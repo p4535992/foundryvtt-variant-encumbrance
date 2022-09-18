@@ -503,10 +503,11 @@ export function retrieveActiveEffectDataChangeByKeyFromActiveEffect(
   effectChanges: EffectChangeData[],
 ): EffectChangeDataProperties|undefined {
   const effectEntityChanges = effectChanges.sort((a, b) => <number>a.priority - <number>b.priority);
-  const atcvEffectChangeData = <EffectChangeData>effectEntityChanges.find((aee) => {
+  const atcvEffectChangeData = <EffectChangeData|undefined>effectEntityChanges.find((aee) => {
     if (aee.key === activeEffectDataChangeKey && aee.value) {
       return aee;
     }
+    return false;
   });
   if(!atcvEffectChangeData || !atcvEffectChangeData.value){
     return undefined;

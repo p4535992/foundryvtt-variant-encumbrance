@@ -74,7 +74,7 @@ export const VariantEncumbranceBulkImpl = {
           // Override the entry for this item using the updatedItem data.
           try {
             mergeObject(<ItemData>itemCurrent.data, updatedItem);
-          } catch (e) {
+          } catch (e:any) {
             error(e?.message);
           }
         }
@@ -1129,7 +1129,7 @@ export const VariantEncumbranceBulkImpl = {
    * @param {string} effectName - the name of the effect to add
    * @param {string} uuid - the uuid of the actor to add the effect to
    */
-  async addEffect(effectName: string, actor: Actor, origin: string, encumbranceTier: number) {
+  async addEffect(effectName: string, actor: Actor, origin: string, encumbranceTier: number):Promise<ActiveEffect|undefined> {
     let speedDecrease: number | null = 1;
     if (encumbranceTier === ENCUMBRANCE_TIERS.NONE) {
       speedDecrease = 1;
@@ -1158,6 +1158,7 @@ export const VariantEncumbranceBulkImpl = {
         return await (<EffectInterfaceApi>API.effectInterface).addEffectOnActor(effectName, <string>actor.id, effect);
       }
     }
+    return undefined;
   },
 };
 

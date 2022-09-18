@@ -12,18 +12,18 @@
 // Import JavaScript modules
 
 // Import TypeScript modules
-import { registerSettings } from './module/settings';
-import { preloadTemplates } from './module/preloadTemplates';
-import { initHooks, readyHooks, setupHooks } from './module/modules';
-import CONSTANTS from './module/constants';
-import { error } from './module/lib/lib';
-import type API from './module/api';
+import { registerSettings } from './scripts/settings';
+import { preloadTemplates } from './scripts/preloadTemplates';
+import { initHooks, readyHooks, setupHooks } from './scripts/modules';
+import CONSTANTS from './scripts/constants';
+import { error } from './scripts/lib/lib';
+import type API from './scripts/api';
 
 /* ------------------------------------ */
 /* Initialize module					*/
 /* ------------------------------------ */
 Hooks.once('init', async () => {
-  console.log(`${CONSTANTS.MODULE_NAME} | Initializing ${CONSTANTS.MODULE_NAME}`);
+  // console.log(`${CONSTANTS.MODULE_NAME} | Initializing ${CONSTANTS.MODULE_NAME}`);
 
   // Register custom module settings
   registerSettings();

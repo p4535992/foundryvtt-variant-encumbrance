@@ -80,7 +80,6 @@ This module uses the [midi-qol](https://gitlab.com/tposney/midi-qol/-/tree/maste
 ### Character Sheets compatibility
 
 * D&D5e Default Character Sheet
-
 * [Sky's Alternate 5th Edition Dungeons & Dragons Sheet](https://github.com/Sky-Captain-13/foundry/tree/master/alt5e) Seem to work
 * [Tidy5e Sheet (Both light & dark themes)](https://github.com/sdenec/tidy5e-sheet) Seem to work
 * [Compact DnDBeyond-like 5e Character Sheet](https://github.com/ElfFriend-DnD/foundryvtt-compactBeyond5eSheet) Active effect work, but there is no visual bar , the values of the weight are synchronized with the system core
@@ -543,19 +542,6 @@ npm run-script build:watch
 
 ```bash
 npm run-script clean
-```
-### lint and lintfix
-
-`lint` launch the eslint process based on the configuration [here](./.eslintrc)
-
-```bash
-npm run-script lint
-```
-
-`lintfix` launch the eslint process with the fix argument
-
-```bash
-npm run-script lintfix
 ```
 
 ### prettier-format
