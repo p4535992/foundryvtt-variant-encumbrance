@@ -542,7 +542,7 @@ export const VariantEncumbranceImpl = {
 				}
 				const isEquipped: boolean =
 					//@ts-ignore
-					item.system.equipped ? item.system.equipped : false;
+					item.system.equipped ? true : false;
 				if (isEquipped) {
 					const isProficient: boolean =
 						//@ts-ignore
@@ -1357,7 +1357,7 @@ function calcWeight(
 	// if (weightless) return getProperty(this, "flags.itemcollection.bagWeight") ?? 0;
 	const isEquipped: boolean =
 		//@ts-ignore
-		item.system.equipped ? item.system.equipped : false;
+		item.system.equipped ? true : false;
 	//@ts-ignore
 	if (useEquippedUnequippedItemCollectionFeature && !isEquipped) {
 		return 0;
