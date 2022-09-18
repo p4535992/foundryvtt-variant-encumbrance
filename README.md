@@ -275,11 +275,11 @@ variant-encumbrance-dnd5e:
 }
 ```
 
-- **burrow:** the value in units for the burrow movement get from property `actor.data.data.attributes.movement.burrow`.
-- **climb:** the value in units for the climb movement get from property `actor.data.data.attributes.movement.climb`.
-- **fly:** the value in units for the fly movement get from property `actor.data.data.attributes.movement.fly`.
-- **swim:** the value in units for the swim movement get from property `actor.data.data.attributes.movement.swim`.
-- **walk:** the value in units for the walk movement get from property `actor.data.data.attributes.movement.walk`.
+- **burrow:** the value in units for the burrow movement get from property `actor.system.attributes.movement.burrow`.
+- **climb:** the value in units for the climb movement get from property `actor.system.attributes.movement.climb`.
+- **fly:** the value in units for the fly movement get from property `actor.system.attributes.movement.fly`.
+- **swim:** the value in units for the swim movement get from property `actor.system.attributes.movement.swim`.
+- **walk:** the value in units for the walk movement get from property `actor.system.attributes.movement.walk`.
 - **totalWeight:** the 'real' total weight synced with the core system of dnd5e.
 - **totalWeightToDisplay:** the 'fake'  total weight not synced with the core system of dnd5e, is used for manage on a display level feature from other module like "Vehicle Cargo Capacity Unit" from the module 'DF QUALITY OF LIFE'.
 - **lightMax:** the weight value for pass from 'unencumbered' to 'encumbered' and back.

@@ -66,7 +66,7 @@ const API = {
 		}
 		const physicalItems = ["weapon", "equipment", "consumable", "tool", "backpack", "loot"];
 		const inventoryItems: Item[] = [];
-		actor.data.items.contents.forEach((im: Item) => {
+		actor.items.contents.forEach((im: Item) => {
 			if (im && physicalItems.includes(im.type)) {
 				inventoryItems.push(im);
 			}
@@ -140,7 +140,7 @@ const API = {
 		}
 		const physicalItems = ["weapon", "equipment", "consumable", "tool", "backpack", "loot"];
 		const inventoryItems: Item[] = [];
-		actor.data.items.contents.forEach((im: Item) => {
+		actor.items.contents.forEach((im: Item) => {
 			if (im && physicalItems.includes(im.type)) {
 				inventoryItems.push(im);
 			}

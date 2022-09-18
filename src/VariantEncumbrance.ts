@@ -13,7 +13,6 @@
 
 // Import TypeScript modules
 import { registerSettings } from "./scripts/settings";
-import { preloadTemplates } from "./scripts/preloadTemplates";
 import { initHooks, readyHooks, setupHooks } from "./scripts/modules";
 import CONSTANTS from "./scripts/constants";
 import { error } from "./scripts/lib/lib";
@@ -36,7 +35,7 @@ Hooks.once("init", async () => {
 	//fetchParams();
 
 	// Preload Handlebars templates
-	await preloadTemplates();
+	// await preloadTemplates();
 	// Register custom sheets (if any)
 });
 

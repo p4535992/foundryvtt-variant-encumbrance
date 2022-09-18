@@ -217,7 +217,7 @@ export const readyHooks = async () => {
 			if (isEnabledActorType(actorEntityTmp)) {
 				const htmlElementEncumbranceVariant = htmlElement.find(".encumbrance").addClass("encumbrance-variant");
 				//@ts-ignore
-				let sheetClass: string = actorSheet.object.data.flags?.core?.sheetClass ?? "";
+				let sheetClass: string = actorSheet.object.flags?.core?.sheetClass ?? "";
 				if (!sheetClass) {
 					for (const obj of SUPPORTED_SHEET) {
 						if (game.modules.get(obj.moduleId)?.active && actorSheet.template.includes(obj.templateId)) {
@@ -257,7 +257,7 @@ export const readyHooks = async () => {
 		}
 	);
 
-	Hooks.on("updateActor", async (actorEntity: Actor, data) => {
+	Hooks.on("updateActor", async (actorEntity: Actor, update) => {
 		if (!actorEntity) {
 			return;
 		}
@@ -267,24 +267,28 @@ export const readyHooks = async () => {
 
 			// For our purpose we filter only the STR modifier action
 			//@ts-ignore
-			if (data?.data?.abilities?.str) {
+			if (update?.system?.abilities?.str) {
 				//@ts-ignore
-				if (actorEntity.data.data.abilities.str.value !== data?.data?.abilities?.str.value) {
+				if (actorEntity.system.abilities.str.value !== update?.system.abilities?.str.value) {
 					//@ts-ignore
-					actorEntity.data.data.abilities.str.value = data?.data?.abilities?.str.value;
+					actorEntity.system.abilities.str.value = update?.system.abilities?.str.value;
 				}
 				doTheUpdate = true;
 			}
 			// For our purpose we filter only the CURRENCY modifier action
-			if (data?.data?.currency) {
+			if (update?.system.currency) {
 				doTheUpdate = true;
 			}
 			// For our purpose we filter only the invenctory-plus modifier action
-			if (invPlusActive && data?.flags && hasProperty(data, `flags.${CONSTANTS.INVENTORY_PLUS_MODULE_NAME}`)) {
+			if (
+				invPlusActive &&
+				update?.flags &&
+				hasProperty(update, `flags.${CONSTANTS.INVENTORY_PLUS_MODULE_NAME}`)
+			) {
 				doTheUpdate = true;
 			}
 			// Check change on the cargo property of vehicle
-			if (data?.data?.attributes.capacity?.cargo) {
+			if (update?.system.attributes.capacity?.cargo) {
 				doTheUpdate = true;
 				noActiveEffect = true;
 			}
@@ -295,7 +299,7 @@ export const readyHooks = async () => {
 					if (game.settings.get(CONSTANTS.MODULE_NAME, "enabled")) {
 						VariantEncumbranceImpl.calculateEncumbrance(
 							actorEntity,
-							actorEntity.data.items.contents,
+							actorEntity.items.contents,
 							false,
 							invPlusActive
 						);
@@ -303,7 +307,7 @@ export const readyHooks = async () => {
 					if (game.settings.get(CONSTANTS.MODULE_NAME, "enableBulkSystem")) {
 						VariantEncumbranceBulkImpl.calculateEncumbrance(
 							actorEntity,
-							actorEntity.data.items.contents,
+							actorEntity.items.contents,
 							false,
 							invPlusActive
 						);
@@ -352,7 +356,7 @@ export const readyHooks = async () => {
 				// ================
 				if (game.settings.get(CONSTANTS.MODULE_NAME, "enabled")) {
 					let enableVarianEncumbranceEffectsOnSpecificActorFlag = true;
-					if (!hasProperty(actorEntity.data, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.ENABLED_AE}`)) {
+					if (!hasProperty(actorEntity, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.ENABLED_AE}`)) {
 						await actorEntity.setFlag(
 							CONSTANTS.FLAG,
 							EncumbranceFlags.ENABLED_AE,
@@ -365,7 +369,7 @@ export const readyHooks = async () => {
 					}
 
 					let enableVarianEncumbranceWeightOnSpecificActorFlag = true;
-					if (!hasProperty(actorEntity.data, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.ENABLED_WE}`)) {
+					if (!hasProperty(actorEntity, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.ENABLED_WE}`)) {
 						await actorEntity.setFlag(
 							CONSTANTS.FLAG,
 							EncumbranceFlags.ENABLED_WE,
@@ -486,7 +490,7 @@ export const readyHooks = async () => {
 				// ================
 				if (game.settings.get(CONSTANTS.MODULE_NAME, "enableBulkSystem")) {
 					let enableVarianEncumbranceEffectsBulkOnSpecificActorFlag = true;
-					if (!hasProperty(actorEntity.data, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.ENABLED_AE_BULK}`)) {
+					if (!hasProperty(actorEntity, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.ENABLED_AE_BULK}`)) {
 						await actorEntity.setFlag(
 							CONSTANTS.FLAG,
 							EncumbranceFlags.ENABLED_AE_BULK,
@@ -499,7 +503,7 @@ export const readyHooks = async () => {
 					}
 
 					let enableVarianEncumbranceWeightBulkOnSpecificActorFlag = true;
-					if (!hasProperty(actorEntity.data, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.ENABLED_WE_BULK}`)) {
+					if (!hasProperty(actorEntity, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.ENABLED_WE_BULK}`)) {
 						await actorEntity.setFlag(
 							CONSTANTS.FLAG,
 							EncumbranceFlags.ENABLED_WE_BULK,
@@ -615,10 +619,10 @@ export const readyHooks = async () => {
 				}
 				//buttons.unshift(...varianEncumbranceButtons);
 			} else {
-				if (hasProperty(actorEntity.data, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.ENABLED_AE}`)) {
+				if (hasProperty(actorEntity, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.ENABLED_AE}`)) {
 					actorEntity.unsetFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE);
 				}
-				if (hasProperty(actorEntity.data, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.ENABLED_WE}`)) {
+				if (hasProperty(actorEntity, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.ENABLED_WE}`)) {
 					actorEntity.unsetFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_WE);
 				}
 				await VariantEncumbranceImpl.updateEncumbrance(
@@ -630,10 +634,10 @@ export const readyHooks = async () => {
 
 				// System Bulk
 
-				if (hasProperty(actorEntity.data, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.ENABLED_AE_BULK}`)) {
+				if (hasProperty(actorEntity, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.ENABLED_AE_BULK}`)) {
 					actorEntity.unsetFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE_BULK);
 				}
-				if (hasProperty(actorEntity.data, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.ENABLED_WE_BULK}`)) {
+				if (hasProperty(actorEntity, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.ENABLED_WE_BULK}`)) {
 					actorEntity.unsetFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_WE_BULK);
 				}
 				await VariantEncumbranceBulkImpl.updateEncumbrance(
@@ -649,7 +653,7 @@ export const readyHooks = async () => {
 
 // export function getEmbeddedDocument(wrapped, embeddedName, id, { strict = false } = {}) {
 //   const actorEntity: Actor = this.actor;
-//   if (actorEntity && (actorEntity.data.type === EncumbranceActorType.CHARACTER || actorEntity.data.type === EncumbranceActorType.VEHICLE)) {
+//   if (actorEntity && (actorEntity.type === EncumbranceActorType.CHARACTER || actorEntity.type === EncumbranceActorType.VEHICLE)) {
 //     VariantEncumbranceImpl.updateEncumbrance(actorEntity, undefined, undefined, EncumbranceMode.ADD);
 //     if (game.settings.get(CONSTANTS.MODULE_NAME, 'enableBulkSystem')) {
 //        VariantEncumbranceBulkImpl.updateEncumbrance(actorEntity, undefined, undefined, EncumbranceMode.ADD);
@@ -762,8 +766,8 @@ export async function deleteDocuments(wrapped, ids = [], context = { parent: {},
 
 // export async function _update(wrapped, data) {
 //   const actorEntity:Actor = this.actor;
-//   const isequipped = data.equipped;
-//   if(actorEntity && actorEntity.data.type === "character"){
+//   const isequipped = data.system.equipped;
+//   if(actorEntity && actorEntity.type === "character"){
 //     await VariantEncumbranceImpl.updateEncumbrance(actorEntity, undefined, undefined, "add");
 //   }
 //   return wrapped(data);
@@ -808,36 +812,36 @@ const module = {
 			// Do no touch the true actor again
 
 			let encumbranceData;
-			// if (hasProperty(actorObject.data, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.DATA}`)) {
-			//   encumbranceData = <EncumbranceData>getProperty(actorObject.data,`flags.${CONSTANTS.FLAG}.${EncumbranceFlags.DATA}`);
+			// if (hasProperty(actorObject, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.DATA}`)) {
+			//   encumbranceData = <EncumbranceData>getProperty(actorObject,`flags.${CONSTANTS.FLAG}.${EncumbranceFlags.DATA}`);
 			// }
 			if (!encumbranceData) {
-				// const itemsCurrent = <Item[]>actorEntity.data.items.contents;//actorObject.items;// STRANGE BUG actorEntity.data.items.contents
+				// const itemsCurrent = <Item[]>actorEntity.items.contents;//actorObject.items;// STRANGE BUG actorEntity.items.contents
 				// const actorEntityCurrent = <ActorData>actorObject.actor; // STRANGE BUG <Actor>game.actors?.get(actorObject.actor._id);
 				// STRANGE BEHAVIOUR
 				if (actorObject.actor?.flags) {
-					// mergeObject(<any>actorEntity.data.flags, <any>actorObject.actor.flags);
-					setProperty(actorEntityTmp.data, "flags", actorObject.actor.flags);
+					// mergeObject(<any>actorEntity.flags, <any>actorObject.actor.flags);
+					setProperty(actorEntityTmp, "flags", actorObject.actor.flags);
 				}
-				if (actorObject.data) {
-					// mergeObject(<any>actorEntity.data.data, <any>actorObject.data);
-					setProperty(actorEntityTmp.data, "data", actorObject.data);
+				if (actorObject.system) {
+					// mergeObject(<any>actorEntity.system, <any>actorObject.system);
+					setProperty(actorEntityTmp, "system", actorObject.system);
 				}
-				// mergeObject(actorEntity.data.items, actorObject.items);
+				// mergeObject(actorEntity.items, actorObject.items);
 				let itemsToCheck = <Item[]>[];
 				// if (actorObject.items && actorObject.items instanceof Array) {
-				//   for (const itemM of actorEntityTmp.data.items.contents) {
+				//   for (const itemM of actorEntityTmp.items.contents) {
 				//     const itemToMerge = <ItemData>actorObject.items.find((z: ItemData) => {
 				//       return z._id === itemM.id;
 				//     });
 				//     const newItem = <any>duplicate(itemM);
 				//     if (itemToMerge) {
-				//       mergeObject(newItem.data, itemToMerge);
+				//       mergeObject(newItem.system, itemToMerge);
 				//     }
 				//     itemsToCheck.push(newItem);
 				//   }
 				// } else {
-				itemsToCheck = actorEntityTmp.data.items.contents;
+				itemsToCheck = actorEntityTmp.items.contents;
 				// }
 
 				encumbranceData = VariantEncumbranceImpl.calculateEncumbrance(
@@ -999,7 +1003,7 @@ const module = {
 
 			const inventoryItems: Item[] = [];
 			const physicalItems = ["weapon", "equipment", "consumable", "tool", "backpack", "loot"];
-			actorEntityTmp.data.items.contents.forEach((im: Item) => {
+			actorEntityTmp.items.contents.forEach((im: Item) => {
 				if (im && physicalItems.includes(im.type)) {
 					inventoryItems.push(im);
 				}
@@ -1014,9 +1018,9 @@ const module = {
 				});
 				if (item) {
 					//@ts-ignore
-					const quantity = item.data.data.quantity ?? 0;
+					const quantity = item.system.quantity ?? 0;
 					//@ts-ignore
-					const bulk = item.data.data.bulk ?? 0;
+					const bulk = item.system.bulk ?? 0;
 					const totalBulk = (quantity * bulk).toNearest(0.1);
 					switch (sheetClass) {
 						case "dnd5e.Tidy5eSheet": {
@@ -1098,36 +1102,36 @@ const module = {
 			}
 
 			let encumbranceDataBulk;
-			// if (hasProperty(actorObject.data, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.DATA}`)) {
-			//   encumbranceDataBulk = <EncumbranceData>getProperty(actorObject.data,`flags.${CONSTANTS.FLAG}.${EncumbranceFlags.DATA}`);
+			// if (hasProperty(actorObject, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.DATA}`)) {
+			//   encumbranceDataBulk = <EncumbranceData>getProperty(actorObject,`flags.${CONSTANTS.FLAG}.${EncumbranceFlags.DATA}`);
 			// }
 			if (!encumbranceDataBulk) {
-				// const itemsCurrent = <Item[]>actorEntity.data.items.contents;//actorObject.items;// STRANGE BUG actorEntity.data.items.contents
+				// const itemsCurrent = <Item[]>actorEntity.items.contents;//actorObject.items;// STRANGE BUG actorEntity.items.contents
 				// const actorEntityCurrent = <ActorData>actorObject.actor; // STRANGE BUG <Actor>game.actors?.get(actorObject.actor._id);
 				// STRANGE BEHAVIOUR
 				if (actorObject.actor?.flags) {
-					// mergeObject(<any>actorEntity.data.flags, <any>actorObject.actor.flags);
-					setProperty(actorEntityTmp.data, "flags", actorObject.actor.flags);
+					// mergeObject(<any>actorEntity.flags, <any>actorObject.actor.flags);
+					setProperty(actorEntityTmp, "flags", actorObject.actor.flags);
 				}
-				if (actorObject.data) {
-					// mergeObject(<any>actorEntity.data.data, <any>actorObject.data);
-					setProperty(actorEntityTmp.data, "data", actorObject.data);
+				if (actorObject.system) {
+					// mergeObject(<any>actorEntity.system, <any>actorObject.system);
+					setProperty(actorEntityTmp, "system", actorObject.system);
 				}
-				// mergeObject(actorEntity.data.items, actorObject.items);
+				// mergeObject(actorEntity.items, actorObject.items);
 				let itemsToCheck = <Item[]>[];
 				// if (actorObject.items && actorObject.items instanceof Array) {
-				//   for (const itemM of actorEntityTmp.data.items.contents) {
+				//   for (const itemM of actorEntityTmp.items.contents) {
 				//     const itemToMerge = <ItemData>actorObject.items.find((z: ItemData) => {
 				//       return z._id === itemM.id;
 				//     });
 				//     const newItem = <any>duplicate(itemM);
 				//     if (itemToMerge) {
-				//       mergeObject(newItem.data, itemToMerge);
+				//       mergeObject(newItem.system, itemToMerge);
 				//     }
 				//     itemsToCheck.push(newItem);
 				//   }
 				// } else {
-				itemsToCheck = actorEntityTmp.data.items.contents;
+				itemsToCheck = actorEntityTmp.items.contents;
 				// }
 
 				encumbranceDataBulk = VariantEncumbranceBulkImpl.calculateEncumbrance(
@@ -1241,13 +1245,13 @@ const module = {
 		// options.push(
 		//   `<option data-image="icons/svg/mystery-man.svg" value="">${i18n(`${CONSTANTS.MODULE_NAME}.default`)}</option>`,
 		// );
-		const weight = data.data.weight ?? 0;
+		const weight = data.weight ?? 0;
 		let suggestedBulkWeight = 0;
 		const suggestedBulk = checkBulkCategory(weight);
 		if (suggestedBulk) {
 			suggestedBulkWeight = suggestedBulk.bulk;
 		}
-		let bulk = data.data.bulk ?? 0;
+		let bulk = data.bulk ?? 0;
 		if (bulk <= 0 && game.settings.get(CONSTANTS.MODULE_NAME, "automaticApplySuggestedBulk")) {
 			bulk = suggestedBulkWeight;
 		}

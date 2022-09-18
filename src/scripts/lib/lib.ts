@@ -37,10 +37,14 @@ export function getOwnedTokens(priorityToControlledIfGM: boolean): Token[] {
 			return arr;
 		}
 	}
-	let ownedTokens = <Token[]>canvas.tokens?.placeables.filter((token) => token.isOwner && (!token.data.hidden || gm));
+	let ownedTokens = <Token[]>(
+		canvas.tokens?.placeables.filter((token) => token.isOwner && (!token.document.hidden || gm))
+	);
 	if (ownedTokens.length === 0 || !canvas.tokens?.controlled[0]) {
 		ownedTokens = <Token[]>(
-			canvas.tokens?.placeables.filter((token) => (token.observer || token.isOwner) && (!token.data.hidden || gm))
+			canvas.tokens?.placeables.filter(
+				(token) => (token.observer || token.isOwner) && (!token.document.hidden || gm)
+			)
 		);
 	}
 	return ownedTokens;
@@ -86,7 +90,7 @@ export function getActiveGMs() {
 
 export function isResponsibleGM() {
 	if (!game.user?.isGM) return false;
-	return !getActiveGMs()?.some((other) => other.data._id < <string>game.user?.data._id);
+	return !getActiveGMs()?.some((other) => other.id < <string>game.user?.id);
 }
 
 export function firstGM() {
@@ -100,7 +104,7 @@ export function isFirstGM() {
 export function firstOwner(doc): User | undefined {
 	/* null docs could mean an empty lookup, null docs are not owned by anyone */
 	if (!doc) return undefined;
-	const permissionObject = (doc instanceof TokenDocument ? doc.actor?.data.permission : doc.data.permission) ?? {};
+	const permissionObject = (doc instanceof TokenDocument ? doc.actor?.permission : doc.permission) ?? {};
 	const playerOwners = Object.entries(permissionObject)
 		.filter(([id, level]) => !game.users?.get(id)?.isGM && game.users?.get(id)?.active && level === 3)
 		.map(([id, level]) => id);
@@ -278,9 +282,9 @@ export function getFirstPlayerTokenSelected(): Token | null {
 		return null;
 	}
 	if (!selectedTokens || selectedTokens.length === 0) {
-		//if(game.user.character.data.token){
+		//if(game.user.character.token){
 		//  //@ts-ignore
-		//  return game.user.character.data.token;
+		//  return game.user.character.token;
 		//}else{
 		return null;
 		//}
@@ -306,9 +310,7 @@ export function getFirstPlayerToken(): Token | null {
 	if (!token) {
 		if (!controlled.length || controlled.length === 0) {
 			// If no token is selected use the token of the users character
-			token = <Token>(
-				canvas.tokens?.placeables.find((token) => token.data._id === game.user?.character?.data?._id)
-			);
+			token = <Token>canvas.tokens?.placeables.find((token) => token.id === game.user?.character?.id);
 		}
 		// If no token is selected use the first owned token of the users character you found
 		if (!token) {
@@ -319,19 +321,19 @@ export function getFirstPlayerToken(): Token | null {
 }
 
 function getElevationToken(token: Token): number {
-	const base = token.document.data;
+	const base = token.document;
 	return getElevationPlaceableObject(base);
 }
 
 function getElevationWall(wall: Wall): number {
-	const base = wall.document.data;
+	const base = wall.document;
 	return getElevationPlaceableObject(base);
 }
 
 function getElevationPlaceableObject(placeableObject: any): number {
 	let base = placeableObject;
 	if (base.document) {
-		base = base.document.data;
+		base = base.document;
 	}
 	const base_elevation =
 		//@ts-ignore
@@ -386,7 +388,7 @@ export function checkBulkCategory(weight: number): BulkData {
 }
 
 export function retrieveAttributeEncumbranceMax(actorEntity: Actor, standardValueN: number): number {
-	// const standardValueS = getProperty(actor, 'data.data.attributes.encumbrance.max');
+	// const standardValueS = getProperty(actor, 'system.attributes.encumbrance.max');
 	// let standardValueN = 0;
 	// try {
 	//   standardValueN = Number(standardValueS);
@@ -423,14 +425,14 @@ export function retrieveAttributeEncumbranceMax(actorEntity: Actor, standardValu
 }
 
 export function retrieveAttributeCapacityCargo(actor: Actor, standardValueN: number): number {
-	// const standardValueS = getProperty(actor, 'data.data.attributes.capacity.cargo');
+	// const standardValueS = getProperty(actor, 'system.attributes.capacity.cargo');
 	// let standardValueN = 0;
 	// try {
 	//   standardValueN = Number(standardValueS);
 	// } catch (e) {
 	//   standardValueN = 0;
 	// }
-	const daeValue = retrieveActiveEffectDataChangeByKey(actor, "data.data.attributes.capacity.cargo");
+	const daeValue = retrieveActiveEffectDataChangeByKey(actor, "system.attributes.capacity.cargo");
 	try {
 		if (daeValue) {
 			const valueN = Number(daeValue.value);
@@ -447,14 +449,14 @@ export function retrieveAttributeCapacityCargo(actor: Actor, standardValueN: num
 			) {
 				return valueN;
 			} else {
-				warn(`Can't parse the mode value ${daeValue.mode} for 'data.data.attributes.capacity.cargo'`);
+				warn(`Can't parse the mode value ${daeValue.mode} for 'system.attributes.capacity.cargo'`);
 				return 0;
 			}
 		} else {
 			return 0;
 		}
 	} catch (e) {
-		warn(`Can't parse the value ${daeValue} for 'data.data.attributes.capacity.cargo'`);
+		warn(`Can't parse the value ${daeValue} for 'system.attributes.capacity.cargo'`);
 		return 0;
 	}
 }
@@ -481,12 +483,14 @@ export function retrieveActiveEffectDataChangeByKey(actor: Actor, key: string): 
 	// }
 	//@ts-ignore
 	let valueDefault: EffectChangeDataProperties | undefined = undefined;
-	const actorEffects = <EmbeddedCollection<typeof ActiveEffect, ActorData>>actor?.data.effects;
+	const actorEffects = <EmbeddedCollection<typeof ActiveEffect, ActorData>>actor?.effects;
 	for (const aef of actorEffects) {
-		if (aef.data.disabled) {
+		//@ts-ignore
+		if (aef.disabled) {
 			continue;
 		}
-		const c = retrieveActiveEffectDataChangeByKeyFromActiveEffect(actor, key, aef.data.changes);
+		//@ts-ignore
+		const c = retrieveActiveEffectDataChangeByKeyFromActiveEffect(actor, key, aef.changes);
 		if (c && c.value) {
 			valueDefault = c;
 			break;
