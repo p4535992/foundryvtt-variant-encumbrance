@@ -1266,7 +1266,7 @@ const module = {
 				`
         <div class="form-group">
           <label>${i18n("variant-encumbrance-dnd5e.label.bulk.Bulk")}</label>
-          <input type="text" name="data.bulk" value="${bulk}" data-dtype="Number"/>
+          <input type="text" name="system.bulk" value="${bulk}" data-dtype="Number"/>
           <p class="notes">${suggesteBulkValueS}</p>
         </div>
         `

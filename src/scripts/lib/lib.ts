@@ -395,7 +395,7 @@ export function retrieveAttributeEncumbranceMax(actorEntity: Actor, standardValu
 	// } catch (e) {
 	//   standardValueN = 0;
 	// }
-	const daeValue = retrieveActiveEffectDataChangeByKey(actorEntity, "data.attributes.encumbrance.max");
+	const daeValue = retrieveActiveEffectDataChangeByKey(actorEntity, "system.attributes.encumbrance.max");
 	try {
 		if (daeValue) {
 			const valueN = Number(daeValue.value);
@@ -515,7 +515,10 @@ export function retrieveActiveEffectDataChangeByKeyFromActiveEffect(
 		return undefined;
 	}
 	let myvalue = "";
-	if (atcvEffectChangeData.value && String(atcvEffectChangeData.value).includes("data.")) {
+	if (
+		(atcvEffectChangeData.value && String(atcvEffectChangeData.value).includes("data.")) ||
+		(atcvEffectChangeData.value && String(atcvEffectChangeData.value).includes("system."))
+	) {
 		// Retrieve the formula.
 		const formula = atcvEffectChangeData.value.replace(/data\./g, "@");
 		// Replace shorthand.
