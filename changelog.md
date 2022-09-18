@@ -1,3 +1,7 @@
+### 0.11.0
+
+- Update fvtt10
+
 ### 0.10.3
 
 - Bug fix [[BUG] Can no longer delete inventory items.](https://github.com/VanirDev/VariantEncumbrance/issues/68)
@@ -186,7 +190,7 @@
 
 ### Update 0.6.7
 
-- Change origin string on add effect from 'actorEntity.id' to `Actor.${actorEntity.data._id}` for strange buf of retrocomaptibility
+- Change origin string on add effect from 'actorEntity.id' to `Actor.${actorEntity.id}` for strange buf of retrocomaptibility
 
 ### Update 0.6.6 [THE ANGRY PATCH AND ALSO BREAKING CHANGES]
 

@@ -1080,7 +1080,7 @@ const module = {
 				.addClass("encumbrance-bulk")
 				.appendTo(encumbranceElement.parent());
 
-			//htmlElement.find('.encumbrance-bulk').css('margin-bottom', '16px');
+			// htmlElement.find('.encumbrance-bulk').css('margin-bottom', '16px');
 			// htmlElement.find('.encumbrance-bulk')[0].style.marginBottom = '16px';
 
 			const htmlElementEncumbranceBulk = htmlElement.find(".encumbrance-bulk");
