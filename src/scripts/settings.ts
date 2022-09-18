@@ -419,7 +419,7 @@ export const registerSettings = function () {
 		name: i18n(CONSTANTS.MODULE_NAME + ".setting.doNotUseSocketLibFeature.name"),
 		hint: i18n(CONSTANTS.MODULE_NAME + ".setting.doNotUseSocketLibFeature.hint"),
 		scope: "world",
-		config: true,
+		config: false,
 		type: Boolean,
 		default: false,
 	});

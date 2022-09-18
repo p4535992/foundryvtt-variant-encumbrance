@@ -35,7 +35,7 @@ export let daeActive;
 export let aemlApi: ActiveEffectManagerLibApi;
 
 export const initHooks = () => {
-	warn("Init Hooks processing");
+	// warn("Init Hooks processing");
 
 	Hooks.once("socketlib.ready", registerSocket);
 
@@ -123,8 +123,6 @@ export const setupHooks = async () => {
 	//@ts-ignore
 	aemlApi = <ActiveEffectManagerLibApi>game.modules.get("active-effect-manager-lib").api;
 	aemlApi.effectInterface.initialize(CONSTANTS.MODULE_NAME);
-
-	API.effectInterface = aemlApi.effectInterface;
 
 	setApi(API);
 

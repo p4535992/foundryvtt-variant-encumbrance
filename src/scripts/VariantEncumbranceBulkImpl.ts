@@ -8,7 +8,7 @@ import {
 	ENCUMBRANCE_TIERS,
 } from "./VariantEncumbranceModels";
 import Effect from "./effects/effect";
-import { ENCUMBRANCE_STATE, invMidiQol, invPlusActive, daeActive, dfQualityLifeActive } from "./modules";
+import { ENCUMBRANCE_STATE, invMidiQol, invPlusActive, daeActive, dfQualityLifeActive, aemlApi } from "./modules";
 import CONSTANTS from "./constants";
 import {
 	debug,
@@ -22,7 +22,6 @@ import {
 import API from "./api";
 import type { EffectChangeData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData";
 import type { ItemData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
-import type { EffectInterfaceApi } from "./effects/effect-interface-api";
 
 /* ------------------------------------ */
 /* Constants         					*/
@@ -1076,20 +1075,8 @@ export const VariantEncumbranceBulkImpl = {
 	 * applied to
 	 * @returns {boolean} true if the effect is applied, false otherwise
 	 */
-	async hasEffectApplied(effectName: string, actor: Actor): Promise<boolean> {
-		if (game.settings.get(CONSTANTS.MODULE_NAME, "doNotUseSocketLibFeature") || !isGMConnected()) {
-			return await (<EffectInterfaceApi>API.effectInterface).hasEffectAppliedOnActor(
-				effectName,
-				<string>actor.id,
-				true
-			);
-		} else {
-			return await (<EffectInterfaceApi>API.effectInterface).hasEffectAppliedOnActor(
-				effectName,
-				<string>actor.id,
-				true
-			);
-		}
+	async hasEffectApplied(effectName: string, actor: Actor): Promise<boolean | undefined> {
+		return await aemlApi.hasEffectAppliedOnActor(<string>actor.id, effectName, true);
 	},
 
 	/**
@@ -1101,20 +1088,8 @@ export const VariantEncumbranceBulkImpl = {
 	 * applied to
 	 * @returns {boolean} true if the effect is applied, false otherwise
 	 */
-	async hasEffectAppliedFromId(effect: ActiveEffect, actor: Actor): Promise<boolean> {
-		if (game.settings.get(CONSTANTS.MODULE_NAME, "doNotUseSocketLibFeature") || !isGMConnected()) {
-			return await (<EffectInterfaceApi>API.effectInterface).hasEffectAppliedFromIdOnActor(
-				<string>effect.id,
-				<string>actor.id,
-				true
-			);
-		} else {
-			return await (<EffectInterfaceApi>API.effectInterface).hasEffectAppliedFromIdOnActor(
-				<string>effect.id,
-				<string>actor.id,
-				true
-			);
-		}
+	async hasEffectAppliedFromId(effect: ActiveEffect, actor: Actor): Promise<boolean | undefined> {
+		return await aemlApi.hasEffectAppliedFromIdOnActor(<string>actor.id, <string>effect.id, true);
 	},
 
 	/**
@@ -1125,11 +1100,7 @@ export const VariantEncumbranceBulkImpl = {
 	 * @param {string} uuid - the uuid of the actor to remove the effect from
 	 */
 	async removeEffect(effectName: string, actor: Actor) {
-		if (game.settings.get(CONSTANTS.MODULE_NAME, "doNotUseSocketLibFeature") || !isGMConnected()) {
-			return await (<EffectInterfaceApi>API.effectInterface).removeEffectOnActor(effectName, <string>actor.id);
-		} else {
-			return await (<EffectInterfaceApi>API.effectInterface).removeEffectOnActor(effectName, <string>actor.id);
-		}
+		return await aemlApi.removeEffectOnActor(<string>actor.id, effectName);
 	},
 
 	/**
@@ -1140,17 +1111,7 @@ export const VariantEncumbranceBulkImpl = {
 	 * @param {string} uuid - the uuid of the actor to remove the effect from
 	 */
 	async removeEffectFromId(effectToRemove: ActiveEffect, actor: Actor) {
-		if (game.settings.get(CONSTANTS.MODULE_NAME, "doNotUseSocketLibFeature") || !isGMConnected()) {
-			return await (<EffectInterfaceApi>API.effectInterface).removeEffectFromIdOnActor(
-				<string>effectToRemove.id,
-				<string>actor.id
-			);
-		} else {
-			return await (<EffectInterfaceApi>API.effectInterface).removeEffectFromIdOnActor(
-				<string>effectToRemove.id,
-				<string>actor.id
-			);
-		}
+		return await aemlApi.removeEffectFromIdOnActor(<string>actor.id, <string>effectToRemove.id);
 	},
 
 	/**
@@ -1190,19 +1151,7 @@ export const VariantEncumbranceBulkImpl = {
 				},
 			};
 			effect.isTemporary = true;
-			if (game.settings.get(CONSTANTS.MODULE_NAME, "doNotUseSocketLibFeature") || !isGMConnected()) {
-				return await (<EffectInterfaceApi>API.effectInterface).addEffectOnActor(
-					effectName,
-					<string>actor.id,
-					effect
-				);
-			} else {
-				return await (<EffectInterfaceApi>API.effectInterface).addEffectOnActor(
-					effectName,
-					<string>actor.id,
-					effect
-				);
-			}
+			return await aemlApi.addEffectOnActor(<string>actor.id, effectName, effect);
 		}
 		return undefined;
 	},

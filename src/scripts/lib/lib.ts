@@ -72,10 +72,6 @@ export function isGMConnected() {
 	return !!Array.from(<Users>game.users).find((user) => user.isGM && user.active);
 }
 
-export function isGMConnectedAndSocketLibEnable() {
-	return isGMConnected(); // && !game.settings.get(CONSTANTS.MODULE_NAME, 'doNotUseSocketLibFeature');
-}
-
 export function wait(ms) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
