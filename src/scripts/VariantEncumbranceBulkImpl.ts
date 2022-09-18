@@ -166,7 +166,8 @@ export const VariantEncumbranceBulkImpl = {
 		let effectEntityPresent: ActiveEffect | undefined;
 
 		for (const effectEntity of actorEntity.effects) {
-			const effectNameToSet = effectEntity.name;
+      //@ts-ignore
+			const effectNameToSet = effectEntity.label;
 
 			//const effectIsApplied = await VariantEncumbranceBulkImpl.hasEffectAppliedFromId(effectEntity, actorEntity);
 

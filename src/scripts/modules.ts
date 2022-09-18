@@ -196,7 +196,7 @@ export const readyHooks = async () => {
 				return;
 			}
 			const item: Item = app.object;
-			module.renderItemSheetBulkSystem(app, html, data, item);
+			module.renderItemSheetBulkSystem(app, html, data.system, item);
 		});
 		// =====================
 		// End bulk management

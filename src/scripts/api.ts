@@ -17,8 +17,8 @@ const API = {
 	},
 
 	calculateWeightOnActorFromId(actorIdOrName: string): EncumbranceData | undefined {
-		const actor = game.actors?.contents.find((a) => {
-			return isStringEquals(a.id, actorIdOrName) || isStringEquals(<string>a.name, actorIdOrName);
+		const actor = game.actors?.contents.find((actorEntity) => {
+			return isStringEquals(actorEntity.id, actorIdOrName) || isStringEquals(<string>actorEntity.name, actorIdOrName);
 		});
 		if (!actor) {
 			warn(`No actor found for reference '${actorIdOrName}'`);
@@ -36,8 +36,8 @@ const API = {
 	},
 
 	calculateWeightOnTokenFromId(tokenIdOrName: string): EncumbranceData | undefined {
-		const token = canvas.tokens?.placeables.find((a) => {
-			return isStringEquals(a.id, tokenIdOrName) || isStringEquals(a.name, tokenIdOrName);
+		const token = canvas.tokens?.placeables.find((tokenEntity) => {
+			return isStringEquals(tokenEntity.id, tokenIdOrName) || isStringEquals(tokenEntity.name, tokenIdOrName);
 		});
 		if (!token) {
 			warn(`No token found for reference '${tokenIdOrName}'`);
@@ -91,8 +91,8 @@ const API = {
 	},
 
 	calculateBulkOnActorFromId(actorIdOrName: string): EncumbranceData | undefined {
-		const actor = game.actors?.contents.find((a) => {
-			return isStringEquals(a.id, actorIdOrName) || isStringEquals(<string>a.name, actorIdOrName);
+		const actor = game.actors?.contents.find((actorEntity) => {
+			return isStringEquals(actorEntity.id, actorIdOrName) || isStringEquals(<string>actorEntity.name, actorIdOrName);
 		});
 		if (!actor) {
 			warn(`No actor found for reference '${actorIdOrName}'`);
@@ -110,8 +110,8 @@ const API = {
 	},
 
 	calculateBulkOnTokenFromId(tokenIdOrName: string): EncumbranceData | undefined {
-		const token = canvas.tokens?.placeables.find((a) => {
-			return isStringEquals(a.id, tokenIdOrName) || isStringEquals(a.name, tokenIdOrName);
+		const token = canvas.tokens?.placeables.find((tokenEntity) => {
+			return isStringEquals(tokenEntity.id, tokenIdOrName) || isStringEquals(tokenEntity.name, tokenIdOrName);
 		});
 		if (!token) {
 			warn(`No token found for reference '${tokenIdOrName}'`);

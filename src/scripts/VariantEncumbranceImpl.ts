@@ -231,7 +231,7 @@ export const VariantEncumbranceImpl = {
 
 		for (const effectEntity of actorEntity.effects) {
 			//@ts-ignore
-			const effectNameToSet = effectEntity.name ? effectEntity.name : effectEntity.label;
+			const effectNameToSet = effectEntity.label;
 
 			//const effectIsApplied = await VariantEncumbranceImpl.hasEffectAppliedFromId(effectEntity, actorEntity);
 
@@ -1351,12 +1351,10 @@ function calcWeight(
 ) {
 	//@ts-ignore
 	if (item.type !== "backpack" || !item.flags.itemcollection) return calcItemWeight(item, ignoreCurrency);
-	// if (item.parent instanceof Actor && !item.system.equipped) return 0;
 	// MOD 4535992 Removed variant encumbrance take care of this
-	// const useEquippedUnequippedItemCollectionFeature = game.settings.get(
-	//   CONSTANTS.MODULE_NAME,
-	//   'useEquippedUnequippedItemCollectionFeature',
-	// );
+	// if (this.parent instanceof Actor && !item.system.equipped) return 0;
+	// const weightless = getProperty(this, "system.capacity.weightless") ?? false;
+	// if (weightless) return getProperty(this, "flags.itemcollection.bagWeight") ?? 0;
 	const isEquipped: boolean =
 		//@ts-ignore
 		item.system.equipped ? item.system.equipped : false;
@@ -1716,7 +1714,10 @@ function _standardActorWeightCalculation(actorEntity: Actor): EncumbranceData {
 
 function _standardCharacterWeightCalculation(actorEntity: Actor): EncumbranceDnd5e {
 	//@ts-ignore
-	return <EncumbranceDnd5e>actorEntity._computeEncumbrance(actorEntity);
+	actorEntity._prepareEncumbrance();
+	//@ts-ignore
+	const encumbrance = <EncumbranceDnd5e>actorEntity.system.attributes.encumbrance;
+	return encumbrance;
 }
 
 function _standardVehicleWeightCalculation(actorEntity: Actor): EncumbranceDnd5e {
@@ -1730,8 +1731,9 @@ function _standardVehicleWeightCalculation(actorEntity: Actor): EncumbranceDnd5e
 		//@ts-ignore
 		const isCargo = item.flags.dnd5e?.vehicleCargo === true;
 		if (isCargo) {
-			// MOD 4535992
 			// totalWeight += (item.system.weight || 0) * item.system.quantity;
+			// cargo.cargo.items.push(item);
+			// continue;
 			const quantity =
 				//@ts-ignore
 				is_real_number(item.system.quantity) ? item.system.quantity : 0;
@@ -1740,12 +1742,11 @@ function _standardVehicleWeightCalculation(actorEntity: Actor): EncumbranceDnd5e
 				is_real_number(item.system.weight) ? item.system.weight : 0;
 			//@ts-ignore
 			totalWeight += weight * quantity;
-			// cargo.cargo.items.push(item);
-			// MOD 4535992
 			//@ts-ignore
-			return actorEntity._computeEncumbrance(totalWeight, data);
-			// END MOD 4535992
-			// continue;
+			actorEntity._prepareEncumbrance();
+			//@ts-ignore
+			const encumbrance = <EncumbranceDnd5e>actorEntity.system.attributes.encumbrance;
+			return encumbrance;
 		}
 
 		// Handle non-cargo item types
@@ -1759,14 +1760,15 @@ function _standardVehicleWeightCalculation(actorEntity: Actor): EncumbranceDnd5e
 				break;
 			}
 			case "feat": {
-				// if ( !item.system.activation.type || (item.system.activation.type === "none") ) features.passive.items.push(item);
-				// else if (item.system.activation.type === "reaction") features.reactions.items.push(item);
+				// const act = item.system.activation;
+				// if ( !act.type || (act.type === "none") ) features.passive.items.push(item);
+				// else if (act.type === "reaction") features.reactions.items.push(item);
 				// else features.actions.items.push(item);
 				break;
 			}
 			default: {
-				// MOD 4535992
-				//totalWeight += (item.system.weight || 0) * item.system.quantity;
+				// totalWeight += (item.system.weight || 0) * item.system.quantity;
+				// cargo.cargo.items.push(item);
 				const quantity =
 					//@ts-ignore
 					is_real_number(item.system.quantity) ? item.system.quantity : 0;
@@ -1774,15 +1776,18 @@ function _standardVehicleWeightCalculation(actorEntity: Actor): EncumbranceDnd5e
 					//@ts-ignore
 					is_real_number(item.system.weight) ? item.system.weight : 0;
 				totalWeight += weight * quantity;
-				// cargo.cargo.items.push(item);
 			}
 		}
 	}
 
 	// Update the rendering context data
-	// actorEntity.features = Object.values(features);
-	// actorEntity.cargo = Object.values(cargo);
-	// actorEntity.system.attributes.encumbrance = actorEntity._computeEncumbrance(totalWeight, data);
+	// context.features = Object.values(features);
+	// context.cargo = Object.values(cargo);
+	// context.system.attributes.encumbrance = actorEntity._prepareEncumbrance();
+
 	//@ts-ignore
-	return <EncumbranceDnd5e>actorEntity._computeEncumbrance(totalWeight, data);
+	actorEntity._prepareEncumbrance();
+	//@ts-ignore
+	const encumbrance = <EncumbranceDnd5e>actorEntity.system.attributes.encumbrance;
+	return encumbrance;
 }
