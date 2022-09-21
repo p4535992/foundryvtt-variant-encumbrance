@@ -77,6 +77,16 @@ export const VariantEncumbranceBulkImpl = {
 					// On update operations, the actorEntity's items have not been updated.
 					// Override the entry for this item using the updatedItem data
 					try {
+						const updatedItem2 = {};
+						for (const [key, value] of Object.entries(updatedItem)) {
+							if (key.startsWith("system.")) {
+								const key2 = key.replace("system.", "");
+								updatedItem2[key2] = value;
+							} else {
+								updatedItem2[key] = value;
+							}
+						}
+						updatedItem = updatedItem2;
 						//@ts-ignore
 						mergeObject(<ItemData>itemCurrent.system, updatedItem);
 					} catch (e: any) {
@@ -166,7 +176,7 @@ export const VariantEncumbranceBulkImpl = {
 		let effectEntityPresent: ActiveEffect | undefined;
 
 		for (const effectEntity of actorEntity.effects) {
-      //@ts-ignore
+			//@ts-ignore
 			const effectNameToSet = effectEntity.label;
 
 			//const effectIsApplied = await VariantEncumbranceBulkImpl.hasEffectAppliedFromId(effectEntity, actorEntity);
@@ -495,25 +505,25 @@ export const VariantEncumbranceBulkImpl = {
 
 			// ON BULK SYSTEM THERE ISN'T [Optional] add Currency Weight (for non-transformed actors)
 			/*
-      //@ts-ignore
-      if (!ignoreCurrency && game.settings.get(CONSTANTS.MODULE_NAME, 'enableCurrencyWeight') && game.settings.get('dnd5e', 'currencyWeight') && actorEntity.system.currency) {
-        //@ts-ignore
-        const currency = actorEntity.system.currency;
-        const numCoins = <number>(
-          Object.values(currency).reduce((val: any, denom: any) => (val += Math.max(denom, 0)), 0)
-        );
+			//@ts-ignore
+			if (!ignoreCurrency && game.settings.get(CONSTANTS.MODULE_NAME, 'enableCurrencyWeight') && game.settings.get('dnd5e', 'currencyWeight') && actorEntity.system.currency) {
+				//@ts-ignore
+				const currency = actorEntity.system.currency;
+				const numCoins = <number>(
+				Object.values(currency).reduce((val: any, denom: any) => (val += Math.max(denom, 0)), 0)
+				);
 
-        const currencyPerWeight = game.settings.get('dnd5e', 'metricWeightUnits')
-          ? game.settings.get(CONSTANTS.MODULE_NAME, 'fakeMetricSystem')
-            ? <number>game.settings.get(CONSTANTS.MODULE_NAME, 'currencyWeight')
-            : <number>game.settings.get(CONSTANTS.MODULE_NAME, 'currencyWeightMetric')
-          : <number>game.settings.get(CONSTANTS.MODULE_NAME, 'currencyWeight');
-        totalWeight += numCoins / currencyPerWeight;
-        debug(
-          `Actor '${actorEntity.name}' : ${numCoins} / ${currencyPerWeight} = ${numCoins / currencyPerWeight} => ${totalWeight}`,
-        );
-      }
-      */
+				const currencyPerWeight = game.settings.get('dnd5e', 'metricWeightUnits')
+				? game.settings.get(CONSTANTS.MODULE_NAME, 'fakeMetricSystem')
+					? <number>game.settings.get(CONSTANTS.MODULE_NAME, 'currencyWeight')
+					: <number>game.settings.get(CONSTANTS.MODULE_NAME, 'currencyWeightMetric')
+				: <number>game.settings.get(CONSTANTS.MODULE_NAME, 'currencyWeight');
+				totalWeight += numCoins / currencyPerWeight;
+				debug(
+				`Actor '${actorEntity.name}' : ${numCoins} / ${currencyPerWeight} = ${numCoins / currencyPerWeight} => ${totalWeight}`,
+				);
+			}
+			*/
 			// Compute Encumbrance percentage
 			totalWeight = totalWeight.toNearest(0.1);
 			debug(`Actor '${actorEntity.name}' => ${totalWeight}`);

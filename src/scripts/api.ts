@@ -18,7 +18,9 @@ const API = {
 
 	calculateWeightOnActorFromId(actorIdOrName: string): EncumbranceData | undefined {
 		const actor = game.actors?.contents.find((actorEntity) => {
-			return isStringEquals(actorEntity.id, actorIdOrName) || isStringEquals(<string>actorEntity.name, actorIdOrName);
+			return (
+				isStringEquals(actorEntity.id, actorIdOrName) || isStringEquals(<string>actorEntity.name, actorIdOrName)
+			);
 		});
 		if (!actor) {
 			warn(`No actor found for reference '${actorIdOrName}'`);
@@ -92,7 +94,9 @@ const API = {
 
 	calculateBulkOnActorFromId(actorIdOrName: string): EncumbranceData | undefined {
 		const actor = game.actors?.contents.find((actorEntity) => {
-			return isStringEquals(actorEntity.id, actorIdOrName) || isStringEquals(<string>actorEntity.name, actorIdOrName);
+			return (
+				isStringEquals(actorEntity.id, actorIdOrName) || isStringEquals(<string>actorEntity.name, actorIdOrName)
+			);
 		});
 		if (!actor) {
 			warn(`No actor found for reference '${actorIdOrName}'`);

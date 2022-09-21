@@ -85,6 +85,16 @@ export const VariantEncumbranceImpl = {
 					// On update operations, the actorEntity's items have not been updated.
 					// Override the entry for this item using the updatedItem data
 					try {
+						const updatedItem2 = {};
+						for (const [key, value] of Object.entries(updatedItem)) {
+							if (key.startsWith("system.")) {
+								const key2 = key.replace("system.", "");
+								updatedItem2[key2] = value;
+							} else {
+								updatedItem2[key] = value;
+							}
+						}
+						updatedItem = updatedItem2;
 						//@ts-ignore
 						mergeObject(<ItemData>itemCurrent.system, updatedItem);
 					} catch (e: any) {
@@ -731,17 +741,17 @@ export const VariantEncumbranceImpl = {
 				// ===============================
 				// MOD 4535992 FROM 2000 to 1 SO I REMOVED ???
 				/*
-        const vehicleWeightMultiplier = game.settings.get('dnd5e', 'metricWeightUnits')
-          ? (game.settings.get(CONSTANTS.MODULE_NAME, 'fakeMetricSystem')
-            ? <number>game.settings.get(CONSTANTS.MODULE_NAME, 'vehicleWeightMultiplier')
-            :<number>game.settings.get(CONSTANTS.MODULE_NAME, 'vehicleWeightMultiplierMetric')
-          )
-          : <number>game.settings.get(CONSTANTS.MODULE_NAME, 'vehicleWeightMultiplier');
+				const vehicleWeightMultiplier = game.settings.get('dnd5e', 'metricWeightUnits')
+				? (game.settings.get(CONSTANTS.MODULE_NAME, 'fakeMetricSystem')
+					? <number>game.settings.get(CONSTANTS.MODULE_NAME, 'vehicleWeightMultiplier')
+					:<number>game.settings.get(CONSTANTS.MODULE_NAME, 'vehicleWeightMultiplierMetric')
+				)
+				: <number>game.settings.get(CONSTANTS.MODULE_NAME, 'vehicleWeightMultiplier');
 
-        // Vehicle weights are an order of magnitude greater.
+				// Vehicle weights are an order of magnitude greater.
 
-        totalWeight /= vehicleWeightMultiplier;
-        */
+				totalWeight /= vehicleWeightMultiplier;
+				*/
 				// TODO
 				//totalWeight /= <number>this.document.getFlag(SETTINGS.MOD_NAME, 'unit') || vehicleWeightMultiplier;
 
@@ -922,7 +932,8 @@ export const VariantEncumbranceImpl = {
 			// THIS IS IMPORTANT WE FORCE THE CORE ENCUMBRANCE TO BE SYNCHRONIZED WITH THE CALCULATION
 			// ===============================================================================
 			//@ts-ignore
-			(<EncumbranceDnd5e>actorEntity.system.attributes.encumbrance) = dataEncumbrance;
+			//(<EncumbranceDnd5e>actorEntity.system.attributes.encumbrance) = dataEncumbrance;
+			setProperty(actorEntity, `system.attributes.encumbrance`, dataEncumbrance);
 
 			const encumbranceData = {
 				totalWeight: totalWeightOriginal.toNearest(0.1),
@@ -1714,7 +1725,7 @@ function _standardActorWeightCalculation(actorEntity: Actor): EncumbranceData {
 
 function _standardCharacterWeightCalculation(actorEntity: Actor): EncumbranceDnd5e {
 	//@ts-ignore
-	actorEntity._prepareEncumbrance();
+	// actorEntity._prepareEncumbrance();
 	//@ts-ignore
 	const encumbrance = <EncumbranceDnd5e>actorEntity.system.attributes.encumbrance;
 	return encumbrance;
@@ -1725,7 +1736,7 @@ function _standardVehicleWeightCalculation(actorEntity: Actor): EncumbranceDnd5e
 	let totalWeight = 0;
 	for (const item of actorEntity.items) {
 		//@ts-ignore
-		actorEntity._prepareCrewedItem(item);
+		// actorEntity._prepareCrewedItem(item);
 
 		// Handle cargo explicitly
 		//@ts-ignore
@@ -1743,7 +1754,7 @@ function _standardVehicleWeightCalculation(actorEntity: Actor): EncumbranceDnd5e
 			//@ts-ignore
 			totalWeight += weight * quantity;
 			//@ts-ignore
-			actorEntity._prepareEncumbrance();
+			// actorEntity._prepareEncumbrance();
 			//@ts-ignore
 			const encumbrance = <EncumbranceDnd5e>actorEntity.system.attributes.encumbrance;
 			return encumbrance;
@@ -1786,7 +1797,7 @@ function _standardVehicleWeightCalculation(actorEntity: Actor): EncumbranceDnd5e
 	// context.system.attributes.encumbrance = actorEntity._prepareEncumbrance();
 
 	//@ts-ignore
-	actorEntity._prepareEncumbrance();
+	// actorEntity._prepareEncumbrance();
 	//@ts-ignore
 	const encumbrance = <EncumbranceDnd5e>actorEntity.system.attributes.encumbrance;
 	return encumbrance;
