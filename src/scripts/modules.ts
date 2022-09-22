@@ -956,10 +956,17 @@ const module = {
 					encumbranceElements[0].classList.add("max");
 				}
 
-				htmlElementEncumbranceVariant
-					.find(".encumbrance-breakpoint-variant.encumbrance-33.arrow-up")
-					.parent()
-					.css("margin-bottom", "4px");
+				if (game.settings.get(CONSTANTS.MODULE_NAME, "enableBulkSystem")) {
+					htmlElementEncumbranceVariant
+						.find(".encumbrance-breakpoint-variant.encumbrance-33.arrow-up")
+						.parent()
+						.css("margin-bottom", "4px");
+				} else {
+					htmlElementEncumbranceVariant
+						.find(".encumbrance-breakpoint-variant.encumbrance-33.arrow-up")
+						.parent()
+						.css("margin-bottom", "14px");
+				}
 				htmlElementEncumbranceVariant
 					.find(".encumbrance-breakpoint-variant.encumbrance-33.arrow-up")
 					.append(

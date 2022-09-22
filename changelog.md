@@ -1,3 +1,7 @@
+### 0.11.2
+
+- Little css fix 14px with no bulk on bottom
+
 ### 0.11.0-1
 
 - Update fvtt10
