@@ -257,7 +257,8 @@ export const VariantEncumbranceBulkImpl = {
 				if (!effectEntityPresent) {
 					effectEntityPresent = effectEntity;
 				} else {
-					await VariantEncumbranceBulkImpl.removeEffectFromId(effectEntity, actorEntity);
+					await VariantEncumbranceBulkImpl.removeEffectFromId(effectEntityPresent, actorEntity);
+					effectEntityPresent = effectEntity;
 				}
 			}
 		}
