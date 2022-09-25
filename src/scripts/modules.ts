@@ -474,19 +474,19 @@ export const readyHooks = async () => {
 										EncumbranceMode.UPDATE
 									);
 								} else if (!enableVarianEncumbranceEffectsOnSpecificActorFlag) {
-										await VariantEncumbranceImpl.manageActiveEffect(
+									await VariantEncumbranceImpl.manageActiveEffect(
+										actorEntity,
+										ENCUMBRANCE_TIERS.NONE
+									);
+									if (enableVarianEncumbranceWeightOnSpecificActorFlag) {
+										await VariantEncumbranceImpl.updateEncumbrance(
 											actorEntity,
-											ENCUMBRANCE_TIERS.NONE
+											undefined,
+											false,
+											EncumbranceMode.UPDATE
 										);
-										if (enableVarianEncumbranceWeightOnSpecificActorFlag) {
-											await VariantEncumbranceImpl.updateEncumbrance(
-												actorEntity,
-												undefined,
-												false,
-												EncumbranceMode.UPDATE
-											);
-										}
-								} else if(enableVarianEncumbranceWeightOnSpecificActorFlag) {
+									}
+								} else if (enableVarianEncumbranceWeightOnSpecificActorFlag) {
 									await VariantEncumbranceImpl.updateEncumbrance(
 										actorEntity,
 										undefined,
@@ -625,19 +625,19 @@ export const readyHooks = async () => {
 									EncumbranceMode.UPDATE
 								);
 							} else if (!enableVarianEncumbranceEffectsBulkOnSpecificActorFlag) {
-									await VariantEncumbranceBulkImpl.manageActiveEffect(
+								await VariantEncumbranceBulkImpl.manageActiveEffect(
+									actorEntity,
+									ENCUMBRANCE_TIERS.NONE
+								);
+								if (enableVarianEncumbranceWeightBulkOnSpecificActorFlag) {
+									await VariantEncumbranceBulkImpl.updateEncumbrance(
 										actorEntity,
-										ENCUMBRANCE_TIERS.NONE
+										undefined,
+										false,
+										EncumbranceMode.UPDATE
 									);
-									if (enableVarianEncumbranceWeightBulkOnSpecificActorFlag) {
-										await VariantEncumbranceBulkImpl.updateEncumbrance(
-											actorEntity,
-											undefined,
-											false,
-											EncumbranceMode.UPDATE
-										);
-									}
-							} else if(enableVarianEncumbranceWeightBulkOnSpecificActorFlag) {
+								}
+							} else if (enableVarianEncumbranceWeightBulkOnSpecificActorFlag) {
 								await VariantEncumbranceBulkImpl.updateEncumbrance(
 									actorEntity,
 									undefined,
@@ -680,6 +680,129 @@ export const readyHooks = async () => {
 			}
 		}
 	});
+
+	// Hooks.on("preCreateActiveEffect", (activeEffect, _config, _userId) => {
+	// 	const actorEntity = activeEffect?.parent instanceof Actor ? <Actor>activeEffect?.parent : undefined;
+	// 	if (!actorEntity) {
+	// 		return;
+	// 	}
+	// 	if (!actorEntity.effects) {
+	// 		return;
+	// 	}
+	// 	if (<boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE)) {
+	// 		let effectEntityPresent: ActiveEffect | undefined = undefined;
+	// 		for (const effectEntity of actorEntity.effects) {
+	// 			//@ts-ignore
+	// 			const effectNameToSet = effectEntity.label;
+
+	// 			//const effectIsApplied = await VariantEncumbranceImpl.hasEffectAppliedFromId(effectEntity, actorEntity);
+
+	// 			// Remove AE with empty a label but with flag of variant encumbrance ???
+	// 			if (!effectNameToSet && hasProperty(effectEntity, `flags.${CONSTANTS.FLAG}`)) {
+	// 				continue;
+	// 			}
+
+	// 			if (!effectNameToSet) {
+	// 				continue;
+	// 			}
+
+	// 			// Remove all encumbrance effect renamed from the player
+	// 			if (
+	// 				// encumbranceData.encumbranceTier &&
+	// 				//@ts-ignore
+	// 				effectEntity.flags &&
+	// 				hasProperty(effectEntity, `flags.${CONSTANTS.FLAG}`) &&
+	// 				effectNameToSet !== ENCUMBRANCE_STATE.UNENCUMBERED &&
+	// 				effectNameToSet !== ENCUMBRANCE_STATE.ENCUMBERED &&
+	// 				effectNameToSet !== ENCUMBRANCE_STATE.HEAVILY_ENCUMBERED &&
+	// 				effectNameToSet !== ENCUMBRANCE_STATE.OVERBURDENED
+	// 			) {
+	// 				continue;
+	// 			}
+
+	// 			// Remove Old settings
+	// 			//@ts-ignore
+	// 			if (effectEntity.flags && hasProperty(effectEntity, `flags.VariantEncumbrance`)) {
+	// 				continue;
+	// 			}
+
+	// 			// Ignore all non encumbrance effect renamed from the player (again)
+	// 			if (
+	// 				!hasProperty(effectEntity, `flags.${CONSTANTS.FLAG}`) &&
+	// 				effectNameToSet !== ENCUMBRANCE_STATE.UNENCUMBERED &&
+	// 				effectNameToSet !== ENCUMBRANCE_STATE.ENCUMBERED &&
+	// 				effectNameToSet !== ENCUMBRANCE_STATE.HEAVILY_ENCUMBERED &&
+	// 				effectNameToSet !== ENCUMBRANCE_STATE.OVERBURDENED
+	// 			) {
+	// 				continue;
+	// 			}
+
+	// 			// Remove encumbrance effect with same name used in this module
+	// 			if (
+	// 				!hasProperty(effectEntity, `flags.${CONSTANTS.FLAG}`) &&
+	// 				(effectNameToSet === ENCUMBRANCE_STATE.UNENCUMBERED ||
+	// 					effectNameToSet === ENCUMBRANCE_STATE.ENCUMBERED ||
+	// 					effectNameToSet === ENCUMBRANCE_STATE.HEAVILY_ENCUMBERED ||
+	// 					effectNameToSet === ENCUMBRANCE_STATE.OVERBURDENED)
+	// 			) {
+	// 				continue;
+	// 			}
+
+	// 			if (
+	// 				hasProperty(effectEntity, `flags.${CONSTANTS.FLAG}`) &&
+	// 				(effectNameToSet === ENCUMBRANCE_STATE.UNENCUMBERED ||
+	// 					effectNameToSet === ENCUMBRANCE_STATE.ENCUMBERED ||
+	// 					effectNameToSet === ENCUMBRANCE_STATE.HEAVILY_ENCUMBERED ||
+	// 					effectNameToSet === ENCUMBRANCE_STATE.OVERBURDENED)
+	// 			) {
+	// 				if (!effectEntityPresent) {
+	// 					effectEntityPresent = effectEntity;
+	// 					break;
+	// 				}
+	// 			}
+	// 		}
+
+	// 		//let encumbranceDataBulk;
+	// 		// if (hasProperty(actorObject, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.DATA_BULK}`)) {
+	// 		//   encumbranceDataBulk = <EncumbranceData>getProperty(actorObject,`flags.${CONSTANTS.FLAG}.${EncumbranceFlags.DATA_BULK}`);
+	// 		// }
+
+	// 		let encumbranceData: EncumbranceData | undefined = undefined;
+	// 		if (hasProperty(actorEntity, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.DATA}`)) {
+	// 			encumbranceData = <EncumbranceData>(
+	// 				getProperty(actorEntity, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.DATA}`)
+	// 			);
+	// 		}
+	// 		let effectName;
+	// 		switch (encumbranceData?.encumbranceTier) {
+	// 			case ENCUMBRANCE_TIERS.NONE:
+	// 				effectName = ENCUMBRANCE_STATE.UNENCUMBERED;
+	// 				break;
+	// 			case ENCUMBRANCE_TIERS.LIGHT:
+	// 				effectName = ENCUMBRANCE_STATE.ENCUMBERED;
+	// 				break;
+	// 			case ENCUMBRANCE_TIERS.HEAVY:
+	// 				effectName = ENCUMBRANCE_STATE.HEAVILY_ENCUMBERED;
+	// 				break;
+	// 			case ENCUMBRANCE_TIERS.MAX:
+	// 				effectName = ENCUMBRANCE_STATE.OVERBURDENED;
+	// 				break;
+	// 			default:
+	// 				effectName = null;
+	// 		}
+
+	// 		if (!game.settings.get(CONSTANTS.MODULE_NAME, "useVariantEncumbrance")) {
+	// 			effectName = ENCUMBRANCE_STATE.UNENCUMBERED;
+	// 		}
+
+	// 		if (effectName && effectName !== "") {
+	// 			//@ts-ignore
+	// 			if (effectName === effectEntityPresent?.label) {
+	// 			}
+	// 		}
+	// 	}
+	// 	// TODO add bulk
+	// });
 };
 
 // export function getEmbeddedDocument(wrapped, embeddedName, id, { strict = false } = {}) {
@@ -697,10 +820,20 @@ export async function createEmbeddedDocuments(wrapped, embeddedName, data, conte
 	const actorEntity: Actor = this.actor;
 	if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enabled")) {
-			await VariantEncumbranceImpl.updateEncumbrance(actorEntity, data, <boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE), EncumbranceMode.ADD);
+			await VariantEncumbranceImpl.updateEncumbrance(
+				actorEntity,
+				data,
+				<boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE),
+				EncumbranceMode.ADD
+			);
 		}
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enableBulkSystem")) {
-			await VariantEncumbranceBulkImpl.updateEncumbrance(actorEntity, data, <boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE_BULK), EncumbranceMode.ADD);
+			await VariantEncumbranceBulkImpl.updateEncumbrance(
+				actorEntity,
+				data,
+				<boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE_BULK),
+				EncumbranceMode.ADD
+			);
 		}
 	}
 	return wrapped(embeddedName, data, context);
@@ -710,10 +843,20 @@ export async function deleteEmbeddedDocuments(wrapped, embeddedName, ids = [], o
 	const actorEntity: Actor = this.actor;
 	if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enabled")) {
-			await VariantEncumbranceImpl.updateEncumbrance(actorEntity, ids, <boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE), EncumbranceMode.DELETE);
+			await VariantEncumbranceImpl.updateEncumbrance(
+				actorEntity,
+				ids,
+				<boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE),
+				EncumbranceMode.DELETE
+			);
 		}
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enableBulkSystem")) {
-			await VariantEncumbranceBulkImpl.updateEncumbrance(actorEntity, ids, <boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE_BULK), EncumbranceMode.DELETE);
+			await VariantEncumbranceBulkImpl.updateEncumbrance(
+				actorEntity,
+				ids,
+				<boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE_BULK),
+				EncumbranceMode.DELETE
+			);
 		}
 	}
 	return wrapped(embeddedName, ids, options);
@@ -723,10 +866,20 @@ export async function updateEmbeddedDocuments(wrapped, embeddedName, data, optio
 	const actorEntity: Actor = this.actor;
 	if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enabled")) {
-			await VariantEncumbranceImpl.updateEncumbrance(actorEntity, data, <boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE), EncumbranceMode.UPDATE);
+			await VariantEncumbranceImpl.updateEncumbrance(
+				actorEntity,
+				data,
+				<boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE),
+				EncumbranceMode.UPDATE
+			);
 		}
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enableBulkSystem")) {
-			await VariantEncumbranceImpl.updateEncumbrance(actorEntity, data, <boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE_BULK), EncumbranceMode.UPDATE);
+			await VariantEncumbranceImpl.updateEncumbrance(
+				actorEntity,
+				data,
+				<boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE_BULK),
+				EncumbranceMode.UPDATE
+			);
 		}
 	}
 	return wrapped(embeddedName, data, options);
@@ -737,10 +890,20 @@ export async function createDocuments(wrapped, data, context = { parent: {}, pac
 	const actorEntity: Actor = <Actor>parent;
 	if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enabled")) {
-			await VariantEncumbranceImpl.updateEncumbrance(actorEntity, data, <boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE), EncumbranceMode.ADD);
+			await VariantEncumbranceImpl.updateEncumbrance(
+				actorEntity,
+				data,
+				<boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE),
+				EncumbranceMode.ADD
+			);
 		}
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enableBulkSystem")) {
-			await VariantEncumbranceBulkImpl.updateEncumbrance(actorEntity, data, <boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE_BULK), EncumbranceMode.ADD);
+			await VariantEncumbranceBulkImpl.updateEncumbrance(
+				actorEntity,
+				data,
+				<boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE_BULK),
+				EncumbranceMode.ADD
+			);
 		}
 	}
 	return wrapped(data, context);
@@ -751,10 +914,20 @@ export async function updateDocuments(wrapped, updates = [], context = { parent:
 	const actorEntity: Actor = <Actor>parent;
 	if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enabled")) {
-			await VariantEncumbranceImpl.updateEncumbrance(actorEntity, updates, <boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE), EncumbranceMode.UPDATE);
+			await VariantEncumbranceImpl.updateEncumbrance(
+				actorEntity,
+				updates,
+				<boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE),
+				EncumbranceMode.UPDATE
+			);
 		}
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enableBulkSystem")) {
-			await VariantEncumbranceBulkImpl.updateEncumbrance(actorEntity, updates, <boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE_BULK), EncumbranceMode.UPDATE);
+			await VariantEncumbranceBulkImpl.updateEncumbrance(
+				actorEntity,
+				updates,
+				<boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE_BULK),
+				EncumbranceMode.UPDATE
+			);
 		}
 	}
 	return wrapped(updates, context);
@@ -765,10 +938,20 @@ export async function deleteDocuments(wrapped, ids = [], context = { parent: {},
 	const actorEntity: Actor = <Actor>parent;
 	if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enabled")) {
-			await VariantEncumbranceImpl.updateEncumbrance(actorEntity, ids, <boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE), EncumbranceMode.DELETE);
+			await VariantEncumbranceImpl.updateEncumbrance(
+				actorEntity,
+				ids,
+				<boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE),
+				EncumbranceMode.DELETE
+			);
 		}
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enableBulkSystem")) {
-			await VariantEncumbranceBulkImpl.updateEncumbrance(actorEntity, ids, <boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE_BULK), EncumbranceMode.DELETE);
+			await VariantEncumbranceBulkImpl.updateEncumbrance(
+				actorEntity,
+				ids,
+				<boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE_BULK),
+				EncumbranceMode.DELETE
+			);
 		}
 	}
 	return wrapped(ids, context);
@@ -875,12 +1058,13 @@ const module = {
 				itemsToCheck = actorEntityTmp.items.contents;
 				// }
 
-				encumbranceData = VariantEncumbranceImpl.calculateEncumbrance(
-					actorEntityTmp,
-					itemsToCheck,
-					false,
-					invPlusActive
+				encumbranceData = <EncumbranceData>(
+					VariantEncumbranceImpl.calculateEncumbrance(actorEntityTmp, itemsToCheck, false, invPlusActive)
 				);
+				// TODO THIS LAUNCH A ERROR ON THE SEMAPHORE SYNCHRONIZE...
+				// if (<boolean>actorEntityTmp.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE)) {
+				// 	await VariantEncumbranceImpl.manageActiveEffect(actorEntityTmp, encumbranceData.encumbranceTier);
+				// }
 			}
 
 			const displayedUnits = encumbranceData.unit;
@@ -1140,8 +1324,8 @@ const module = {
 			}
 
 			let encumbranceDataBulk;
-			// if (hasProperty(actorObject, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.DATA}`)) {
-			//   encumbranceDataBulk = <EncumbranceData>getProperty(actorObject,`flags.${CONSTANTS.FLAG}.${EncumbranceFlags.DATA}`);
+			// if (hasProperty(actorObject, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.DATA_BULK}`)) {
+			//   encumbranceDataBulk = <EncumbranceData>getProperty(actorObject,`flags.${CONSTANTS.FLAG}.${EncumbranceFlags.DATA_BULK}`);
 			// }
 			if (!encumbranceDataBulk) {
 				// const itemsCurrent = <Item[]>actorEntity.items.contents;//actorObject.items;// STRANGE BUG actorEntity.items.contents
@@ -1178,6 +1362,11 @@ const module = {
 					false,
 					invPlusActive
 				);
+
+				// TODO THIS LAUNCH A ERROR ON THE SEMAPHORE SYNCHRONIZE...
+				// if (<boolean>actorEntityTmp.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE_BULK)) {
+				// 	await VariantEncumbranceBulkImpl.manageActiveEffect(actorEntityTmp, encumbranceDataBulk.encumbranceTier);
+				// }
 			}
 
 			const displayedUnitsBulk = encumbranceDataBulk.unit;

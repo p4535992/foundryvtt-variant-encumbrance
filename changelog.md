@@ -1,3 +1,7 @@
+### 0.11.3
+
+- Some bug fix
+
 ### 0.11.2
 
 - Little css fix 14px with no bulk on bottom
