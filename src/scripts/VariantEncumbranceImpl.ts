@@ -9,7 +9,14 @@ import {
 	ENCUMBRANCE_TIERS,
 } from "./VariantEncumbranceModels";
 import Effect from "./effects/effect";
-import { daeActive, dfQualityLifeActive, ENCUMBRANCE_STATE, invMidiQol, invPlusActive } from "./modules";
+import {
+	daeActive,
+	dfQualityLifeActive,
+	ENCUMBRANCE_STATE,
+	invMidiQol,
+	invPlusActive,
+	itemContainerActive,
+} from "./modules";
 import CONSTANTS from "./constants";
 import {
 	debug,
@@ -33,7 +40,7 @@ export const VariantEncumbranceImpl = {
 	updateEncumbrance: async function (
 		actorEntity: Actor,
 		updatedItems: any[] | undefined,
-		updatedEffect?: ActiveEffect | undefined,
+		updatedEffect: boolean,
 		mode?: EncumbranceMode
 	): Promise<void> {
 		if (updatedItems && updatedItems.length > 0) {
@@ -49,7 +56,7 @@ export const VariantEncumbranceImpl = {
 	_updateEncumbranceInternal: async function (
 		actorEntity: Actor,
 		updatedItem: any | undefined,
-		updatedEffect?: ActiveEffect | undefined,
+		updatedEffect?: boolean,
 		mode?: EncumbranceMode
 	): Promise<void> {
 		// Remove old flags
@@ -194,8 +201,16 @@ export const VariantEncumbranceImpl = {
 				actorEntity.system.attributes.movement.walk
 			);
 		}
-
-		await VariantEncumbranceImpl.calculateEncumbranceWithEffect(actorEntity, inventoryItems, false, invPlusActive);
+		if (updatedEffect) {
+			await VariantEncumbranceImpl.calculateEncumbranceWithEffect(
+				actorEntity,
+				inventoryItems,
+				false,
+				invPlusActive
+			);
+		} else {
+			VariantEncumbranceImpl.calculateEncumbrance(actorEntity, inventoryItems, false, invPlusActive);
+		}
 	},
 
 	calculateEncumbranceWithEffect: async function (
@@ -452,7 +467,8 @@ export const VariantEncumbranceImpl = {
 				// Start Item container check
 				if (
 					getProperty(item, "flags.itemcollection.bagWeight") !== null &&
-					getProperty(item, "flags.itemcollection.bagWeight") !== undefined
+					getProperty(item, "flags.itemcollection.bagWeight") !== undefined &&
+					itemContainerActive
 				) {
 					const weightless = getProperty(item, "system.capacity.weightless") ?? false;
 					if (weightless) {

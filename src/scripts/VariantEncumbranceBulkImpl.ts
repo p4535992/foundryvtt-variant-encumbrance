@@ -8,7 +8,15 @@ import {
 	ENCUMBRANCE_TIERS,
 } from "./VariantEncumbranceModels";
 import Effect from "./effects/effect";
-import { ENCUMBRANCE_STATE, invMidiQol, invPlusActive, daeActive, dfQualityLifeActive, aemlApi } from "./modules";
+import {
+	ENCUMBRANCE_STATE,
+	invMidiQol,
+	invPlusActive,
+	daeActive,
+	dfQualityLifeActive,
+	aemlApi,
+	itemContainerActive,
+} from "./modules";
 import CONSTANTS from "./constants";
 import {
 	debug,
@@ -31,7 +39,7 @@ export const VariantEncumbranceBulkImpl = {
 	updateEncumbrance: async function (
 		actorEntity: Actor,
 		updatedItems: any[] | undefined,
-		updatedEffect?: ActiveEffect | undefined,
+		updatedEffect: boolean,
 		mode?: EncumbranceMode
 	): Promise<void> {
 		if (updatedItems && updatedItems.length > 0) {
@@ -52,7 +60,7 @@ export const VariantEncumbranceBulkImpl = {
 	_updateEncumbranceInternal: async function (
 		actorEntity: Actor,
 		updatedItem: any | undefined,
-		updatedEffect?: ActiveEffect | undefined,
+		updatedEffect?: boolean,
 		mode?: EncumbranceMode
 	): Promise<void> {
 		if (updatedItem) {
@@ -124,13 +132,16 @@ export const VariantEncumbranceBulkImpl = {
 				}
 			}
 		}
-
-		await VariantEncumbranceBulkImpl.calculateEncumbranceWithEffect(
-			actorEntity,
-			inventoryItems,
-			false,
-			invPlusActive
-		);
+		if (updatedEffect) {
+			await VariantEncumbranceBulkImpl.calculateEncumbranceWithEffect(
+				actorEntity,
+				inventoryItems,
+				false,
+				invPlusActive
+			);
+		} else {
+			VariantEncumbranceBulkImpl.calculateEncumbrance(actorEntity, inventoryItems, false, invPlusActive);
+		}
 	},
 
 	calculateEncumbranceWithEffect: async function (
@@ -367,7 +378,8 @@ export const VariantEncumbranceBulkImpl = {
 				// Start Item container check
 				if (
 					getProperty(item, "flags.itemcollection.bagWeight") !== null &&
-					getProperty(item, "flags.itemcollection.bagWeight") !== undefined
+					getProperty(item, "flags.itemcollection.bagWeight") !== undefined &&
+					itemContainerActive
 				) {
 					const weightless = getProperty(item, "system.capacity.weightless") ?? false;
 					if (weightless) {

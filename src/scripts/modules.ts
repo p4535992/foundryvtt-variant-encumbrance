@@ -317,7 +317,7 @@ export const readyHooks = async () => {
 						await VariantEncumbranceImpl.updateEncumbrance(
 							actorEntity,
 							undefined,
-							undefined,
+							false,
 							EncumbranceMode.ADD
 						);
 					}
@@ -325,7 +325,7 @@ export const readyHooks = async () => {
 						await VariantEncumbranceBulkImpl.updateEncumbrance(
 							actorEntity,
 							undefined,
-							undefined,
+							false,
 							EncumbranceMode.ADD
 						);
 					}
@@ -463,20 +463,42 @@ export const readyHooks = async () => {
 									enableVarianEncumbranceWeightOnSpecificActorFlag
 								);
 
-								if (!enableVarianEncumbranceEffectsOnSpecificActorFlag) {
-									await VariantEncumbranceImpl.manageActiveEffect(
-										actorEntity,
-										ENCUMBRANCE_TIERS.NONE
-									);
+								if (
+									enableVarianEncumbranceEffectsOnSpecificActorFlag &&
+									enableVarianEncumbranceWeightOnSpecificActorFlag
+								) {
+									// await VariantEncumbranceImpl.updateEncumbrance(
+									// 	actorEntity,
+									// 	undefined,
+									// 	true,
+									// 	EncumbranceMode.UPDATE
+									// );
+								} else {
+									if (!enableVarianEncumbranceEffectsOnSpecificActorFlag) {
+										await VariantEncumbranceImpl.manageActiveEffect(
+											actorEntity,
+											ENCUMBRANCE_TIERS.NONE
+										);
+										if (enableVarianEncumbranceWeightOnSpecificActorFlag) {
+											await VariantEncumbranceImpl.updateEncumbrance(
+												actorEntity,
+												undefined,
+												false,
+												EncumbranceMode.UPDATE
+											);
+										}
+									} else {
+										// if (enableVarianEncumbranceWeightOnSpecificActorFlag) {
+										// 	await VariantEncumbranceImpl.updateEncumbrance(
+										// 		actorEntity,
+										// 		undefined,
+										// 		true,
+										// 		EncumbranceMode.UPDATE
+										// 	);
+										// }
+									}
 								}
-								if (enableVarianEncumbranceWeightOnSpecificActorFlag) {
-									await VariantEncumbranceImpl.updateEncumbrance(
-										actorEntity,
-										undefined,
-										undefined,
-										EncumbranceMode.UPDATE
-									);
-								}
+
 								if (removeLabelButtonsSheetHeader) {
 									mylabel = "";
 								}
@@ -596,20 +618,42 @@ export const readyHooks = async () => {
 								enableVarianEncumbranceWeightBulkOnSpecificActorFlag
 							);
 
-							if (!enableVarianEncumbranceEffectsBulkOnSpecificActorFlag) {
-								await VariantEncumbranceBulkImpl.manageActiveEffect(
-									actorEntity,
-									ENCUMBRANCE_TIERS.NONE
-								);
+							if (
+								enableVarianEncumbranceEffectsBulkOnSpecificActorFlag &&
+								enableVarianEncumbranceWeightBulkOnSpecificActorFlag
+							) {
+								// await VariantEncumbranceBulkImpl.updateEncumbrance(
+								// 	actorEntity,
+								// 	undefined,
+								// 	true,
+								// 	EncumbranceMode.UPDATE
+								// );
+							} else {
+								if (!enableVarianEncumbranceEffectsBulkOnSpecificActorFlag) {
+									await VariantEncumbranceBulkImpl.manageActiveEffect(
+										actorEntity,
+										ENCUMBRANCE_TIERS.NONE
+									);
+									if (enableVarianEncumbranceWeightBulkOnSpecificActorFlag) {
+										await VariantEncumbranceBulkImpl.updateEncumbrance(
+											actorEntity,
+											undefined,
+											false,
+											EncumbranceMode.UPDATE
+										);
+									}
+								} else {
+									// if (enableVarianEncumbranceWeightBulkOnSpecificActorFlag) {
+									// 	await VariantEncumbranceBulkImpl.updateEncumbrance(
+									// 		actorEntity,
+									// 		undefined,
+									// 		true,
+									// 		EncumbranceMode.UPDATE
+									// 	);
+									// }
+								}
 							}
-							if (enableVarianEncumbranceWeightBulkOnSpecificActorFlag) {
-								await VariantEncumbranceBulkImpl.updateEncumbrance(
-									actorEntity,
-									undefined,
-									undefined,
-									EncumbranceMode.UPDATE
-								);
-							}
+
 							if (removeLabelButtonsSheetHeader) {
 								mylabelBulk = "";
 							}
@@ -625,12 +669,7 @@ export const readyHooks = async () => {
 				if (hasProperty(actorEntity, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.ENABLED_WE}`)) {
 					actorEntity.unsetFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_WE);
 				}
-				await VariantEncumbranceImpl.updateEncumbrance(
-					actorEntity,
-					undefined,
-					undefined,
-					EncumbranceMode.UPDATE
-				);
+				await VariantEncumbranceImpl.updateEncumbrance(actorEntity, undefined, false, EncumbranceMode.UPDATE);
 
 				// System Bulk
 
@@ -643,7 +682,7 @@ export const readyHooks = async () => {
 				await VariantEncumbranceBulkImpl.updateEncumbrance(
 					actorEntity,
 					undefined,
-					undefined,
+					false,
 					EncumbranceMode.UPDATE
 				);
 			}
@@ -666,10 +705,10 @@ export async function createEmbeddedDocuments(wrapped, embeddedName, data, conte
 	const actorEntity: Actor = this.actor;
 	if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enabled")) {
-			await VariantEncumbranceImpl.updateEncumbrance(actorEntity, data, undefined, EncumbranceMode.ADD);
+			await VariantEncumbranceImpl.updateEncumbrance(actorEntity, data, false, EncumbranceMode.ADD);
 		}
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enableBulkSystem")) {
-			await VariantEncumbranceBulkImpl.updateEncumbrance(actorEntity, data, undefined, EncumbranceMode.ADD);
+			await VariantEncumbranceBulkImpl.updateEncumbrance(actorEntity, data, false, EncumbranceMode.ADD);
 		}
 	}
 	return wrapped(embeddedName, data, context);
@@ -679,10 +718,10 @@ export async function deleteEmbeddedDocuments(wrapped, embeddedName, ids = [], o
 	const actorEntity: Actor = this.actor;
 	if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enabled")) {
-			await VariantEncumbranceImpl.updateEncumbrance(actorEntity, ids, undefined, EncumbranceMode.DELETE);
+			await VariantEncumbranceImpl.updateEncumbrance(actorEntity, ids, false, EncumbranceMode.DELETE);
 		}
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enableBulkSystem")) {
-			await VariantEncumbranceBulkImpl.updateEncumbrance(actorEntity, ids, undefined, EncumbranceMode.DELETE);
+			await VariantEncumbranceBulkImpl.updateEncumbrance(actorEntity, ids, false, EncumbranceMode.DELETE);
 		}
 	}
 	return wrapped(embeddedName, ids, options);
@@ -692,10 +731,10 @@ export async function updateEmbeddedDocuments(wrapped, embeddedName, data, optio
 	const actorEntity: Actor = this.actor;
 	if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enabled")) {
-			await VariantEncumbranceImpl.updateEncumbrance(actorEntity, data, undefined, EncumbranceMode.UPDATE);
+			await VariantEncumbranceImpl.updateEncumbrance(actorEntity, data, false, EncumbranceMode.UPDATE);
 		}
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enableBulkSystem")) {
-			await VariantEncumbranceImpl.updateEncumbrance(actorEntity, data, undefined, EncumbranceMode.UPDATE);
+			await VariantEncumbranceImpl.updateEncumbrance(actorEntity, data, false, EncumbranceMode.UPDATE);
 		}
 	}
 	return wrapped(embeddedName, data, options);
@@ -706,10 +745,10 @@ export async function createDocuments(wrapped, data, context = { parent: {}, pac
 	const actorEntity: Actor = <Actor>parent;
 	if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enabled")) {
-			await VariantEncumbranceImpl.updateEncumbrance(actorEntity, data, undefined, EncumbranceMode.ADD);
+			await VariantEncumbranceImpl.updateEncumbrance(actorEntity, data, false, EncumbranceMode.ADD);
 		}
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enableBulkSystem")) {
-			await VariantEncumbranceBulkImpl.updateEncumbrance(actorEntity, data, undefined, EncumbranceMode.ADD);
+			await VariantEncumbranceBulkImpl.updateEncumbrance(actorEntity, data, false, EncumbranceMode.ADD);
 		}
 	}
 	return wrapped(data, context);
@@ -720,10 +759,10 @@ export async function updateDocuments(wrapped, updates = [], context = { parent:
 	const actorEntity: Actor = <Actor>parent;
 	if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enabled")) {
-			await VariantEncumbranceImpl.updateEncumbrance(actorEntity, updates, undefined, EncumbranceMode.UPDATE);
+			await VariantEncumbranceImpl.updateEncumbrance(actorEntity, updates, false, EncumbranceMode.UPDATE);
 		}
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enableBulkSystem")) {
-			await VariantEncumbranceBulkImpl.updateEncumbrance(actorEntity, updates, undefined, EncumbranceMode.UPDATE);
+			await VariantEncumbranceBulkImpl.updateEncumbrance(actorEntity, updates, false, EncumbranceMode.UPDATE);
 		}
 	}
 	return wrapped(updates, context);
@@ -734,10 +773,10 @@ export async function deleteDocuments(wrapped, ids = [], context = { parent: {},
 	const actorEntity: Actor = <Actor>parent;
 	if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enabled")) {
-			await VariantEncumbranceImpl.updateEncumbrance(actorEntity, ids, undefined, EncumbranceMode.DELETE);
+			await VariantEncumbranceImpl.updateEncumbrance(actorEntity, ids, false, EncumbranceMode.DELETE);
 		}
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enableBulkSystem")) {
-			await VariantEncumbranceBulkImpl.updateEncumbrance(actorEntity, ids, undefined, EncumbranceMode.DELETE);
+			await VariantEncumbranceBulkImpl.updateEncumbrance(actorEntity, ids, false, EncumbranceMode.DELETE);
 		}
 	}
 	return wrapped(ids, context);
@@ -844,7 +883,7 @@ const module = {
 				itemsToCheck = actorEntityTmp.items.contents;
 				// }
 
-				encumbranceData = VariantEncumbranceImpl.calculateEncumbrance(
+				encumbranceData = await VariantEncumbranceImpl.calculateEncumbranceWithEffect(
 					actorEntityTmp,
 					itemsToCheck,
 					false,
@@ -1141,7 +1180,7 @@ const module = {
 				itemsToCheck = actorEntityTmp.items.contents;
 				// }
 
-				encumbranceDataBulk = VariantEncumbranceBulkImpl.calculateEncumbrance(
+				encumbranceDataBulk = await VariantEncumbranceImpl.calculateEncumbranceWithEffect(
 					actorEntityTmp,
 					itemsToCheck,
 					false,
