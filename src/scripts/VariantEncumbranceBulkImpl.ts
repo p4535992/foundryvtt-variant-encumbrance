@@ -346,6 +346,16 @@ export const VariantEncumbranceBulkImpl = {
 		const enableVarianEncumbranceWeightBulkOnActorFlag = <boolean>(
 			actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_WE_BULK)
 		);
+		const useStandardWeightCalculation = game.settings.get(CONSTANTS.MODULE_NAME, "useStandardWeightCalculation");
+		const doNotIncreaseWeightByQuantityForNoAmmunition = <boolean>(
+			game.settings.get(CONSTANTS.MODULE_NAME, "doNotIncreaseWeightByQuantityForNoAmmunition")
+		);
+		const doNotApplyWeightForEquippedArmor = <boolean>(
+			game.settings.get(CONSTANTS.MODULE_NAME, "doNotApplyWeightForEquippedArmor")
+		);
+		const useEquippedUnequippedItemCollectionFeature = <boolean>(
+			game.settings.get(CONSTANTS.MODULE_NAME, "useEquippedUnequippedItemCollectionFeature")
+		);
 		if (!enableVarianEncumbranceWeightBulkOnActorFlag) {
 			return <EncumbranceBulkData>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.DATA_BULK) || {};
 		} else if (enableVarianEncumbranceWeightBulkOnActorFlag) {
@@ -389,10 +399,12 @@ export const VariantEncumbranceBulkImpl = {
 					} else {
 						// itemWeight = calcItemWeight(item) + getProperty(item, 'flags.itemcollection.bagWeight');
 						// MOD 4535992 Removed variant encumbrance take care of this
-						const useEquippedUnequippedItemCollectionFeature = <boolean>(
-							game.settings.get(CONSTANTS.MODULE_NAME, "useEquippedUnequippedItemCollectionFeature")
+						itemWeight = calcBulk(
+							item,
+							useEquippedUnequippedItemCollectionFeature,
+							doNotApplyWeightForEquippedArmor,
+							ignoreCurrency
 						);
-						itemWeight = calcBulk(item, useEquippedUnequippedItemCollectionFeature, ignoreCurrency);
 						//@ts-ignore
 						if (useEquippedUnequippedItemCollectionFeature) {
 							ignoreEquipmentCheck = true;
@@ -470,7 +482,7 @@ export const VariantEncumbranceBulkImpl = {
 				// End External modules calculation
 
 				// Feature: Do Not increase weight by quantity for no ammunition item
-				if (game.settings.get(CONSTANTS.MODULE_NAME, "doNotIncreaseWeightByQuantityForNoAmmunition")) {
+				if (doNotIncreaseWeightByQuantityForNoAmmunition) {
 					//@ts-ignore
 					if (item.system?.consumableType !== "ammo") {
 						itemQuantity = 1;
@@ -496,6 +508,11 @@ export const VariantEncumbranceBulkImpl = {
 						appliedWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "profEquippedMultiplier");
 					} else {
 						appliedWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "equippedMultiplier");
+					}
+					const itemArmorTypes = ["clothing", "light", "medium", "heavy", "natural"];
+					//@ts-ignore
+					if (doNotApplyWeightForEquippedArmor && itemArmorTypes.includes(item.system.armor?.type)) {
+						appliedWeight = 0;
 					}
 				} else {
 					appliedWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "unequippedMultiplier");
@@ -1165,6 +1182,7 @@ export const VariantEncumbranceBulkImpl = {
 export function calcBulk(
 	item: Item,
 	useEquippedUnequippedItemCollectionFeature: boolean,
+	doNotApplyWeightForEquippedArmor: boolean,
 	ignoreCurrency: boolean,
 	{ ignoreItems, ignoreTypes } = { ignoreItems: undefined, ignoreTypes: undefined }
 ) {
@@ -1174,15 +1192,16 @@ export function calcBulk(
 	}
 	// if (item.parent instanceof Actor && !item.system.equipped) return 0;
 	// MOD 4535992 Removed variant encumbrance take care of thicalcBulk
-	// const useEquippedUnequippedItemCollectionFeature = game.settings.get(
-	//   CONSTANTS.MODULE_NAME,
-	//   'useEquippedUnequippedItemCollectionFeature',
-	// );
 	const isEquipped: boolean =
 		//@ts-ignore
 		item.system.equipped ? true : false;
 	//@ts-ignore
 	if (useEquippedUnequippedItemCollectionFeature && !isEquipped) {
+		return 0;
+	}
+	const itemArmorTypes = ["clothing", "light", "medium", "heavy", "natural"];
+	//@ts-ignore
+	if (isEquipped && doNotApplyWeightForEquippedArmor && itemArmorTypes.includes(item.system.armor?.type)) {
 		return 0;
 	}
 	// END MOD 4535992

@@ -222,6 +222,13 @@ Add new buttons on the header sheet of the actors for choose when to avoid to ad
 |![balance-scale-left-solid](./wiki/icons/balance-scale-left-solid.svg)| If you don't  want to have the Varian Encumbrance Active Effects feature on your actor make sure to have the "balance" symbol on the header sheet. ATTENTION the weight calculation feature is still active|
 |![feather-alt-solid](./wiki/icons/feather-alt-solid.svg)| If you don't  want to have the Variant Encumbrance Active Effects and Weight calculation features on your actor make sure to have the "feather" symbol on the header sheet. *The weight is not calculated anymore and remain frozen (unless the setting 'Use standard calculation weight of the dnd5e system' is set to true in that case the weight calculation rollback to the standard weight calculation of the system dnd5e)* |
 
+### Homebrew rules from the community !!!
+
+**Feature: Do Not increase weight by quantity for no ammunition item:** This is a homebrew rule, for non-ammunition items don't increase weight by quantity (so 5 potions = 1 item weight for example
+
+**Feature: Do Not apply weight for equipped armor item:** This is a homebrew rule, for equipped armor types (clothing, light, medium, heavy, natural), the weight is set to 0 and not applied. NOTE: This will override the feature from '_Equipped Item Weight Multiplier_'
+
+
 ### Variant Encumbrance Flag
 
 Should you wish to integrate some of Variant Encumbrance's calculations into your own modules, there is now a flag which stores the actor's encumbrance tier, weight, and modified speed. Encumbrance tier is presented as 0, 1, 2, 3, as Unencumbered, Encumbered, Heavily Encumbered, Over Encumbered, respectively.
@@ -341,7 +348,8 @@ variant-encumbrance-dnd5e:
 |Encumbered Speed Decrease (Bulk System)|The number of speed units multiply when heavily encumbered (Bulk System), default is '0.5'.|0.5||
 |Automatic apply suggested bulk|WARNING: THIS IS DANGEROUS, IT WILL UPDATE THE BULK DATA ON EVERY ITEM BEEN RENDERED IF THE BULK VALUE IS 0. This is usually save time if you don't want to manually set every item (the advisable way)|false||
 |Remove standard encumbrance bar from the character sheet| If enabled it will hide the standard bar of encumbrance, is useful only for people using the bulk bar and do not want to see two graphic bars|false|
-|Do Not increase weight by quantity for no ammunition item| This is a homebrew rule, for non-ammunition items don't increase weight by quantity (so 5 potions = 1 item weight for example). ATTENTION: If the module 'Variant Encumbrance' is present and active this feature is disabled by default if the module settings 'Feature: Integration with Variant Encumbrance' is enabled.|false|
+|Feature: Do Not increase weight by quantity for no ammunition item| This is a homebrew rule, for non-ammunition items don't increase weight by quantity (so 5 potions = 1 item weight for example). ATTENTION: If the module 'Variant Encumbrance' is present and active this feature is disabled by default if the module settings 'Feature: Integration with Variant Encumbrance' is enabled.|false|
+|Feature: Do Not apply weight for equipped armor item| This is a homebrew rule, for equipped armor types (clothing, light, medium, heavy, natural), the weight is set to 0 and not applied. NOTE: This will override the feature from '_Equipped Item Weight Multiplier_'|false|
 |Debug|Enable debug messages useful for check issues|false||
 
 # API

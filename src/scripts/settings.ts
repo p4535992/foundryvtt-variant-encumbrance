@@ -406,6 +406,15 @@ export const registerSettings = function () {
 		type: Boolean,
 	});
 
+	game.settings.register(CONSTANTS.MODULE_NAME, "doNotApplyWeightForEquippedArmor", {
+		name: `${CONSTANTS.MODULE_NAME}.setting.doNotApplyWeightForEquippedArmor.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.doNotApplyWeightForEquippedArmor.hint`,
+		scope: "world",
+		config: true,
+		default: false,
+		type: Boolean,
+	});
+
 	game.settings.register(CONSTANTS.MODULE_NAME, "debug", {
 		name: `${CONSTANTS.MODULE_NAME}.setting.debug.name`,
 		hint: `${CONSTANTS.MODULE_NAME}.setting.debug.hint`,
@@ -425,12 +434,12 @@ export const registerSettings = function () {
 	});
 
 	// const settings = defaultSettings();
-	// for (const [name, data] of Object.entries(settings)) {
-	//   game.settings.register(CONSTANTS.MODULE_NAME, name, <any>data);
+	// for (const [settingName, settingValue] of Object.entries(settings)) {
+	//   game.settings.register(CONSTANTS.MODULE_NAME, settingName, <any>settingValue);
 	// }
 
-	for (const [name, data] of Object.entries(otherSettings)) {
-		game.settings.register(CONSTANTS.MODULE_NAME, name, data);
+	for (const [settingName, settingValue] of Object.entries(otherSettings)) {
+		game.settings.register(CONSTANTS.MODULE_NAME, settingName, settingValue);
 	}
 };
 
@@ -875,6 +884,15 @@ function otherSettings(apply = false) {
 		doNotIncreaseWeightByQuantityForNoAmmunition: {
 			name: `${CONSTANTS.MODULE_NAME}.setting.doNotIncreaseWeightByQuantityForNoAmmunition.name`,
 			hint: `${CONSTANTS.MODULE_NAME}.setting.doNotIncreaseWeightByQuantityForNoAmmunition.hint`,
+			scope: "world",
+			config: true,
+			default: false,
+			type: Boolean,
+		},
+
+		doNotApplyWeightForEquippedArmor: {
+			name: `${CONSTANTS.MODULE_NAME}.setting.doNotApplyWeightForEquippedArmor.name`,
+			hint: `${CONSTANTS.MODULE_NAME}.setting.doNotApplyWeightForEquippedArmor.hint`,
 			scope: "world",
 			config: true,
 			default: false,

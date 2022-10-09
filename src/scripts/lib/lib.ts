@@ -372,7 +372,10 @@ export function checkBulkCategory(weight: number, item: Item | undefined): BulkD
 		const useEquippedUnequippedItemCollectionFeature = <boolean>(
 			game.settings.get(CONSTANTS.MODULE_NAME, "useEquippedUnequippedItemCollectionFeature")
 		);
-		bulkRef = calcWeight(item, useEquippedUnequippedItemCollectionFeature, false);
+		const doNotApplyWeightForEquippedArmor = <boolean>(
+			game.settings.get(CONSTANTS.MODULE_NAME, "doNotApplyWeightForEquippedArmor")
+		);
+		bulkRef = calcWeight(item, useEquippedUnequippedItemCollectionFeature, doNotApplyWeightForEquippedArmor, false);
 	}
 	if (game.settings.get("dnd5e", "metricWeightUnits")) {
 		bulkRef = bulkRef <= 0 ? 0 : convertPoundsToKg(bulkRef);
