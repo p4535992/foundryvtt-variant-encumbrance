@@ -178,8 +178,8 @@ const API = {
 		return encumbranceData;
 	},
 
-	convertLbToBulk(weight: number): number {
-		return checkBulkCategory(weight).bulk;
+	convertLbToBulk(weight: number, item: Item | undefined): number {
+		return checkBulkCategory(weight, item).bulk;
 	},
 
 	calculateWeightOnActorWithItemsNoInventoryPlus(actor: Actor, items: Item[]): EncumbranceData | undefined {

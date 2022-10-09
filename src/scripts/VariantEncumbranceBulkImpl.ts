@@ -378,20 +378,21 @@ export const VariantEncumbranceBulkImpl = {
 
 				// Start Item container check
 				if (
-					getProperty(item, "flags.itemcollection.bagWeight") !== null &&
-					getProperty(item, "flags.itemcollection.bagWeight") !== undefined &&
+					// getProperty(item, "flags.itemcollection.bagWeight") !== null &&
+					// getProperty(item, "flags.itemcollection.bagWeight") !== undefined &&
+					hasProperty(item, `flags.itemcollection`) &&
 					itemContainerActive
 				) {
 					const weightless = getProperty(item, "system.capacity.weightless") ?? false;
 					if (weightless) {
-						itemWeight = getProperty(item, "flags.itemcollection.bagWeight");
+						itemWeight = getProperty(item, "system.bulk");
 					} else {
 						// itemWeight = calcItemWeight(item) + getProperty(item, 'flags.itemcollection.bagWeight');
 						// MOD 4535992 Removed variant encumbrance take care of this
 						const useEquippedUnequippedItemCollectionFeature = <boolean>(
 							game.settings.get(CONSTANTS.MODULE_NAME, "useEquippedUnequippedItemCollectionFeature")
 						);
-						itemWeight = calcWeight(item, useEquippedUnequippedItemCollectionFeature, ignoreCurrency);
+						itemWeight = calcBulk(item, useEquippedUnequippedItemCollectionFeature, ignoreCurrency);
 						//@ts-ignore
 						if (useEquippedUnequippedItemCollectionFeature) {
 							ignoreEquipmentCheck = true;
@@ -427,11 +428,11 @@ export const VariantEncumbranceBulkImpl = {
 							}
 
 							// Inherent weight
-							if (API.convertLbToBulk(section?.ownWeight) > 0) {
+							if (API.convertLbToBulk(section?.ownWeight, undefined) > 0) {
 								if (!invPlusCategoriesWeightToAdd.has(categoryId)) {
 									invPlusCategoriesWeightToAdd.set(
 										categoryId,
-										API.convertLbToBulk(section.ownWeight)
+										API.convertLbToBulk(section.ownWeight, undefined)
 									);
 								}
 							}
@@ -449,11 +450,11 @@ export const VariantEncumbranceBulkImpl = {
 										ignoreEquipmentCheck = true;
 									}
 									// Inherent weight
-									if (API.convertLbToBulk(section?.ownWeight) > 0) {
+									if (API.convertLbToBulk(section?.ownWeight, undefined) > 0) {
 										if (!invPlusCategoriesWeightToAdd.has(categoryId)) {
 											invPlusCategoriesWeightToAdd.set(
 												categoryId,
-												API.convertLbToBulk(section.ownWeight)
+												API.convertLbToBulk(section.ownWeight, undefined)
 											);
 										}
 									}
@@ -1161,16 +1162,18 @@ export const VariantEncumbranceBulkImpl = {
 // Item Collection/Container SUPPORT
 // ===========================
 
-function calcWeight(
+export function calcBulk(
 	item: Item,
 	useEquippedUnequippedItemCollectionFeature: boolean,
 	ignoreCurrency: boolean,
 	{ ignoreItems, ignoreTypes } = { ignoreItems: undefined, ignoreTypes: undefined }
 ) {
 	//@ts-ignore
-	if (item.type !== "backpack" || !item.flags.itemcollection) return calcItemWeight(item, ignoreCurrency);
+	if (item.type !== "backpack" || !item.flags.itemcollection) {
+		return calcItemBulk(item, ignoreCurrency);
+	}
 	// if (item.parent instanceof Actor && !item.system.equipped) return 0;
-	// MOD 4535992 Removed variant encumbrance take care of thicalcWeights
+	// MOD 4535992 Removed variant encumbrance take care of thicalcBulk
 	// const useEquippedUnequippedItemCollectionFeature = game.settings.get(
 	//   CONSTANTS.MODULE_NAME,
 	//   'useEquippedUnequippedItemCollectionFeature',
@@ -1184,20 +1187,21 @@ function calcWeight(
 	}
 	// END MOD 4535992
 	const weightless = getProperty(item, "system.capacity.weightless") ?? false;
-	if (weightless) return getProperty(item, "flags.itemcollection.bagWeight") ?? 0;
-	return (
-		calcItemWeight(item, ignoreCurrency, { ignoreItems, ignoreTypes }) +
-		(getProperty(item, "flags.itemcollection.bagWeight") ?? 0)
-	);
+	if (weightless) {
+		return getProperty(item, "system.bulk") ?? 0;
+	}
+	return calcItemBulk(item, ignoreCurrency, { ignoreItems, ignoreTypes }) + (getProperty(item, "system.bulk") ?? 0);
 }
 
-function calcItemWeight(
+function calcItemBulk(
 	item: Item,
 	ignoreCurrency: boolean,
 	{ ignoreItems, ignoreTypes } = { ignoreItems: undefined, ignoreTypes: undefined }
 ) {
 	//@ts-ignore
-	if (item.type !== "backpack" || item.items === undefined) return _calcItemWeight(item);
+	if (item.type !== "backpack" || item.items === undefined) {
+		return _calcItemBulk(item);
+	}
 	//@ts-ignore
 	let weight = item.items.reduce((acc, item) => {
 		//@ts-ignore
@@ -1206,7 +1210,7 @@ function calcItemWeight(
 		if (ignoreItems?.includes(item.name)) return acc;
 		//@ts-ignore
 		return acc + (item.system.bulk ?? 0); // TODO convert this in a static method ???
-	}, (item.type === "backpack" ? 0 : _calcItemWeight(item)) ?? 0);
+	}, (item.type === "backpack" ? 0 : _calcItemBulk(item)) ?? 0);
 	// [Optional] add Currency Weight (for non-transformed actors)
 	if (
 		!ignoreCurrency &&
@@ -1237,7 +1241,7 @@ function calcItemWeight(
 	return weight;
 }
 
-function _calcItemWeight(item: Item) {
+function _calcItemBulk(item: Item) {
 	// const quantity = item.system.quantity || 1;
 	// const weight = item.system.bulk || 0;
 	const quantity: number =

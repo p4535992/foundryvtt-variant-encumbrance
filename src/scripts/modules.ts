@@ -13,7 +13,7 @@ import { checkBulkCategory, convertPoundsToKg, debug, duplicateExtended, i18n, i
 import CONSTANTS from "./constants";
 import { registerSocket } from "./socket";
 import API from "./api";
-import { VariantEncumbranceBulkImpl } from "./VariantEncumbranceBulkImpl";
+import { calcBulk, VariantEncumbranceBulkImpl } from "./VariantEncumbranceBulkImpl";
 import { setApi } from "../VariantEncumbrance";
 import type { ActiveEffectManagerLibApi } from "./effects/effect-api";
 import type { ItemData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
@@ -25,12 +25,12 @@ export let ENCUMBRANCE_STATE = {
 	OVERBURDENED: "", // "Overburdened"
 };
 
-export let invPlusActive;
-export let itemContainerActive;
-export let dfredsConvenientEffectsActive;
-export let invMidiQol;
-export let dfQualityLifeActive;
-export let daeActive;
+export let invPlusActive: boolean;
+export let itemContainerActive: boolean;
+export let dfredsConvenientEffectsActive: boolean;
+export let invMidiQol: boolean;
+export let dfQualityLifeActive: boolean;
+export let daeActive: boolean;
 
 export let aemlApi: ActiveEffectManagerLibApi;
 
@@ -1467,14 +1467,14 @@ const module = {
 	},
 	renderItemSheetBulkSystem(app: ItemSheet, html: JQuery<HTMLElement>, data: any, itemTmp: Item): void {
 		// Size
-
+		const item = app.object;
 		const options: string[] = [];
 		// options.push(
 		//   `<option data-image="icons/svg/mystery-man.svg" value="">${i18n(`${CONSTANTS.MODULE_NAME}.default`)}</option>`,
 		// );
 		const weight = data.weight ?? 0;
 		let suggestedBulkWeight = 0;
-		const suggestedBulk = checkBulkCategory(weight);
+		const suggestedBulk = checkBulkCategory(weight, item);
 		if (suggestedBulk) {
 			suggestedBulkWeight = suggestedBulk.bulk;
 		}

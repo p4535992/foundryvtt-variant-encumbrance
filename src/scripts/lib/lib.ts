@@ -6,6 +6,9 @@ import type {
 } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData";
 import type EmbeddedCollection from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/abstract/embedded-collection.mjs";
 import type { ActorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
+import { calcBulk } from "../VariantEncumbranceBulkImpl";
+import { itemContainerActive } from "../modules";
+import { calcWeight } from "../VariantEncumbranceImpl";
 
 // =============================
 // Module Generic function
@@ -363,10 +366,16 @@ export function convertKgToPounds(valNum: number): number {
 	return valNum * 2.20462262;
 }
 
-export function checkBulkCategory(weight: number): BulkData {
-	let bulkRef = weight;
+export function checkBulkCategory(weight: number, item: Item | undefined): BulkData {
+	let bulkRef = <number>weight;
+	if (item && hasProperty(item, `flags.itemcollection`) && itemContainerActive) {
+		const useEquippedUnequippedItemCollectionFeature = <boolean>(
+			game.settings.get(CONSTANTS.MODULE_NAME, "useEquippedUnequippedItemCollectionFeature")
+		);
+		bulkRef = calcWeight(item, useEquippedUnequippedItemCollectionFeature, false);
+	}
 	if (game.settings.get("dnd5e", "metricWeightUnits")) {
-		bulkRef = weight <= 0 ? 0 : convertPoundsToKg(weight);
+		bulkRef = bulkRef <= 0 ? 0 : convertPoundsToKg(bulkRef);
 	}
 	if (bulkRef <= 0) {
 		return BULK_CATEGORY.NONE;

@@ -467,8 +467,9 @@ export const VariantEncumbranceImpl = {
 
 				// Start Item container check
 				if (
-					getProperty(item, "flags.itemcollection.bagWeight") !== null &&
-					getProperty(item, "flags.itemcollection.bagWeight") !== undefined &&
+					// getProperty(item, "flags.itemcollection.bagWeight") !== null &&
+					// getProperty(item, "flags.itemcollection.bagWeight") !== undefined &&
+					hasProperty(item, `flags.itemcollection`) &&
 					itemContainerActive
 				) {
 					const weightless = getProperty(item, "system.capacity.weightless") ?? false;
@@ -1371,14 +1372,16 @@ export const isEnabledActorType = function (actorEntity: Actor): boolean {
 // Item Collection/Container SUPPORT
 // ===========================
 
-function calcWeight(
+export function calcWeight(
 	item: Item,
 	useEquippedUnequippedItemCollectionFeature: boolean,
 	ignoreCurrency: boolean,
 	{ ignoreItems, ignoreTypes } = { ignoreItems: undefined, ignoreTypes: undefined }
 ) {
 	//@ts-ignore
-	if (item.type !== "backpack" || !item.flags.itemcollection) return calcItemWeight(item, ignoreCurrency);
+	if (item.type !== "backpack" || !item.flags.itemcollection) {
+		return calcItemWeight(item, ignoreCurrency);
+	}
 	// MOD 4535992 Removed variant encumbrance take care of this
 	// if (this.parent instanceof Actor && !item.system.equipped) return 0;
 	// const weightless = getProperty(this, "system.capacity.weightless") ?? false;
@@ -1392,7 +1395,9 @@ function calcWeight(
 	}
 	// END MOD 4535992
 	const weightless = getProperty(item, "system.capacity.weightless") ?? false;
-	if (weightless) return getProperty(item, "flags.itemcollection.bagWeight") ?? 0;
+	if (weightless) {
+		return getProperty(item, "flags.itemcollection.bagWeight") ?? 0;
+	}
 	return (
 		calcItemWeight(item, ignoreCurrency, { ignoreItems, ignoreTypes }) +
 		(getProperty(item, "flags.itemcollection.bagWeight") ?? 0)
@@ -1405,7 +1410,9 @@ function calcItemWeight(
 	{ ignoreItems, ignoreTypes } = { ignoreItems: undefined, ignoreTypes: undefined }
 ) {
 	//@ts-ignore
-	if (item.type !== "backpack" || item.items === undefined) return _calcItemWeight(item);
+	if (item.type !== "backpack" || item.items === undefined) {
+		return _calcItemWeight(item);
+	}
 	//@ts-ignore
 	let weight = item.items.reduce((acc, item) => {
 		//@ts-ignore
