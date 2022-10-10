@@ -1,3 +1,8 @@
+
+### 0.11.5
+
+- Apply ownBulk
+
 ### 0.11.4
 
 - Bug fix: [Apply bulk weight for compatibility with item container module]([Use containers bulk, not items in containers bulk](https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/2)

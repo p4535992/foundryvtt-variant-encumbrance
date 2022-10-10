@@ -367,7 +367,7 @@ export function convertKgToPounds(valNum: number): number {
 }
 
 export function checkBulkCategory(weight: number, item: Item | undefined): BulkData {
-	let bulkRef = <number>weight;
+	let bulkRef = <number>weight ?? 0;
 	if (item && hasProperty(item, `flags.itemcollection`) && itemContainerActive) {
 		const useEquippedUnequippedItemCollectionFeature = <boolean>(
 			game.settings.get(CONSTANTS.MODULE_NAME, "useEquippedUnequippedItemCollectionFeature")
