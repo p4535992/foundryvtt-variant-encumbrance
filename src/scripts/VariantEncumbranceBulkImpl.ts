@@ -440,11 +440,11 @@ export const VariantEncumbranceBulkImpl = {
 							}
 
 							// Inherent weight
-							if (API.convertLbToBulk(section?.ownBulk, undefined) > 0) {
+							if (section?.ownBulk > 0) {
 								if (!invPlusCategoriesWeightToAdd.has(categoryId)) {
 									invPlusCategoriesWeightToAdd.set(
 										categoryId,
-										API.convertLbToBulk(section.ownBulk, undefined)
+										section.ownBulk
 									);
 								}
 							}
@@ -462,11 +462,11 @@ export const VariantEncumbranceBulkImpl = {
 										ignoreEquipmentCheck = true;
 									}
 									// Inherent weight
-									if (API.convertLbToBulk(section?.ownBulk, undefined) > 0) {
+									if (section?.ownBulk > 0) {
 										if (!invPlusCategoriesWeightToAdd.has(categoryId)) {
 											invPlusCategoriesWeightToAdd.set(
 												categoryId,
-												API.convertLbToBulk(section.ownBulk, undefined)
+												section.ownBulk
 											);
 										}
 									}
