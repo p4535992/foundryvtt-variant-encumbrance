@@ -415,6 +415,15 @@ export const registerSettings = function () {
 		type: Boolean,
 	});
 
+	game.settings.register(CONSTANTS.MODULE_NAME, "useStrValueInsteadStrModOnBulk", {
+		name: `${CONSTANTS.MODULE_NAME}.setting.useStrValueInsteadStrModOnBulk.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.useStrValueInsteadStrModOnBulk.hint`,
+		scope: "world",
+		config: true,
+		default: false,
+		type: Boolean,
+	});
+
 	game.settings.register(CONSTANTS.MODULE_NAME, "debug", {
 		name: `${CONSTANTS.MODULE_NAME}.setting.debug.name`,
 		hint: `${CONSTANTS.MODULE_NAME}.setting.debug.hint`,
@@ -893,6 +902,15 @@ function otherSettings(apply = false) {
 		doNotApplyWeightForEquippedArmor: {
 			name: `${CONSTANTS.MODULE_NAME}.setting.doNotApplyWeightForEquippedArmor.name`,
 			hint: `${CONSTANTS.MODULE_NAME}.setting.doNotApplyWeightForEquippedArmor.hint`,
+			scope: "world",
+			config: true,
+			default: false,
+			type: Boolean,
+		},
+
+		useStrValueInsteadStrModOnBulk: {
+			name: `${CONSTANTS.MODULE_NAME}.setting.useStrValueInsteadStrModOnBulk.name`,
+			hint: `${CONSTANTS.MODULE_NAME}.setting.useStrValueInsteadStrModOnBulk.hint`,
 			scope: "world",
 			config: true,
 			default: false,

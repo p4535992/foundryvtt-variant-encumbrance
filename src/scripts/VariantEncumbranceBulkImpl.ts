@@ -353,6 +353,9 @@ export const VariantEncumbranceBulkImpl = {
 		const doNotApplyWeightForEquippedArmor = <boolean>(
 			game.settings.get(CONSTANTS.MODULE_NAME, "doNotApplyWeightForEquippedArmor")
 		);
+		const useStrValueInsteadStrModOnBulk = <boolean>(
+			game.settings.get(CONSTANTS.MODULE_NAME, "useStrValueInsteadStrModOnBulk")
+		);
 		const useEquippedUnequippedItemCollectionFeature = <boolean>(
 			game.settings.get(CONSTANTS.MODULE_NAME, "useEquippedUnequippedItemCollectionFeature")
 		);
@@ -431,7 +434,7 @@ export const VariantEncumbranceBulkImpl = {
 								item.flags[CONSTANTS.INVENTORY_PLUS_MODULE_NAME]?.category === categoryId
 							) {
 								// Ignore weight
-								if (section?.ignoreWeight === true) {
+								if (section?.ignoreBulk === true) {
 									itemWeight = 0;
 									ignoreEquipmentCheck = true;
 								}
@@ -442,10 +445,7 @@ export const VariantEncumbranceBulkImpl = {
 							// Inherent weight
 							if (section?.ownBulk > 0) {
 								if (!invPlusCategoriesWeightToAdd.has(categoryId)) {
-									invPlusCategoriesWeightToAdd.set(
-										categoryId,
-										section.ownBulk
-									);
+									invPlusCategoriesWeightToAdd.set(categoryId, section.ownBulk);
 								}
 							}
 							if (actorHasCustomCategories) {
@@ -457,17 +457,14 @@ export const VariantEncumbranceBulkImpl = {
 								if (item.type === categoryId) {
 									const section = inventoryPlusCategories[categoryId];
 									// Ignore weight
-									if (section?.ignoreWeight === true) {
+									if (section?.ignoreBulk === true) {
 										itemWeight = 0;
 										ignoreEquipmentCheck = true;
 									}
 									// Inherent weight
 									if (section?.ownBulk > 0) {
 										if (!invPlusCategoriesWeightToAdd.has(categoryId)) {
-											invPlusCategoriesWeightToAdd.set(
-												categoryId,
-												section.ownBulk
-											);
+											invPlusCategoriesWeightToAdd.set(categoryId, section.ownBulk);
 										}
 									}
 									// EXIT FOR
@@ -587,31 +584,73 @@ export const VariantEncumbranceBulkImpl = {
 				if (size === "tiny") {
 					minimumBulk = 5;
 					//@ts-ignore
-					inventorySlot = 6 + actorEntity.system.abilities.str.mod;
+					inventorySlot =
+						6 +
+						(useStrValueInsteadStrModOnBulk
+							? //@ts-ignore
+							  actorEntity.system.abilities.str.value
+							: //@ts-ignore
+							  actorEntity.system.abilities.str.mod);
 				} else if (size === "sm") {
 					minimumBulk = 10;
 					//@ts-ignore
-					inventorySlot = 14 + actorEntity.system.abilities.str.mod;
+					inventorySlot =
+						14 +
+						(useStrValueInsteadStrModOnBulk
+							? //@ts-ignore
+							  actorEntity.system.abilities.str.value
+							: //@ts-ignore
+							  actorEntity.system.abilities.str.mod);
 				} else if (size === "med") {
 					minimumBulk = 20;
 					//@ts-ignore
-					inventorySlot = 18 + actorEntity.system.abilities.str.mod;
+					inventorySlot =
+						18 +
+						(useStrValueInsteadStrModOnBulk
+							? //@ts-ignore
+							  actorEntity.system.abilities.str.value
+							: //@ts-ignore
+							  actorEntity.system.abilities.str.mod);
 				} else if (size === "lg") {
 					minimumBulk = 40;
 					//@ts-ignore
-					inventorySlot = 22 + actorEntity.system.abilities.str.mod * 2;
+					inventorySlot =
+						22 +
+						(useStrValueInsteadStrModOnBulk
+							? //@ts-ignore
+							  actorEntity.system.abilities.str.value
+							: //@ts-ignore
+							  actorEntity.system.abilities.str.mod * 2);
 				} else if (size === "huge") {
 					minimumBulk = 80;
 					//@ts-ignore
-					inventorySlot = 30 + actorEntity.system.abilities.str.mod * 4;
+					inventorySlot =
+						30 +
+						(useStrValueInsteadStrModOnBulk
+							? //@ts-ignore
+							  actorEntity.system.abilities.str.value
+							: //@ts-ignore
+							  actorEntity.system.abilities.str.mod * 4);
 				} else if (size === "grg") {
 					minimumBulk = 160;
 					//@ts-ignore
-					inventorySlot = 46 + actorEntity.system.abilities.str.mod * 8;
+					inventorySlot =
+						46 +
+						(useStrValueInsteadStrModOnBulk
+							? //@ts-ignore
+							  actorEntity.system.abilities.str.value
+							: //@ts-ignore
+							  actorEntity.system.abilities.str.mod * 8);
 				} else {
 					minimumBulk = 20;
 					//@ts-ignore
-					inventorySlot = 18 + actorEntity.system.abilities.str.mod;
+					inventorySlot =
+						18 +
+						(useStrValueInsteadStrModOnBulk
+							? //@ts-ignore
+							  actorEntity.system.abilities.str.value
+							: //@ts-ignore
+							  actorEntity.system.abilities.str.mod);
 				}
 			} else if (actorEntity.type === EncumbranceActorType.VEHICLE) {
 				//@ts-ignore
@@ -650,31 +689,73 @@ export const VariantEncumbranceBulkImpl = {
 				if (size === "tiny") {
 					minimumBulk = 5;
 					//@ts-ignore
-					inventorySlot = 6 + actorEntity.system.abilities.str.mod;
+					inventorySlot =
+						6 +
+						(useStrValueInsteadStrModOnBulk
+							? //@ts-ignore
+							  actorEntity.system.abilities.str.value
+							: //@ts-ignore
+							  actorEntity.system.abilities.str.mod);
 				} else if (size === "sm") {
 					minimumBulk = 10;
 					//@ts-ignore
-					inventorySlot = 14 + actorEntity.system.abilities.str.mod;
+					inventorySlot =
+						14 +
+						(useStrValueInsteadStrModOnBulk
+							? //@ts-ignore
+							  actorEntity.system.abilities.str.value
+							: //@ts-ignore
+							  actorEntity.system.abilities.str.mod);
 				} else if (size === "med") {
 					minimumBulk = 20;
 					//@ts-ignore
-					inventorySlot = 18 + actorEntity.system.abilities.str.mod;
+					inventorySlot =
+						18 +
+						(useStrValueInsteadStrModOnBulk
+							? //@ts-ignore
+							  actorEntity.system.abilities.str.value
+							: //@ts-ignore
+							  actorEntity.system.abilities.str.mod);
 				} else if (size === "lg") {
 					minimumBulk = 40;
 					//@ts-ignore
-					inventorySlot = 22 + actorEntity.system.abilities.str.mod * 2;
+					inventorySlot =
+						22 +
+						(useStrValueInsteadStrModOnBulk
+							? //@ts-ignore
+							  actorEntity.system.abilities.str.value
+							: //@ts-ignore
+							  actorEntity.system.abilities.str.mod * 2);
 				} else if (size === "huge") {
 					minimumBulk = 80;
 					//@ts-ignore
-					inventorySlot = 30 + actorEntity.system.abilities.str.mod * 4;
+					inventorySlot =
+						30 +
+						(useStrValueInsteadStrModOnBulk
+							? //@ts-ignore
+							  actorEntity.system.abilities.str.value
+							: //@ts-ignore
+							  actorEntity.system.abilities.str.mod * 4);
 				} else if (size === "grg") {
 					minimumBulk = 160;
 					//@ts-ignore
-					inventorySlot = 46 + actorEntity.system.abilities.str.mod * 8;
+					inventorySlot =
+						46 +
+						(useStrValueInsteadStrModOnBulk
+							? //@ts-ignore
+							  actorEntity.system.abilities.str.value
+							: //@ts-ignore
+							  actorEntity.system.abilities.str.mod * 8);
 				} else {
 					minimumBulk = 20;
 					//@ts-ignore
-					inventorySlot = 18 + actorEntity.system.abilities.str.mod;
+					inventorySlot =
+						18 +
+						(useStrValueInsteadStrModOnBulk
+							? //@ts-ignore
+							  actorEntity.system.abilities.str.value
+							: //@ts-ignore
+							  actorEntity.system.abilities.str.mod);
 				}
 			}
 

@@ -363,6 +363,7 @@ variant-encumbrance-dnd5e:
 |Remove standard encumbrance bar from the character sheet| If enabled it will hide the standard bar of encumbrance, is useful only for people using the bulk bar and do not want to see two graphic bars|false|
 |Feature: Do Not increase weight by quantity for no ammunition item| This is a homebrew rule, for non-ammunition items don't increase weight by quantity (so 5 potions = 1 item weight for example). ATTENTION: If the module 'Variant Encumbrance' is present and active this feature is disabled by default if the module settings 'Feature: Integration with Variant Encumbrance' is enabled.|false|
 |Feature: Do Not apply weight for equipped armor item| This is a homebrew rule, for equipped armor types (clothing, light, medium, heavy, natural), the weight is set to 0 and not applied. NOTE: This will override the feature from '_Equipped Item Weight Multiplier_'|false|
+|Feature: Use STR flat value instead STR MOD, ONLY FOR BULK calculation| This is a homebrew rule, ONLY FOR BULK calculation. Currently there is no way to adjust the maximum bulk for a creature, which is tied to size and STR MOD, now you can use the flat value of force to handle it.|false|
 |Debug|Enable debug messages useful for check issues|false||
 
 # API

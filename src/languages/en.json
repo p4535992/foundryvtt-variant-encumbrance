@@ -159,6 +159,9 @@
 	"variant-encumbrance-dnd5e.setting.doNotApplyWeightForEquippedArmor.name": "Feature: Do Not apply weight for equipped armor item",
 	"variant-encumbrance-dnd5e.setting.doNotApplyWeightForEquippedArmor.hint": "This is a homebrew rule, for equipped armor types (clothing, light, medium, heavy, natural), the weight is set to 0 and not applied. NOTE: This will override the feature from 'Equipped Item Weight Multiplier'",
 
+	"variant-encumbrance-dnd5e.setting.useStrValueInsteadStrModOnBulk.name": "Feature: Use STR flat value instead STR MOD on Bulk",
+	"variant-encumbrance-dnd5e.setting.useStrValueInsteadStrModOnBulk.hint": "This is a homebrew rule, ONLY FOR BULK calculation. Currently there is no way to adjust the maximum bulk for a creature, which is tied to size and STR MOD, now you can use the flat value of force to handle it.",
+
 	"variant-encumbrance-dnd5e.config.name": "Weight Unit",
 	"variant-encumbrance-dnd5e.config.hint": "Unit of measurement to be used for weight calculation.",
 	"variant-encumbrance-dnd5e.label.units_LongTon": "Long Ton (2240 lb.)",

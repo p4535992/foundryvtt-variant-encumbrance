@@ -1,3 +1,6 @@
+### 0.11.6-7
+
+- Better bulk integration
 
 ### 0.11.5
 
