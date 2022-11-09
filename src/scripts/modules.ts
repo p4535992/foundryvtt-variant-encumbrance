@@ -1037,10 +1037,10 @@ const module = {
 					// mergeObject(<any>actorEntity.flags, <any>actorObject.actor.flags);
 					setProperty(actorEntityTmp, "flags", actorObject.actor.flags);
 				}
-				if (actorObject.system) {
-					// mergeObject(<any>actorEntity.system, <any>actorObject.system);
-					setProperty(actorEntityTmp, "system", actorObject.system);
-				}
+				// if (actorObject.system) {
+				// 	// mergeObject(<any>actorEntity.system, <any>actorObject.system);
+				// 	setProperty(actorEntityTmp, "system", actorObject.system);
+				// }
 				// mergeObject(actorEntity.items, actorObject.items);
 				let itemsToCheck = <Item[]>[];
 				// if (actorObject.items && actorObject.items instanceof Array) {
@@ -1335,10 +1335,10 @@ const module = {
 					// mergeObject(<any>actorEntity.flags, <any>actorObject.actor.flags);
 					setProperty(actorEntityTmp, "flags", actorObject.actor.flags);
 				}
-				if (actorObject.system) {
-					// mergeObject(<any>actorEntity.system, <any>actorObject.system);
-					setProperty(actorEntityTmp, "system", actorObject.system);
-				}
+				// if (actorObject.system) {
+				// 	// mergeObject(<any>actorEntity.system, <any>actorObject.system);
+				// 	setProperty(actorEntityTmp, "system", actorObject.system);
+				// }
 				// mergeObject(actorEntity.items, actorObject.items);
 				let itemsToCheck = <Item[]>[];
 				// if (actorObject.items && actorObject.items instanceof Array) {

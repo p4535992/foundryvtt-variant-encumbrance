@@ -2,7 +2,7 @@
   "name": "variant-encumbrance-dnd5e",
   "title": "Variant Encumbrance Dnd5e",
   "description": "",
-  "version": "0.11.7",
+  "version": "0.11.8",
   "main": "VariantEncumbrance.js",
   "scripts": {
     "publish": "gulp publish --update",
