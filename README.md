@@ -14,6 +14,8 @@
 
 [![Translation status](https://weblate.foundryvtt-hub.com/widgets/variant-encumbrance-dnd5e/-/287x66-black.png)](https://weblate.foundryvtt-hub.com/engage/variant-encumbrance-dnd5e/)
 
+### If you want to buy me a coffee [![alt-text](https://img.shields.io/badge/-Patreon-%23ff424d?style=for-the-badge)](https://www.patreon.com/p4535992)
+
 A visual modification to player character sheets to better display the effects of the [Encumbrance variant ruleset in the PHB](https://5thsrd.org/rules/abilities/strength/).
 
 - The rules for Lifting and Carrying are intentionally simple. Here is a variant if you are looking for more detailed rules for determining how a character is hindered by the weight of Equipment. When you use this variant, ignore the Strength column of the Armor table.
