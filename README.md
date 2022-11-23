@@ -243,6 +243,7 @@ Add new buttons on the header sheet of the actors for choose when to avoid to ad
 
 **Feature: Do Not apply weight for equipped armor item:** This is a homebrew rule, for equipped armor types (clothing, light, medium, heavy, natural), the weight is set to 0 and not applied. NOTE: This will override the feature from '_Equipped Item Weight Multiplier_'
 
+**Feature: Use STR flat value instead STR MOD on Bulk":** This is a homebrew rule, ONLY FOR BULK calculation. Currently there is no way to adjust the maximum bulk for a creature, which is tied to size and STR MOD, now you can use the flat value of force to handle it.
 
 ### Variant Encumbrance Flag
 
