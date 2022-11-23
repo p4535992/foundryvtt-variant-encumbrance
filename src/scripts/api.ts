@@ -57,7 +57,12 @@ const API = {
 		if (!Array.isArray(inAttributes)) {
 			throw error("calculateWeightOnActorArr | inAttributes must be of type array");
 		}
-		const [actor] = inAttributes;
+		const [actorIdOrName] = inAttributes;
+		const actor = game.actors?.contents.find((actorEntity) => {
+			return (
+				isStringEquals(actorEntity.id, actorIdOrName) || isStringEquals(<string>actorEntity.name, actorIdOrName)
+			);
+		});
 		return this.calculateWeightOnActor(actor);
 	},
 
@@ -133,7 +138,12 @@ const API = {
 		if (!Array.isArray(inAttributes)) {
 			throw error("calculateBulkOnActorArr | inAttributes must be of type array");
 		}
-		const [actor] = inAttributes;
+		const [actorIdOrName] = inAttributes;
+		const actor = game.actors?.contents.find((actorEntity) => {
+			return (
+				isStringEquals(actorEntity.id, actorIdOrName) || isStringEquals(<string>actorEntity.name, actorIdOrName)
+			);
+		});
 		return this.calculateBulkOnActor(actor);
 	},
 

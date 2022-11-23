@@ -1,4 +1,8 @@
-### 0.11.6-7
+### 0.11.9
+
+- Little fix on api
+
+### 0.11.6-7-8
 
 - Better bulk integration
 
