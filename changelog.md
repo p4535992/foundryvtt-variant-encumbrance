@@ -1,3 +1,7 @@
+### 0.11.10
+
+- Synced with item-collection 10.0.6
+
 ### 0.11.9
 
 - Little fix on api

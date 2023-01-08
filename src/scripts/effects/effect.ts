@@ -1,7 +1,4 @@
-import type { ActiveEffectDataProperties } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/activeEffectData";
 import type { EffectChangeData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData";
-import type { PropertiesToSource } from "@league-of-foundry-developers/foundry-vtt-types/src/types/helperTypes";
-import { duplicateExtended, i18n, isStringEquals, is_real_number } from "../lib/lib";
 
 /**
  * Data class for defining an effect
@@ -289,7 +286,7 @@ export default class Effect {
 		}
 		const result =
 			obj && // null and undefined check
-			(Object.keys(obj).length === 0 || Object.getPrototypeOf(obj) === Object.prototype);
+			Object.keys(obj).length === 0; // || Object.getPrototypeOf(obj) === Object.prototype);
 		return result;
 	}
 }
@@ -316,3 +313,35 @@ export class Constants {
 		IN_ONE_WEEK: 604800,
 	};
 }
+
+function cleanUpString(stringToCleanUp: string): string {
+	// regex expression to match all non-alphanumeric characters in string
+	const regex = /[^A-Za-z0-9]/g;
+	if (stringToCleanUp) {
+		return i18n(stringToCleanUp).replace(regex, "").toLowerCase();
+	} else {
+		return stringToCleanUp;
+	}
+}
+
+function isStringEquals(stringToCheck1: string, stringToCheck2: string, startsWith = false): boolean {
+	if (stringToCheck1 && stringToCheck2) {
+		const s1 = cleanUpString(stringToCheck1) ?? "";
+		const s2 = cleanUpString(stringToCheck2) ?? "";
+		if (startsWith) {
+			return s1.startsWith(s2) || s2.startsWith(s1);
+		} else {
+			return s1 === s2;
+		}
+	} else {
+		return stringToCheck1 === stringToCheck2;
+	}
+}
+
+function is_real_number(inNumber): boolean {
+	return !isNaN(inNumber) && typeof inNumber === "number" && isFinite(inNumber);
+}
+
+const i18n = (key: string): string => {
+	return game.i18n.localize(key)?.trim();
+};

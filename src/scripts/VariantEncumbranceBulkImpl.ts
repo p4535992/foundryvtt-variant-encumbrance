@@ -1271,13 +1271,15 @@ export function calcBulk(
 	if (item.type !== "backpack" || !item.flags.itemcollection) {
 		return calcItemBulk(item, ignoreCurrency);
 	}
-	// if (item.parent instanceof Actor && !item.system.equipped) return 0;
-	// MOD 4535992 Removed variant encumbrance take care of thicalcBulk
+	// MOD 4535992 Removed variant encumbrance take care of this
+	// if (this.parent instanceof Actor && (!this.system.equipped && this.system.capacity.weightlessUnequipped)) return 0;
+	// const weightless = getProperty(this, "system.capacity.weightless") ?? false;
+	// if (weightless) return getProperty(this, "flags.itemcollection.bagWeight") ?? 0;
 	const isEquipped: boolean =
 		//@ts-ignore
 		item.system.equipped ? true : false;
 	//@ts-ignore
-	if (useEquippedUnequippedItemCollectionFeature && !isEquipped) {
+	if (useEquippedUnequippedItemCollectionFeature && !isEquipped && item.system?.capacity?.weightlessUnequipped) {
 		return 0;
 	}
 	const itemArmorTypes = ["clothing", "light", "medium", "heavy", "natural"];

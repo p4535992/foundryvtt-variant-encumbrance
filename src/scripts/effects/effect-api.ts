@@ -1,8 +1,3 @@
-import type {
-	ActiveEffectData,
-	UserData,
-} from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs";
-import type { ActiveEffectDataProperties } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/activeEffectData";
 import type { EffectChangeData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData";
 import type { PropertiesToSource } from "@league-of-foundry-developers/foundry-vtt-types/src/types/helperTypes";
 import type Effect from "./effect";
@@ -117,7 +112,7 @@ export interface ActiveEffectManagerLibApi {
 		overlay?: boolean | undefined
 	): Promise<boolean | undefined>;
 
-	addActiveEffectOnActor(actorId: string, activeEffectData: ActiveEffectData): Promise<ActiveEffect | undefined>;
+	addActiveEffectOnActor(actorId: string, activeEffectData: ActiveEffect): Promise<ActiveEffect | undefined>;
 
 	removeEffectOnActor(actorId: string, effectName: string): Promise<ActiveEffect | undefined>;
 
@@ -163,7 +158,7 @@ export interface ActiveEffectManagerLibApi {
 		overlay?: boolean | undefined
 	): Promise<boolean | undefined>;
 
-	addActiveEffectOnToken(tokenId: string, activeEffectData: ActiveEffectData): Promise<ActiveEffect | undefined>;
+	addActiveEffectOnToken(tokenId: string, activeEffectData: ActiveEffect): Promise<ActiveEffect | undefined>;
 
 	removeEffectOnToken(tokenId: string, effectName: string): Promise<ActiveEffect | undefined>;
 
@@ -192,7 +187,7 @@ export interface ActiveEffectManagerLibApi {
 		effectId: string,
 		origin: string,
 		overlay: boolean,
-		effectUpdated: ActiveEffectData
+		effectUpdated: ActiveEffect
 	): Promise<boolean | undefined>;
 
 	updateActiveEffectFromNameOnToken(
@@ -200,7 +195,7 @@ export interface ActiveEffectManagerLibApi {
 		effectName: string,
 		origin: string,
 		overlay: boolean,
-		effectUpdated: ActiveEffectData
+		effectUpdated: ActiveEffect
 	): Promise<boolean | undefined>;
 
 	// ======================
@@ -208,13 +203,15 @@ export interface ActiveEffectManagerLibApi {
 	// ======================
 
 	onManageActiveEffectFromEffectId(
-		effectActions: {
-			create: "create";
-			edit: "edit";
-			delete: "delete";
-			toogle: "toggle";
-			update: "update";
-		},
+		effectActions:
+			| {
+					create: "create";
+					edit: "edit";
+					delete: "delete";
+					toggle: "toggle";
+					update: "update";
+			  }
+			| string,
 		owner: Actor | Item,
 		effectId: string,
 		alwaysDelete?: boolean | undefined,
@@ -225,13 +222,15 @@ export interface ActiveEffectManagerLibApi {
 	): Promise<Item | ActiveEffect | boolean | undefined>;
 
 	onManageActiveEffectFromEffect(
-		effectActions: {
-			create: "create";
-			edit: "edit";
-			delete: "delete";
-			toogle: "toggle";
-			update: "update";
-		},
+		effectActions:
+			| {
+					create: "create";
+					edit: "edit";
+					delete: "delete";
+					toggle: "toggle";
+					update: "update";
+			  }
+			| string,
 		owner: Actor | Item,
 		effect: Effect,
 		alwaysDelete?: boolean | undefined,
@@ -242,13 +241,15 @@ export interface ActiveEffectManagerLibApi {
 	): Promise<Item | ActiveEffect | boolean | undefined>;
 
 	onManageActiveEffectFromActiveEffect(
-		effectActions: {
-			create: "create";
-			edit: "edit";
-			delete: "delete";
-			toogle: "toggle";
-			update: "update";
-		},
+		effectActions:
+			| {
+					create: "create";
+					edit: "edit";
+					delete: "delete";
+					toggle: "toggle";
+					update: "update";
+			  }
+			| string,
 		owner: Actor | Item,
 		activeEffect: ActiveEffect | null | undefined,
 		alwaysDelete?: boolean | undefined,
@@ -280,7 +281,7 @@ export interface ActiveEffectManagerLibApi {
 	convertActiveEffectToEffect(effect: ActiveEffect): Promise<Effect>;
 
 	convertActiveEffectDataPropertiesToActiveEffect(
-		p: PropertiesToSource<ActiveEffectDataProperties>,
+		p: PropertiesToSource<any>,
 		isPassive: boolean
 	): Promise<ActiveEffect>;
 
@@ -292,11 +293,16 @@ export interface ActiveEffectManagerLibApi {
 
 	prepareOriginForActor(actorOrActorId: Actor | string): Promise<string>;
 
+	prepareOriginFromEntity(entity: string | ActiveEffect | Actor | Item | Token): Promise<string>;
+
 	convertToATLEffect(
 		//lockRotation: boolean,
+		sightEnabled: boolean,
 		dimSight: number,
 		brightSight: number,
 		sightAngle: number,
+		sightVisionMode: string, //e.g. 'darkvision'
+
 		dimLight: number,
 		brightLight: number,
 		lightColor: string,
@@ -325,7 +331,8 @@ export interface ActiveEffectManagerLibApi {
 		// name: string | null,
 		height: number | null,
 		width: number | null,
-		scale: number | null
+		scale: number | null,
+		alpha: number | null
 	): Promise<Effect>;
 }
 
@@ -402,7 +409,7 @@ interface EffectInterfaceApi {
 
 	addActiveEffectOnActor(
 		uuid: string,
-		activeEffectData: ActiveEffectData,
+		activeEffectData: ActiveEffect,
 		withSocket?: boolean
 	): Promise<ActiveEffect | undefined>;
 
@@ -462,7 +469,7 @@ interface EffectInterfaceApi {
 
 	addActiveEffectOnToken(
 		uuid: string,
-		activeEffectData: ActiveEffectData,
+		activeEffectData: ActiveEffect,
 		withSocket?: boolean
 	): Promise<ActiveEffect | undefined>;
 
@@ -493,7 +500,7 @@ interface EffectInterfaceApi {
 		uuid: string,
 		origin: string,
 		overlay: boolean,
-		effectUpdated: ActiveEffectData,
+		effectUpdated: ActiveEffect,
 		withSocket?: boolean
 	): Promise<boolean | undefined>;
 
@@ -502,20 +509,22 @@ interface EffectInterfaceApi {
 		uuid: string,
 		origin: string,
 		overlay: boolean,
-		effectUpdated: ActiveEffectData,
+		effectUpdated: ActiveEffect,
 		withSocket?: boolean
 	): Promise<boolean | undefined>;
 
 	// ==================================================================
 
 	onManageActiveEffectFromEffectId(
-		effectActions: {
-			create: "create";
-			edit: "edit";
-			delete: "delete";
-			toogle: "toggle";
-			update: "update";
-		},
+		effectActions:
+			| {
+					create: "create";
+					edit: "edit";
+					delete: "delete";
+					toggle: "toggle";
+					update: "update";
+			  }
+			| string,
 		owner: Actor | Item,
 		effectId: string,
 		alwaysDelete?: boolean | undefined,
@@ -527,13 +536,15 @@ interface EffectInterfaceApi {
 	): Promise<Item | ActiveEffect | boolean | undefined>;
 
 	onManageActiveEffectFromEffect(
-		effectActions: {
-			create: "create";
-			edit: "edit";
-			delete: "delete";
-			toogle: "toggle";
-			update: "update";
-		},
+		effectActions:
+			| {
+					create: "create";
+					edit: "edit";
+					delete: "delete";
+					toggle: "toggle";
+					update: "update";
+			  }
+			| string,
 		owner: Actor | Item,
 		effect: Effect,
 		alwaysDelete?: boolean | undefined,
@@ -545,13 +556,15 @@ interface EffectInterfaceApi {
 	): Promise<Item | ActiveEffect | boolean | undefined>;
 
 	onManageActiveEffectFromActiveEffect(
-		effectActions: {
-			create: "create";
-			edit: "edit";
-			delete: "delete";
-			toogle: "toggle";
-			update: "update";
-		},
+		effectActions:
+			| {
+					create: "create";
+					edit: "edit";
+					delete: "delete";
+					toggle: "toggle";
+					update: "update";
+			  }
+			| string,
 		owner: Actor | Item,
 		activeEffect: ActiveEffect | null | undefined,
 		alwaysDelete?: boolean | undefined,
