@@ -1,8 +1,8 @@
 # Variant Encumbrance
 
-![Latest Release Download Count](https://img.shields.io/github/downloads/p4535992/foundryvtt-variant-encumbrance-dnd5e/latest/module.zip?color=2b82fc&label=DOWNLOADS&style=for-the-badge) 
+![Latest Release Download Count](https://img.shields.io/github/downloads/p4535992/foundryvtt-variant-encumbrance-dnd5e/latest/module.zip?color=2b82fc&label=DOWNLOADS&style=for-the-badge)
 
-[![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Fvariant-encumbrance-dnd5e&colorB=006400&style=for-the-badge)](https://forge-vtt.com/bazaar#package=variant-encumbrance-dnd5e) 
+[![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Fvariant-encumbrance-dnd5e&colorB=006400&style=for-the-badge)](https://forge-vtt.com/bazaar#package=variant-encumbrance-dnd5e)
 
 ![Foundry Core Compatible Version](https://img.shields.io/badge/dynamic/json.svg?url=https%3A%2F%2Fraw.githubusercontent.com%2Fp4535992%2Ffoundryvtt-variant-encumbrance-dnd5e%2Fmaster%2Fsrc%2Fmodule.json&label=Foundry%20Version&query=$.compatibility.verified&colorB=orange&style=for-the-badge)
 
@@ -73,10 +73,10 @@ This module uses the [midi-qol](https://gitlab.com/tposney/midi-qol/-/tree/maste
 
 ## Compatibility
 
-![](https://img.shields.io/badge/D&D5e-v1.3.4-blue) 
-![](https://img.shields.io/badge/Sky's%20Alternate%20Character%20Sheet-v1.5.2-red) 
-![](https://img.shields.io/badge/Tidy5e%20Sheet-v0.4.10-red) 
-![](https://img.shields.io/badge/Inventory+-v0.3.1-red) 
+![](https://img.shields.io/badge/D&D5e-v1.3.4-blue)
+![](https://img.shields.io/badge/Sky's%20Alternate%20Character%20Sheet-v1.5.2-red)
+![](https://img.shields.io/badge/Tidy5e%20Sheet-v0.4.10-red)
+![](https://img.shields.io/badge/Inventory+-v0.3.1-red)
 ![](https://img.shields.io/badge/DAE-v0.2.34-red)
 
 ### Character Sheets compatibility
@@ -218,7 +218,7 @@ Bulk represents the effort needed by a medium-sized creature to carry an object 
 By default when the Bulk feature is enabled a little label "Suggested Bulk" show up on the item sheet preview for give a suggestion for the convertion lb/g to bulk based on the below _giffyglyph_ table:
 
 | Category | Bulk	| Size | Weight |
-|:-------------:|:---------------:|:------------:|:------------:|	
+|:-------------:|:---------------:|:------------:|:------------:|
 | Tiny |0.2	| Tiny: Smaller than the palm of your hand. You can hold many of these in one hand. | Negligible: A negligible or trivial weight. |
 | Small | 1	| Short: Up to a handspan / 9 inches. Can be held comfortably with one hand. | Light: Up to 2 lbs. The weight of a loaf of bread or a bag of sugar. |
 | Medium | 2 | Medium: Up to an arms-length / 2 feet long. Can be held with one hand. | Medium: Up to 5 lbs. About as heavy as a few big bags of sugar. |
@@ -242,6 +242,16 @@ Add new buttons on the header sheet of the actors for choose when to avoid to ad
 **Feature: Do Not increase weight by quantity for no ammunition item:** This is a homebrew rule, for non-ammunition items don't increase weight by quantity (so 5 potions = 1 item weight for example
 
 **Feature: Do Not apply weight for equipped armor item:** This is a homebrew rule, for equipped armor types (clothing, light, medium, heavy, natural), the weight is set to 0 and not applied. NOTE: This will override the feature from '_Equipped Item Weight Multiplier_'
+
+**Feature: Equipped Armor Weight Multiplier for Clothing:** This is a homebrew rule, and is mostly an upgrade of the existing feature _Do Not apply weight for equipped armor item_ for equipped armor types **clothing**, a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from '_Do Not apply weight for equipped armor item_' ENABLED, the value by default the value is 0.
+
+**Feature: Equipped Armor Weight Multiplier for Light:** This is a homebrew rule, and is mostly an upgrade of the existing feature _Do Not apply weight for equipped armor item_ for equipped armor types **light**, a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from '_Do Not apply weight for equipped armor item_' ENABLED, the value by default the value is 0.
+
+**Feature: Equipped Armor Weight Multiplier for Medium:** This is a homebrew rule, and is mostly an upgrade of the existing feature _Do Not apply weight for equipped armor item_ for equipped armor types **medium**, a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from '_Do Not apply weight for equipped armor item_' ENABLED, the value by default the value is 0.
+
+**Feature: Equipped Armor Weight Multiplier for Heavy:** This is a homebrew rule, and is mostly an upgrade of the existing feature _Do Not apply weight for equipped armor item_ for equipped armor types **heavy**, a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from '_Do Not apply weight for equipped armor item_' ENABLED, the value by default the value is 0.
+
+**Feature: Equipped Armor Weight Multiplier for Natural:** This is a homebrew rule, and is mostly an upgrade of the existing feature _Do Not apply weight for equipped armor item_ for equipped armor types **natural**, a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from '_Do Not apply weight for equipped armor item_' ENABLED, the value by default the value is 0.
 
 **Feature: Use STR flat value instead STR MOD on Bulk:** This is a homebrew rule, ONLY FOR BULK calculation. Currently there is no way to adjust the maximum bulk for a creature, which is tied to size and STR MOD, now you can use the flat value of force to handle it.
 
@@ -308,7 +318,7 @@ variant-encumbrance-dnd5e:
 - **lightMax:** the weight value for pass from 'unencumbered' to 'encumbered' and back.
 - **mediumMax:** the weight value for pass from 'encumbered' to 'heavily encumbered' and back.
 - **heavyMax:** the weight value for pass from 'heavily encumbered' to 'overburdened' and back.
-- **encumbranceTier:** the number given the current tier applied don the actor 
+- **encumbranceTier:** the number given the current tier applied don the actor
     - 0 = Unencumbered
     - 1 = Encumbered
     - 2 = Heavily Encumbered
@@ -366,6 +376,11 @@ variant-encumbrance-dnd5e:
 |Remove standard encumbrance bar from the character sheet| If enabled it will hide the standard bar of encumbrance, is useful only for people using the bulk bar and do not want to see two graphic bars|false|
 |Feature: Do Not increase weight by quantity for no ammunition item| This is a homebrew rule, for non-ammunition items don't increase weight by quantity (so 5 potions = 1 item weight for example). ATTENTION: If the module 'Variant Encumbrance' is present and active this feature is disabled by default if the module settings 'Feature: Integration with Variant Encumbrance' is enabled.|false|
 |Feature: Do Not apply weight for equipped armor item| This is a homebrew rule, for equipped armor types (clothing, light, medium, heavy, natural), the weight is set to 0 and not applied. NOTE: This will override the feature from '_Equipped Item Weight Multiplier_'|false|
+|Feature: Equipped Armor Weight Multiplier for Clothing|This is a homebrew rule, and is mostly an upgrade of the existing feature _Do Not apply weight for equipped armor item_ for equipped armor types **clothing**, a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from '_Do Not apply weight for equipped armor item_' ENABLED, the value by default the value is 0.|0|
+|Feature: Equipped Armor Weight Multiplier for Light|This is a homebrew rule, and is mostly an upgrade of the existing feature _Do Not apply weight for equipped armor item_ for equipped armor types **light**, a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from '_Do Not apply weight for equipped armor item_' ENABLED, the value by default the value is 0.|0|
+|Feature: Equipped Armor Weight Multiplier for Medium|This is a homebrew rule, and is mostly an upgrade of the existing feature _Do Not apply weight for equipped armor item_ for equipped armor types **medium**, a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from '_Do Not apply weight for equipped armor item_' ENABLED, the value by default the value is 0.|0|
+|Feature: Equipped Armor Weight Multiplier for Heavy|This is a homebrew rule, and is mostly an upgrade of the existing feature _Do Not apply weight for equipped armor item_ for equipped armor types **heavy**, a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from '_Do Not apply weight for equipped armor item_' ENABLED, the value by default the value is 0.|0|
+|Feature: Equipped Armor Weight Multiplier for Natural|This is a homebrew rule, and is mostly an upgrade of the existing feature _Do Not apply weight for equipped armor item_ for equipped armor types **natural**, a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from '_Do Not apply weight for equipped armor item_' ENABLED, the value by default the value is 0.|0|
 |Feature: Use STR flat value instead STR MOD, ONLY FOR BULK calculation| This is a homebrew rule, ONLY FOR BULK calculation. Currently there is no way to adjust the maximum bulk for a creature, which is tied to size and STR MOD, now you can use the flat value of force to handle it.|false|
 |Debug|Enable debug messages useful for check issues|false||
 
