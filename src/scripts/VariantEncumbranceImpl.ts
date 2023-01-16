@@ -475,10 +475,7 @@ export const VariantEncumbranceImpl = {
 				// External modules calculation
 
 				// Start Item container check
-				if (
-					hasProperty(item, `flags.itemcollection`) &&
-					itemContainerActive
-				) {
+				if (hasProperty(item, `flags.itemcollection`) && itemContainerActive) {
 					const weightless = getProperty(item, "system.capacity.weightless") ?? false;
 					if (weightless) {
 						itemWeight = getProperty(item, "flags.itemcollection.bagWeight") || 0;
@@ -1411,46 +1408,46 @@ export function calcWeight(
 	const itemArmorTypes = ["clothing", "light", "medium", "heavy", "natural"];
 	//@ts-ignore
 	if (isEquipped && doNotApplyWeightForEquippedArmor && itemArmorTypes.includes(item.system.armor?.type)) {
-        const currentItemWeight = calcItemWeight(item, ignoreCurrency, { ignoreItems, ignoreTypes }) +
-		(getProperty(item, "flags.itemcollection.bagWeight") || 0)
-        const applyWeightMultiplierForEquippedArmorClothing = <number>(
-            game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorClothing") || 0
-        );
-        const applyWeightMultiplierForEquippedArmorLight = <number>(
-            game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorLight") || 0
-        );
-        const applyWeightMultiplierForEquippedArmorMedium = <number>(
-            game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorMedium") || 0
-        );
-        const applyWeightMultiplierForEquippedArmorHeavy = <number>(
-            game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorHeavy") || 0
-        );
-        const applyWeightMultiplierForEquippedArmorNatural = <number>(
-            game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorNatural") || 0
-        );
-        //@ts-ignore
-        if(item.system.armor?.type === "clothing"){
-            return currentItemWeight * applyWeightMultiplierForEquippedArmorClothing;
-        }
-        //@ts-ignore
-        else if(item.system.armor?.type === "light"){
-            return currentItemWeight * applyWeightMultiplierForEquippedArmorLight;
-        }
-        //@ts-ignore
-        else if(item.system.armor?.type === "medium"){
-            return currentItemWeight * applyWeightMultiplierForEquippedArmorMedium;
-        }
-        //@ts-ignore
-        else if(item.system.armor?.type === "heavy"){
-            return currentItemWeight * applyWeightMultiplierForEquippedArmorHeavy;
-        }
-        //@ts-ignore
-        else if(item.system.armor?.type === "natural"){
-            return currentItemWeight * applyWeightMultiplierForEquippedArmorNatural;
-        }
-        else {
-            return 0;
-        }
+		const currentItemWeight =
+			calcItemWeight(item, ignoreCurrency, { ignoreItems, ignoreTypes }) +
+			(getProperty(item, "flags.itemcollection.bagWeight") || 0);
+		const applyWeightMultiplierForEquippedArmorClothing = <number>(
+			(game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorClothing") || 0)
+		);
+		const applyWeightMultiplierForEquippedArmorLight = <number>(
+			(game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorLight") || 0)
+		);
+		const applyWeightMultiplierForEquippedArmorMedium = <number>(
+			(game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorMedium") || 0)
+		);
+		const applyWeightMultiplierForEquippedArmorHeavy = <number>(
+			(game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorHeavy") || 0)
+		);
+		const applyWeightMultiplierForEquippedArmorNatural = <number>(
+			(game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorNatural") || 0)
+		);
+		//@ts-ignore
+		if (item.system.armor?.type === "clothing") {
+			return currentItemWeight * applyWeightMultiplierForEquippedArmorClothing;
+		}
+		//@ts-ignore
+		else if (item.system.armor?.type === "light") {
+			return currentItemWeight * applyWeightMultiplierForEquippedArmorLight;
+		}
+		//@ts-ignore
+		else if (item.system.armor?.type === "medium") {
+			return currentItemWeight * applyWeightMultiplierForEquippedArmorMedium;
+		}
+		//@ts-ignore
+		else if (item.system.armor?.type === "heavy") {
+			return currentItemWeight * applyWeightMultiplierForEquippedArmorHeavy;
+		}
+		//@ts-ignore
+		else if (item.system.armor?.type === "natural") {
+			return currentItemWeight * applyWeightMultiplierForEquippedArmorNatural;
+		} else {
+			return 0;
+		}
 	}
 	// END MOD 4535992
 	const weightless = getProperty(item, "system.capacity.weightless") ?? false;

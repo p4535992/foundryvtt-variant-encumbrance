@@ -1,4 +1,4 @@
-### 0.11.10
+### 0.11.11
 
 - Synced with item-collection 10.0.7
 

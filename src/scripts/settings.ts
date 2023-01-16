@@ -350,9 +350,9 @@ export const registerSettings = function () {
 		default: true,
 	});
 
-    // ======================================================
+	// ======================================================
 	// BULK SYSTEM
-    // ======================================================
+	// ======================================================
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "enableBulkSystem", {
 		name: i18n(CONSTANTS.MODULE_NAME + ".setting.enableBulkSystem.name"),
@@ -399,9 +399,9 @@ export const registerSettings = function () {
 		default: false,
 	});
 
-    // ======================================================
-    // Homebrew Rule
-    // ======================================================
+	// ======================================================
+	// Homebrew Rule
+	// ======================================================
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "doNotIncreaseWeightByQuantityForNoAmmunition", {
 		name: `${CONSTANTS.MODULE_NAME}.setting.doNotIncreaseWeightByQuantityForNoAmmunition.name`,
@@ -421,7 +421,7 @@ export const registerSettings = function () {
 		type: Boolean,
 	});
 
-    game.settings.register(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorClothing", {
+	game.settings.register(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorClothing", {
 		name: `${CONSTANTS.MODULE_NAME}.setting.applyWeightMultiplierForEquippedArmorClothing.name`,
 		hint: `${CONSTANTS.MODULE_NAME}.setting.applyWeightMultiplierForEquippedArmorClothing.hint`,
 		scope: "world",
@@ -430,7 +430,7 @@ export const registerSettings = function () {
 		type: Number,
 	});
 
-    game.settings.register(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorLight", {
+	game.settings.register(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorLight", {
 		name: `${CONSTANTS.MODULE_NAME}.setting.applyWeightMultiplierForEquippedArmorLight.name`,
 		hint: `${CONSTANTS.MODULE_NAME}.setting.applyWeightMultiplierForEquippedArmorLight.hint`,
 		scope: "world",
@@ -439,7 +439,7 @@ export const registerSettings = function () {
 		type: Number,
 	});
 
-    game.settings.register(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorMedium", {
+	game.settings.register(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorMedium", {
 		name: `${CONSTANTS.MODULE_NAME}.setting.applyWeightMultiplierForEquippedArmorMedium.name`,
 		hint: `${CONSTANTS.MODULE_NAME}.setting.applyWeightMultiplierForEquippedArmorMedium.hint`,
 		scope: "world",
@@ -448,7 +448,7 @@ export const registerSettings = function () {
 		type: Number,
 	});
 
-    game.settings.register(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorHeavy", {
+	game.settings.register(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorHeavy", {
 		name: `${CONSTANTS.MODULE_NAME}.setting.applyWeightMultiplierForEquippedArmorHeavy.name`,
 		hint: `${CONSTANTS.MODULE_NAME}.setting.applyWeightMultiplierForEquippedArmorHeavy.hint`,
 		scope: "world",
@@ -457,7 +457,7 @@ export const registerSettings = function () {
 		type: Number,
 	});
 
-    game.settings.register(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorNatural", {
+	game.settings.register(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorNatural", {
 		name: `${CONSTANTS.MODULE_NAME}.setting.applyWeightMultiplierForEquippedArmorNatural.name`,
 		hint: `${CONSTANTS.MODULE_NAME}.setting.applyWeightMultiplierForEquippedArmorNatural.hint`,
 		scope: "world",
@@ -475,7 +475,7 @@ export const registerSettings = function () {
 		type: Boolean,
 	});
 
-    // =============================================================================================================
+	// =============================================================================================================
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "debug", {
 		name: `${CONSTANTS.MODULE_NAME}.setting.debug.name`,
@@ -485,7 +485,6 @@ export const registerSettings = function () {
 		default: false,
 		type: Boolean,
 	});
-
 };
 
 class ResetSettingsDialog extends FormApplication<FormApplicationOptions, object, any> {
@@ -504,7 +503,9 @@ class ResetSettingsDialog extends FormApplication<FormApplicationOptions, object
 					icon: '<i class="fas fa-check"></i>',
 					label: game.i18n.localize(`${CONSTANTS.MODULE_NAME}.dialogs.resetsettings.confirm`),
 					callback: async () => {
-						const worldSettings = game.settings.storage?.get("world")?.filter((setting) => setting.key.startsWith(`${CONSTANTS.MODULE_NAME}.`));
+						const worldSettings = game.settings.storage
+							?.get("world")
+							?.filter((setting) => setting.key.startsWith(`${CONSTANTS.MODULE_NAME}.`));
 						for (let setting of worldSettings) {
 							console.log(`Reset setting '${setting.key}'`);
 							await setting.delete();
