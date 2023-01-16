@@ -1,5 +1,9 @@
 ### 0.11.10
 
+- Synced with item-collection 10.0.7
+
+### 0.11.10
+
 - Synced with item-collection 10.0.6
 
 ### 0.11.9
@@ -120,7 +124,7 @@
 ### 0.8.3
 
 - Bug fix for the metric system: fail to calculate with modules setting 'enable Varian Encumbrance Weight On Actor Flag'
-- Bug fix for the metric system: Replace standard metric weight steps from 2.3/4.5/6.8 to 2.5/5/7.5 
+- Bug fix for the metric system: Replace standard metric weight steps from 2.3/4.5/6.8 to 2.5/5/7.5
 
 ### 0.8.2
 
@@ -147,7 +151,7 @@
 
 ### 0.7.7
 
-- Bug fix 
+- Bug fix
 - Remove dynamic effects for longstrider and encumbrance movement
 
 ### 0.7.6
@@ -246,7 +250,7 @@
 
 - Clean up of the code
 - Write a new and better workflow for calculate the weight
-- Try to fix again (Bug fix [[BUG] Item Containers weight calculation with backpacks becomes reverse of intended](https://github.com/VanirDev/VariantEncumbrance/issues/47)) 
+- Try to fix again (Bug fix [[BUG] Item Containers weight calculation with backpacks becomes reverse of intended](https://github.com/VanirDev/VariantEncumbrance/issues/47))
 
 ### Update 0.6.3
 
@@ -319,7 +323,7 @@
 ### Update 0.5.13
 
 - Bug fix add hook for intercept create of module inventory+
-- 
+-
 ### Update 0.5.12
 
 - Bug fix add hook for intercept update of module inventory+
@@ -422,7 +426,7 @@
 
 - Many bug fix and updates
 - Finally integration with Active effects for encumbrance
-  
+
 ### Update 0.3.6
 
 - Many bug fix and updates
@@ -430,7 +434,7 @@
 ### Update 0.3.5
 
 - Converted to typescript (because i iike it better than javascript) and some bug fix
-  
+
 ### Update 0.3.4
 
 * Update for 0.8.8
@@ -438,14 +442,14 @@
 * Add fix from [hmqgg fork](https://github.com/hmqgg/VariantEncumbrance/commit/27004558654bbd28eeb419c35d8f88093fbb7605)
 * Add optional use of the module midi (if the module is installed or not) request from tgp (unkwnon discord name)
 * Minor bug fix
-  
+
 ### Update 0.3.3
-  
+
 * Bugfixes for foundryvtt 0.8.6
 * Setup npm for better build the project in the future
-  
+
 ### Update 0.3.2
-  
+
 * Bugfixes for inventory+ support
 * Added support for Dynamic Active Effects
 

@@ -476,14 +476,12 @@ export const VariantEncumbranceImpl = {
 
 				// Start Item container check
 				if (
-					// getProperty(item, "flags.itemcollection.bagWeight") !== null &&
-					// getProperty(item, "flags.itemcollection.bagWeight") !== undefined &&
 					hasProperty(item, `flags.itemcollection`) &&
 					itemContainerActive
 				) {
 					const weightless = getProperty(item, "system.capacity.weightless") ?? false;
 					if (weightless) {
-						itemWeight = getProperty(item, "flags.itemcollection.bagWeight");
+						itemWeight = getProperty(item, "flags.itemcollection.bagWeight") || 0;
 					} else {
 						// itemWeight = calcItemWeight(item) + getProperty(item, 'flags.itemcollection.bagWeight');
 						// MOD 4535992 Removed variant encumbrance take care of this
@@ -1402,7 +1400,7 @@ export function calcWeight(
 	// MOD 4535992 Removed variant encumbrance take care of this
 	// if (this.parent instanceof Actor && (!this.system.equipped && this.system.capacity.weightlessUnequipped)) return 0;
 	// const weightless = getProperty(this, "system.capacity.weightless") ?? false;
-	// if (weightless) return getProperty(this, "flags.itemcollection.bagWeight") ?? 0;
+	// if (weightless) return getProperty(this, "flags.itemcollection.bagWeight") || 0;
 	const isEquipped: boolean =
 		//@ts-ignore
 		item.system.equipped ? true : false;
@@ -1418,11 +1416,11 @@ export function calcWeight(
 	// END MOD 4535992
 	const weightless = getProperty(item, "system.capacity.weightless") ?? false;
 	if (weightless) {
-		return getProperty(item, "flags.itemcollection.bagWeight") ?? 0;
+		return getProperty(item, "flags.itemcollection.bagWeight") || 0;
 	}
 	return (
 		calcItemWeight(item, ignoreCurrency, { ignoreItems, ignoreTypes }) +
-		(getProperty(item, "flags.itemcollection.bagWeight") ?? 0)
+		(getProperty(item, "flags.itemcollection.bagWeight") || 0)
 	);
 }
 
@@ -1441,8 +1439,8 @@ function calcItemWeight(
 		if (ignoreTypes?.some((name) => item.name.includes(name))) return acc;
 		//@ts-ignore
 		if (ignoreItems?.includes(item.name)) return acc;
-		return acc + (item.calcWeight() ?? 0); // TODO convert this in a static method ???
-	}, (item.type === "backpack" ? 0 : _calcItemWeight(item)) ?? 0);
+		return acc + (item.calcWeight() || 0); // TODO convert this in a static method ???
+	}, (item.type === "backpack" ? 0 : _calcItemWeight(item)) || 0);
 	// [Optional] add Currency Weight (for non-transformed actors)
 	if (
 		!ignoreCurrency &&

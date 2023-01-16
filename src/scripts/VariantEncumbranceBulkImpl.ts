@@ -391,8 +391,6 @@ export const VariantEncumbranceBulkImpl = {
 
 				// Start Item container check
 				if (
-					// getProperty(item, "flags.itemcollection.bagWeight") !== null &&
-					// getProperty(item, "flags.itemcollection.bagWeight") !== undefined &&
 					hasProperty(item, `flags.itemcollection`) &&
 					itemContainerActive
 				) {
@@ -515,7 +513,7 @@ export const VariantEncumbranceBulkImpl = {
 					appliedWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "unequippedMultiplier");
 				}
 				debug(
-					`Actor '${actorEntity.name}, Item '${item.name}', Equipped '${isEquipped}' : 
+					`Actor '${actorEntity.name}, Item '${item.name}', Equipped '${isEquipped}' :
             ${itemQuantity} * ${itemWeight} = ${appliedWeight} on total ${weight} => ${weight + appliedWeight}`
 				);
 				return weight + appliedWeight;
@@ -1274,7 +1272,7 @@ export function calcBulk(
 	// MOD 4535992 Removed variant encumbrance take care of this
 	// if (this.parent instanceof Actor && (!this.system.equipped && this.system.capacity.weightlessUnequipped)) return 0;
 	// const weightless = getProperty(this, "system.capacity.weightless") ?? false;
-	// if (weightless) return getProperty(this, "flags.itemcollection.bagWeight") ?? 0;
+	// if (weightless) return getProperty(this, "flags.itemcollection.bagWeight") || 0;
 	const isEquipped: boolean =
 		//@ts-ignore
 		item.system.equipped ? true : false;
