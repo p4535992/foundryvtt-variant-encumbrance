@@ -597,3 +597,39 @@ export function retrieveActiveEffectDataChangeByKeyFromActiveEffect(
 		priority: atcvEffectChangeData.priority,
 	};
 }
+
+export function getItemWeight(item: Item): number {
+	//@ts-ignore
+	const itemWeight = is_real_number(item.system.weight)
+		? //@ts-ignore
+		  item.system.weight
+		: 0;
+	return itemWeight ?? 0;
+}
+
+export function getItemQuantity(item: Item): number {
+	//@ts-ignore
+	const itemQuantity = is_real_number(item.system.quantity)
+		? //@ts-ignore
+		  item.system.quantity
+		: 0;
+	return itemQuantity ?? 0;
+}
+
+export function getItemBulk(item: Item): number {
+	const itemBulk = getProperty(item, `flags.${CONSTANTS.MODULE_NAME}.bulk`);
+	const itemWeightBulk = is_real_number(itemBulk) ? <number>itemBulk : 0;
+	return itemWeightBulk ?? 0;
+}
+
+export function getBulkLabel():string {
+	// i18n('variant-encumbrance-dnd5e.label.bulk.ItemContainerCapacityBulk') ??
+	const bulkLabelI18n = i18n("variant-encumbrance-dnd5e.label.bulk.Bulk");
+	const displayedUnits = <string>game.settings.get(CONSTANTS.MODULE_NAME, "unitsBulk");
+	const bulkLabel = capitalizeFirstLetter(displayedUnits ?? bulkLabelI18n);
+	return bulkLabel;
+}
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}

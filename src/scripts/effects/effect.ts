@@ -5,9 +5,11 @@ import type { EffectChangeData } from "@league-of-foundry-developers/foundry-vtt
  */
 export default class Effect {
 	customId: string;
+	/** @deprecated use instead label */
 	name: string;
+	label: string;
 	description: string;
-	icon: string;
+	icon = "icons/svg/aura.svg";
 	tint: string;
 	seconds: number;
 	rounds: number;
@@ -19,43 +21,51 @@ export default class Effect {
 	atlChanges: EffectChangeData[] = [];
 	tokenMagicChanges: EffectChangeData[] = [];
 	nestedEffects: Effect[] = [];
-	transfer = false;
+	subEffects: Effect[] = [];
 	// ADDED FROM 4535992
-	origin = "";
-	overlay = false;
-	atcvChanges: EffectChangeData[] = [];
 	isDisabled: boolean;
 	isTemporary: boolean;
 	isSuppressed: boolean;
+
+	transfer = false;
+	atcvChanges: EffectChangeData[] = [];
 	dae: {};
+	overlay = false;
+	// Optional
+	origin = "";
 	// END ADDED FROM 4535992
 
 	constructor({
 		customId = "",
 		name = "",
+		label = "",
 		description = "",
-		icon = "",
+		icon = "icons/svg/aura.svg",
 		tint = "",
 		seconds = NaN,
 		rounds = NaN,
 		turns = NaN,
 		isDynamic = false,
 		isViewable = true,
-		isDisabled = false,
-		isTemporary = false,
-		isSuppressed = false,
+		isDisabled = false, // ADDED FROM 4535992
+		isTemporary = false, // ADDED FROM 4535992
+		isSuppressed = false, // ADDED FROM 4535992
 		flags = {},
 		changes = <any[]>[],
 		atlChanges = <any[]>[],
 		tokenMagicChanges = <any[]>[],
 		nestedEffects = <Effect[]>[],
+		subEffects = <Effect[]>[],
+		// ADDED FROM 4535992
 		transfer = false,
 		atcvChanges = <any[]>[],
 		dae = {},
 		overlay = false,
+		// END ADDED FROM 4535992
 	}) {
 		this.customId = customId;
 		this.name = name;
+		this.label = label;
 		this.description = description;
 		this.icon = icon;
 		this.tint = tint;
@@ -69,6 +79,7 @@ export default class Effect {
 		this.atlChanges = atlChanges;
 		this.tokenMagicChanges = tokenMagicChanges;
 		this.nestedEffects = nestedEffects;
+		this.subEffects = subEffects;
 		this.transfer = transfer;
 		// 4535992 ADDED
 		this.atcvChanges = atcvChanges;
@@ -100,10 +111,15 @@ export default class Effect {
 		}
 		const isPassive = !this.isTemporary;
 		const currentDae = this._isEmptyObject(this.dae) ? this.flags.dae : this.dae;
+
+		const convenientDescription = this.description
+			? i18n(this.description) ?? "Applies custom effects"
+			: this.description;
+
 		return {
 			id: this._id,
-			name: i18n(this.name),
-			label: i18n(this.name),
+			// name: i18n(this.name),
+			label: i18n(this.label),
 			description: i18n(this.description), // 4535992 this not make sense, but it doesn't hurt either
 			icon: this.icon,
 			tint: this.tint,
@@ -113,9 +129,14 @@ export default class Effect {
 					statusId: isPassive ? undefined : this._id,
 					overlay: overlay ? overlay : this.overlay ? this.overlay : false, // MOD 4535992
 				},
-				isConvenient: true,
-				isCustomConvenient: true,
-				convenientDescription: i18n(this.description) ?? "Applies custom effects",
+				[Constants.MODULE_ID]: {
+					[Constants.FLAGS.DESCRIPTION]: convenientDescription,
+					[Constants.FLAGS.IS_CONVENIENT]: true,
+					[Constants.FLAGS.IS_DYNAMIC]: this.isDynamic,
+					[Constants.FLAGS.IS_VIEWABLE]: this.isViewable,
+					[Constants.FLAGS.NESTED_EFFECTS]: this.nestedEffects,
+					[Constants.FLAGS.SUB_EFFECTS]: this.subEffects,
+				},
 				dae: this._isEmptyObject(currentDae)
 					? isPassive
 						? { stackable: false, specialDuration: [], transfer: true }
@@ -134,6 +155,63 @@ export default class Effect {
 	}
 
 	/**
+	 * Converts the effect data to an active effect data object
+	 *
+	 * @param {object} params - the params to use for conversion
+	 * @param {string} params.origin - the origin to add to the effect
+	 * @param {boolean} params.overlay - whether the effect is an overlay or not
+	 * @returns {object} The active effect data object for this effect
+	 */
+	convertToActiveEffect(): ActiveEffect {
+		const changes = this._handleIntegrations();
+		const flags = <any>{};
+		const label = this.label ? this.label : this.name;
+		const description = this.description;
+		const isDynamic = this.isDynamic;
+		const isViewable = this.isViewable;
+		const nestedEffects = this.nestedEffects;
+		const subEffects = this.subEffects;
+		const icon = this.icon;
+		const rounds = this.rounds;
+		const seconds = this.seconds;
+		const turns = this.turns;
+
+		if (!flags.core) {
+			flags.core = {};
+		}
+		flags.core.statusId = `Convenient Effect: ${label}`;
+
+		flags[Constants.MODULE_ID] = {};
+		flags[Constants.MODULE_ID][Constants.FLAGS.DESCRIPTION] = description;
+		flags[Constants.MODULE_ID][Constants.FLAGS.IS_CONVENIENT] = true;
+		flags[Constants.MODULE_ID][Constants.FLAGS.IS_DYNAMIC] = isDynamic;
+		flags[Constants.MODULE_ID][Constants.FLAGS.IS_VIEWABLE] = isViewable;
+		flags[Constants.MODULE_ID][Constants.FLAGS.NESTED_EFFECTS] = nestedEffects;
+		flags[Constants.MODULE_ID][Constants.FLAGS.SUB_EFFECTS] = subEffects;
+
+		let duration = {
+			rounds: rounds ?? <number>seconds / CONFIG.time.roundTime,
+			seconds: seconds,
+			startRound: game.combat?.round,
+			startTime: game.time.worldTime,
+			startTurn: game.combat?.turn,
+			turns: turns,
+		};
+		let effect = new CONFIG.ActiveEffect.documentClass({
+			changes,
+			disabled: false,
+			duration,
+			flags,
+			icon,
+			label,
+			origin,
+			transfer: false,
+		});
+
+		return effect;
+	}
+
+	/**
 	 * Converts the Effect into an object
 	 *
 	 * @returns {object} the object representation of this effect
@@ -143,10 +221,19 @@ export default class Effect {
 	}
 
 	get _id() {
-		return `Convenient Effect: ${this.name}`;
+		const label = this.label ? this.label : this.name;
+		return `Convenient Effect: ${label}`;
 	}
 
 	_getDurationData() {
+		// let duration = {
+		// 	rounds: this._getCombatRounds() ?? <number>this._getCombatRounds() / CONFIG.time.roundTime,
+		// 	seconds: this._getSeconds(),
+		// 	startRound: game.combat?.round,
+		// 	startTime: game.time.worldTime,
+		// 	startTurn: game.combat?.turn,
+		// 	turns: !is_real_number(this.turns) ? undefined : this.turns
+		// };
 		const isPassive = !this.isTemporary;
 		if (game.combat) {
 			if (isPassive) {
@@ -291,10 +378,24 @@ export default class Effect {
 	}
 }
 
+// =========================
+// FLAGS SUPPORT
+// =========================
+
 /**
  * Contains any constants for the application
  */
 export class Constants {
+	static MODULE_ID = "dfreds-convenient-effects";
+	static FLAGS = {
+		DESCRIPTION: "description",
+		IS_CONVENIENT: "isConvenient",
+		IS_DYNAMIC: "isDynamic",
+		IS_VIEWABLE: "isViewable",
+		NESTED_EFFECTS: "nestedEffects",
+		SUB_EFFECTS: "subEffects",
+	};
+
 	static COLORS = {
 		COLD_FIRE: "#389888",
 		FIRE: "#f98026",
@@ -312,7 +413,13 @@ export class Constants {
 		IN_ONE_DAY: 86400,
 		IN_ONE_WEEK: 604800,
 	};
+
+	static SIZES_ORDERED = ["tiny", "sm", "med", "lg", "huge", "grg"];
 }
+
+// ===========================
+// UTILITIES
+// ===========================
 
 function cleanUpString(stringToCleanUp: string): string {
 	// regex expression to match all non-alphanumeric characters in string

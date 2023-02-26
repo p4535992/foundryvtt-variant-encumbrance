@@ -26,6 +26,8 @@ import {
 	is_real_number,
 	retrieveAttributeEncumbranceMax,
 	retrieveAttributeCapacityCargo,
+	getItemQuantity,
+	getItemWeight,
 } from "./lib/lib";
 import API from "./api";
 import type { EffectChangeData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData";
@@ -458,13 +460,8 @@ export const VariantEncumbranceImpl = {
 					return weight;
 				}
 
-				let itemQuantity: number =
-					//@ts-ignore
-					is_real_number(item.system.quantity) ? item.system.quantity : 0;
-
-				let itemWeight: number =
-					//@ts-ignore
-					is_real_number(item.system.weight) ? item.system.weight : 0;
+				let itemQuantity: number = getItemQuantity(item);
+				let itemWeight: number = getItemWeight(item);
 
 				debug(
 					`Actor '${actorEntity.name}, Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`
@@ -1508,14 +1505,10 @@ function calcItemWeight(
 }
 
 function _calcItemWeight(item: Item) {
-	// const quantity = item.system.quantity || 1;
-	// const weight = item.system.weight || 0;
-	const quantity: number =
-		//@ts-ignore
-		is_real_number(item.system.quantity) ? item.system.quantity : 0;
-	const weight: number =
-		//@ts-ignore
-		is_real_number(item.system.weight) ? item.system.weight : 0;
+	// const quantity = getItemQuantity(item);
+	// const weight = getItemWeight(item);
+	const quantity: number = getItemQuantity(item);
+	const weight: number = getItemWeight(item);
 	return Math.round(weight * quantity * 100) / 100;
 }
 
@@ -1822,15 +1815,12 @@ function _standardVehicleWeightCalculation(actorEntity: Actor): EncumbranceDnd5e
 		//@ts-ignore
 		const isCargo = item.flags.dnd5e?.vehicleCargo === true;
 		if (isCargo) {
-			// totalWeight += (item.system.weight || 0) * item.system.quantity;
+			// totalWeight += getItemWeight(item) * getItemQuantity(item);
 			// cargo.cargo.items.push(item);
 			// continue;
-			const quantity =
-				//@ts-ignore
-				is_real_number(item.system.quantity) ? item.system.quantity : 0;
-			const weight =
-				//@ts-ignore
-				is_real_number(item.system.weight) ? item.system.weight : 0;
+			const quantity = getItemQuantity(item);
+			const weight = getItemWeight(item);
+
 			//@ts-ignore
 			totalWeight += weight * quantity;
 			//@ts-ignore
@@ -1858,14 +1848,11 @@ function _standardVehicleWeightCalculation(actorEntity: Actor): EncumbranceDnd5e
 				break;
 			}
 			default: {
-				// totalWeight += (item.system.weight || 0) * item.system.quantity;
+				// totalWeight += getItemWeight(item) * getItemQuantity(item);
 				// cargo.cargo.items.push(item);
-				const quantity =
-					//@ts-ignore
-					is_real_number(item.system.quantity) ? item.system.quantity : 0;
-				const weight =
-					//@ts-ignore
-					is_real_number(item.system.weight) ? item.system.weight : 0;
+				const quantity = getItemQuantity(item);
+				const weight = getItemWeight(item);
+
 				totalWeight += weight * quantity;
 			}
 		}

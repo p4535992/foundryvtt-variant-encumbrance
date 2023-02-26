@@ -21,6 +21,8 @@ import CONSTANTS from "./constants";
 import {
 	debug,
 	error,
+	getItemBulk,
+	getItemQuantity,
 	i18n,
 	isGMConnected,
 	is_real_number,
@@ -113,7 +115,7 @@ export const VariantEncumbranceBulkImpl = {
 			if (im && physicalItems.includes(im.type)) {
 				if (im.id === currentItemId) {
 					if (mode === EncumbranceMode.DELETE) {
-						// setProperty(im, 'system.bulk', 0);
+						// setProperty(im, 'flags[CONSTANTS.MODULE_NAME].bulk', 0);
 					} else {
 						inventoryItems.push(im);
 					}
@@ -126,7 +128,7 @@ export const VariantEncumbranceBulkImpl = {
 			const im = <Item>game.items?.find((itemTmp: Item) => itemTmp.id === currentItemId);
 			if (im && physicalItems.includes(im.type)) {
 				if (mode === EncumbranceMode.DELETE) {
-					// setProperty(im, 'system.bulk', 0);
+					// setProperty(im, 'flags[CONSTANTS.MODULE_NAME].bulk', 0);
 				} else {
 					inventoryItems.push(im);
 				}
@@ -373,13 +375,8 @@ export const VariantEncumbranceBulkImpl = {
 					return weight;
 				}
 
-				let itemQuantity: number =
-					//@ts-ignore
-					is_real_number(item.system.quantity) ? item.system.quantity : 0;
-
-				let itemWeight: number =
-					//@ts-ignore
-					is_real_number(item.system.bulk) ? item.system.bulk : 0;
+				let itemQuantity: number = getItemQuantity(item);
+				let itemWeight: number = getItemBulk(item);
 
 				debug(
 					`Actor '${actorEntity.name}, Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`
@@ -393,7 +390,7 @@ export const VariantEncumbranceBulkImpl = {
 				if (hasProperty(item, `flags.itemcollection`) && itemContainerActive) {
 					const weightless = getProperty(item, "system.capacity.weightless") ?? false;
 					if (weightless) {
-						itemWeight = getProperty(item, "system.bulk");
+						itemWeight = getItemBulk(item);
 					} else {
 						// itemWeight = calcItemWeight(item) + getProperty(item, 'flags.itemcollection.bagWeight');
 						// MOD 4535992 Removed variant encumbrance take care of this
@@ -1280,8 +1277,7 @@ export function calcBulk(
 	const itemArmorTypes = ["clothing", "light", "medium", "heavy", "natural"];
 	//@ts-ignore
 	if (isEquipped && doNotApplyWeightForEquippedArmor && itemArmorTypes.includes(item.system.armor?.type)) {
-		const currentItemWeight =
-			calcItemBulk(item, ignoreCurrency, { ignoreItems, ignoreTypes }) + (getProperty(item, "system.bulk") ?? 0);
+		const currentItemWeight = calcItemBulk(item, ignoreCurrency, { ignoreItems, ignoreTypes }) + getItemBulk(item);
 		const applyWeightMultiplierForEquippedArmorClothing = <number>(
 			(game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorClothing") || 0)
 		);
@@ -1323,9 +1319,9 @@ export function calcBulk(
 	// END MOD 4535992
 	const weightless = getProperty(item, "system.capacity.weightless") ?? false;
 	if (weightless) {
-		return getProperty(item, "system.bulk") ?? 0;
+		return getItemBulk(item);
 	}
-	return calcItemBulk(item, ignoreCurrency, { ignoreItems, ignoreTypes }) + (getProperty(item, "system.bulk") ?? 0);
+	return calcItemBulk(item, ignoreCurrency, { ignoreItems, ignoreTypes }) + getItemBulk(item);
 }
 
 function calcItemBulk(
@@ -1344,7 +1340,7 @@ function calcItemBulk(
 		//@ts-ignore
 		if (ignoreItems?.includes(item.name)) return acc;
 		//@ts-ignore
-		return acc + (item.system.bulk ?? 0); // TODO convert this in a static method ???
+		return acc + getItemBulk(item); // TODO convert this in a static method ???
 	}, (item.type === "backpack" ? 0 : _calcItemBulk(item)) ?? 0);
 	// [Optional] add Currency Weight (for non-transformed actors)
 	if (
@@ -1377,13 +1373,9 @@ function calcItemBulk(
 }
 
 function _calcItemBulk(item: Item) {
-	// const quantity = item.system.quantity || 1;
-	// const weight = item.system.bulk || 0;
-	const quantity: number =
-		//@ts-ignore
-		is_real_number(item.system.quantity) ? item.system.quantity : 0;
-	const weight: number =
-		//@ts-ignore
-		is_real_number(item.system.bulk) ? item.system.bulk : 0;
+	// const quantity = getItemQuantity(item);
+	// const weight = getItemBulk(item);
+	const quantity: number = getItemQuantity(item);
+	const weight: number = getItemBulk(item);
 	return Math.round(weight * quantity * 100) / 100;
 }

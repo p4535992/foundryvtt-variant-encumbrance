@@ -259,6 +259,8 @@ Add new buttons on the header sheet of the actors for choose when to avoid to ad
 
 Should you wish to integrate some of Variant Encumbrance's calculations into your own modules, there is now a flag which stores the actor's encumbrance tier, weight, and modified speed. Encumbrance tier is presented as 0, 1, 2, 3, as Unencumbered, Encumbered, Heavily Encumbered, Over Encumbered, respectively.
 
+FLAGS ON ACTOR DOCUMENT
+
 ```javascript
 variant-encumbrance-dnd5e:
 {
@@ -305,6 +307,15 @@ variant-encumbrance-dnd5e:
   enabledwe: true,
   enabledaebulk: false,
   enabledwebulk: true,
+}
+```
+
+FLAGS ON ITEM DOCUMENT
+
+```javascript
+variant-encumbrance-dnd5e:
+{
+  bulk: 0
 }
 ```
 

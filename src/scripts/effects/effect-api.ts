@@ -287,6 +287,8 @@ export interface ActiveEffectManagerLibApi {
 
 	convertToActiveEffectData(effect: Effect): Promise<Record<string, unknown>>;
 
+	convertToActiveEffect(effect: Effect): ActiveEffect;
+
 	retrieveChangesOrderedByPriorityFromAE(effectEntity: ActiveEffect): Promise<EffectChangeData[]>;
 
 	prepareOriginForToken(tokenOrTokenId: Token | string): Promise<string>;

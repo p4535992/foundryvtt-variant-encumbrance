@@ -9,7 +9,19 @@ import {
 	BulkData,
 	SUPPORTED_SHEET,
 } from "./VariantEncumbranceModels";
-import { checkBulkCategory, convertPoundsToKg, debug, duplicateExtended, i18n, i18nFormat, warn } from "./lib/lib";
+import {
+	checkBulkCategory,
+	convertPoundsToKg,
+	debug,
+	duplicateExtended,
+	getBulkLabel,
+	getItemBulk,
+	getItemQuantity,
+	i18n,
+	i18nFormat,
+	is_real_number,
+	warn,
+} from "./lib/lib";
 import CONSTANTS from "./constants";
 import { registerSocket } from "./socket";
 import API from "./api";
@@ -1218,8 +1230,7 @@ const module = {
 				//@ts-ignore
 				const liHeader = <JQuery<HTMLElement>>$(liHeaderB);
 				liHeader.append(
-					//`<div class="item-detail item-weight">${i18n('variant-encumbrance-dnd5e.label.bulk.Bulk')}</div>`,
-					`<br>/${i18n("variant-encumbrance-dnd5e.label.bulk.Bulk")}`
+					`<br/>${getBulkLabel()}`
 				);
 			}
 
@@ -1239,17 +1250,16 @@ const module = {
 					return im.id === itemId || im.name === itemName;
 				});
 				if (item) {
-					//@ts-ignore
-					const quantity = item.system.quantity ?? 0;
-					//@ts-ignore
-					const bulk = item.system.bulk ?? 0;
-					const totalBulk = (quantity * bulk).toNearest(0.1);
+					const quantity = getItemQuantity(item);
+					const bulk = getItemBulk(item);
+
+					const totalBulk = (quantity * bulk).toNearest(0.1) ?? 0;
 					switch (sheetClass) {
 						case "dnd5e.Tidy5eSheet": {
 							liItem
 								.parent()
-								.find(".item-detail.item-weight div")
-								.append(`/${totalBulk ?? 0}`);
+								.find(".item-detail.item-weight")
+								.append(`<br/>${totalBulk} ${getBulkLabel()}`);
 							break;
 						}
 						default: {
@@ -1257,9 +1267,7 @@ const module = {
 								.parent()
 								.find(".item-detail.item-weight div")
 								.append(
-									`<br/>/${totalBulk ?? 0} ${i18n(
-										"variant-encumbrance-dnd5e.label.bulk.ItemContainerCapacityBulk"
-									)}`
+									`<br/>${totalBulk} ${getBulkLabel()}`
 								);
 							break;
 						}
@@ -1271,9 +1279,9 @@ const module = {
             .append(
               `
             <div class="item-detail"
-              title="Bulk: ${totalBulk ?? 0} ${i18n('variant-encumbrance-dnd5e.label.bulk.ItemContainerCapacityBulk')}"
+              title="Bulk: ${totalBulk ?? 0} ${getBulkLabel()}"
             >
-              ${totalBulk ?? 0} ${i18n('variant-encumbrance-dnd5e.label.bulk.ItemContainerCapacityBulk')}
+              ${totalBulk ?? 0} ${getBulkLabel()}
             </div>
             `,
           );
@@ -1281,10 +1289,8 @@ const module = {
 					/*
           liItem.parent().closest('item-weight').after(
             `
-            <div class="item-detail item-bulk" title="Bulk: ${totalBulk ?? 0} ${i18n(
-              'variant-encumbrance-dnd5e.label.bulk.ItemContainerCapacityBulk',
-            )}">
-              ${totalBulk ?? 0} ${i18n('variant-encumbrance-dnd5e.label.bulk.ItemContainerCapacityBulk')}
+            <div class="item-detail item-bulk" title="Bulk: ${totalBulk ?? 0} ${getBulkLabel()}">
+              ${totalBulk ?? 0} ${getBulkLabel()}
             </div>
             `,
           );
@@ -1369,7 +1375,7 @@ const module = {
 				// }
 			}
 
-			const displayedUnitsBulk = encumbranceDataBulk.unit;
+			const displayedUnitsBulk = encumbranceDataBulk.unit ?? <string>game.settings.get(CONSTANTS.MODULE_NAME, "unitsBulk");
 
 			if (
 				!encumbranceElementsBulk &&
@@ -1478,7 +1484,8 @@ const module = {
 		if (suggestedBulk) {
 			suggestedBulkWeight = suggestedBulk.bulk;
 		}
-		let bulk = data.bulk ?? 0;
+		// NOTE: we use the parent no the data
+		let bulk = getProperty(data, `parent.flags.${CONSTANTS.MODULE_NAME}.bulk`) ?? 0;
 		if (bulk <= 0 && game.settings.get(CONSTANTS.MODULE_NAME, "automaticApplySuggestedBulk")) {
 			bulk = suggestedBulkWeight;
 		}
@@ -1492,8 +1499,8 @@ const module = {
 			.append(
 				`
         <div class="form-group">
-          <label>${i18n("variant-encumbrance-dnd5e.label.bulk.Bulk")}</label>
-          <input type="text" name="system.bulk" value="${bulk}" data-dtype="Number"/>
+          <label>${getBulkLabel()}</label>
+          <input type="text" name="flags.variant-encumbrance-dnd5e.bulk" value="${bulk}" data-dtype="Number"/>
           <p class="notes">${suggesteBulkValueS}</p>
         </div>
         `
