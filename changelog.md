@@ -1,3 +1,9 @@
+### 0.12.0 [BREAKING CHANGES]
+
+- Upgrade for system 2.1.5
+- Add module settings 'hideStandardWeightUnits'
+- Replace item.system.bulk with flags ....
+
 ### 0.11.11
 
 - Synced with item-collection 10.0.7

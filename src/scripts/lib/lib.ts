@@ -622,7 +622,7 @@ export function getItemBulk(item: Item): number {
 	return itemWeightBulk ?? 0;
 }
 
-export function getBulkLabel():string {
+export function getBulkLabel(): string {
 	// i18n('variant-encumbrance-dnd5e.label.bulk.ItemContainerCapacityBulk') ??
 	const bulkLabelI18n = i18n("variant-encumbrance-dnd5e.label.bulk.Bulk");
 	const displayedUnits = <string>game.settings.get(CONSTANTS.MODULE_NAME, "unitsBulk");
@@ -631,5 +631,5 @@ export function getBulkLabel():string {
 }
 
 function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+	return string.charAt(0).toUpperCase() + string.slice(1);
 }

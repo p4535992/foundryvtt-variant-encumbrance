@@ -1224,14 +1224,17 @@ const module = {
 			// ======================================================
 			// CUSTOMIZE INVENTORY
 			// ======================================================
+			const hideStandardWeightUnits = game.settings.get(CONSTANTS.MODULE_NAME, "hideStandardWeightUnits");
 
 			const listHeaders = htmlElement.find("li.items-header .item-weight");
 			for (const liHeaderB of listHeaders) {
 				//@ts-ignore
 				const liHeader = <JQuery<HTMLElement>>$(liHeaderB);
-				liHeader.append(
-					`<br/>${getBulkLabel()}`
-				);
+				if (hideStandardWeightUnits) {
+					liHeader.text(`${getBulkLabel()}`);
+				} else {
+					liHeader.append(`<br/>${getBulkLabel()}`);
+				}
 			}
 
 			const inventoryItems: Item[] = [];
@@ -1254,47 +1257,47 @@ const module = {
 					const bulk = getItemBulk(item);
 
 					const totalBulk = (quantity * bulk).toNearest(0.1) ?? 0;
+					const totalBulkS = `${totalBulk} ${getBulkLabel()}`;
+					const currentText =
+						(liItem.parent().find(".item-detail.item-weight")[0]?.innerText ?? "")
+						.replace(/(\r\n|\n|\r)/gm, "").trim();
+					const currentTextB = currentText ? true : false;
 					switch (sheetClass) {
 						case "dnd5e.Tidy5eSheet": {
-							liItem
-								.parent()
-								.find(".item-detail.item-weight")
-								.append(`<br/>${totalBulk} ${getBulkLabel()}`);
+							if (hideStandardWeightUnits) {
+								if(currentTextB) {
+									liItem.parent().find(".item-detail.item-weight").text(totalBulkS);
+								}
+							} else {
+								if(currentTextB) {
+									liItem
+										.parent()
+										.find(".item-detail.item-weight")
+										.append(`<br/>${totalBulkS}`);
+								}
+							}
 							break;
 						}
 						default: {
-							liItem
-								.parent()
-								.find(".item-detail.item-weight div")
-								.append(
-									`<br/>${totalBulk} ${getBulkLabel()}`
-								);
+							if (hideStandardWeightUnits) {
+								if(currentTextB) {
+									liItem
+										.parent()
+										.find(".item-detail.item-weight div")
+										.text(totalBulkS);
+								}
+							} else {
+								if(currentTextB) {
+									liItem
+										.parent()
+										.find(".item-detail.item-weight div")
+										.append(`<br/>${totalBulkS}`);
+								}
+							}
+
 							break;
 						}
 					}
-					/*
-          liItem
-            .parent()
-            .find('.item-detail.item-weight')
-            .append(
-              `
-            <div class="item-detail"
-              title="Bulk: ${totalBulk ?? 0} ${getBulkLabel()}"
-            >
-              ${totalBulk ?? 0} ${getBulkLabel()}
-            </div>
-            `,
-          );
-          */
-					/*
-          liItem.parent().closest('item-weight').after(
-            `
-            <div class="item-detail item-bulk" title="Bulk: ${totalBulk ?? 0} ${getBulkLabel()}">
-              ${totalBulk ?? 0} ${getBulkLabel()}
-            </div>
-            `,
-          );
-          */
 				}
 			}
 
@@ -1375,7 +1378,8 @@ const module = {
 				// }
 			}
 
-			const displayedUnitsBulk = encumbranceDataBulk.unit ?? <string>game.settings.get(CONSTANTS.MODULE_NAME, "unitsBulk");
+			const displayedUnitsBulk =
+				encumbranceDataBulk.unit ?? <string>game.settings.get(CONSTANTS.MODULE_NAME, "unitsBulk");
 
 			if (
 				!encumbranceElementsBulk &&

@@ -399,6 +399,15 @@ export const registerSettings = function () {
 		default: false,
 	});
 
+	game.settings.register(CONSTANTS.MODULE_NAME, "hideStandardWeightUnits", {
+		name: i18n(CONSTANTS.MODULE_NAME + ".setting.hideStandardWeightUnits.name"),
+		hint: i18n(CONSTANTS.MODULE_NAME + ".setting.hideStandardWeightUnits.hint"),
+		scope: "world",
+		config: true,
+		type: Boolean,
+		default: false,
+	});
+
 	// ======================================================
 	// Homebrew Rule
 	// ======================================================

@@ -113,6 +113,9 @@
 	"variant-encumbrance-dnd5e.setting.hideStandardEncumbranceBar.name": "Remove standard encumbrance bar from the character sheet",
 	"variant-encumbrance-dnd5e.setting.hideStandardEncumbranceBar.hint": "If enabled it will hide the standard bar of encumbrance, is useful only for people using the bulk bar and do not want to see two graphic bars",
 
+	"variant-encumbrance-dnd5e.setting.hideStandardWeightUnits.name": "Remove standard weight units from the character sheet",
+	"variant-encumbrance-dnd5e.setting.hideStandardWeightUnits.hint": "If enabled it will 'try' to hide the standard weight unit, is useful only for people using the bulk units.",
+
 	"variant-encumbrance-dnd5e.setting.reset.name": "Reset settings to default",
 	"variant-encumbrance-dnd5e.setting.reset.label": "Reset Settings To Default",
 	"variant-encumbrance-dnd5e.setting.reset.hint": "This will reset all of the settings of back to the active game system's default.",
