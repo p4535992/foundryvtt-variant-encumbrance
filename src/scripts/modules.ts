@@ -273,7 +273,7 @@ export const readyHooks = async () => {
 		if (!actorEntity) {
 			return;
 		}
-		if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
+		if (isEnabledActorType(actorEntity)) { //  && actorEntity.sheet?.rendered
 			let doTheUpdate = false;
 			let noActiveEffect = false;
 
@@ -286,10 +286,12 @@ export const readyHooks = async () => {
 					actorEntity.system.abilities.str.value = update?.system.abilities?.str.value;
 				}
 				doTheUpdate = true;
+				noActiveEffect = false;
 			}
 			// For our purpose we filter only the CURRENCY modifier action
-			if (update?.system.currency) {
+			if (update?.system?.currency) {
 				doTheUpdate = true;
+				noActiveEffect = false;
 			}
 			// For our purpose we filter only the invenctory-plus modifier action
 			if (
@@ -298,9 +300,10 @@ export const readyHooks = async () => {
 				hasProperty(update, `flags.${CONSTANTS.INVENTORY_PLUS_MODULE_NAME}`)
 			) {
 				doTheUpdate = true;
+				noActiveEffect = false;
 			}
 			// Check change on the cargo property of vehicle
-			if (update?.system.attributes.capacity?.cargo) {
+			if (update?.system?.attributes?.capacity?.cargo) {
 				doTheUpdate = true;
 				noActiveEffect = true;
 			}

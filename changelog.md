@@ -1,3 +1,7 @@
+### 0.12.1
+
+- Bug fix: https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/12 
+
 ### 0.12.0 [BREAKING CHANGES]
 
 - Upgrade for system 2.1.5
