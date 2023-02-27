@@ -273,7 +273,8 @@ export const readyHooks = async () => {
 		if (!actorEntity) {
 			return;
 		}
-		if (isEnabledActorType(actorEntity)) { //  && actorEntity.sheet?.rendered
+		if (isEnabledActorType(actorEntity)) {
+			//  && actorEntity.sheet?.rendered
 			let doTheUpdate = false;
 			let noActiveEffect = false;
 
@@ -1261,40 +1262,31 @@ const module = {
 
 					const totalBulk = (quantity * bulk).toNearest(0.1) ?? 0;
 					const totalBulkS = `${totalBulk} ${getBulkLabel()}`;
-					const currentText =
-						(liItem.parent().find(".item-detail.item-weight")[0]?.innerText ?? "")
-						.replace(/(\r\n|\n|\r)/gm, "").trim();
+					const currentText = (liItem.parent().find(".item-detail.item-weight")[0]?.innerText ?? "")
+						.replace(/(\r\n|\n|\r)/gm, "")
+						.trim();
 					const currentTextB = currentText ? true : false;
 					switch (sheetClass) {
 						case "dnd5e.Tidy5eSheet": {
 							if (hideStandardWeightUnits) {
-								if(currentTextB) {
+								if (currentTextB) {
 									liItem.parent().find(".item-detail.item-weight").text(totalBulkS);
 								}
 							} else {
-								if(currentTextB) {
-									liItem
-										.parent()
-										.find(".item-detail.item-weight")
-										.append(`<br/>${totalBulkS}`);
+								if (currentTextB) {
+									liItem.parent().find(".item-detail.item-weight").append(`<br/>${totalBulkS}`);
 								}
 							}
 							break;
 						}
 						default: {
 							if (hideStandardWeightUnits) {
-								if(currentTextB) {
-									liItem
-										.parent()
-										.find(".item-detail.item-weight div")
-										.text(totalBulkS);
+								if (currentTextB) {
+									liItem.parent().find(".item-detail.item-weight div").text(totalBulkS);
 								}
 							} else {
-								if(currentTextB) {
-									liItem
-										.parent()
-										.find(".item-detail.item-weight div")
-										.append(`<br/>${totalBulkS}`);
+								if (currentTextB) {
+									liItem.parent().find(".item-detail.item-weight div").append(`<br/>${totalBulkS}`);
 								}
 							}
 
