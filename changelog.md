@@ -1,3 +1,7 @@
+### 0.12.4
+
+- Add a first integration for [Backpack Manager](https://github.com/krbz999/backpack-manager)
+
 ### 0.12.3
 
 - bug fix: https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/13

@@ -8,6 +8,7 @@ const CONSTANTS = {
 	DFREDS_CONVENIENT_EFFECTS_MODULE_NAME: "dfreds-convenient-effects",
 	DF_QUALITY_OF_LIFE_MODULE_NAME: "df-qol",
 	DAE_MODULE_NAME: "dae",
+	BACKPACK_MANAGER_MODULE_NAME: "backpack-manager",
 };
 
 CONSTANTS.PATH = `modules/${CONSTANTS.MODULE_NAME}/`;

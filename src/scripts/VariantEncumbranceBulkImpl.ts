@@ -28,6 +28,7 @@ import {
 	is_real_number,
 	retrieveAttributeCapacityCargo,
 	retrieveAttributeEncumbranceMax,
+	retrieveBackPackManagerItem,
 } from "./lib/lib";
 import API from "./api";
 import type { EffectChangeData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData";
@@ -378,6 +379,21 @@ export const VariantEncumbranceBulkImpl = {
 				let itemQuantity: number = getItemQuantity(item);
 				let itemWeight: number = getItemBulk(item);
 
+				let backpackManager = <Actor | undefined>retrieveBackPackManagerItem(item);
+				if (backpackManager) {
+					// Does the weight of the items in the container carry over to the actor?
+					const weightless = getProperty(item, "system.capacity.weightless") ?? false;
+					const backpackManagerWeight =
+						<number>API.calculateBulkOnActor(backpackManager)?.totalWeight ?? itemWeight;
+					itemWeight = weightless ? itemWeight : itemWeight + backpackManagerWeight;
+
+					debug(
+						`Is BackpackManager! Actor '${actorEntity.name}, Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`
+					);
+
+					return itemQuantity * itemWeight;
+				}
+
 				const isEquipped: boolean =
 					//@ts-ignore
 					item.system.equipped ? true : false;
@@ -395,6 +411,7 @@ export const VariantEncumbranceBulkImpl = {
 
 				// Start Item container check
 				if (hasProperty(item, `flags.itemcollection`) && itemContainerActive) {
+					// Does the weight of the items in the container carry over to the actor?
 					const weightless = getProperty(item, "system.capacity.weightless") ?? false;
 					if (weightless) {
 						itemWeight = getItemBulk(item);
@@ -413,6 +430,10 @@ export const VariantEncumbranceBulkImpl = {
 						}
 					}
 				} else {
+					// Does the weight of the items in the container carry over to the actor?
+					// TODO  wait for 2.2.0
+					const weightless = getProperty(item, "system.capacity.weightless") ?? false;
+
 					const itemArmorTypes = ["clothing", "light", "medium", "heavy", "natural"];
 					if (
 						isEquipped &&

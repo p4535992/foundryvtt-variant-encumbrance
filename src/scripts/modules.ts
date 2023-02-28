@@ -43,6 +43,7 @@ export let dfredsConvenientEffectsActive: boolean;
 export let invMidiQol: boolean;
 export let dfQualityLifeActive: boolean;
 export let daeActive: boolean;
+export let backPackManagerActive: boolean;
 
 export let aemlApi: ActiveEffectManagerLibApi;
 
@@ -129,6 +130,7 @@ export const initHooks = () => {
 	dfredsConvenientEffectsActive = <boolean>game.modules.get(CONSTANTS.DFREDS_CONVENIENT_EFFECTS_MODULE_NAME)?.active;
 	dfQualityLifeActive = <boolean>game.modules.get(CONSTANTS.DF_QUALITY_OF_LIFE_MODULE_NAME)?.active;
 	daeActive = <boolean>game.modules.get(CONSTANTS.DAE_MODULE_NAME)?.active;
+	backPackManagerActive = <boolean>game.modules.get(CONSTANTS.BACKPACK_MANAGER_MODULE_NAME)?.active;
 };
 
 export const setupHooks = async () => {

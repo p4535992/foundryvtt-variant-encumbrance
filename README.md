@@ -73,13 +73,7 @@ This module uses the [midi-qol](https://gitlab.com/tposney/midi-qol/-/tree/maste
 
 ## Compatibility
 
-![](https://img.shields.io/badge/D&D5e-v1.3.4-blue)
-![](https://img.shields.io/badge/Sky's%20Alternate%20Character%20Sheet-v1.5.2-red)
-![](https://img.shields.io/badge/Tidy5e%20Sheet-v0.4.10-red)
-![](https://img.shields.io/badge/Inventory+-v0.3.1-red)
-![](https://img.shields.io/badge/DAE-v0.2.34-red)
-
-### Character Sheets compatibility
+### Character Sheets Compatibility
 
 * D&D5e Default Character Sheet
 * [Sky's Alternate 5th Edition Dungeons & Dragons Sheet](https://github.com/Sky-Captain-13/foundry/tree/master/alt5e) Seem to work
@@ -87,13 +81,14 @@ This module uses the [midi-qol](https://gitlab.com/tposney/midi-qol/-/tree/maste
 * [Compact DnDBeyond-like 5e Character Sheet](https://github.com/ElfFriend-DnD/foundryvtt-compactBeyond5eSheet) Active effect work, but there is no visual bar , the values of the weight are synchronized with the system core
 * [DNDBeyond Character Sheet for 5E](https://github.com/jopeek/fvtt-dndbeyond-character-sheet) Active effect work, but there is no visual bar , the values of the weight are synchronized with the system core
 
-### Other Modules Compatability
+### Other Modules Compatibility
 
-* [Inventory +](https://github.com/p4535992/inventory-plus) version 0.4.0
+* [Inventory +](https://github.com/p4535992/inventory-plus)
 * [Dynamic Active Effects](https://gitlab.com/tposney/dae)
-* [DFreds Convenient Effects](https://github.com/DFreds/dfreds-convenient-effects/) version 1.8.5
-* [Item Collection/Item Containers](https://foundryvtt.com/packages/itemcollection) version 1.8.13
-* [DragonFlagon Quality of Life, Vehicle Cargo Capacity Unit Feature](https://github.com/flamewave000/dragonflagon-fvtt/blob/master/df-qol/README.md#vehicle-cargo-capacity-unit) version 1.6.0
+* [DFreds Convenient Effects](https://github.com/DFreds/dfreds-convenient-effects/)
+* [Item Collection/Item Containers](https://foundryvtt.com/packages/itemcollection)
+* [DragonFlagon Quality of Life, Vehicle Cargo Capacity Unit Feature](https://github.com/flamewave000/dragonflagon-fvtt/blob/master/df-qol/README.md#vehicle-cargo-capacity-unit)
+* [Backpack Manager](https://github.com/krbz999/backpack-manager)
 
 **I highly recommend avoiding module [Inventory +](https://github.com/p4535992/inventory-plus) in favor of the module [Item Collection/Item Containers](https://foundryvtt.com/packages/itemcollection)**
 
@@ -241,17 +236,17 @@ Add new buttons on the header sheet of the actors for choose when to avoid to ad
 
 **Feature: Do Not increase weight by quantity for no ammunition item:** This is a homebrew rule, for non-ammunition items don't increase weight by quantity (so 5 potions = 1 item weight for example
 
-**Feature: Do Not apply weight for equipped armor item:** This is a homebrew rule, for equipped armor types (clothing, light, medium, heavy, natural), the weight is set to 0 and not applied. NOTE: This will override the feature from '_Equipped Item Weight Multiplier_'
+**Feature: Do Not apply weight for equipped armor item:** This is a homebrew rule, for equipped armor types (clothing, light, medium, heavy, natural), the weight is set to 0 and not applied, this will override the setting from _'Equipped Item Weight Multiplier'_. **NOTE:** The specific armor calculation setting _'Feature: Equipped Armor Weight Multiplier for 'XXX Armor'_ will be override this setting.
 
-**Feature: Equipped Armor Weight Multiplier for Clothing:** This is a homebrew rule, and is mostly an upgrade of the existing feature _Do Not apply weight for equipped armor item_ for equipped armor types **clothing**, a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from '_Do Not apply weight for equipped armor item_' ENABLED, the value by default the value is 0.
+**Feature: Equipped Armor Weight Multiplier for 'Clothing Armor':** This is a homebrew rule, and is mostly an upgrade of the existing feature _Do Not apply weight for equipped armor item_ for equipped armor types **clothing**, a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from '_Do Not apply weight for equipped armor item_' ENABLED, the value by default the value is 0.
 
-**Feature: Equipped Armor Weight Multiplier for Light:** This is a homebrew rule, and is mostly an upgrade of the existing feature _Do Not apply weight for equipped armor item_ for equipped armor types **light**, a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from '_Do Not apply weight for equipped armor item_' ENABLED, the value by default the value is 0.
+**Feature: Equipped Armor Weight Multiplier for 'Light Armor':** This is a homebrew rule, and is mostly an upgrade of the existing feature _Do Not apply weight for equipped armor item_ for equipped armor types **light**, a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from '_Do Not apply weight for equipped armor item_' ENABLED, the value by default the value is 0.
 
-**Feature: Equipped Armor Weight Multiplier for Medium:** This is a homebrew rule, and is mostly an upgrade of the existing feature _Do Not apply weight for equipped armor item_ for equipped armor types **medium**, a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from '_Do Not apply weight for equipped armor item_' ENABLED, the value by default the value is 0.
+**Feature: Equipped Armor Weight Multiplier for 'Medium Armor':** This is a homebrew rule, and is mostly an upgrade of the existing feature _Do Not apply weight for equipped armor item_ for equipped armor types **medium**, a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from '_Do Not apply weight for equipped armor item_' ENABLED, the value by default the value is 0.
 
-**Feature: Equipped Armor Weight Multiplier for Heavy:** This is a homebrew rule, and is mostly an upgrade of the existing feature _Do Not apply weight for equipped armor item_ for equipped armor types **heavy**, a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from '_Do Not apply weight for equipped armor item_' ENABLED, the value by default the value is 0.
+**Feature: Equipped Armor Weight Multiplier for 'Heavy Armor':** This is a homebrew rule, and is mostly an upgrade of the existing feature _Do Not apply weight for equipped armor item_ for equipped armor types **heavy**, a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from '_Do Not apply weight for equipped armor item_' ENABLED, the value by default the value is 0.
 
-**Feature: Equipped Armor Weight Multiplier for Natural:** This is a homebrew rule, and is mostly an upgrade of the existing feature _Do Not apply weight for equipped armor item_ for equipped armor types **natural**, a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from '_Do Not apply weight for equipped armor item_' ENABLED, the value by default the value is 0.
+**Feature: Equipped Armor Weight Multiplier for 'Natural Armor':** This is a homebrew rule, and is mostly an upgrade of the existing feature _Do Not apply weight for equipped armor item_ for equipped armor types **natural**, a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from '_Do Not apply weight for equipped armor item_' ENABLED, the value by default the value is 0.
 
 **Feature: Use STR flat value instead STR MOD on Bulk:** This is a homebrew rule, ONLY FOR BULK calculation. Currently there is no way to adjust the maximum bulk for a creature, which is tied to size and STR MOD, now you can use the flat value of force to handle it.
 
@@ -386,12 +381,12 @@ variant-encumbrance-dnd5e:
 |Automatic apply suggested bulk|WARNING: THIS IS DANGEROUS, IT WILL UPDATE THE BULK DATA ON EVERY ITEM BEEN RENDERED IF THE BULK VALUE IS 0. This is usually save time if you don't want to manually set every item (the advisable way)|false||
 |Remove standard encumbrance bar from the character sheet| If enabled it will hide the standard bar of encumbrance, is useful only for people using the bulk bar and do not want to see two graphic bars|false|
 |Feature: Do Not increase weight by quantity for no ammunition item| This is a homebrew rule, for non-ammunition items don't increase weight by quantity (so 5 potions = 1 item weight for example). ATTENTION: If the module 'Variant Encumbrance' is present and active this feature is disabled by default if the module settings 'Feature: Integration with Variant Encumbrance' is enabled.|false|
-|Feature: Do Not apply weight for equipped armor item| This is a homebrew rule, for equipped armor types (clothing, light, medium, heavy, natural), the weight is set to 0 and not applied. NOTE: This will override the feature from '_Equipped Item Weight Multiplier_'|false|
-|Feature: Equipped Armor Weight Multiplier for Clothing|This is a homebrew rule, and is mostly an upgrade of the existing feature _Do Not apply weight for equipped armor item_ for equipped armor types **clothing**, a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from '_Do Not apply weight for equipped armor item_' ENABLED, the value by default the value is 0.|0|
-|Feature: Equipped Armor Weight Multiplier for Light|This is a homebrew rule, and is mostly an upgrade of the existing feature _Do Not apply weight for equipped armor item_ for equipped armor types **light**, a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from '_Do Not apply weight for equipped armor item_' ENABLED, the value by default the value is 0.|0|
-|Feature: Equipped Armor Weight Multiplier for Medium|This is a homebrew rule, and is mostly an upgrade of the existing feature _Do Not apply weight for equipped armor item_ for equipped armor types **medium**, a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from '_Do Not apply weight for equipped armor item_' ENABLED, the value by default the value is 0.|0|
-|Feature: Equipped Armor Weight Multiplier for Heavy|This is a homebrew rule, and is mostly an upgrade of the existing feature _Do Not apply weight for equipped armor item_ for equipped armor types **heavy**, a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from '_Do Not apply weight for equipped armor item_' ENABLED, the value by default the value is 0.|0|
-|Feature: Equipped Armor Weight Multiplier for Natural|This is a homebrew rule, and is mostly an upgrade of the existing feature _Do Not apply weight for equipped armor item_ for equipped armor types **natural**, a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from '_Do Not apply weight for equipped armor item_' ENABLED, the value by default the value is 0.|0|
+|Feature: Do Not apply weight for equipped armor item|This is a homebrew rule, for equipped armor types (clothing, light, medium, heavy, natural), the weight is set to 0 and not applied, this will override the setting from _'Equipped Item Weight Multiplier'_. **NOTE:** The specific armor calculation setting _'Feature: Equipped Armor Weight Multiplier for 'XXX Armor'_ will be override this setting.|false|
+|Feature: Equipped Armor Weight Multiplier for 'Clothing Armor'|This is a homebrew rule, and is mostly an upgrade of the existing feature _Do Not apply weight for equipped armor item_ for equipped armor types **clothing**, a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from '_Do Not apply weight for equipped armor item_' ENABLED, the value by default the value is 0.|0|
+|Feature: Equipped Armor Weight Multiplier for 'Light Armor'|This is a homebrew rule, and is mostly an upgrade of the existing feature _Do Not apply weight for equipped armor item_ for equipped armor types **light**, a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from '_Do Not apply weight for equipped armor item_' ENABLED, the value by default the value is 0.|0|
+|Feature: Equipped Armor Weight Multiplier for 'Medium Armor'|This is a homebrew rule, and is mostly an upgrade of the existing feature _Do Not apply weight for equipped armor item_ for equipped armor types **medium**, a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from '_Do Not apply weight for equipped armor item_' ENABLED, the value by default the value is 0.|0|
+|Feature: Equipped Armor Weight Multiplier for 'Heavy Armor'|This is a homebrew rule, and is mostly an upgrade of the existing feature _Do Not apply weight for equipped armor item_ for equipped armor types **heavy**, a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from '_Do Not apply weight for equipped armor item_' ENABLED, the value by default the value is 0.|0|
+|Feature: Equipped Armor Weight Multiplier for 'Natural Armor'|This is a homebrew rule, and is mostly an upgrade of the existing feature _Do Not apply weight for equipped armor item_ for equipped armor types **natural**, a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from '_Do Not apply weight for equipped armor item_' ENABLED, the value by default the value is 0.|0|
 |Feature: Use STR flat value instead STR MOD, ONLY FOR BULK calculation| This is a homebrew rule, ONLY FOR BULK calculation. Currently there is no way to adjust the maximum bulk for a creature, which is tied to size and STR MOD, now you can use the flat value of force to handle it.|false|
 |Debug|Enable debug messages useful for check issues|false||
 

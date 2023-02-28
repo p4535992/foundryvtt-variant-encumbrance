@@ -7,7 +7,7 @@ import type {
 import type EmbeddedCollection from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/abstract/embedded-collection.mjs";
 import type { ActorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
 import { calcBulk } from "../VariantEncumbranceBulkImpl";
-import { itemContainerActive } from "../modules";
+import { backPackManagerActive, itemContainerActive } from "../modules";
 import { calcWeight } from "../VariantEncumbranceImpl";
 
 // =============================
@@ -632,4 +632,68 @@ export function getBulkLabel(): string {
 
 function capitalizeFirstLetter(string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+/* Whether this is a valid item to put in a backpack. */
+export function isValidBackPackManagerItem(item): boolean {
+	if (!backPackManagerActive) {
+		return false;
+	}
+	if (game.system.id === "dnd5e") {
+		if (["class", "subclass", "feat", "spell", "background", "race"].includes(item.type)) {
+			return false;
+		}
+		if (item.system.quantity < 1) {
+			return false;
+		}
+		if (item.type !== "backpack") {
+			return true;
+		}
+	}
+
+	// it must not be setup with this module:
+	const uuid = item.getFlag(CONSTANTS.BACKPACK_MANAGER_MODULE_NAME, "containerActorUuid");
+	if (!uuid) {
+		return true;
+	}
+	//@ts-ignore
+	const backpack = fromUuidSync(uuid);
+	if (!backpack) {
+		return true;
+	}
+	// if for some ungodly reason, you put yourself in yourself:
+	if (backpack === item.parent) {
+		return true;
+	}
+	return false;
+}
+
+/* Whether this is a valid item to put in a backpack. */
+export function retrieveBackPackManagerItem(item: Item): Actor | undefined {
+	if (!backPackManagerActive || !item) {
+		return undefined;
+	}
+	if (!hasProperty(item, `flags.${CONSTANTS.BACKPACK_MANAGER_MODULE_NAME}.containerActorUuid`)) {
+		return undefined;
+	}
+
+	// it must not be setup with this module:
+	const uuid = getProperty(item, `flags.${CONSTANTS.BACKPACK_MANAGER_MODULE_NAME}.containerActorUuid`);
+	if (!uuid) {
+		return undefined;
+	}
+	//@ts-ignore
+	const backpack = <Actor>fromUuidSync(uuid);
+	if (!backpack) {
+		warn(`No backpack (Actor) is been found with uuid:${uuid} on item: ${item.name}`);
+		return undefined;
+	}
+	// if for some ungodly reason, you put yourself in yourself:
+	if (backpack === item.parent) {
+		warn(
+			`No backpack (Actor) is been evaluate with uuid:${uuid} on item: ${item.name} if for some ungodly reason, you put yourself in yourself`
+		);
+		return undefined;
+	}
+	return backpack;
 }
