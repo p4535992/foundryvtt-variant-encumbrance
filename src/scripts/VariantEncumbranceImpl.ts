@@ -499,16 +499,6 @@ export const VariantEncumbranceImpl = {
 					}
 				} else {
 					const itemArmorTypes = ["clothing", "light", "medium", "heavy", "natural"];
-					if (isEquipped) {
-						if (isProficient) {
-							itemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "profEquippedMultiplier");
-						} else {
-							itemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "equippedMultiplier");
-						}
-					} else {
-						itemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "unequippedMultiplier");
-					}
-
 					if (
 						isEquipped &&
 						doNotApplyWeightForEquippedArmor &&
@@ -561,6 +551,14 @@ export const VariantEncumbranceImpl = {
 						else {
 							itemWeight *= 0;
 						}
+					} else if (isEquipped) {
+						if (isProficient) {
+							itemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "profEquippedMultiplier");
+						} else {
+							itemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "equippedMultiplier");
+						}
+					} else {
+						itemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "unequippedMultiplier");
 					}
 				}
 				// End Item container check
@@ -636,36 +634,7 @@ export const VariantEncumbranceImpl = {
 				}
 
 				let appliedWeight = itemQuantity * itemWeight;
-				/*
-				if (ignoreEquipmentCheck) {
-					debug(
-						`Actor '${actorEntity.name}, Item '${item.name}' :
-               ${itemQuantity} * ${itemWeight} = ${appliedWeight} on total ${weight} => ${weight + appliedWeight}`
-					);
-					return weight + appliedWeight;
-				}
-				
-				const isEquipped: boolean =
-					//@ts-ignore
-					item.system.equipped ? true : false;
-				if (isEquipped) {
-					const isProficient: boolean =
-						//@ts-ignore
-						item.system.proficient ? item.system.proficient : false;
-					if (isProficient) {
-						appliedWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "profEquippedMultiplier");
-					} else {
-						appliedWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "equippedMultiplier");
-					}
-					const itemArmorTypes = ["clothing", "light", "medium", "heavy", "natural"];
-					//@ts-ignore
-					if (doNotApplyWeightForEquippedArmor && itemArmorTypes.includes(item.system.armor?.type)) {
-						appliedWeight = 0;
-					}
-				} else {
-					appliedWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "unequippedMultiplier");
-				}
-				*/
+
 				debug(
 					`Actor '${actorEntity.name}, Item '${
 						item.name
@@ -1476,15 +1445,6 @@ export function calcWeight(
 	if (item.type !== "backpack" || !item.flags.itemcollection) {
 		let currentItemWeight = calcItemWeight(item, ignoreCurrency);
 		const itemArmorTypes = ["clothing", "light", "medium", "heavy", "natural"];
-		if (isEquipped) {
-			if (isProficient) {
-				currentItemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "profEquippedMultiplier");
-			} else {
-				currentItemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "equippedMultiplier");
-			}
-		} else {
-			currentItemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "unequippedMultiplier");
-		}
 		//@ts-ignore
 		if (isEquipped && doNotApplyWeightForEquippedArmor && itemArmorTypes.includes(item.system.armor?.type)) {
 			const applyWeightMultiplierForEquippedArmorClothing = <number>(
@@ -1526,8 +1486,16 @@ export function calcWeight(
 			else {
 				currentItemWeight *= 0;
 			}
-			return currentItemWeight;
+		} else if (isEquipped) {
+			if (isProficient) {
+				currentItemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "profEquippedMultiplier");
+			} else {
+				currentItemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "equippedMultiplier");
+			}
+		} else {
+			currentItemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "unequippedMultiplier");
 		}
+		return currentItemWeight;
 	}
 	// IF IS A BACKPACK
 	// MOD 4535992 Removed variant encumbrance take care of this

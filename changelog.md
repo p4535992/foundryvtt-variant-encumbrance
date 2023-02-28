@@ -1,3 +1,8 @@
+### 0.12.3
+
+- bug fix: https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/13
+- bug fix: https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/11
+
 ### 0.12.2
 
 - Update labels
@@ -8,6 +13,7 @@
 
 ### 0.12.0 [BREAKING CHANGES]
 
+- Bug fix: https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/10
 - Upgrade for system 2.1.5
 - Add module settings 'hideStandardWeightUnits'
 - Replace item.system.bulk with flags ....
