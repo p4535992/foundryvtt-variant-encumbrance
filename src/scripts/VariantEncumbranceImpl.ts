@@ -6,7 +6,7 @@ import {
 	EncumbranceDnd5e,
 	EncumbranceFlags,
 	EncumbranceMode,
-	ENCUMBRANCE_TIERS,
+	ENCUMBRANCE_TIERS
 } from "./VariantEncumbranceModels";
 import Effect from "./effects/effect";
 import {
@@ -15,7 +15,7 @@ import {
 	ENCUMBRANCE_STATE,
 	invMidiQol,
 	invPlusActive,
-	itemContainerActive,
+	itemContainerActive
 } from "./modules";
 import CONSTANTS from "./constants";
 import {
@@ -28,7 +28,7 @@ import {
 	retrieveAttributeCapacityCargo,
 	getItemQuantity,
 	getItemWeight,
-	retrieveBackPackManagerItem,
+	retrieveBackPackManagerItem
 } from "./lib/lib";
 import API from "./api";
 import type { EffectChangeData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData";
@@ -1018,7 +1018,7 @@ export const VariantEncumbranceImpl = {
 				value: totalWeightOriginal.toNearest(0.1),
 				max: max.toNearest(0.1),
 				pct: pct,
-				encumbered: encumbranceTier !== ENCUMBRANCE_TIERS.NONE,
+				encumbered: encumbranceTier !== ENCUMBRANCE_TIERS.NONE
 			};
 
 			// ==========================================================================================
@@ -1038,7 +1038,7 @@ export const VariantEncumbranceImpl = {
 				encumbranceTier: encumbranceTier,
 				speedDecrease: speedDecrease,
 				unit: displayedUnits,
-				encumbrance: dataEncumbrance,
+				encumbrance: dataEncumbrance
 			};
 			debug(JSON.stringify(encumbranceData));
 			return encumbranceData;
@@ -1104,7 +1104,7 @@ export const VariantEncumbranceImpl = {
 			description: i18n("variant-encumbrance-dnd5e.effect.description.encumbered"),
 			icon: "icons/svg/down.svg",
 			isDynamic: true,
-			transfer: true,
+			transfer: true
 		});
 	},
 
@@ -1119,49 +1119,49 @@ export const VariantEncumbranceImpl = {
 				{
 					key: "flags.midi-qol.disadvantage.attack.str",
 					mode: CONST.ACTIVE_EFFECT_MODES.CUSTOM,
-					value: "1",
+					value: "1"
 				},
 				{
 					key: "flags.midi-qol.disadvantage.attack.dex",
 					mode: CONST.ACTIVE_EFFECT_MODES.CUSTOM,
-					value: "1",
+					value: "1"
 				},
 				{
 					key: "flags.midi-qol.disadvantage.attack.con",
 					mode: CONST.ACTIVE_EFFECT_MODES.CUSTOM,
-					value: "1",
+					value: "1"
 				},
 				{
 					key: "flags.midi-qol.disadvantage.ability.check.str",
 					mode: CONST.ACTIVE_EFFECT_MODES.CUSTOM,
-					value: "1",
+					value: "1"
 				},
 				{
 					key: "flags.midi-qol.disadvantage.ability.check.dex",
 					mode: CONST.ACTIVE_EFFECT_MODES.CUSTOM,
-					value: "1",
+					value: "1"
 				},
 				{
 					key: "flags.midi-qol.disadvantage.ability.check.con",
 					mode: CONST.ACTIVE_EFFECT_MODES.CUSTOM,
-					value: "1",
+					value: "1"
 				},
 				{
 					key: "flags.midi-qol.disadvantage.ability.save.str",
 					mode: CONST.ACTIVE_EFFECT_MODES.CUSTOM,
-					value: "1",
+					value: "1"
 				},
 				{
 					key: "flags.midi-qol.disadvantage.ability.save.dex",
 					mode: CONST.ACTIVE_EFFECT_MODES.CUSTOM,
-					value: "1",
+					value: "1"
 				},
 				{
 					key: "flags.midi-qol.disadvantage.ability.save.con",
 					mode: CONST.ACTIVE_EFFECT_MODES.CUSTOM,
-					value: "1",
-				},
-			],
+					value: "1"
+				}
+			]
 		});
 	},
 
@@ -1172,7 +1172,7 @@ export const VariantEncumbranceImpl = {
 			icon: "icons/svg/downgrade.svg",
 			isDynamic: true,
 			transfer: true,
-			changes: [],
+			changes: []
 		});
 	},
 
@@ -1188,49 +1188,49 @@ export const VariantEncumbranceImpl = {
 				{
 					key: "flags.midi-qol.disadvantage.attack.str",
 					mode: CONST.ACTIVE_EFFECT_MODES.CUSTOM,
-					value: "1",
+					value: "1"
 				},
 				{
 					key: "flags.midi-qol.disadvantage.attack.dex",
 					mode: CONST.ACTIVE_EFFECT_MODES.CUSTOM,
-					value: "1",
+					value: "1"
 				},
 				{
 					key: "flags.midi-qol.disadvantage.attack.con",
 					mode: CONST.ACTIVE_EFFECT_MODES.CUSTOM,
-					value: "1",
+					value: "1"
 				},
 				{
 					key: "flags.midi-qol.disadvantage.ability.check.str",
 					mode: CONST.ACTIVE_EFFECT_MODES.CUSTOM,
-					value: "1",
+					value: "1"
 				},
 				{
 					key: "flags.midi-qol.disadvantage.ability.check.dex",
 					mode: CONST.ACTIVE_EFFECT_MODES.CUSTOM,
-					value: "1",
+					value: "1"
 				},
 				{
 					key: "flags.midi-qol.disadvantage.ability.check.con",
 					mode: CONST.ACTIVE_EFFECT_MODES.CUSTOM,
-					value: "1",
+					value: "1"
 				},
 				{
 					key: "flags.midi-qol.disadvantage.ability.save.str",
 					mode: CONST.ACTIVE_EFFECT_MODES.CUSTOM,
-					value: "1",
+					value: "1"
 				},
 				{
 					key: "flags.midi-qol.disadvantage.ability.save.dex",
 					mode: CONST.ACTIVE_EFFECT_MODES.CUSTOM,
-					value: "1",
+					value: "1"
 				},
 				{
 					key: "flags.midi-qol.disadvantage.ability.save.con",
 					mode: CONST.ACTIVE_EFFECT_MODES.CUSTOM,
-					value: "1",
-				},
-			],
+					value: "1"
+				}
+			]
 		});
 	},
 
@@ -1242,7 +1242,7 @@ export const VariantEncumbranceImpl = {
 			icon: "icons/tools/smithing/anvil.webp",
 			isDynamic: true,
 			transfer: true,
-			changes: [],
+			changes: []
 		});
 	},
 
@@ -1253,31 +1253,31 @@ export const VariantEncumbranceImpl = {
 		effect.changes.push(<EffectChangeData>{
 			key: "system.attributes.movement.burrow",
 			mode: CONST.ACTIVE_EFFECT_MODES.ADD,
-			value: movement.burrow > value ? `-${value}` : `-${movement.burrow}`,
+			value: movement.burrow > value ? `-${value}` : `-${movement.burrow}`
 		});
 
 		effect.changes.push(<EffectChangeData>{
 			key: "system.attributes.movement.climb",
 			mode: CONST.ACTIVE_EFFECT_MODES.ADD,
-			value: movement.climb > value ? `-${value}` : `-${movement.climb}`,
+			value: movement.climb > value ? `-${value}` : `-${movement.climb}`
 		});
 
 		effect.changes.push(<EffectChangeData>{
 			key: "system.attributes.movement.fly",
 			mode: CONST.ACTIVE_EFFECT_MODES.ADD,
-			value: movement.fly > value ? `-${value}` : `-${movement.fly}`,
+			value: movement.fly > value ? `-${value}` : `-${movement.fly}`
 		});
 
 		effect.changes.push(<EffectChangeData>{
 			key: "system.attributes.movement.swim",
 			mode: CONST.ACTIVE_EFFECT_MODES.ADD,
-			value: movement.swim > value ? `-${value}` : `-${movement.swim}`,
+			value: movement.swim > value ? `-${value}` : `-${movement.swim}`
 		});
 
 		effect.changes.push(<EffectChangeData>{
 			key: "system.attributes.movement.walk",
 			mode: CONST.ACTIVE_EFFECT_MODES.ADD,
-			value: movement.walk > value ? `-${value}` : `-${movement.walk}`,
+			value: movement.walk > value ? `-${value}` : `-${movement.walk}`
 		});
 		// THIS IS THE DAE SOLUTION
 		// } else {
@@ -1296,31 +1296,31 @@ export const VariantEncumbranceImpl = {
 		effect.changes.push(<EffectChangeData>{
 			key: "system.attributes.movement.burrow",
 			mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
-			value: "0",
+			value: "0"
 		});
 
 		effect.changes.push(<EffectChangeData>{
 			key: "system.attributes.movement.climb",
 			mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
-			value: "0",
+			value: "0"
 		});
 
 		effect.changes.push(<EffectChangeData>{
 			key: "system.attributes.movement.fly",
 			mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
-			value: "0",
+			value: "0"
 		});
 
 		effect.changes.push(<EffectChangeData>{
 			key: "system.attributes.movement.swim",
 			mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
-			value: "0",
+			value: "0"
 		});
 
 		effect.changes.push(<EffectChangeData>{
 			key: "system.attributes.movement.walk",
 			mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
-			value: "0",
+			value: "0"
 		});
 		// THIS IS THE DAE SOLUTION
 		// } else {
@@ -1416,14 +1416,14 @@ export const VariantEncumbranceImpl = {
 		if (effect) {
 			effect.flags = {
 				"variant-encumbrance-dnd5e": {
-					tier: encumbranceTier,
-				},
+					tier: encumbranceTier
+				}
 			};
 			effect.isTemporary = true;
 			return await aemlApi.addEffectOnActor(<string>actor.id, effectName, effect);
 		}
 		return undefined;
-	},
+	}
 };
 
 export const isEnabledActorType = function (actorEntity: Actor): boolean {
@@ -1873,7 +1873,7 @@ function _standardActorWeightCalculation(actorEntity: Actor): EncumbranceData {
 		encumbranceTier: encumbranceTier,
 		speedDecrease: 0,
 		unit: displayedUnits,
-		encumbrance: dataEncumbrance,
+		encumbrance: dataEncumbrance
 	};
 }
 

@@ -2,7 +2,7 @@ import { BULK_CATEGORY, BulkData, EncumbranceActorType } from "./../VariantEncum
 import CONSTANTS from "../constants.js";
 import type {
 	EffectChangeData,
-	EffectChangeDataProperties,
+	EffectChangeDataProperties
 } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData";
 import type EmbeddedCollection from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/abstract/embedded-collection.mjs";
 import type { ActorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
@@ -594,7 +594,7 @@ export function retrieveActiveEffectDataChangeByKeyFromActiveEffect(
 		key: atcvEffectChangeData.key,
 		value: myvalue,
 		mode: atcvEffectChangeData.mode,
-		priority: atcvEffectChangeData.priority,
+		priority: atcvEffectChangeData.priority
 	};
 }
 

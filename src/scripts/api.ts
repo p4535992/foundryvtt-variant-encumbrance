@@ -208,7 +208,7 @@ const API = {
 		}
 		const encumbranceData = VariantEncumbranceBulkImpl.calculateEncumbrance(actor, items, true, false);
 		return encumbranceData;
-	},
+	}
 };
 
 export default API;

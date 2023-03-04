@@ -60,7 +60,7 @@ export default class Effect {
 		transfer = false,
 		atcvChanges = <any[]>[],
 		dae = {},
-		overlay = false,
+		overlay = false
 		// END ADDED FROM 4535992
 	}) {
 		this.customId = customId;
@@ -127,7 +127,7 @@ export default class Effect {
 			flags: foundry.utils.mergeObject(this.flags, {
 				core: {
 					statusId: isPassive ? undefined : this._id,
-					overlay: overlay ? overlay : this.overlay ? this.overlay : false, // MOD 4535992
+					overlay: overlay ? overlay : this.overlay ? this.overlay : false // MOD 4535992
 				},
 				[Constants.MODULE_ID]: {
 					[Constants.FLAGS.DESCRIPTION]: convenientDescription,
@@ -135,18 +135,18 @@ export default class Effect {
 					[Constants.FLAGS.IS_DYNAMIC]: this.isDynamic,
 					[Constants.FLAGS.IS_VIEWABLE]: this.isViewable,
 					[Constants.FLAGS.NESTED_EFFECTS]: this.nestedEffects,
-					[Constants.FLAGS.SUB_EFFECTS]: this.subEffects,
+					[Constants.FLAGS.SUB_EFFECTS]: this.subEffects
 				},
 				dae: this._isEmptyObject(currentDae)
 					? isPassive
 						? { stackable: false, specialDuration: [], transfer: true }
 						: {}
-					: currentDae,
+					: currentDae
 			}),
 			origin: origin ? origin : this.origin ? this.origin : "", // MOD 4535992
 			transfer: isPassive ? false : this.transfer,
 			//changes: this.changes, // MOD 4535992
-			changes: this._handleIntegrations(),
+			changes: this._handleIntegrations()
 			// 4535992 these are not under data
 			// isDisabled: this.isDisabled ?? false,
 			// isTemporary: this.isTemporary ?? false,
@@ -195,7 +195,7 @@ export default class Effect {
 			startRound: game.combat?.round,
 			startTime: game.time.worldTime,
 			startTurn: game.combat?.turn,
-			turns: turns,
+			turns: turns
 		};
 		let effect = new CONFIG.ActiveEffect.documentClass({
 			changes,
@@ -205,7 +205,7 @@ export default class Effect {
 			icon,
 			label,
 			origin,
-			transfer: false,
+			transfer: false
 		});
 
 		return effect;
@@ -240,13 +240,13 @@ export default class Effect {
 				return {
 					startTime: game.time.worldTime,
 					startRound: 0,
-					startTurn: 0,
+					startTurn: 0
 				};
 			} else {
 				return {
 					startRound: game.combat.round,
 					rounds: this._getCombatRounds(),
-					turns: !is_real_number(this.turns) ? undefined : this.turns,
+					turns: !is_real_number(this.turns) ? undefined : this.turns
 				};
 			}
 		} else {
@@ -254,12 +254,12 @@ export default class Effect {
 				return {
 					startTime: game.time.worldTime,
 					startRound: 0,
-					startTurn: 0,
+					startTurn: 0
 				};
 			} else {
 				return {
 					startTime: game.time.worldTime,
-					seconds: this._getSeconds(),
+					seconds: this._getSeconds()
 				};
 			}
 		}
@@ -393,14 +393,14 @@ export class Constants {
 		IS_DYNAMIC: "isDynamic",
 		IS_VIEWABLE: "isViewable",
 		NESTED_EFFECTS: "nestedEffects",
-		SUB_EFFECTS: "subEffects",
+		SUB_EFFECTS: "subEffects"
 	};
 
 	static COLORS = {
 		COLD_FIRE: "#389888",
 		FIRE: "#f98026",
 		WHITE: "#ffffff",
-		MOON_TOUCHED: "#f4f1c9",
+		MOON_TOUCHED: "#f4f1c9"
 	};
 
 	static SECONDS = {
@@ -411,7 +411,7 @@ export class Constants {
 		IN_SIX_HOURS: 21600,
 		IN_EIGHT_HOURS: 28800,
 		IN_ONE_DAY: 86400,
-		IN_ONE_WEEK: 604800,
+		IN_ONE_WEEK: 604800
 	};
 
 	static SIZES_ORDERED = ["tiny", "sm", "med", "lg", "huge", "grg"];

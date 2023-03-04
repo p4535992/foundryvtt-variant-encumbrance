@@ -8,7 +8,7 @@ export const registerSettings = function () {
 		hint: `${CONSTANTS.MODULE_NAME}.setting.reset.hint`,
 		icon: "fas fa-coins",
 		type: ResetSettingsDialog,
-		restricted: true,
+		restricted: true
 	});
 
 	// Removed on 0.6.5
@@ -18,7 +18,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: Boolean,
-		default: true,
+		default: true
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "useVarianEncumbranceWithSpecificType", {
@@ -27,7 +27,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: String,
-		default: "character,vehicle",
+		default: "character,vehicle"
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "fakeMetricSystem", {
@@ -36,7 +36,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: Boolean,
-		default: false,
+		default: false
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "lightMultiplier", {
@@ -45,7 +45,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: Number,
-		default: 5,
+		default: 5
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "lightMultiplierMetric", {
@@ -54,7 +54,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: Number,
-		default: 2.5,
+		default: 2.5
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "mediumMultiplier", {
@@ -63,7 +63,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: Number,
-		default: 10,
+		default: 10
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "mediumMultiplierMetric", {
@@ -72,7 +72,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: Number,
-		default: 5,
+		default: 5
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "heavyMultiplier", {
@@ -85,7 +85,7 @@ export const registerSettings = function () {
 		onChange: (value) => {
 			// NOT NECESSARY WE USE THE VALUE ON THE SETTING
 			// DND5E.encumbrance.strMultiplier = value;
-		},
+		}
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "heavyMultiplierMetric", {
@@ -98,7 +98,7 @@ export const registerSettings = function () {
 		onChange: (value) => {
 			// NOT NECESSARY WE USE THE VALUE ON THE SETTING
 			// DND5E.encumbrance.strMultiplier = value;
-		},
+		}
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "useStrengthMultiplier", {
@@ -107,7 +107,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: Boolean,
-		default: false,
+		default: false
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "strengthMultiplier", {
@@ -120,7 +120,7 @@ export const registerSettings = function () {
 		onChange: (value) => {
 			// NOT NECESSARY WE USE THE VALUE ON THE SETTING
 			// DND5E.encumbrance.strMultiplier = value;
-		},
+		}
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "strengthMultiplierMetric", {
@@ -133,7 +133,7 @@ export const registerSettings = function () {
 		onChange: (value) => {
 			// NOT NECESSARY WE USE THE VALUE ON THE SETTING
 			// DND5E.encumbrance.strMultiplier = value;
-		},
+		}
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "useVariantEncumbrance", {
@@ -142,7 +142,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: Boolean,
-		default: true,
+		default: true
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "unequippedMultiplier", {
@@ -151,7 +151,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: Number,
-		default: 1,
+		default: 1
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "equippedMultiplier", {
@@ -160,7 +160,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: Number,
-		default: 1,
+		default: 1
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "profEquippedMultiplier", {
@@ -169,7 +169,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: Number,
-		default: 1,
+		default: 1
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "enableCurrencyWeight", {
@@ -178,7 +178,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: Boolean,
-		default: true,
+		default: true
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "currencyWeight", {
@@ -191,7 +191,7 @@ export const registerSettings = function () {
 		onChange: (value) => {
 			// NOT NECESSARY WE USE THE VALUE ON THE SETTING
 			// DND5E.encumbrance.currencyPerWeight = value;
-		},
+		}
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "currencyWeightMetric", {
@@ -204,7 +204,7 @@ export const registerSettings = function () {
 		onChange: (value) => {
 			// NOT NECESSARY WE USE THE VALUE ON THE SETTING
 			// DND5E.encumbrance.currencyPerWeight = value;
-		},
+		}
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "vehicleWeightMultiplier", {
@@ -217,7 +217,7 @@ export const registerSettings = function () {
 		onChange: (value) => {
 			// NOT NECESSARY WE USE THE VALUE ON THE SETTING
 			// DND5E.encumbrance.currencyPerWeight = value;
-		},
+		}
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "vehicleWeightMultiplierMetric", {
@@ -230,7 +230,7 @@ export const registerSettings = function () {
 		onChange: (value) => {
 			// NOT NECESSARY WE USE THE VALUE ON THE SETTING
 			// DND5E.encumbrance.currencyPerWeight = value;
-		},
+		}
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "sizeMultipliers", {
@@ -239,7 +239,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: Boolean,
-		default: true,
+		default: true
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "units", {
@@ -248,7 +248,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: String,
-		default: "lbs.",
+		default: "lbs."
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "unitsMetric", {
@@ -257,7 +257,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: String,
-		default: "kg.",
+		default: "kg."
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "lightWeightDecrease", {
@@ -266,7 +266,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: Number,
-		default: 10,
+		default: 10
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "lightWeightDecreaseMetric", {
@@ -275,7 +275,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: Number,
-		default: 3,
+		default: 3
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "heavyWeightDecrease", {
@@ -284,7 +284,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: Number,
-		default: 20,
+		default: 20
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "heavyWeightDecreaseMetric", {
@@ -293,7 +293,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: Number,
-		default: 6,
+		default: 6
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "enablePreCheckEncumbranceTier", {
@@ -302,7 +302,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: Boolean,
-		default: false,
+		default: false
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "enableVarianEncumbranceOnSpecificActor", {
@@ -311,7 +311,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: Boolean,
-		default: true,
+		default: true
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "removeLabelButtonsSheetHeader", {
@@ -320,7 +320,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: Boolean,
-		default: true,
+		default: true
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "useStandardWeightCalculation", {
@@ -329,7 +329,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: Boolean,
-		default: false,
+		default: false
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "useEquippedUnequippedItemCollectionFeature", {
@@ -338,7 +338,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: Boolean,
-		default: false,
+		default: false
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "enableDAEIntegration", {
@@ -347,7 +347,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: Boolean,
-		default: true,
+		default: true
 	});
 
 	// ======================================================
@@ -360,7 +360,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: Boolean,
-		default: false,
+		default: false
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "unitsBulk", {
@@ -369,7 +369,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: String,
-		default: "bulk",
+		default: "bulk"
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "heavyWeightDecreaseBulk", {
@@ -378,7 +378,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: Number,
-		default: 0.5,
+		default: 0.5
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "automaticApplySuggestedBulk", {
@@ -387,7 +387,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: Boolean,
-		default: false,
+		default: false
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "hideStandardEncumbranceBar", {
@@ -396,7 +396,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: Boolean,
-		default: false,
+		default: false
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "hideStandardWeightUnits", {
@@ -405,7 +405,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		type: Boolean,
-		default: false,
+		default: false
 	});
 
 	// ======================================================
@@ -418,7 +418,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		default: false,
-		type: Boolean,
+		type: Boolean
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "doNotApplyWeightForEquippedArmor", {
@@ -427,7 +427,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		default: false,
-		type: Boolean,
+		type: Boolean
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorClothing", {
@@ -436,7 +436,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		default: 0,
-		type: Number,
+		type: Number
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorLight", {
@@ -445,7 +445,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		default: 0,
-		type: Number,
+		type: Number
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorMedium", {
@@ -454,7 +454,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		default: 0,
-		type: Number,
+		type: Number
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorHeavy", {
@@ -463,7 +463,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		default: 0,
-		type: Number,
+		type: Number
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorNatural", {
@@ -472,7 +472,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		default: 0,
-		type: Number,
+		type: Number
 	});
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "useStrValueInsteadStrModOnBulk", {
@@ -481,7 +481,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		default: false,
-		type: Boolean,
+		type: Boolean
 	});
 
 	// =============================================================================================================
@@ -492,7 +492,7 @@ export const registerSettings = function () {
 		scope: "world",
 		config: true,
 		default: false,
-		type: Boolean,
+		type: Boolean
 	});
 };
 
@@ -520,14 +520,14 @@ class ResetSettingsDialog extends FormApplication<FormApplicationOptions, object
 							await setting.delete();
 						}
 						//window.location.reload();
-					},
+					}
 				},
 				cancel: {
 					icon: '<i class="fas fa-times"></i>',
-					label: game.i18n.localize(`${CONSTANTS.MODULE_NAME}.dialogs.resetsettings.cancel`),
-				},
+					label: game.i18n.localize(`${CONSTANTS.MODULE_NAME}.dialogs.resetsettings.cancel`)
+				}
 			},
-			default: "cancel",
+			default: "cancel"
 		});
 	}
 

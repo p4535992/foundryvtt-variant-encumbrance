@@ -7,7 +7,7 @@ import {
 	BULK_CATEGORIES,
 	BULK_CATEGORY,
 	BulkData,
-	SUPPORTED_SHEET,
+	SUPPORTED_SHEET
 } from "./VariantEncumbranceModels";
 import {
 	checkBulkCategory,
@@ -20,7 +20,7 @@ import {
 	i18n,
 	i18nFormat,
 	is_real_number,
-	warn,
+	warn
 } from "./lib/lib";
 import CONSTANTS from "./constants";
 import { registerSocket } from "./socket";
@@ -34,7 +34,7 @@ export let ENCUMBRANCE_STATE = {
 	UNENCUMBERED: "", // "Unencumbered",
 	ENCUMBERED: "", // "Encumbered",
 	HEAVILY_ENCUMBERED: "", // "Heavily Encumbered",
-	OVERBURDENED: "", // "Overburdened"
+	OVERBURDENED: "" // "Overburdened"
 };
 
 export let invPlusActive: boolean;
@@ -221,7 +221,7 @@ export const readyHooks = async () => {
 		UNENCUMBERED: i18n(CONSTANTS.MODULE_NAME + ".effect.name.unencumbered"), // "Unencumbered",
 		ENCUMBERED: i18n(CONSTANTS.MODULE_NAME + ".effect.name.encumbered"), // "Encumbered",
 		HEAVILY_ENCUMBERED: i18n(CONSTANTS.MODULE_NAME + ".effect.name.heavily_encumbered"), // "Heavily Encumbered",
-		OVERBURDENED: i18n(CONSTANTS.MODULE_NAME + ".effect.name.overburdened"), // "Overburdened"
+		OVERBURDENED: i18n(CONSTANTS.MODULE_NAME + ".effect.name.overburdened") // "Overburdened"
 	};
 
 	Hooks.on(
@@ -517,7 +517,7 @@ export const readyHooks = async () => {
 									mylabel = "";
 								}
 								ev.currentTarget.innerHTML = `<i class="${myicon}"></i>${mylabel}`;
-							},
+							}
 						});
 					}
 				}
@@ -668,7 +668,7 @@ export const readyHooks = async () => {
 								mylabelBulk = "";
 							}
 							ev.currentTarget.innerHTML = `<i class="${myiconBulk}"></i>${mylabelBulk}`;
-						},
+						}
 					});
 				}
 				//buttons.unshift(...varianEncumbranceButtons);
@@ -1492,7 +1492,7 @@ const module = {
 		}
 
 		const suggesteBulkValueS = i18nFormat("variant-encumbrance-dnd5e.label.bulk.suggestedValue", {
-			suggestedBulkWeight: suggestedBulkWeight,
+			suggestedBulkWeight: suggestedBulkWeight
 		});
 
 		html.find(".item-properties") // <div class="item-properties">
@@ -1506,5 +1506,5 @@ const module = {
         </div>
         `
 			);
-	},
+	}
 };
