@@ -9,6 +9,7 @@ import type { ActorData } from "@league-of-foundry-developers/foundry-vtt-types/
 import { calcBulk } from "../VariantEncumbranceBulkImpl";
 import { backPackManagerActive, itemContainerActive } from "../modules";
 import { calcWeight } from "../VariantEncumbranceImpl";
+import API from "../api";
 
 // =============================
 // Module Generic function
@@ -696,4 +697,64 @@ export function retrieveBackPackManagerItem(item: Item): Actor | undefined {
 		return undefined;
 	}
 	return backpack;
+}
+
+// The items stowed on the Backpack Actor.
+export function stowedItemBackPackManager(bag: Actor): Item[] {
+	return bag.items
+		.filter((item) => {
+			return isValidBackPackManagerItem(item);
+		})
+		.sort((a: Item, b: Item) => {
+			//@ts-ignore
+			return a.name.localeCompare(b.name);
+		});
+}
+
+// // The items held on the Actor.
+// export function itemItemBackPackManager(bag: Actor) {
+// 	return this.actor.items
+// 		.filter((item) => {
+// 			return isValidBackPackManagerItem(item);
+// 		})
+// 		.sort((a, b) => {
+// 			return a.name.localeCompare(b.name);
+// 		});
+// }
+
+export function calculateBackPackManagerWeight(item: Item, bag: Actor, ignoreCurrency: boolean) {
+	const data = <any>{};
+	const stowed = stowedItemBackPackManager(bag);
+	//@ts-ignore
+	const type = item.system.capacity.type;
+	if (type === "weight") {
+		const backpackManagerWeight =
+			<number>API.calculateWeightOnActorWithItems(bag, stowed, ignoreCurrency)?.totalWeight ??
+			getItemWeight(item);
+		data.bagValue = backpackManagerWeight;
+	} else if (type === "items") {
+		data.bagValue = stowed.reduce((acc, item) => {
+			return acc + getItemQuantity(item);
+		}, 0);
+	}
+
+	return data.bagValue;
+}
+
+export function calculateBackPackManagerBulk(item: Item, bag: Actor, ignoreCurrency: boolean) {
+	const data = <any>{};
+	const stowed = stowedItemBackPackManager(bag);
+	//@ts-ignore
+	const type = item.system.capacity.type;
+	if (type === "weight") {
+		const backpackManagerBulk =
+			<number>API.calculateBulkOnActorWithItems(bag, stowed, ignoreCurrency)?.totalWeight ?? getItemBulk(item);
+		data.bagValue = backpackManagerBulk;
+	} else if (type === "items") {
+		data.bagValue = stowed.reduce((acc, item) => {
+			return acc + getItemQuantity(item);
+		}, 0);
+	}
+
+	return data.bagValue;
 }

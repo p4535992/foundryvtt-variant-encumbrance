@@ -170,21 +170,31 @@ const API = {
 
 	// ====================================================
 
-	calculateWeightOnActorWithItems(actor: Actor, items: Item[]): EncumbranceData | undefined {
+	calculateWeightOnActorWithItems(actor: Actor, items: Item[], ignoreCurrency = true): EncumbranceData | undefined {
 		if (!actor) {
 			warn(`No actor is been passed`);
 			return;
 		}
-		const encumbranceData = VariantEncumbranceImpl.calculateEncumbrance(actor, items, true, invPlusActive);
+		const encumbranceData = VariantEncumbranceImpl.calculateEncumbrance(
+			actor,
+			items,
+			ignoreCurrency,
+			invPlusActive
+		);
 		return encumbranceData;
 	},
 
-	calculateBulkOnActorWithItems(actor: Actor, items: Item[]): EncumbranceBulkData | undefined {
+	calculateBulkOnActorWithItems(actor: Actor, items: Item[], ignoreCurrency = true): EncumbranceBulkData | undefined {
 		if (!actor) {
 			warn(`No actor is been passed`);
 			return;
 		}
-		const encumbranceData = VariantEncumbranceBulkImpl.calculateEncumbrance(actor, items, true, invPlusActive);
+		const encumbranceData = VariantEncumbranceBulkImpl.calculateEncumbrance(
+			actor,
+			items,
+			ignoreCurrency,
+			invPlusActive
+		);
 		return encumbranceData;
 	},
 
@@ -192,21 +202,29 @@ const API = {
 		return checkBulkCategory(weight, item).bulk;
 	},
 
-	calculateWeightOnActorWithItemsNoInventoryPlus(actor: Actor, items: Item[]): EncumbranceData | undefined {
+	calculateWeightOnActorWithItemsNoInventoryPlus(
+		actor: Actor,
+		items: Item[],
+		ignoreCurrency = true
+	): EncumbranceData | undefined {
 		if (!actor) {
 			warn(`No actor is been passed`);
 			return;
 		}
-		const encumbranceData = VariantEncumbranceImpl.calculateEncumbrance(actor, items, true, false);
+		const encumbranceData = VariantEncumbranceImpl.calculateEncumbrance(actor, items, ignoreCurrency, false);
 		return encumbranceData;
 	},
 
-	calculateBulkOnActorWithItemsNoInventoryPlus(actor: Actor, items: Item[]): EncumbranceBulkData | undefined {
+	calculateBulkOnActorWithItemsNoInventoryPlus(
+		actor: Actor,
+		items: Item[],
+		ignoreCurrency = true
+	): EncumbranceBulkData | undefined {
 		if (!actor) {
 			warn(`No actor is been passed`);
 			return;
 		}
-		const encumbranceData = VariantEncumbranceBulkImpl.calculateEncumbrance(actor, items, true, false);
+		const encumbranceData = VariantEncumbranceBulkImpl.calculateEncumbrance(actor, items, ignoreCurrency, false);
 		return encumbranceData;
 	}
 };

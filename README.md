@@ -483,13 +483,13 @@ Convert weight to bulk
 **Example**:
 `game.modules.get('variant-encumbrance-dnd5e').api.convertLbToBulk(weight)`
 
-### game.modules.get('variant-encumbrance-dnd5e').api.calculateWeightOnActorWithItems(actor: Actor, items:Item[]): EncumbranceData | undefined
+### game.modules.get('variant-encumbrance-dnd5e').api.calculateWeightOnActorWithItems(actor: Actor, items:Item[], ignoreCurrency = true): EncumbranceData | undefined
 
-### game.modules.get('variant-encumbrance-dnd5e').api.calculateBulkOnActorWithItems(actor: Actor, items:Item[]): EncumbranceBulkData | undefined
+### game.modules.get('variant-encumbrance-dnd5e').api.calculateBulkOnActorWithItems(actor: Actor, items:Item[],ignoreCurrency = true): EncumbranceBulkData | undefined
 
-### game.modules.get('variant-encumbrance-dnd5e').api.calculateWeightOnActorWithItemsNoInventoryPlus(actor: Actor, items:Item[]): EncumbranceData | undefined
+### game.modules.get('variant-encumbrance-dnd5e').api.calculateWeightOnActorWithItemsNoInventoryPlus(actor: Actor, items:Item[], ignoreCurrency = true): EncumbranceData | undefined
 
-### game.modules.get('variant-encumbrance-dnd5e').api.calculateBulkOnActorWithItemsNoInventoryPlus(actor: Actor, items:Item[]): EncumbranceBulkData | undefined
+### game.modules.get('variant-encumbrance-dnd5e').api.calculateBulkOnActorWithItemsNoInventoryPlus(actor: Actor, items:Item[], ignoreCurrency = true): EncumbranceBulkData | undefined
 
 ## Models
 

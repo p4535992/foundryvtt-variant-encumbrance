@@ -19,6 +19,7 @@ import {
 } from "./modules";
 import CONSTANTS from "./constants";
 import {
+	calculateBackPackManagerBulk,
 	debug,
 	error,
 	getItemBulk,
@@ -383,8 +384,9 @@ export const VariantEncumbranceBulkImpl = {
 				if (backpackManager) {
 					// Does the weight of the items in the container carry over to the actor?
 					const weightless = getProperty(item, "system.capacity.weightless") ?? false;
-					const backpackManagerWeight =
-						<number>API.calculateBulkOnActor(backpackManager)?.totalWeight ?? itemWeight;
+					// const backpackManagerWeight =
+					// 	<number>API.calculateBulkOnActor(backpackManager)?.totalWeight ?? itemWeight;
+					const backpackManagerWeight = calculateBackPackManagerBulk(item, backpackManager, ignoreCurrency);
 					itemWeight = weightless ? itemWeight : itemWeight + backpackManagerWeight;
 
 					debug(

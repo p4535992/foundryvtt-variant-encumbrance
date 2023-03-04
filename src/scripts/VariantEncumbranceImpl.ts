@@ -28,7 +28,8 @@ import {
 	retrieveAttributeCapacityCargo,
 	getItemQuantity,
 	getItemWeight,
-	retrieveBackPackManagerItem
+	retrieveBackPackManagerItem,
+	calculateBackPackManagerWeight
 } from "./lib/lib";
 import API from "./api";
 import type { EffectChangeData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData";
@@ -468,8 +469,9 @@ export const VariantEncumbranceImpl = {
 				if (backpackManager) {
 					// Does the weight of the items in the container carry over to the actor?
 					const weightless = getProperty(item, "system.capacity.weightless") ?? false;
-					const backpackManagerWeight =
-						<number>API.calculateWeightOnActor(backpackManager)?.totalWeight ?? itemWeight;
+					// const backpackManagerWeight =
+					// 	<number>API.calculateWeightOnActor(backpackManager)?.totalWeight ?? itemWeight;
+					const backpackManagerWeight = calculateBackPackManagerWeight(item, backpackManager, ignoreCurrency);
 					itemWeight = weightless ? itemWeight : itemWeight + backpackManagerWeight;
 
 					debug(

@@ -1,3 +1,7 @@
+### 0.12.5 
+
+- Better integration with [Backpack Manager](https://github.com/krbz999/backpack-manager) 
+
 ### 0.12.4
 
 - Add a first integration for [Backpack Manager](https://github.com/krbz999/backpack-manager)
