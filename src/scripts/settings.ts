@@ -475,6 +475,15 @@ export const registerSettings = function () {
 		type: Number
 	});
 
+	game.settings.register(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedContainer", {
+		name: `${CONSTANTS.MODULE_NAME}.setting.applyWeightMultiplierForEquippedContainer.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.setting.applyWeightMultiplierForEquippedContainer.hint`,
+		scope: "world",
+		config: true,
+		default: -1,
+		type: Number
+	});
+
 	game.settings.register(CONSTANTS.MODULE_NAME, "useStrValueInsteadStrModOnBulk", {
 		name: `${CONSTANTS.MODULE_NAME}.setting.useStrValueInsteadStrModOnBulk.name`,
 		hint: `${CONSTANTS.MODULE_NAME}.setting.useStrValueInsteadStrModOnBulk.hint`,

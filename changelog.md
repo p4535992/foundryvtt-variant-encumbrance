@@ -1,3 +1,8 @@
+### 0.12.6 
+
+- Bug fix : https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/14 
+- Add new module setting "Feature: Equipped Container/Backpack Weight Multiplier" for homebrew rule
+
 ### 0.12.5 
 
 - Better integration with [Backpack Manager](https://github.com/krbz999/backpack-manager) 

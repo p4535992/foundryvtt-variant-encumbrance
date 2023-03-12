@@ -493,7 +493,20 @@ export const VariantEncumbranceBulkImpl = {
 						if (isProficient) {
 							itemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "profEquippedMultiplier");
 						} else {
-							itemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "equippedMultiplier");
+							const applyWeightMultiplierForEquippedContainer =
+								item.type === "backpack"
+									? <number>(
+											(game.settings.get(
+												CONSTANTS.MODULE_NAME,
+												"applyWeightMultiplierForEquippedContainer"
+											) || 0)
+									  )
+									: 0;
+							if (applyWeightMultiplierForEquippedContainer > -1) {
+								itemWeight *= applyWeightMultiplierForEquippedContainer;
+							} else {
+								itemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "equippedMultiplier");
+							}
 						}
 					} else {
 						itemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "unequippedMultiplier");
@@ -1405,7 +1418,7 @@ export function calcBulk(
 	// END MOD 4535992
 	const weightless = getProperty(item, "system.capacity.weightless") ?? false;
 	if (weightless) {
-		return getItemBulk(item) || 0;
+		itemWeight = getItemBulk(item) || 0;
 	} else {
 		itemWeight = calcItemBulk(item, ignoreCurrency, { ignoreItems, ignoreTypes }) + (getItemBulk(item) || 0);
 	}
@@ -1413,7 +1426,17 @@ export function calcBulk(
 		if (isProficient) {
 			itemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "profEquippedMultiplier");
 		} else {
-			itemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "equippedMultiplier");
+			const applyWeightMultiplierForEquippedContainer =
+				item.type === "backpack"
+					? <number>(
+							(game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedContainer") || 0)
+					  )
+					: 0;
+			if (applyWeightMultiplierForEquippedContainer > -1) {
+				itemWeight *= applyWeightMultiplierForEquippedContainer;
+			} else {
+				itemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "equippedMultiplier");
+			}
 		}
 	} else {
 		itemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "unequippedMultiplier");

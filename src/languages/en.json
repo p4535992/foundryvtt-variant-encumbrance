@@ -157,7 +157,7 @@
 	"variant-encumbrance-dnd5e.setting.doNotIncreaseWeightByQuantityForNoAmmunition.hint": "This is a homebrew rule, for non-ammunition items don't increase weight by quantity (so 5 potions = 1 item weight for example)",
 
 	"variant-encumbrance-dnd5e.setting.doNotApplyWeightForEquippedArmor.name": "Feature: Do Not apply weight for equipped armor item",
-	"variant-encumbrance-dnd5e.setting.doNotApplyWeightForEquippedArmor.hint": "This is a homebrew rule, for equipped armor types (clothing, light, medium, heavy, natural), the weight is set to 0 and not applied, this will override the setting from 'Equipped Item Weight Multiplier'. NOTE: The specific armor calculation setting 'Feature: Equipped Armor Weight Multiplier for 'XXX Armor' will be override this setting.",
+	"variant-encumbrance-dnd5e.setting.doNotApplyWeightForEquippedArmor.hint": "This is a homebrew rule, for equipped armor types (clothing, light, medium, heavy, natural), if the weight is set to 0 is not applied, this will override the setting from 'Equipped Item Weight Multiplier'. NOTE: The specific armor calculation setting 'Feature: Equipped Armor Weight Multiplier for 'XXX Armor' will be override this setting.",
 
 	"variant-encumbrance-dnd5e.setting.applyWeightMultiplierForEquippedArmorClothing.name": "Feature: Equipped Armor Weight Multiplier for 'Clothing Armor'",
 	"variant-encumbrance-dnd5e.setting.applyWeightMultiplierForEquippedArmorClothing.hint": "This is a homebrew rule, and is mostly an upgrade of the existing feature 'Do Not apply weight for equipped armor item' for equipped armor types 'clothing', a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from 'Do Not apply weight for equipped armor item' ENABLED, the value by default the value is 0.",
@@ -173,6 +173,9 @@
 
 	"variant-encumbrance-dnd5e.setting.applyWeightMultiplierForEquippedArmorNatural.name": "Feature: Equipped Armor Weight Multiplier for 'Natural Armor'",
 	"variant-encumbrance-dnd5e.setting.applyWeightMultiplierForEquippedArmorNatural.hint": "This is a homebrew rule, and is mostly an upgrade of the existing feature 'Do Not apply weight for equipped armor item' for equipped armor types 'natural', a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from 'Do Not apply weight for equipped armor item' ENABLED, the value by default the value is 0.",
+
+	"variant-encumbrance-dnd5e.setting.applyWeightMultiplierForEquippedContainer.name": "Feature: Equipped Container/Backpack Weight Multiplier",
+	"variant-encumbrance-dnd5e.setting.applyWeightMultiplierForEquippedContainer.hint": "This is a homebrew rule, for equipped container/backpack types, if the weight is set to -1 is not applied, this will override the setting from 'Equipped Item Weight Multiplier'.",
 
 	"variant-encumbrance-dnd5e.setting.useStrValueInsteadStrModOnBulk.name": "Feature: Use STR flat value instead STR MOD on Bulk",
 	"variant-encumbrance-dnd5e.setting.useStrValueInsteadStrModOnBulk.hint": "This is a homebrew rule, ONLY FOR BULK calculation. Currently there is no way to adjust the maximum bulk for a creature, which is tied to size and STR MOD, now you can use the flat value of force to handle it.",

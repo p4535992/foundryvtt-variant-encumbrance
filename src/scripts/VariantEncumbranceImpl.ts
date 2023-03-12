@@ -578,7 +578,20 @@ export const VariantEncumbranceImpl = {
 						if (isProficient) {
 							itemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "profEquippedMultiplier");
 						} else {
-							itemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "equippedMultiplier");
+							const applyWeightMultiplierForEquippedContainer =
+								item.type === "backpack"
+									? <number>(
+											(game.settings.get(
+												CONSTANTS.MODULE_NAME,
+												"applyWeightMultiplierForEquippedContainer"
+											) || 0)
+									  )
+									: 0;
+							if (applyWeightMultiplierForEquippedContainer > -1) {
+								itemWeight *= applyWeightMultiplierForEquippedContainer;
+							} else {
+								itemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "equippedMultiplier");
+							}
 						}
 					} else {
 						itemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "unequippedMultiplier");
@@ -1543,7 +1556,17 @@ export function calcWeight(
 		if (isProficient) {
 			itemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "profEquippedMultiplier");
 		} else {
-			itemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "equippedMultiplier");
+			const applyWeightMultiplierForEquippedContainer =
+				item.type === "backpack"
+					? <number>(
+							(game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedContainer") || 0)
+					  )
+					: 0;
+			if (applyWeightMultiplierForEquippedContainer > -1) {
+				itemWeight *= applyWeightMultiplierForEquippedContainer;
+			} else {
+				itemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "equippedMultiplier");
+			}
 		}
 	} else {
 		itemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "unequippedMultiplier");
