@@ -499,23 +499,23 @@ export const VariantEncumbranceImpl = {
 				// Start Item container check
 				if (hasProperty(item, `flags.itemcollection`) && itemContainerActive) {
 					// Does the weight of the items in the container carry over to the actor?
-					const weightless = getProperty(item, "system.capacity.weightless") ?? false;
-					if (weightless) {
-						itemWeight = getProperty(item, "flags.itemcollection.bagWeight") || 0;
-					} else {
-						// itemWeight = calcItemWeight(item) + getProperty(item, 'flags.itemcollection.bagWeight');
-						// MOD 4535992 Removed variant encumbrance take care of this
-						itemWeight = calcWeight(
-							item,
-							useEquippedUnequippedItemCollectionFeature,
-							doNotApplyWeightForEquippedArmor,
-							ignoreCurrency
-						);
-						//@ts-ignore
-						if (useEquippedUnequippedItemCollectionFeature) {
-							// ignoreEquipmentCheck = true;
-						}
-					}
+					//const weightless = getProperty(item, "system.capacity.weightless") ?? false;
+					// if (weightless) {
+					// 	itemWeight = getProperty(item, "flags.itemcollection.bagWeight") || 0;
+					// } else {
+					// itemWeight = calcItemWeight(item) + getProperty(item, 'flags.itemcollection.bagWeight');
+					// MOD 4535992 Removed variant encumbrance take care of this
+					itemWeight = calcWeight(
+						item,
+						useEquippedUnequippedItemCollectionFeature,
+						doNotApplyWeightForEquippedArmor,
+						ignoreCurrency
+					);
+					//@ts-ignore
+					// if (useEquippedUnequippedItemCollectionFeature) {
+					//	// ignoreEquipmentCheck = true;
+					// }
+					// }
 				} else {
 					// Does the weight of the items in the container carry over to the actor?
 					// TODO  wait for 2.2.0
@@ -1525,6 +1525,7 @@ export function calcWeight(
 	// if (this.parent instanceof Actor && (!this.system.equipped && this.system.capacity.weightlessUnequipped)) return 0;
 	// const weightless = getProperty(this, "system.capacity.weightless") ?? false;
 	// if (weightless) return getProperty(this, "flags.itemcollection.bagWeight") || 0;
+	let itemWeight = getItemWeight(item) || 0;
 	//@ts-ignore
 	if (useEquippedUnequippedItemCollectionFeature && !isEquipped && item.system?.capacity?.weightlessUnequipped) {
 		return 0;
@@ -1532,12 +1533,22 @@ export function calcWeight(
 	// END MOD 4535992
 	const weightless = getProperty(item, "system.capacity.weightless") ?? false;
 	if (weightless) {
-		return getProperty(item, "flags.itemcollection.bagWeight") || 0;
+		itemWeight = getProperty(item, "flags.itemcollection.bagWeight") || 0;
+	} else {
+		itemWeight =
+			calcItemWeight(item, ignoreCurrency, { ignoreItems, ignoreTypes }) +
+			(getProperty(item, "flags.itemcollection.bagWeight") || 0);
 	}
-	return (
-		calcItemWeight(item, ignoreCurrency, { ignoreItems, ignoreTypes }) +
-		(getProperty(item, "flags.itemcollection.bagWeight") || 0)
-	);
+	if (isEquipped) {
+		if (isProficient) {
+			itemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "profEquippedMultiplier");
+		} else {
+			itemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "equippedMultiplier");
+		}
+	} else {
+		itemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "unequippedMultiplier");
+	}
+	return itemWeight;
 }
 
 function calcItemWeight(

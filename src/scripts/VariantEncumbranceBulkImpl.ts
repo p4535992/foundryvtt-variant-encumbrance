@@ -414,23 +414,23 @@ export const VariantEncumbranceBulkImpl = {
 				// Start Item container check
 				if (hasProperty(item, `flags.itemcollection`) && itemContainerActive) {
 					// Does the weight of the items in the container carry over to the actor?
-					const weightless = getProperty(item, "system.capacity.weightless") ?? false;
-					if (weightless) {
-						itemWeight = getItemBulk(item);
-					} else {
-						// itemWeight = calcItemWeight(item) + getProperty(item, 'flags.itemcollection.bagWeight');
-						// MOD 4535992 Removed variant encumbrance take care of this
-						itemWeight = calcBulk(
-							item,
-							useEquippedUnequippedItemCollectionFeature,
-							doNotApplyWeightForEquippedArmor,
-							ignoreCurrency
-						);
-						//@ts-ignore
-						if (useEquippedUnequippedItemCollectionFeature) {
-							// ignoreEquipmentCheck = true;
-						}
-					}
+					// const weightless = getProperty(item, "system.capacity.weightless") ?? false;
+					// if (weightless) {
+					// 	itemWeight = getItemBulk(item);
+					// } else {
+					// itemWeight = calcItemWeight(item) + getProperty(item, 'flags.itemcollection.bagWeight');
+					// MOD 4535992 Removed variant encumbrance take care of this
+					itemWeight = calcBulk(
+						item,
+						useEquippedUnequippedItemCollectionFeature,
+						doNotApplyWeightForEquippedArmor,
+						ignoreCurrency
+					);
+					//@ts-ignore
+					// if (useEquippedUnequippedItemCollectionFeature) {
+					// 	// ignoreEquipmentCheck = true;
+					// }
+					// }
 				} else {
 					// Does the weight of the items in the container carry over to the actor?
 					// TODO  wait for 2.2.0
@@ -1397,58 +1397,28 @@ export function calcBulk(
 	// if (this.parent instanceof Actor && (!this.system.equipped && this.system.capacity.weightlessUnequipped)) return 0;
 	// const weightless = getProperty(this, "system.capacity.weightless") ?? false;
 	// if (weightless) return getProperty(this, "flags.itemcollection.bagWeight") || 0;
+	let itemWeight = getItemBulk(item) || 0;
 	//@ts-ignore
 	if (useEquippedUnequippedItemCollectionFeature && !isEquipped && item.system?.capacity?.weightlessUnequipped) {
 		return 0;
 	}
-	const itemArmorTypes = ["clothing", "light", "medium", "heavy", "natural"];
-	//@ts-ignore
-	if (isEquipped && doNotApplyWeightForEquippedArmor && itemArmorTypes.includes(item.system.armor?.type)) {
-		const currentItemWeight = calcItemBulk(item, ignoreCurrency, { ignoreItems, ignoreTypes }) + getItemBulk(item);
-		const applyWeightMultiplierForEquippedArmorClothing = <number>(
-			(game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorClothing") || 0)
-		);
-		const applyWeightMultiplierForEquippedArmorLight = <number>(
-			(game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorLight") || 0)
-		);
-		const applyWeightMultiplierForEquippedArmorMedium = <number>(
-			(game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorMedium") || 0)
-		);
-		const applyWeightMultiplierForEquippedArmorHeavy = <number>(
-			(game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorHeavy") || 0)
-		);
-		const applyWeightMultiplierForEquippedArmorNatural = <number>(
-			(game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorNatural") || 0)
-		);
-		//@ts-ignore
-		if (item.system.armor?.type === "clothing") {
-			return currentItemWeight * applyWeightMultiplierForEquippedArmorClothing;
-		}
-		//@ts-ignore
-		else if (item.system.armor?.type === "light") {
-			return currentItemWeight * applyWeightMultiplierForEquippedArmorLight;
-		}
-		//@ts-ignore
-		else if (item.system.armor?.type === "medium") {
-			return currentItemWeight * applyWeightMultiplierForEquippedArmorMedium;
-		}
-		//@ts-ignore
-		else if (item.system.armor?.type === "heavy") {
-			return currentItemWeight * applyWeightMultiplierForEquippedArmorHeavy;
-		}
-		//@ts-ignore
-		else if (item.system.armor?.type === "natural") {
-			return currentItemWeight * applyWeightMultiplierForEquippedArmorNatural;
-		} else {
-			return 0;
-		}
-	}
 	// END MOD 4535992
 	const weightless = getProperty(item, "system.capacity.weightless") ?? false;
 	if (weightless) {
-		return getItemBulk(item);
+		return getItemBulk(item) || 0;
+	} else {
+		itemWeight = calcItemBulk(item, ignoreCurrency, { ignoreItems, ignoreTypes }) + (getItemBulk(item) || 0);
 	}
-	return calcItemBulk(item, ignoreCurrency, { ignoreItems, ignoreTypes }) + getItemBulk(item);
+	if (isEquipped) {
+		if (isProficient) {
+			itemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "profEquippedMultiplier");
+		} else {
+			itemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "equippedMultiplier");
+		}
+	} else {
+		itemWeight *= <number>game.settings.get(CONSTANTS.MODULE_NAME, "unequippedMultiplier");
+	}
+	return itemWeight;
 }
 
 function calcItemBulk(
