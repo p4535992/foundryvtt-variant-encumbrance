@@ -347,6 +347,7 @@ export const VariantEncumbranceBulkImpl = {
 		ignoreCurrency: boolean,
 		invPlusActiveTmp: boolean
 	): EncumbranceBulkData {
+		const mapItemEncumbrance = {};
 		const enableVarianEncumbranceWeightBulkOnActorFlag = <boolean>(
 			actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_WE_BULK)
 		);
@@ -392,8 +393,8 @@ export const VariantEncumbranceBulkImpl = {
 					debug(
 						`Is BackpackManager! Actor '${actorEntity.name}, Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`
 					);
-
-					return itemQuantity * itemWeight;
+					mapItemEncumbrance[<string>item.id] = (itemQuantity * itemWeight);
+					return weight + (itemQuantity * itemWeight);
 				}
 
 				const isEquipped: boolean =
@@ -592,6 +593,7 @@ export const VariantEncumbranceBulkImpl = {
 					}', Equipped '${isEquipped}', Proficient ${isProficient} :
              ${itemQuantity} * ${itemWeight} = ${appliedWeight} on total ${weight} => ${weight + appliedWeight}`
 				);
+				mapItemEncumbrance[<string>item.id] = (appliedWeight);
 				return weight + appliedWeight;
 			}, 0);
 
@@ -958,7 +960,8 @@ export const VariantEncumbranceBulkImpl = {
 				unit: displayedUnits,
 				inventorySlot: inventorySlot,
 				minimumBulk: minimumBulk,
-				encumbrance: dataEncumbrance
+				encumbrance: dataEncumbrance,
+				mapItemEncumbrance: mapItemEncumbrance
 			};
 			debug(JSON.stringify(encumbranceData));
 			return encumbranceData;

@@ -631,6 +631,14 @@ export function getBulkLabel(): string {
 	return bulkLabel;
 }
 
+export function getWeightLabel(): string {
+	const displayedUnits = game.settings.get("dnd5e", "metricWeightUnits")
+		? <string>game.settings.get(CONSTANTS.MODULE_NAME, "unitsMetric")
+		: <string>game.settings.get(CONSTANTS.MODULE_NAME, "units");
+	const bulkLabel = capitalizeFirstLetter(displayedUnits);
+	return bulkLabel;
+}
+
 function capitalizeFirstLetter(string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 }

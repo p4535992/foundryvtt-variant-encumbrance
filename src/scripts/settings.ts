@@ -350,6 +350,15 @@ export const registerSettings = function () {
 		default: true
 	});
 
+	game.settings.register(CONSTANTS.MODULE_NAME, "replaceStandardWeightValue", {
+		name: i18n(CONSTANTS.MODULE_NAME + ".setting.replaceStandardWeightValue.name"),
+		hint: i18n(CONSTANTS.MODULE_NAME + ".setting.replaceStandardWeightValue.hint"),
+		scope: "world",
+		config: true,
+		type: Boolean,
+		default: true
+	});
+	
 	// ======================================================
 	// BULK SYSTEM
 	// ======================================================

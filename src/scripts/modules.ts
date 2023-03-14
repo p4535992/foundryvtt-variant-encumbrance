@@ -7,7 +7,8 @@ import {
 	BULK_CATEGORIES,
 	BULK_CATEGORY,
 	BulkData,
-	SUPPORTED_SHEET
+	SUPPORTED_SHEET,
+	EncumbranceBulkData
 } from "./VariantEncumbranceModels";
 import {
 	checkBulkCategory,
@@ -17,6 +18,8 @@ import {
 	getBulkLabel,
 	getItemBulk,
 	getItemQuantity,
+	getItemWeight,
+	getWeightLabel,
 	i18n,
 	i18nFormat,
 	is_real_number,
@@ -239,6 +242,107 @@ export const readyHooks = async () => {
 						}
 						if (sheetClass) {
 							break;
+						}
+					}
+				}
+
+				// ======================================================
+				// CUSTOMIZE INVENTORY
+				// ======================================================
+				const hideStandardWeightUnits = game.settings.get(CONSTANTS.MODULE_NAME, "hideStandardWeightUnits");
+				const replaceStandardWeightValue = game.settings.get(CONSTANTS.MODULE_NAME, "replaceStandardWeightValue");
+				const isBulkEnable = game.settings.get(CONSTANTS.MODULE_NAME, "enableBulkSystem");
+
+				const listHeaders = htmlElement.find("li.items-header .item-weight");
+				for (const liHeaderB of listHeaders) {
+					//@ts-ignore
+					const liHeader = <JQuery<HTMLElement>>$(liHeaderB);
+					if(isBulkEnable) {
+						if (hideStandardWeightUnits) {
+							liHeader.text(`${getBulkLabel()}`);
+						} else {
+							liHeader.append(`<br/>${getBulkLabel()}`);
+						}
+					} else {
+
+					}
+				}
+
+				const inventoryItems: Item[] = [];
+				const physicalItems = ["weapon", "equipment", "consumable", "tool", "backpack", "loot"];
+				actorEntityTmp.items.contents.forEach((im: Item) => {
+					if (im && physicalItems.includes(im.type)) {
+						inventoryItems.push(im);
+					}
+				});
+				const encumbranceData = <EncumbranceData>(
+					VariantEncumbranceImpl.calculateEncumbrance(actorEntityTmp, inventoryItems, false, invPlusActive)
+				);
+				const encumbranceDataBulk = <EncumbranceBulkData>(
+					VariantEncumbranceBulkImpl.calculateEncumbrance(actorEntityTmp, inventoryItems, false, invPlusActive)
+				);
+				const listItem = htmlElement.find("li.item .item-weight");
+				for (const liItemB of listItem) {
+					const liItem = <JQuery<HTMLElement>>$(liItemB);
+					const itemId = liItem.parent().attr("data-item-id");
+					const itemName = liItem.parent().find(".item-name h4").html().replace(/\n/g, "").trim();
+					const item = <Item>inventoryItems.find((im: Item) => {
+						return im.id === itemId || im.name === itemName;
+					});
+					if (item) {
+						const quantity = getItemQuantity(item);
+						const currentText = (liItem.parent().find(".item-detail.item-weight")[0]?.innerText ?? "")
+							.replace(/(\r\n|\n|\r)/gm, "")
+							.trim();
+						const currentTextB = currentText ? true : false;
+						
+						switch (sheetClass) {
+							case "dnd5e.Tidy5eSheet": {
+								if(replaceStandardWeightValue){
+									if (currentTextB) {
+										const weight =  encumbranceData.mapItemEncumbrance[<string>item.id]?.toNearest(0.1) ?? (quantity * getItemWeight(item)).toNearest(0.1) ?? 0;
+										const totalWeightS = `${weight} ${getWeightLabel()}`;
+										liItem.parent().find(".item-detail.item-weight").text(totalWeightS);
+									}
+								}
+								if(isBulkEnable) {
+									const bulk =  encumbranceDataBulk.mapItemEncumbrance[<string>item.id]?.toNearest(0.1) ?? (quantity * getItemBulk(item)).toNearest(0.1) ?? 0;
+									const totalBulkS = `${bulk} ${getBulkLabel()}`;
+									if (hideStandardWeightUnits) {
+										if (currentTextB) {
+											liItem.parent().find(".item-detail.item-weight").text(totalBulkS);
+										}
+									} else {
+										if (currentTextB) {
+											liItem.parent().find(".item-detail.item-weight").append(`<br/>${totalBulkS}`);
+										}
+									}
+								}
+								break;
+							}
+							default: {
+								if(replaceStandardWeightValue){
+									if (currentTextB) {
+										const weight =  encumbranceData.mapItemEncumbrance[<string>item.id]?.toNearest(0.1) ?? (quantity * getItemWeight(item)).toNearest(0.1) ?? 0;
+										const totalWeightS = `${weight} ${getWeightLabel()}`;
+										liItem.parent().find(".item-detail.item-weight div").text(totalWeightS);
+									}
+								}
+								if(isBulkEnable) {
+									const bulk =  encumbranceDataBulk.mapItemEncumbrance[<string>item.id]?.toNearest(0.1) ?? (quantity * getItemBulk(item)).toNearest(0.1) ?? 0;
+									const totalBulkS = `${bulk} ${getBulkLabel()}`;
+									if (hideStandardWeightUnits) {
+										if (currentTextB) {
+											liItem.parent().find(".item-detail.item-weight div").text(totalBulkS);
+										}
+									} else {
+										if (currentTextB) {
+											liItem.parent().find(".item-detail.item-weight div").append(`<br/>${totalBulkS}`);
+										}
+									}
+								}
+								break;
+							}
 						}
 					}
 				}
@@ -1227,76 +1331,6 @@ const module = {
 		sheetClass: string
 	): Promise<void> {
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enableBulkSystem")) {
-			// ======================================================
-			// CUSTOMIZE INVENTORY
-			// ======================================================
-			const hideStandardWeightUnits = game.settings.get(CONSTANTS.MODULE_NAME, "hideStandardWeightUnits");
-
-			const listHeaders = htmlElement.find("li.items-header .item-weight");
-			for (const liHeaderB of listHeaders) {
-				//@ts-ignore
-				const liHeader = <JQuery<HTMLElement>>$(liHeaderB);
-				if (hideStandardWeightUnits) {
-					liHeader.text(`${getBulkLabel()}`);
-				} else {
-					liHeader.append(`<br/>${getBulkLabel()}`);
-				}
-			}
-
-			const inventoryItems: Item[] = [];
-			const physicalItems = ["weapon", "equipment", "consumable", "tool", "backpack", "loot"];
-			actorEntityTmp.items.contents.forEach((im: Item) => {
-				if (im && physicalItems.includes(im.type)) {
-					inventoryItems.push(im);
-				}
-			});
-			const listItem = htmlElement.find("li.item .item-weight");
-			for (const liItemB of listItem) {
-				const liItem = <JQuery<HTMLElement>>$(liItemB);
-				const itemId = liItem.parent().attr("data-item-id");
-				const itemName = liItem.parent().find(".item-name h4").html().replace(/\n/g, "").trim();
-				const item = <Item>inventoryItems.find((im: Item) => {
-					return im.id === itemId || im.name === itemName;
-				});
-				if (item) {
-					const quantity = getItemQuantity(item);
-					const bulk = getItemBulk(item);
-
-					const totalBulk = (quantity * bulk).toNearest(0.1) ?? 0;
-					const totalBulkS = `${totalBulk} ${getBulkLabel()}`;
-					const currentText = (liItem.parent().find(".item-detail.item-weight")[0]?.innerText ?? "")
-						.replace(/(\r\n|\n|\r)/gm, "")
-						.trim();
-					const currentTextB = currentText ? true : false;
-					switch (sheetClass) {
-						case "dnd5e.Tidy5eSheet": {
-							if (hideStandardWeightUnits) {
-								if (currentTextB) {
-									liItem.parent().find(".item-detail.item-weight").text(totalBulkS);
-								}
-							} else {
-								if (currentTextB) {
-									liItem.parent().find(".item-detail.item-weight").append(`<br/>${totalBulkS}`);
-								}
-							}
-							break;
-						}
-						default: {
-							if (hideStandardWeightUnits) {
-								if (currentTextB) {
-									liItem.parent().find(".item-detail.item-weight div").text(totalBulkS);
-								}
-							} else {
-								if (currentTextB) {
-									liItem.parent().find(".item-detail.item-weight div").append(`<br/>${totalBulkS}`);
-								}
-							}
-
-							break;
-						}
-					}
-				}
-			}
 
 			// ===============================
 			// CUSTOMIZE ENCUMBRANCE
