@@ -33,7 +33,7 @@ export class EncumbranceData {
 	speedDecrease: number;
 	unit: string;
 	encumbrance: EncumbranceDnd5e;
-	mapItemEncumbrance: {[index:string]: number};
+	mapItemEncumbrance: { [index: string]: number };
 }
 
 export class EncumbranceBulkData extends EncumbranceData {

@@ -101,8 +101,8 @@
 	"variant-encumbrance-dnd5e.setting.enableDAEIntegration.name": "Enable DAE integration",
 	"variant-encumbrance-dnd5e.setting.enableDAEIntegration.hint": "If enabled, this setting will apply the value recovered by the DAE effects to the 'system.attributes.encumbrance.max' and 'system.attributes.capacity.cargo' attributes IF the 'DAE' module is present and active.",
 
-	"variant-encumbrance-dnd5e.setting.replaceStandardWeightValue.name": "Replace standard weight value on Actor Sheet",
-	"variant-encumbrance-dnd5e.setting.replaceStandardWeightValue.hint": "If enabled, this setting will replace the standard weight value with the 'modified value' from this module",
+	"variant-encumbrance-dnd5e.setting.replaceStandardWeightValue.name": "Replace standard displayed weight value on Actor Sheet",
+	"variant-encumbrance-dnd5e.setting.replaceStandardWeightValue.hint": "If enabled, this setting will replace the standard weight displayed on the actor inventory list value with the 'modified value' from this module",
 
 	"variant-encumbrance-dnd5e.setting.enableBulkSystem.name": "Enable Bulk system",
 	"variant-encumbrance-dnd5e.setting.enableBulkSystem.hint": "Enable integration with the Bulk System explained here: https://www.giffyglyph.com/darkerdungeons/grimoire/4.0.0/en/active_inventory.html",

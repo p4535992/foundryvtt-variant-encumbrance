@@ -358,7 +358,7 @@ export const registerSettings = function () {
 		type: Boolean,
 		default: true
 	});
-	
+
 	// ======================================================
 	// BULK SYSTEM
 	// ======================================================
