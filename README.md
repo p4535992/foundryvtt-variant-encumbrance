@@ -280,7 +280,8 @@ variant-encumbrance-dnd5e:
         max: 100,
         pct: 200,
         encumbered: true,
-    }
+    },
+    mapItemEncumbrance: { [index: string]: number }
   },
   bulk: {
     totalWeight: 0,
@@ -297,13 +298,14 @@ variant-encumbrance-dnd5e:
         pct: 200,
         encumbered: true,
     },
+    mapItemEncumbrance: { [index: string]: number },
     inventorySlot: 60,
-    minimumBulk: 2;
+    minimumBulk: 2
   },
   enabledae: true,
   enabledwe: true,
   enabledaebulk: false,
-  enabledwebulk: true,
+  enabledwebulk: true
 }
 ```
 
@@ -340,6 +342,7 @@ variant-encumbrance-dnd5e:
 - **enabledwe:** if true it's mean on the actor is applied the calculation of the weight from the module.
 - **enabledaebulk:** if true it's mean on the actor is applied the system bulk the management of the active effects of the weight from the module. _NOTE: if you set true this is better to set to false 'enabledwe'_
 - **enabledwebulk:** if true it's mean on the actor is applied the system bulk and the calculation of the weight from the module.
+- **mapItemEncumbrance:** the inner map of the 'modified' item weight value from this module
 
 # Settings
 
