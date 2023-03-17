@@ -146,6 +146,8 @@ export const VariantEncumbranceBulkImpl = {
 		} else {
 			VariantEncumbranceBulkImpl.calculateEncumbrance(actorEntity, inventoryItems, false, invPlusActive);
 		}
+
+		// Finalize some flag (maybe to remove...)
 	},
 
 	calculateEncumbranceWithEffect: async function (

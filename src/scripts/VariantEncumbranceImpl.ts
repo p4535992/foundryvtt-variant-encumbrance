@@ -143,6 +143,18 @@ export const VariantEncumbranceImpl = {
 				}
 			}
 		}
+		if (updatedEffect) {
+			await VariantEncumbranceImpl.calculateEncumbranceWithEffect(
+				actorEntity,
+				inventoryItems,
+				false,
+				invPlusActive
+			);
+		} else {
+			VariantEncumbranceImpl.calculateEncumbrance(actorEntity, inventoryItems, false, invPlusActive);
+		}
+
+		// Finalize some flag (maybe to remove...)
 
 		const burrow = hasProperty(actorEntity, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.BURROW}`)
 			? actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.BURROW)
@@ -159,7 +171,6 @@ export const VariantEncumbranceImpl = {
 		const walk = hasProperty(actorEntity, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.WALK}`)
 			? actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.WALK)
 			: {};
-
 		//@ts-ignore
 		if (burrow !== actorEntity.system.attributes.movement.burrow) {
 			await actorEntity.setFlag(
@@ -204,16 +215,6 @@ export const VariantEncumbranceImpl = {
 				//@ts-ignore
 				actorEntity.system.attributes.movement.walk
 			);
-		}
-		if (updatedEffect) {
-			await VariantEncumbranceImpl.calculateEncumbranceWithEffect(
-				actorEntity,
-				inventoryItems,
-				false,
-				invPlusActive
-			);
-		} else {
-			VariantEncumbranceImpl.calculateEncumbrance(actorEntity, inventoryItems, false, invPlusActive);
 		}
 	},
 

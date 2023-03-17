@@ -1,3 +1,8 @@
+### 0.12.8
+
+- Bug fix: https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/15
+- Possible fix: https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/13
+
 ### 0.12.7 
 
 - Add module settings 'replaceStandardWeightValue' by default is true 
