@@ -1,3 +1,7 @@
+## 0.12.9 
+
+- Bug fix: https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/16
+
 ### 0.12.8
 
 - Bug fix: https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/15

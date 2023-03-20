@@ -502,9 +502,9 @@ export const VariantEncumbranceBulkImpl = {
 											(game.settings.get(
 												CONSTANTS.MODULE_NAME,
 												"applyWeightMultiplierForEquippedContainer"
-											) || 0)
+											) || -1)
 									  )
-									: 0;
+									: -1;
 							if (applyWeightMultiplierForEquippedContainer > -1) {
 								itemWeight *= applyWeightMultiplierForEquippedContainer;
 							} else {
@@ -1434,9 +1434,9 @@ export function calcBulk(
 			const applyWeightMultiplierForEquippedContainer =
 				item.type === "backpack"
 					? <number>(
-							(game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedContainer") || 0)
+							(game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedContainer") || -1)
 					  )
-					: 0;
+					: -1;
 			if (applyWeightMultiplierForEquippedContainer > -1) {
 				itemWeight *= applyWeightMultiplierForEquippedContainer;
 			} else {
