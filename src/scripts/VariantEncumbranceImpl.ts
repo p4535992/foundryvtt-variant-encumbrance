@@ -1,7 +1,6 @@
 // Import JavaScript modules
 import {
 	EncumbranceActorType,
-	// EncumbranceActorType,
 	EncumbranceData,
 	EncumbranceDnd5e,
 	EncumbranceFlags,
@@ -34,7 +33,6 @@ import {
 import API from "./api";
 import type { EffectChangeData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData";
 import type { ItemData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
-import { aemlApi } from "./modules";
 
 /* ------------------------------------ */
 /* Constants         					*/
@@ -50,7 +48,12 @@ export const VariantEncumbranceImpl = {
 		if (updatedItems && updatedItems.length > 0) {
 			for (let i = 0; i < updatedItems.length; i++) {
 				const updatedItem: any = updatedItems ? (<any[]>updatedItems)[i] : undefined;
-				await VariantEncumbranceImpl._updateEncumbranceInternal(actorEntity, updatedItem, updatedEffect, mode);
+				await VariantEncumbranceImpl._updateEncumbranceInternal(
+					actorEntity,
+					updatedItem,
+					updatedEffect,
+					mode
+				);
 			}
 		} else {
 			await VariantEncumbranceImpl._updateEncumbranceInternal(actorEntity, undefined, updatedEffect, mode);
@@ -124,7 +127,6 @@ export const VariantEncumbranceImpl = {
 			if (im && physicalItems.includes(im.type)) {
 				if (im.id === currentItemId) {
 					if (mode === EncumbranceMode.DELETE) {
-						// setProperty(im, 'system.weight', 0);
 					} else {
 						inventoryItems.push(im);
 					}
@@ -137,7 +139,6 @@ export const VariantEncumbranceImpl = {
 			const im = <Item>game.items?.find((itemTmp: Item) => itemTmp.id === currentItemId);
 			if (im && physicalItems.includes(im.type)) {
 				if (mode === EncumbranceMode.DELETE) {
-					// setProperty(im, 'system.weight', 0);
 				} else {
 					inventoryItems.push(im);
 				}
@@ -500,24 +501,12 @@ export const VariantEncumbranceImpl = {
 
 				// Start Item container check
 				if (hasProperty(item, `flags.itemcollection`) && itemContainerActive) {
-					// Does the weight of the items in the container carry over to the actor?
-					//const weightless = getProperty(item, "system.capacity.weightless") ?? false;
-					// if (weightless) {
-					// 	itemWeight = getProperty(item, "flags.itemcollection.bagWeight") || 0;
-					// } else {
-					// itemWeight = calcItemWeight(item) + getProperty(item, 'flags.itemcollection.bagWeight');
-					// MOD 4535992 Removed variant encumbrance take care of this
 					itemWeight = calcWeight(
 						item,
 						useEquippedUnequippedItemCollectionFeature,
 						doNotApplyWeightForEquippedArmor,
 						ignoreCurrency
 					);
-					//@ts-ignore
-					// if (useEquippedUnequippedItemCollectionFeature) {
-					//	// ignoreEquipmentCheck = true;
-					// }
-					// }
 				} else {
 					// Does the weight of the items in the container carry over to the actor?
 					// TODO  wait for 2.2.0
@@ -1341,15 +1330,6 @@ export const VariantEncumbranceImpl = {
 			mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
 			value: "0"
 		});
-		// THIS IS THE DAE SOLUTION
-		// } else {
-		//   effect.changes.push({
-		//     key: 'system.attributes.movement.all',
-		//     mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
-		//     value: '0',
-		//     priority: 5,
-		//   });
-		// }
 	},
 
 	/**
@@ -1362,7 +1342,7 @@ export const VariantEncumbranceImpl = {
 	 * @returns {boolean} true if the effect is applied, false otherwise
 	 */
 	async hasEffectApplied(effectName: string, actor: Actor): Promise<boolean | undefined> {
-		return await aemlApi.hasEffectAppliedOnActor(<string>actor.id, effectName, true);
+		return await actor?.effects?.some((e) => ((e as any)?.name == effectName || (e as any)?.label == effectName) && !(e as any)?.disabled);
 	},
 
 	/**
@@ -1375,7 +1355,7 @@ export const VariantEncumbranceImpl = {
 	 * @returns {boolean} true if the effect is applied, false otherwise
 	 */
 	async hasEffectAppliedFromId(effect: ActiveEffect, actor: Actor): Promise<boolean | undefined> {
-		return await aemlApi.hasEffectAppliedFromIdOnActor(<string>actor.id, <string>effect.id, true);
+		return await actor?.effects?.some((e) => (e?.id == effect.id));
 	},
 
 	/**
@@ -1386,7 +1366,14 @@ export const VariantEncumbranceImpl = {
 	 * @param {string} uuid - the uuid of the actor to remove the effect from
 	 */
 	async removeEffect(effectName: string, actor: Actor) {
-		return await aemlApi.removeEffectOnActor(<string>actor.id, effectName);
+		if (effectName)
+			effectName = i18n(effectName);
+		const actorEffects = actor?.effects || [];
+		const effectToRemove = actorEffects.find((e) => ((e as any)?.label === effectName || (e as any)?.name === effectName));
+		if (!effectToRemove || !effectToRemove.id)
+			return undefined;
+		const activeEffectsRemoved = await actor.deleteEmbeddedDocuments("ActiveEffect", [effectToRemove.id]) || [];
+		return activeEffectsRemoved[0];
 	},
 
 	/**
@@ -1396,8 +1383,16 @@ export const VariantEncumbranceImpl = {
 	 * @param {string} effectName - the name of the effect to remove
 	 * @param {string} uuid - the uuid of the actor to remove the effect from
 	 */
-	async removeEffectFromId(effectToRemove: ActiveEffect, actor: Actor) {
-		return await aemlApi.removeEffectFromIdOnActor(<string>actor.id, <string>effectToRemove.id);
+	async removeEffectFromId(effect: ActiveEffect, actor: Actor) {
+		if (effect.id)
+		{
+			const effectToRemove = (actor?.effects || []).find((e) => e.id === effect.id);
+			if (!effectToRemove || !effectToRemove.id)
+				return undefined;
+			const activeEffectsRemoved = await actor.deleteEmbeddedDocuments("ActiveEffect", [effectToRemove.id]) || [];
+			return activeEffectsRemoved[0];
+		}
+		return undefined;
 	},
 
 	/**
@@ -1427,11 +1422,7 @@ export const VariantEncumbranceImpl = {
 		} else if (encumbranceTier === ENCUMBRANCE_TIERS.MAX) {
 			speedDecrease = null;
 		}
-		// let effect = VariantEncumbranceImpl.findEffectByName(effectName, actor.id);
-		//const actor = await VariantEncumbranceImpl._foundryHelpers.getActorByUuid(uuid);
-		// if (effect.isDynamic) {
 		const effect = <Effect>await VariantEncumbranceImpl.addDynamicEffects(effectName, actor, <number>speedDecrease);
-		// }
 		if (effect) {
 			effect.flags = {
 				"variant-encumbrance-dnd5e": {
@@ -1439,7 +1430,60 @@ export const VariantEncumbranceImpl = {
 				}
 			};
 			effect.isTemporary = true;
-			return await aemlApi.addEffectOnActor(<string>actor.id, effectName, effect);
+			effectName = i18n(effectName);
+			if (!origin) {
+				origin = `Actor.${actor.id}`;
+			}
+			effect.origin = effect.origin ? effect.origin : origin;
+			effect.overlay = false;
+			if (await this.hasEffectApplied(effectName, actor)) return undefined;
+			
+			// Create the Convenient Effects flags
+			let ceFlags = {};
+			if (!isNewerVersion(game.version, "10.999")) {
+				ceFlags = {
+					core: {
+						statusId: `Convenient Effect: ${effectName}`
+					}
+				};
+			}
+			ceFlags["dfreds-convenient-effects"] = {};
+			ceFlags["dfreds-convenient-effects"]["description"] = effect.description;
+			ceFlags["dfreds-convenient-effects"]["isConvenient"] = true;
+			ceFlags["dfreds-convenient-effects"]["isDynamic"] = effect.isDynamic;
+			ceFlags["dfreds-convenient-effects"]["isViewable"] =  effect.isViewable;
+			ceFlags["dfreds-convenient-effects"]["nestedEffects"] = effect.nestedEffects;
+			ceFlags["dfreds-convenient-effects"]["subEffects"] = effect.subEffects;
+			
+			const changes = effect._handleIntegrations();
+			const duration = {
+				rounds: ~~(effect.rounds ?? effect.seconds / CONFIG.time.roundTime),
+				seconds: ~~effect.seconds,
+				startRound: game.combat?.round,
+				startTime: game.time.worldTime,
+				startTurn: game.combat?.turn,
+				turns: ~~effect.turns
+			};
+			// Create the ActiveEffect document
+			// @league-of-foundry-developers is behind the curve here, 
+			// so we have to resort to some ts-ignores
+			let activeEffectData = new CONFIG.ActiveEffect.documentClass({
+				changes: changes, //changes
+				disabled: false,
+				duration: duration,
+				flags: foundry.utils.mergeObject(ceFlags, effect.flags),
+				icon: effect.icon, // icon
+				// @ts-ignore
+				name: effectName, // label
+				origin: origin, // origin
+				transfer: false,
+				// @ts-ignore
+				statuses: [`Convenient Effect: ${effectName}`]
+			});
+			// @ts-ignore
+			const activeEffectsAdded = await actor.createEmbeddedDocuments("ActiveEffect", [activeEffectData]) || [];
+			// @ts-ignore
+			return activeEffectsAdded[0];
 		}
 		return undefined;
 	}

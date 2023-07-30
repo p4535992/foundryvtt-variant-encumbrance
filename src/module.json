@@ -16,6 +16,12 @@
 			"ko-fi": "",
 			"reddit": "",
 			"email": ""
+		},
+		{
+			"name": "IHaveThatPower",
+			"url": "https://github.com/IHaveThatPower/",
+			"discord": "ihavethatpower",
+			"github": "IHaveThatPower"
 		}
 	],
 	"type": "module",
@@ -57,8 +63,7 @@
 	"styles": ["styles/VariantEncumbrance.css"],
 	"compatibility": {
 		"minimum": 10,
-		"verified": 10,
-		"maximum": 10
+		"verified": 11.306
 	},
 	"url": "https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e",
 	"manifest": "https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/releases/latest/download/module.json",
@@ -86,12 +91,6 @@
 			}
 		],
 		"requires": [
-			{
-				"id": "active-effect-manager-lib",
-				"type": "module",
-				"manifest": "https://github.com/p4535992/foundryvtt-active-effect-manager-lib/releases/latest/download/module.json",
-				"compatibility": {}
-			},
 			{
 				"id": "lib-wrapper",
 				"type": "module",
