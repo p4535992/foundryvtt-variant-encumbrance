@@ -48,8 +48,6 @@ export let dfQualityLifeActive: boolean;
 export let daeActive: boolean;
 export let backPackManagerActive: boolean;
 
-export let aemlApi: ActiveEffectManagerLibApi;
-
 export const initHooks = () => {
 	// warn("Init Hooks processing");
 
@@ -137,10 +135,6 @@ export const initHooks = () => {
 };
 
 export const setupHooks = async () => {
-	//@ts-ignore
-	aemlApi = <ActiveEffectManagerLibApi>game.modules.get("active-effect-manager-lib").api;
-	aemlApi.effectInterface.initialize(CONSTANTS.MODULE_NAME);
-
 	setApi(API);
 
 	// module specific
