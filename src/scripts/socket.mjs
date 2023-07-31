@@ -25,28 +25,28 @@ import { setSocket } from "../module";
 export let variantEncumbranceSocket;
 
 export function registerSocket() {
-	debug("Registered variantEncumbranceSocket");
-	if (variantEncumbranceSocket) {
-		return variantEncumbranceSocket;
-	}
-	//@ts-ignore
-	variantEncumbranceSocket = socketlib.registerModule(CONSTANTS.MODULE_NAME);
+  debug("Registered variantEncumbranceSocket");
+  if (variantEncumbranceSocket) {
+    return variantEncumbranceSocket;
+  }
+  //@ts-ignore
+  variantEncumbranceSocket = socketlib.registerModule(CONSTANTS.MODULE_NAME);
 
-	// variantEncumbranceSocket.register(SOCKET_HANDLERS.ON_RENDER_TOKEN_CONFIG, (...args) =>
-	//   API._onRenderTokenConfig(...args),
-	// );
+  // variantEncumbranceSocket.register(SOCKET_HANDLERS.ON_RENDER_TOKEN_CONFIG, (...args) =>
+  //   API._onRenderTokenConfig(...args),
+  // );
 
-	// =========================================================
-	variantEncumbranceSocket.register("calculateWeightOnActorFromId", (...args) =>
-		API.calculateWeightOnActorFromIdArr(...args)
-	);
-	variantEncumbranceSocket.register("calculateWeightOnTokenFromId", (...args) =>
-		API.calculateWeightOnTokenFromIdArr(...args)
-	);
-	variantEncumbranceSocket.register("calculateWeightOnActor", (...args) => API.calculateWeightOnActorArr(...args));
+  // =========================================================
+  variantEncumbranceSocket.register("calculateWeightOnActorFromId", (...args) =>
+    API.calculateWeightOnActorFromIdArr(...args)
+  );
+  variantEncumbranceSocket.register("calculateWeightOnTokenFromId", (...args) =>
+    API.calculateWeightOnTokenFromIdArr(...args)
+  );
+  variantEncumbranceSocket.register("calculateWeightOnActor", (...args) => API.calculateWeightOnActorArr(...args));
 
-	setSocket(variantEncumbranceSocket);
-	return variantEncumbranceSocket;
+  setSocket(variantEncumbranceSocket);
+  return variantEncumbranceSocket;
 }
 
 // async function callHook(inHookName, ...args) {

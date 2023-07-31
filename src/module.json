@@ -1,114 +1,115 @@
 {
-	"id": "variant-encumbrance-dnd5e",
-	"title": "Variant Encumbrance+Midi",
-	"description": "A module for D&D 5th Edition, to automatically modify character carry weights to match the Variant Encumbrance optional rule set.",
-	"version": "0.12.9",
-	"authors": [
-		{ "name": "Vanir#0001 (discord)" },
-		{ "name": "47Y" },
-		{
-			"name": "p4535992",
-			"url": "https://github.com/p4535992",
-			"discord": "",
-			"twitter": "",
-			"patreon": "",
-			"github": "p4535992",
-			"ko-fi": "",
-			"reddit": "",
-			"email": ""
-		},
-		{
-			"name": "IHaveThatPower",
-			"url": "https://github.com/IHaveThatPower/",
-			"discord": "ihavethatpower",
-			"github": "IHaveThatPower"
-		}
-	],
-	"type": "module",
-	"socket": true,
-	"includes": [
-		"./assets/**",
-		"./lang/**",
-		"./languages/**",
-		"./scripts/**",
-		"./styles/**",
-		"./templates/**",
-		"./module.json",
-		"./README.md",
-		"./icons/**",
-		"./packs/**"
-	],
-	"media": [
-		{
-			"type": "icon",
-			"location": ""
-		},
-		{
-			"type": "cover",
-			"location": ""
-		},
-		{
-			"type": "screenshot",
-			"location": ""
-		}
-	],
-	"languages": [
-		{
-			"lang": "en",
-			"name": "English",
-			"path": "languages/en.json"
-		}
-	],
-	"esmodules": ["VariantEncumbrance.js"],
-	"styles": ["styles/VariantEncumbrance.css"],
-	"compatibility": {
-		"minimum": 10,
-		"verified": 11.306
-	},
-	"url": "https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e",
-	"manifest": "https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/releases/latest/download/module.json",
-	"download": "https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/releases/latest/download/module.zip",
-	"readme": "https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/blob/v0.12.9 /README.md",
-	"changelog": "https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/blob/v0.12.9 /changelog.md",
-	"bugs": "https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues",
-	"allowBugReporter": true,
-	"manifestPlusVersion": "1.2.0",
-	"relationships": {
-		"systems": [
-			{
-				"id": "dnd5e",
-				"type": "system",
-				"manifest": "https://raw.githubusercontent.com/foundryvtt/dnd5e/master/system.json",
-				"compatibility": {
-					"verified": "2.0.2"
-				}
-			},
-			{
-				"id": "sw5e",
-				"type": "system",
-				"manifest": "https://raw.githubusercontent.com/unrealkakeman89/sw5e/master/system.json",
-				"compatibility": {}
-			}
-		],
-		"requires": [
-			{
-				"id": "lib-wrapper",
-				"type": "module",
-				"manifest": "https://github.com/ruipin/fvtt-lib-wrapper/releases/latest/download/module.json",
-				"compatibility": {}
-			},
-			{
-				"id": "socketlib",
-				"type": "module",
-				"manifest": "https://raw.githubusercontent.com/manuelVo/foundryvtt-socketlib/develop/module.json",
-				"compatibility": {}
-			}
-		],
-		"conflicts": [
-			{
-				"id": "df-qol",
-				"reason": "Minor issue: possible wrong calculation on vehicle sheet with the feature \"Vehicle Cargo Capacity Unit\", it should work, but i'm not tested all the use cases, open a issue if you encounter any problem"
-			}
-		]
-	}
+  "id": "variant-encumbrance-dnd5e",
+  "title": "Variant Encumbrance+Midi",
+  "description": "A module for D&D 5th Edition, to automatically modify character carry weights to match the Variant Encumbrance optional rule set.",
+  "version": "0.13.0",
+  "authors": [
+    { "name": "Vanir#0001 (discord)" },
+    { "name": "47Y" },
+    {
+      "name": "p4535992",
+      "url": "https://github.com/p4535992",
+      "discord": "",
+      "twitter": "",
+      "patreon": "",
+      "github": "p4535992",
+      "ko-fi": "",
+      "reddit": "",
+      "email": ""
+    },
+    {
+      "name": "IHaveThatPower",
+      "url": "https://github.com/IHaveThatPower/",
+      "discord": "ihavethatpower",
+      "github": "IHaveThatPower"
+    }
+  ],
+  "type": "module",
+  "socket": true,
+  "includes": [
+    "./assets/**",
+    "./lang/**",
+    "./languages/**",
+    "./scripts/**",
+    "./styles/**",
+    "./templates/**",
+    "./module.json",
+    "./README.md",
+    "./icons/**",
+    "./packs/**"
+  ],
+  "media": [
+    {
+      "type": "icon",
+      "location": ""
+    },
+    {
+      "type": "cover",
+      "location": ""
+    },
+    {
+      "type": "screenshot",
+      "location": ""
+    }
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "languages/en.json"
+    }
+  ],
+  "esmodules": ["module.js"],
+  "styles": ["styles/VariantEncumbrance.css"],
+  "compatibility": {
+    "minimum": 11,
+    "verified": 11,
+    "maximum": 11
+  },
+  "url": "https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e",
+  "manifest": "https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/releases/download/v0.13.0/module.json",
+  "download": "https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/releases/download/v0.13.0/module.zip",
+  "readme": "https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/blob/v0.13.0/README.md",
+  "changelog": "https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/blob/v0.13.0/changelog.md",
+  "bugs": "https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues",
+  "allowBugReporter": true,
+  "manifestPlusVersion": "1.2.0",
+  "relationships": {
+    "systems": [
+      {
+        "id": "dnd5e",
+        "type": "system",
+        "manifest": "https://raw.githubusercontent.com/foundryvtt/dnd5e/master/system.json",
+        "compatibility": {
+          "verified": "2.2.1"
+        }
+      },
+      {
+        "id": "sw5e",
+        "type": "system",
+        "manifest": "https://raw.githubusercontent.com/unrealkakeman89/sw5e/master/system.json",
+        "compatibility": {}
+      }
+    ],
+    "requires": [
+      {
+        "id": "lib-wrapper",
+        "type": "module",
+        "manifest": "https://github.com/ruipin/fvtt-lib-wrapper/releases/latest/download/module.json",
+        "compatibility": {}
+      },
+      {
+        "id": "socketlib",
+        "type": "module",
+        "manifest": "https://raw.githubusercontent.com/manuelVo/foundryvtt-socketlib/develop/module.json",
+        "compatibility": {}
+      }
+    ],
+    "conflicts": [
+      {
+        "id": "df-qol",
+        "reason": "Minor issue: possible wrong calculation on vehicle sheet with the feature \"Vehicle Cargo Capacity Unit\", it should work, but i'm not tested all the use cases, open a issue if you encounter any problem"
+      }
+    ]
+  }
 }

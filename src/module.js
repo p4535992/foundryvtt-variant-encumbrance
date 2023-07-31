@@ -22,46 +22,46 @@ import API from "./scripts/api.mjs";
 /* Initialize module					*/
 /* ------------------------------------ */
 Hooks.once("init", async () => {
-	// console.log(`${CONSTANTS.MODULE_NAME} | Initializing ${CONSTANTS.MODULE_NAME}`);
+  // console.log(`${CONSTANTS.MODULE_NAME} | Initializing ${CONSTANTS.MODULE_NAME}`);
 
-	// Register custom module settings
-	registerSettings();
+  // Register custom module settings
+  registerSettings();
 
-	initHooks();
-	// Assign custom classes and constants here
+  initHooks();
+  // Assign custom classes and constants here
 
-	// Register custom module settings
-	//registerSettings();
-	//fetchParams();
+  // Register custom module settings
+  //registerSettings();
+  //fetchParams();
 
-	// Preload Handlebars templates
-	// await preloadTemplates();
-	// Register custom sheets (if any)
+  // Preload Handlebars templates
+  // await preloadTemplates();
+  // Register custom sheets (if any)
 });
 
 /* ------------------------------------ */
 /* Setup module							*/
 /* ------------------------------------ */
 Hooks.once("setup", function () {
-	setupHooks();
+  setupHooks();
 });
 
 /* ------------------------------------ */
 /* When ready							*/
 /* ------------------------------------ */
 Hooks.once("ready", () => {
-	// Do anything once the module is ready
-	if (!game.modules.get("lib-wrapper")?.active && game.user?.isGM) {
-		let word = "install and activate";
-		if (game.modules.get("lib-wrapper")) word = "activate";
-		throw error(`Requires the 'libWrapper' module. Please ${word} it.`);
-	}
-	if (!game.modules.get("socketlib")?.active && game.user?.isGM) {
-		let word = "install and activate";
-		if (game.modules.get("socketlib")) word = "activate";
-		throw error(`Requires the 'socketlib' module. Please ${word} it.`);
-	}
-	readyHooks();
+  // Do anything once the module is ready
+  if (!game.modules.get("lib-wrapper")?.active && game.user?.isGM) {
+    let word = "install and activate";
+    if (game.modules.get("lib-wrapper")) word = "activate";
+    throw error(`Requires the 'libWrapper' module. Please ${word} it.`);
+  }
+  if (!game.modules.get("socketlib")?.active && game.user?.isGM) {
+    let word = "install and activate";
+    if (game.modules.get("socketlib")) word = "activate";
+    throw error(`Requires the 'socketlib' module. Please ${word} it.`);
+  }
+  readyHooks();
 });
 
 // Add any additional hooks if necessary
@@ -71,8 +71,8 @@ Hooks.once("ready", () => {
  * @param api to set to game module.
  */
 export function setApi(api) {
-	const data = game.modules.get(CONSTANTS.MODULE_NAME);
-	data.api = api;
+  const data = game.modules.get(CONSTANTS.MODULE_NAME);
+  data.api = api;
 }
 
 /**
@@ -80,8 +80,8 @@ export function setApi(api) {
  * @returns Api from games module.
  */
 export function getApi() {
-	const data = game.modules.get(CONSTANTS.MODULE_NAME);
-	return data.api;
+  const data = game.modules.get(CONSTANTS.MODULE_NAME);
+  return data.api;
 }
 
 /**
@@ -89,8 +89,8 @@ export function getApi() {
  * @param socket to set to game module.
  */
 export function setSocket(socket) {
-	const data = game.modules.get(CONSTANTS.MODULE_NAME);
-	data.socket = socket;
+  const data = game.modules.get(CONSTANTS.MODULE_NAME);
+  data.socket = socket;
 }
 
 /*
@@ -98,6 +98,6 @@ export function setSocket(socket) {
  * @returns Socket from games module.
  */
 export function getSocket() {
-	const data = game.modules.get(CONSTANTS.MODULE_NAME);
-	return data.socket;
+  const data = game.modules.get(CONSTANTS.MODULE_NAME);
+  return data.socket;
 }
