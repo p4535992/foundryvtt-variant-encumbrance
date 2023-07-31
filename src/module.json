@@ -57,7 +57,12 @@
       "lang": "en",
       "name": "English",
       "path": "languages/en.json"
-    }
+    },
+		{
+			"lang": "pl",
+			"name": "polski",
+			"path": "languages/pl.json"
+		}
   ],
   "esmodules": ["module.js"],
   "styles": ["styles/VariantEncumbrance.css"],

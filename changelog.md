@@ -1,3 +1,11 @@
+## 0.13.0
+
+- Upgrade for v11
+- Remove dependencies to 'Active Effect Manager' in favor o Dfred Active Effect
+- Update and bug fixing ty to @IHaveThatPower
+- Abbadoned Typescript in favor of javascript+svelte integration with tyhponjs plugins
+- Fix: https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/18
+
 ## 0.12.9 
 
 - Bug fix: https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/16

@@ -1270,24 +1270,33 @@ export const VariantEncumbranceBulkImpl = {
       }
       effect.origin = effect.origin ? effect.origin : origin;
       effect.overlay = false;
-      if (await this.hasEffectApplied(effectName, actor)) return undefined;
-
+      if (await this.hasEffectApplied(effectName, actor)) {
+        return undefined;
+      }
       // Create the Convenient Effects flags
       let ceFlags = {};
-      if (!isNewerVersion(game.version, "10.999")) {
-        ceFlags = {
-          core: {
-            statusId: `Convenient Effect: ${effectName}`,
-          },
-        };
-      }
-      ceFlags["dfreds-convenient-effects"] = {};
-      ceFlags["dfreds-convenient-effects"]["description"] = effect.description;
-      ceFlags["dfreds-convenient-effects"]["isConvenient"] = true;
-      ceFlags["dfreds-convenient-effects"]["isDynamic"] = effect.isDynamic;
-      ceFlags["dfreds-convenient-effects"]["isViewable"] = effect.isViewable;
-      ceFlags["dfreds-convenient-effects"]["nestedEffects"] = effect.nestedEffects;
-      ceFlags["dfreds-convenient-effects"]["subEffects"] = effect.subEffects;
+      // if (!isNewerVersion(game.version, "10.999")) {
+      //   ceFlags = {
+      //     core: {
+      //       statusId: `Convenient Effect: ${effectName}`,
+      //     },
+      //   };
+      // }
+      ceFlags[CONSTANTS.DFREDS_CONVENIENT_EFFECTS_MODULE_NAME] = {};
+      ceFlags[CONSTANTS.DFREDS_CONVENIENT_EFFECTS_MODULE_NAME][CONSTANTS.DFREDS_CONVENIENT_EFFECTS.FLAGS.DESCRIPTION] =
+        effect.description;
+      ceFlags[CONSTANTS.DFREDS_CONVENIENT_EFFECTS_MODULE_NAME][
+        CONSTANTS.DFREDS_CONVENIENT_EFFECTS.FLAGS.IS_CONVENIENT
+      ] = true;
+      ceFlags[CONSTANTS.DFREDS_CONVENIENT_EFFECTS_MODULE_NAME][CONSTANTS.DFREDS_CONVENIENT_EFFECTS.FLAGS.IS_DYNAMIC] =
+        effect.isDynamic;
+      ceFlags[CONSTANTS.DFREDS_CONVENIENT_EFFECTS_MODULE_NAME][CONSTANTS.DFREDS_CONVENIENT_EFFECTS.FLAGS.IS_VIEWABLE] =
+        effect.isViewable;
+      ceFlags[CONSTANTS.DFREDS_CONVENIENT_EFFECTS_MODULE_NAME][
+        CONSTANTS.DFREDS_CONVENIENT_EFFECTS.FLAGS.NESTED_EFFECTS
+      ] = effect.nestedEffects;
+      ceFlags[CONSTANTS.DFREDS_CONVENIENT_EFFECTS_MODULE_NAME][CONSTANTS.DFREDS_CONVENIENT_EFFECTS.FLAGS.SUB_EFFECTS] =
+        effect.subEffects;
 
       const changes = effect._handleIntegrations();
       const duration = {
