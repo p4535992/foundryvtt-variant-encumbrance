@@ -1106,10 +1106,10 @@ const module = {
       // =============================
 
       htmlElementEncumbranceVariant.find(".encumbrance-breakpoint").each(function (el) {
-        $(el).addClass("encumbrance-breakpoint-variant");
+        $(this).addClass("encumbrance-breakpoint-variant");
       });
       htmlElementEncumbranceVariant.find(".encumbrance-breakpoint-label").each(function (el) {
-        $(el).addClass("encumbrance-breakpoint-label-variant");
+        $(this).addClass("encumbrance-breakpoint-label-variant");
       });
 
       let encumbranceElements;
@@ -1255,6 +1255,7 @@ const module = {
 
         encumbranceElements[0].classList.remove("medium");
         encumbranceElements[0].classList.remove("heavy");
+        encumbranceElements[0].classList.remove("max");
 
         if (encumbranceData.encumbranceTier === ENCUMBRANCE_TIERS.LIGHT) {
           encumbranceElements[0].classList.add("medium");

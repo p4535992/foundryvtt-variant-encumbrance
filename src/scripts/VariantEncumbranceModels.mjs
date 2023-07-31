@@ -41,23 +41,23 @@ export class EncumbranceBulkData extends EncumbranceData {
   minimumBulk = 0;
 }
 
-export class EncumbranceFlags {
-  // TIER = 'tier';
-  // WEIGHT = 'weight';
-  BURROW = "burrow";
-  CLIMB = "climb";
-  FLY = "fly";
-  SWIM = "swim";
-  WALK = "walk";
-  DATA = "data";
-  ENABLED_AE = "enabledae";
-  ENABLED_WE = "enabledwe";
-  // UNIT = 'unit';
+export const EncumbranceFlags = {
+  // TIER: 'tier',
+  // WEIGHT: 'weight',
+  BURROW: "burrow",
+  CLIMB: "climb",
+  FLY: "fly",
+  SWIM: "swim",
+  WALK: "walk",
+  DATA: "data",
+  ENABLED_AE: "enabledae",
+  ENABLED_WE: "enabledwe",
+  // UNIT: 'unit',
   // System bulk
-  DATA_BULK = "bulk";
-  ENABLED_AE_BULK = "enabledaebulk";
-  ENABLED_WE_BULK = "enabledwebulk";
-}
+  DATA_BULK: "bulk",
+  ENABLED_AE_BULK: "enabledaebulk",
+  ENABLED_WE_BULK: "enabledwebulk",
+};
 
 // export class EncumbranceFlagData {
 //   tier = 0;
@@ -69,24 +69,24 @@ export class EncumbranceFlags {
 //   walk = 0;
 // }
 
-export class EncumbranceMode {
-  ADD = "add";
-  DELETE = "delete";
-  UPDATE = "update";
-}
+export const EncumbranceMode = {
+  ADD: "add",
+  DELETE: "delete",
+  UPDATE: "update",
+};
 
-export class EncumbranceActorType {
-  CHARACTER = "character"; // Player Character
-  NPC = "NPC"; // Non-Player Character
-  VEHICLE = "vehicle"; // Vehicle
-}
+export const EncumbranceActorType = {
+  CHARACTER: "character", // Player Character
+  NPC: "NPC", // Non-Player Character
+  VEHICLE: "vehicle", // Vehicle
+};
 
-export class ENCUMBRANCE_TIERS {
-  NONE = 0;
-  LIGHT = 1;
-  HEAVY = 2;
-  MAX = 3;
-}
+export const ENCUMBRANCE_TIERS = {
+  NONE: 0,
+  LIGHT: 1,
+  HEAVY: 2,
+  MAX: 3,
+};
 
 export const BULK_CATEGORY = {
   // None
