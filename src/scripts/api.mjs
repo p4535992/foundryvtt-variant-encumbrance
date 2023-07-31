@@ -1,11 +1,11 @@
-import { VariantEncumbranceImpl } from "./VariantEncumbranceImpl";
-import CONSTANTS from "./constants";
-import type Effect from "./effects/effect";
-import { checkBulkCategory, error, isStringEquals, warn } from "./lib/lib";
+import { VariantEncumbranceImpl } from "./VariantEncumbranceImpl.mjs";
+import CONSTANTS from "./constants.mjs";
+import type Effect from "./effects/effect.mjs";
+import { checkBulkCategory, error, isStringEquals, warn } from "./lib/lib.mjs";
 import type { ActiveEffectData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
 import type { EncumbranceBulkData, EncumbranceData } from "./VariantEncumbranceModels";
-import { VariantEncumbranceBulkImpl } from "./VariantEncumbranceBulkImpl";
-import { invPlusActive } from "./modules";
+import { VariantEncumbranceBulkImpl } from "./VariantEncumbranceBulkImpl.mjs";
+import { invPlusActive } from "./modules.mjs";
 
 const API = {
 	async calculateWeightOnActorFromIdArr(...inAttributes: any[]): Promise<EncumbranceData | undefined> {

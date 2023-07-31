@@ -1,4 +1,4 @@
-import { isEnabledActorType, VariantEncumbranceImpl } from "./VariantEncumbranceImpl";
+import { isEnabledActorType, VariantEncumbranceImpl } from "./VariantEncumbranceImpl.mjs";
 import {
 	EncumbranceData,
 	EncumbranceMode,
@@ -24,13 +24,13 @@ import {
 	i18nFormat,
 	is_real_number,
 	warn
-} from "./lib/lib";
-import CONSTANTS from "./constants";
-import { registerSocket } from "./socket";
-import API from "./api";
-import { calcBulk, VariantEncumbranceBulkImpl } from "./VariantEncumbranceBulkImpl";
+} from "./lib/lib.mjs";
+import CONSTANTS from "./constants.mjs";
+import { registerSocket } from "./socket.mjs";
+import API from "./api.mjs";
+import { calcBulk, VariantEncumbranceBulkImpl } from "./VariantEncumbranceBulkImpl.mjs";
 import { setApi } from "../module";
-import type { ActiveEffectManagerLibApi } from "./effects/effect-api";
+import type { ActiveEffectManagerLibApi } from "./effects/effect-api.mjs";
 import type { ItemData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
 
 export let ENCUMBRANCE_STATE = {

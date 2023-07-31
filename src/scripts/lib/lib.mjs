@@ -1,15 +1,15 @@
 import { BULK_CATEGORY, BulkData, EncumbranceActorType } from "./../VariantEncumbranceModels";
-import CONSTANTS from "../constants.js";
+import CONSTANTS from "../constants.mjs";
 import type {
 	EffectChangeData,
 	EffectChangeDataProperties
 } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData";
 import type EmbeddedCollection from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/abstract/embedded-collection.mjs";
 import type { ActorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
-import { calcBulk } from "../VariantEncumbranceBulkImpl";
-import { backPackManagerActive, itemContainerActive } from "../modules";
-import { calcWeight } from "../VariantEncumbranceImpl";
-import API from "../api";
+import { calcBulk } from "../VariantEncumbranceBulkImpl.mjs";
+import { backPackManagerActive, itemContainerActive } from "../modules.mjs";
+import { calcWeight } from "../VariantEncumbranceImpl.mjs";
+import API from "../api.mjs";
 
 // =============================
 // Module Generic function

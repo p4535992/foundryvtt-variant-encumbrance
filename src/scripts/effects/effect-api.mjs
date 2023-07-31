@@ -1,6 +1,6 @@
 import type { EffectChangeData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData";
 import type { PropertiesToSource } from "@league-of-foundry-developers/foundry-vtt-types/src/types/helperTypes";
-import type Effect from "./effect";
+import type Effect from "./effect.mjs";
 
 export interface ActiveEffectManagerLibApi {
 	effectInterface: EffectInterfaceApi;

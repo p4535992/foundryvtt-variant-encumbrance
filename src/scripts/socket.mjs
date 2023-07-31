@@ -1,6 +1,6 @@
-import CONSTANTS from "./constants";
-import API from "./api";
-import { debug } from "./lib/lib";
+import CONSTANTS from "./constants.mjs";
+import API from "./api.mjs";
+import { debug } from "./lib/lib.mjs";
 import { setSocket } from "../module";
 
 // export const SOCKET_HANDLERS = {
