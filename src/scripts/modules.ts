@@ -29,7 +29,7 @@ import CONSTANTS from "./constants";
 import { registerSocket } from "./socket";
 import API from "./api";
 import { calcBulk, VariantEncumbranceBulkImpl } from "./VariantEncumbranceBulkImpl";
-import { setApi } from "../VariantEncumbrance";
+import { setApi } from "../module";
 import type { ActiveEffectManagerLibApi } from "./effects/effect-api";
 import type { ItemData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
 

@@ -1,7 +1,7 @@
 import CONSTANTS from "./constants";
 import API from "./api";
 import { debug } from "./lib/lib";
-import { setSocket } from "../VariantEncumbrance";
+import { setSocket } from "../module";
 
 // export const SOCKET_HANDLERS = {
 // 	/**
