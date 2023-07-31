@@ -1,14 +1,14 @@
 export class VariantEncumbranceItemData {
-	_id: string;
-	weight: number;
-	quantity: number;
-	totalWeight: number;
-	proficient: boolean;
-	equipped: boolean;
-	type: string;
-	// invPlusCategoryId: string;
-	flags: any;
-	itemCollectionWeightless: boolean;
+	_id = "";
+	weight = 0;
+	quantity = 0;
+	totalWeight = 0;
+	proficient = false;
+	equipped = false;
+	type = "";
+	// invPlusCategoryId = "";
+	flags = {};
+	itemCollectionWeightless = false;
 }
 
 // export class VariantEncumbranceEffectData {
@@ -17,80 +17,80 @@ export class VariantEncumbranceItemData {
 // }
 
 export class EncumbranceDnd5e {
-	value: number;
-	max: number;
-	pct: number;
-	encumbered?: boolean; //Vehicle not have this
+	value = 0;
+	max = 0;
+	pct = 0;
+	encumbered = false; //Vehicle not have this
 }
 
 export class EncumbranceData {
-	totalWeight: number;
-	totalWeightToDisplay: number;
-	lightMax: number;
-	mediumMax: number;
-	heavyMax: number;
-	encumbranceTier: number;
-	speedDecrease: number;
-	unit: string;
-	encumbrance: EncumbranceDnd5e;
-	mapItemEncumbrance: { [index: string]: number };
+	totalWeight = 0;
+	totalWeightToDisplay = 0;
+	lightMax = 0;
+	mediumMax = 0;
+	heavyMax = 0;
+	encumbranceTier = 0;
+	speedDecrease = 0;
+	unit = "";
+	encumbrance = {};
+	mapItemEncumbrance = {};
 }
 
 export class EncumbranceBulkData extends EncumbranceData {
-	inventorySlot: number;
-	minimumBulk: number;
+	inventorySlot = 0;
+	minimumBulk = 0;
 }
 
-export enum EncumbranceFlags {
-	// TIER = 'tier',
-	// WEIGHT = 'weight',
-	BURROW = "burrow",
-	CLIMB = "climb",
-	FLY = "fly",
-	SWIM = "swim",
-	WALK = "walk",
-	DATA = "data",
-	ENABLED_AE = "enabledae",
-	ENABLED_WE = "enabledwe",
-	// UNIT = 'unit',
+export class EncumbranceFlags {
+	// TIER = 'tier';
+	// WEIGHT = 'weight';
+	BURROW = "burrow";
+	CLIMB = "climb";
+	FLY = "fly";
+	SWIM = "swim";
+	WALK = "walk";
+	DATA = "data";
+	ENABLED_AE = "enabledae";
+	ENABLED_WE = "enabledwe";
+	// UNIT = 'unit';
 	// System bulk
-	DATA_BULK = "bulk",
-	ENABLED_AE_BULK = "enabledaebulk",
-	ENABLED_WE_BULK = "enabledwebulk"
+	DATA_BULK = "bulk";
+	ENABLED_AE_BULK = "enabledaebulk";
+	ENABLED_WE_BULK = "enabledwebulk";
 }
 
 // export class EncumbranceFlagData {
-//   tier: number;
-//   weight: number;
-//   burrow: number;
-//   climb: number;
-//   fly: number;
-//   swim: number;
-//   walk: number;
+//   tier = 0;
+//   weight = 0;
+//   burrow = 0;
+//   climb = 0;
+//   fly = 0;
+//   swim = 0;
+//   walk = 0;
 // }
 
-export enum EncumbranceMode {
-	ADD = "add",
-	DELETE = "delete",
-	UPDATE = "update"
+export class EncumbranceMode {
+	ADD = "add";
+	DELETE = "delete";
+	UPDATE = "update";
 }
 
-export enum EncumbranceActorType {
-	CHARACTER = "character", // Player Character
-	NPC = "NPC", // Non-Player Character
-	VEHICLE = "vehicle" // Vehicle
+export class EncumbranceActorType {
+	CHARACTER = "character"; // Player Character
+	NPC = "NPC"; // Non-Player Character
+	VEHICLE = "vehicle"; // Vehicle
 }
 
-export enum ENCUMBRANCE_TIERS {
-	NONE = 0,
-	LIGHT = 1,
-	HEAVY = 2,
-	MAX = 3
+export class ENCUMBRANCE_TIERS {
+	NONE = 0;
+	LIGHT = 1;
+	HEAVY = 2;
+	MAX = 3;
 }
 
 export const BULK_CATEGORY = {
 	// None
-	NONE: <BulkData>{
+	NONE: {
 		category: "None",
 		bulk: 0,
 		size: "None",
@@ -100,7 +100,7 @@ export const BULK_CATEGORY = {
 		weightMax: 0
 	},
 	// Smaller than the palm of your hand. You can hold many of these in one hand. A negligible or trivial weight.
-	TINY: <BulkData>{
+	TINY: {
 		category: "Tiny",
 		bulk: 0.2,
 		size: "Tiny",
@@ -110,7 +110,7 @@ export const BULK_CATEGORY = {
 		weightMax: 2
 	},
 	// Up to a handspan / 9 inches. Can be held comfortably with one hand. Up to 2 lbs. The weight of a loaf of bread or a bag of sugar.
-	SMALL: <BulkData>{
+	SMALL: {
 		category: "Small",
 		bulk: 1,
 		size: "Short",
@@ -120,7 +120,7 @@ export const BULK_CATEGORY = {
 		weightMax: 5
 	},
 	// Up to an arms-length / 2 feet long. Can be held with one hand. Up to 5 lbs. About as heavy as a few big bags of sugar.
-	MEDIUM: <BulkData>{
+	MEDIUM: {
 		category: "Medium",
 		bulk: 2,
 		size: "Medium",
@@ -130,7 +130,7 @@ export const BULK_CATEGORY = {
 		weightMax: 10
 	},
 	// Longer than an arm. Usually can be held with one hand, but us most comfortable with two. Up to 10 lbs. About as heavy as a cat or a sack of potatoes.
-	LARGE: <BulkData>{
+	LARGE: {
 		category: "Large",
 		bulk: 3,
 		size: "Long",
@@ -140,7 +140,7 @@ export const BULK_CATEGORY = {
 		weightMax: 35
 	},
 	// Longer than the height of an average person. Requires two hands to hold. Up to 35 lbs. About a quarter of the weight of an average person.
-	X_LARGE: <BulkData>{
+	X_LARGE: {
 		category: "X-Large",
 		bulk: 6,
 		size: "Extra-long",
@@ -150,7 +150,7 @@ export const BULK_CATEGORY = {
 		weightMax: 70
 	},
 	// Longer than the height of two people. Requires two hands to hold. Up to 70 lbs. About half as heavy as an average person.
-	XX_LARGE: <BulkData>{
+	XX_LARGE: {
 		category: "XX-Large",
 		bulk: 9,
 		size: "Extensive",
@@ -171,11 +171,11 @@ export const BULK_CATEGORIES = [
 ];
 
 export class BulkData {
-	category: string;
-	bulk: number;
-	size: string;
-	weight: string;
-	description: string;
+	category = "";
+	bulk = 0;
+	size = "";
+	weight = "";
+	description = "";
 }
 
 export const SUPPORTED_SHEET = [

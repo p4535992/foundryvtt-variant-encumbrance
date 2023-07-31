@@ -1,14 +1,12 @@
 import { VariantEncumbranceImpl } from "./VariantEncumbranceImpl.mjs";
 import CONSTANTS from "./constants.mjs";
-import type Effect from "./effects/effect.mjs";
+import Effect from "./effects/effect.mjs";
 import { checkBulkCategory, error, isStringEquals, warn } from "./lib/lib.mjs";
-import type { ActiveEffectData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
-import type { EncumbranceBulkData, EncumbranceData } from "./VariantEncumbranceModels";
 import { VariantEncumbranceBulkImpl } from "./VariantEncumbranceBulkImpl.mjs";
 import { invPlusActive } from "./modules.mjs";
 
 const API = {
-	async calculateWeightOnActorFromIdArr(...inAttributes: any[]): Promise<EncumbranceData | undefined> {
+	async calculateWeightOnActorFromIdArr(...inAttributes) {
 		if (!Array.isArray(inAttributes)) {
 			throw error("calculateWeightOnActorFromIdArr | inAttributes must be of type array");
 		}
@@ -16,10 +14,10 @@ const API = {
 		return this.calculateWeightOnActorFromId(actorIdOrName);
 	},
 
-	calculateWeightOnActorFromId(actorIdOrName: string): EncumbranceData | undefined {
+	calculateWeightOnActorFromId(actorIdOrName) {
 		const actor = game.actors?.contents.find((actorEntity) => {
 			return (
-				isStringEquals(actorEntity.id, actorIdOrName) || isStringEquals(<string>actorEntity.name, actorIdOrName)
+				isStringEquals(actorEntity.id, actorIdOrName) || isStringEquals(actorEntity.name, actorIdOrName)
 			);
 		});
 		if (!actor) {
@@ -29,7 +27,7 @@ const API = {
 		return this.calculateWeightOnActor(actor);
 	},
 
-	async calculateWeightOnTokenFromIdArr(...inAttributes: any[]): Promise<EncumbranceData | undefined> {
+	async calculateWeightOnTokenFromIdArr(...inAttributes) {
 		if (!Array.isArray(inAttributes)) {
 			throw error("calculateWeightOnTokenFromIdArr | inAttributes must be of type array");
 		}
@@ -37,7 +35,7 @@ const API = {
 		return this.calculateWeightOnTokenFromId(tokenIdOrName);
 	},
 
-	calculateWeightOnTokenFromId(tokenIdOrName: string): EncumbranceData | undefined {
+	calculateWeightOnTokenFromId(tokenIdOrName) {
 		const token = canvas.tokens?.placeables.find((tokenEntity) => {
 			return isStringEquals(tokenEntity.id, tokenIdOrName) || isStringEquals(tokenEntity.name, tokenIdOrName);
 		});
@@ -53,27 +51,27 @@ const API = {
 		return this.calculateWeightOnActor(actor);
 	},
 
-	async calculateWeightOnActorArr(...inAttributes: any[]): Promise<EncumbranceData | undefined> {
+	async calculateWeightOnActorArr(...inAttributes) {
 		if (!Array.isArray(inAttributes)) {
 			throw error("calculateWeightOnActorArr | inAttributes must be of type array");
 		}
 		const [actorIdOrName] = inAttributes;
 		const actor = game.actors?.contents.find((actorEntity) => {
 			return (
-				isStringEquals(actorEntity.id, actorIdOrName) || isStringEquals(<string>actorEntity.name, actorIdOrName)
+				isStringEquals(actorEntity.id, actorIdOrName) || isStringEquals(actorEntity.name, actorIdOrName)
 			);
 		});
 		return this.calculateWeightOnActor(actor);
 	},
 
-	calculateWeightOnActor(actor: Actor): EncumbranceData | undefined {
+	calculateWeightOnActor(actor) {
 		if (!actor) {
 			warn(`No actor is been passed`);
 			return;
 		}
 		const physicalItems = ["weapon", "equipment", "consumable", "tool", "backpack", "loot"];
-		const inventoryItems: Item[] = [];
-		actor.items.contents.forEach((im: Item) => {
+		const inventoryItems = [];
+		actor.items.contents.forEach((im) => {
 			if (im && physicalItems.includes(im.type)) {
 				inventoryItems.push(im);
 			}
@@ -89,7 +87,7 @@ const API = {
 
 	// ====================================================
 
-	async calculateBulkOnActorFromIdArr(...inAttributes: any[]): Promise<EncumbranceData | undefined> {
+	async calculateBulkOnActorFromIdArr(...inAttributes) {
 		if (!Array.isArray(inAttributes)) {
 			throw error("calculateBulkOnActorFromIdArr | inAttributes must be of type array");
 		}
@@ -97,10 +95,10 @@ const API = {
 		return this.calculateBulkOnActorFromId(actorIdOrName);
 	},
 
-	calculateBulkOnActorFromId(actorIdOrName: string): EncumbranceData | undefined {
+	calculateBulkOnActorFromId(actorIdOrName) {
 		const actor = game.actors?.contents.find((actorEntity) => {
 			return (
-				isStringEquals(actorEntity.id, actorIdOrName) || isStringEquals(<string>actorEntity.name, actorIdOrName)
+				isStringEquals(actorEntity.id, actorIdOrName) || isStringEquals(actorEntity.name, actorIdOrName)
 			);
 		});
 		if (!actor) {
@@ -110,7 +108,7 @@ const API = {
 		return this.calculateBulkOnActor(actor);
 	},
 
-	async calculateBulkOnTokenFromIdArr(...inAttributes: any[]): Promise<EncumbranceData | undefined> {
+	async calculateBulkOnTokenFromIdArr(...inAttributes) {
 		if (!Array.isArray(inAttributes)) {
 			throw error("calculateBulkOnTokenFromIdArr | inAttributes must be of type array");
 		}
@@ -118,7 +116,7 @@ const API = {
 		return this.calculateBulkOnTokenFromId(tokenIdOrName);
 	},
 
-	calculateBulkOnTokenFromId(tokenIdOrName: string): EncumbranceData | undefined {
+	calculateBulkOnTokenFromId(tokenIdOrName) {
 		const token = canvas.tokens?.placeables.find((tokenEntity) => {
 			return isStringEquals(tokenEntity.id, tokenIdOrName) || isStringEquals(tokenEntity.name, tokenIdOrName);
 		});
@@ -134,27 +132,27 @@ const API = {
 		return this.calculateBulkOnActor(actor);
 	},
 
-	async calculateBulkOnActorArr(...inAttributes: any[]): Promise<EncumbranceData | undefined> {
+	async calculateBulkOnActorArr(...inAttributes) {
 		if (!Array.isArray(inAttributes)) {
 			throw error("calculateBulkOnActorArr | inAttributes must be of type array");
 		}
 		const [actorIdOrName] = inAttributes;
 		const actor = game.actors?.contents.find((actorEntity) => {
 			return (
-				isStringEquals(actorEntity.id, actorIdOrName) || isStringEquals(<string>actorEntity.name, actorIdOrName)
+				isStringEquals(actorEntity.id, actorIdOrName) || isStringEquals(actorEntity.name, actorIdOrName)
 			);
 		});
 		return this.calculateBulkOnActor(actor);
 	},
 
-	calculateBulkOnActor(actor: Actor): EncumbranceData | undefined {
+	calculateBulkOnActor(actor) {
 		if (!actor) {
 			warn(`No actor is been passed`);
 			return;
 		}
 		const physicalItems = ["weapon", "equipment", "consumable", "tool", "backpack", "loot"];
-		const inventoryItems: Item[] = [];
-		actor.items.contents.forEach((im: Item) => {
+		const inventoryItems = [];
+		actor.items.contents.forEach((im) => {
 			if (im && physicalItems.includes(im.type)) {
 				inventoryItems.push(im);
 			}
@@ -170,7 +168,7 @@ const API = {
 
 	// ====================================================
 
-	calculateWeightOnActorWithItems(actor: Actor, items: Item[], ignoreCurrency = true): EncumbranceData | undefined {
+	calculateWeightOnActorWithItems(actor, items, ignoreCurrency = true) {
 		if (!actor) {
 			warn(`No actor is been passed`);
 			return;
@@ -184,7 +182,7 @@ const API = {
 		return encumbranceData;
 	},
 
-	calculateBulkOnActorWithItems(actor: Actor, items: Item[], ignoreCurrency = true): EncumbranceBulkData | undefined {
+	calculateBulkOnActorWithItems(actor, items, ignoreCurrency = true) {
 		if (!actor) {
 			warn(`No actor is been passed`);
 			return;
@@ -198,15 +196,15 @@ const API = {
 		return encumbranceData;
 	},
 
-	convertLbToBulk(weight: number, item: Item | undefined): number {
+	convertLbToBulk(weight, item) {
 		return checkBulkCategory(weight, item).bulk;
 	},
 
 	calculateWeightOnActorWithItemsNoInventoryPlus(
-		actor: Actor,
-		items: Item[],
+		actor,
+		items,
 		ignoreCurrency = true
-	): EncumbranceData | undefined {
+	) {
 		if (!actor) {
 			warn(`No actor is been passed`);
 			return;
@@ -216,10 +214,10 @@ const API = {
 	},
 
 	calculateBulkOnActorWithItemsNoInventoryPlus(
-		actor: Actor,
-		items: Item[],
+		actor,
+		items,
 		ignoreCurrency = true
-	): EncumbranceBulkData | undefined {
+	) {
 		if (!actor) {
 			warn(`No actor is been passed`);
 			return;

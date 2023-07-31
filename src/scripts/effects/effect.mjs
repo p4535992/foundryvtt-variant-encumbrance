@@ -1,35 +1,33 @@
-import type { EffectChangeData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData";
-
 /**
  * Data class for defining an effect
  */
 export default class Effect {
-	customId: string;
+	customId= "";
 	/** @deprecated use instead label */
-	name: string;
-	label: string;
-	description: string;
+	name= "";
+	label= "";
+	description= "";
 	icon = "icons/svg/aura.svg";
-	tint: string;
-	seconds: number;
-	rounds: number;
-	turns: number;
+	tint= "";
+	seconds= 0;
+	rounds= 0;
+	turns= 0;
 	isDynamic = false;
 	isViewable = true;
-	flags: any;
-	changes: EffectChangeData[] = [];
-	atlChanges: EffectChangeData[] = [];
-	tokenMagicChanges: EffectChangeData[] = [];
-	nestedEffects: Effect[] = [];
-	subEffects: Effect[] = [];
+	flags= {};
+	changes = [];
+	atlChanges = [];
+	tokenMagicChanges = [];
+	nestedEffects = [];
+	subEffects = [];
 	// ADDED FROM 4535992
-	isDisabled: boolean;
-	isTemporary: boolean;
-	isSuppressed: boolean;
+	isDisabled = false;
+	isTemporary = false;
+	isSuppressed = false;
 
 	transfer = false;
-	atcvChanges: EffectChangeData[] = [];
-	dae: {};
+	atcvChanges = [];
+	dae = {};
 	overlay = false;
 	// Optional
 	origin = "";
@@ -51,14 +49,14 @@ export default class Effect {
 		isTemporary = false, // ADDED FROM 4535992
 		isSuppressed = false, // ADDED FROM 4535992
 		flags = {},
-		changes = <any[]>[],
-		atlChanges = <any[]>[],
-		tokenMagicChanges = <any[]>[],
-		nestedEffects = <Effect[]>[],
-		subEffects = <Effect[]>[],
+		changes = [],
+		atlChanges = [],
+		tokenMagicChanges = [],
+		nestedEffects = [],
+		subEffects = [],
 		// ADDED FROM 4535992
 		transfer = false,
-		atcvChanges = <any[]>[],
+		atcvChanges = [],
 		dae = {},
 		overlay = false
 		// END ADDED FROM 4535992
@@ -99,7 +97,7 @@ export default class Effect {
 	 * @param {boolean} params.overlay - whether the effect is an overlay or not
 	 * @returns {object} The active effect data object for this effect
 	 */
-	convertToActiveEffectData({ origin = "", overlay = false } = {}): Record<string, unknown> {
+	convertToActiveEffectData({ origin = "", overlay = false } = {}) {
 		if (is_real_number(this.seconds)) {
 			this.isTemporary = true;
 		}
@@ -162,9 +160,9 @@ export default class Effect {
 	 * @param {boolean} params.overlay - whether the effect is an overlay or not
 	 * @returns {object} The active effect data object for this effect
 	 */
-	convertToActiveEffect(): ActiveEffect {
+	convertToActiveEffect() {
 		const changes = this._handleIntegrations();
-		const flags = <any>{};
+		const flags = {};
 		const label = this.label ? this.label : this.name;
 		const description = this.description;
 		const isDynamic = this.isDynamic;
@@ -190,7 +188,7 @@ export default class Effect {
 		flags[Constants.MODULE_ID][Constants.FLAGS.SUB_EFFECTS] = subEffects;
 
 		let duration = {
-			rounds: rounds ?? <number>seconds / CONFIG.time.roundTime,
+			rounds: rounds ?? seconds / CONFIG.time.roundTime,
 			seconds: seconds,
 			startRound: game.combat?.round,
 			startTime: game.time.worldTime,
@@ -227,7 +225,7 @@ export default class Effect {
 
 	_getDurationData() {
 		// let duration = {
-		// 	rounds: this._getCombatRounds() ?? <number>this._getCombatRounds() / CONFIG.time.roundTime,
+		// 	rounds: this._getCombatRounds() ?? this._getCombatRounds() / CONFIG.time.roundTime,
 		// 	seconds: this._getSeconds(),
 		// 	startRound: game.combat?.round,
 		// 	startTime: game.time.worldTime,
@@ -291,7 +289,7 @@ export default class Effect {
 
 	// =============================================
 
-	isDuplicateEffectChange(aeKey: string, arrChanges: EffectChangeData[]) {
+	isDuplicateEffectChange(aeKey, arrChanges) {
 		let isDuplicate = false;
 		for (const aec of arrChanges) {
 			if (isStringEquals(aec.key, aeKey)) {
@@ -303,8 +301,8 @@ export default class Effect {
 	}
 
 	_handleIntegrations() {
-		const arrChanges: EffectChangeData[] = [];
-		for (const change of <EffectChangeData[]>this?.changes) {
+		const arrChanges = [];
+		for (const change of this?.changes) {
 			if (!change.value) {
 				change.value = "";
 			}
@@ -365,7 +363,7 @@ export default class Effect {
 		return arrChanges;
 	}
 
-	_isEmptyObject(obj: any) {
+	_isEmptyObject(obj) {
 		// because Object.keys(new Date()).length === 0;
 		// we have to do some additional check
 		if (obj === null || obj === undefined) {
@@ -421,7 +419,7 @@ export class Constants {
 // UTILITIES
 // ===========================
 
-function cleanUpString(stringToCleanUp: string): string {
+function cleanUpString(stringToCleanUp) {
 	// regex expression to match all non-alphanumeric characters in string
 	const regex = /[^A-Za-z0-9]/g;
 	if (stringToCleanUp) {
@@ -431,7 +429,7 @@ function cleanUpString(stringToCleanUp: string): string {
 	}
 }
 
-function isStringEquals(stringToCheck1: string, stringToCheck2: string, startsWith = false): boolean {
+function isStringEquals(stringToCheck1, stringToCheck2, startsWith = false) {
 	if (stringToCheck1 && stringToCheck2) {
 		const s1 = cleanUpString(stringToCheck1) ?? "";
 		const s2 = cleanUpString(stringToCheck2) ?? "";
@@ -445,10 +443,10 @@ function isStringEquals(stringToCheck1: string, stringToCheck2: string, startsWi
 	}
 }
 
-function is_real_number(inNumber): boolean {
+function is_real_number(inNumber) {
 	return !isNaN(inNumber) && typeof inNumber === "number" && isFinite(inNumber);
 }
 
-const i18n = (key: string): string => {
+const i18n = (key) => {
 	return game.i18n.localize(key)?.trim();
 };

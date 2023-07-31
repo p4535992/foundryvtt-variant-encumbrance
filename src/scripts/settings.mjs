@@ -514,7 +514,7 @@ export const registerSettings = function () {
 	});
 };
 
-class ResetSettingsDialog extends FormApplication<FormApplicationOptions, object, any> {
+class ResetSettingsDialog extends FormApplication {
 	constructor(...args) {
 		//@ts-ignore
 		super(...args);
@@ -549,7 +549,7 @@ class ResetSettingsDialog extends FormApplication<FormApplicationOptions, object
 		});
 	}
 
-	async _updateObject(event: Event, formData?: object): Promise<any> {
+	async _updateObject(event, formData) {
 		// do nothing
 	}
 }

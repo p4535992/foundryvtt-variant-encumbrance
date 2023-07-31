@@ -16,7 +16,7 @@ import { registerSettings } from "./scripts/settings.mjs";
 import { initHooks, readyHooks, setupHooks } from "./scripts/modules.mjs";
 import CONSTANTS from "./scripts/constants.mjs";
 import { error } from "./scripts/lib/lib.mjs";
-import type API from "./scripts/api.mjs";
+import API from "./scripts/api.mjs";
 
 /* ------------------------------------ */
 /* Initialize module					*/
@@ -66,17 +66,12 @@ Hooks.once("ready", () => {
 
 // Add any additional hooks if necessary
 
-export interface VariantEncumbranceModuleData {
-	api: typeof API;
-	socket: any;
-}
-
 /**
  * Initialization helper, to set API.
  * @param api to set to game module.
  */
-export function setApi(api: typeof API): void {
-	const data = game.modules.get(CONSTANTS.MODULE_NAME) as unknown as VariantEncumbranceModuleData;
+export function setApi(api) {
+	const data = game.modules.get(CONSTANTS.MODULE_NAME);
 	data.api = api;
 }
 
@@ -84,8 +79,8 @@ export function setApi(api: typeof API): void {
  * Returns the set API.
  * @returns Api from games module.
  */
-export function getApi(): typeof API {
-	const data = game.modules.get(CONSTANTS.MODULE_NAME) as unknown as VariantEncumbranceModuleData;
+export function getApi() {
+	const data = game.modules.get(CONSTANTS.MODULE_NAME);
 	return data.api;
 }
 
@@ -93,8 +88,8 @@ export function getApi(): typeof API {
  * Initialization helper, to set Socket.
  * @param socket to set to game module.
  */
-export function setSocket(socket: any): void {
-	const data = game.modules.get(CONSTANTS.MODULE_NAME) as unknown as VariantEncumbranceModuleData;
+export function setSocket(socket) {
+	const data = game.modules.get(CONSTANTS.MODULE_NAME);
 	data.socket = socket;
 }
 
@@ -103,6 +98,6 @@ export function setSocket(socket: any): void {
  * @returns Socket from games module.
  */
 export function getSocket() {
-	const data = game.modules.get(CONSTANTS.MODULE_NAME) as unknown as VariantEncumbranceModuleData;
+	const data = game.modules.get(CONSTANTS.MODULE_NAME);
 	return data.socket;
 }

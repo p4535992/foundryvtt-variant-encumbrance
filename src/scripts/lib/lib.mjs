@@ -1,11 +1,5 @@
-import { BULK_CATEGORY, BulkData, EncumbranceActorType } from "./../VariantEncumbranceModels";
+import { BULK_CATEGORY, BulkData, EncumbranceActorType } from "./../VariantEncumbranceModels.mjs";
 import CONSTANTS from "../constants.mjs";
-import type {
-	EffectChangeData,
-	EffectChangeDataProperties
-} from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData";
-import type EmbeddedCollection from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/abstract/embedded-collection.mjs";
-import type { ActorData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
 import { calcBulk } from "../VariantEncumbranceBulkImpl.mjs";
 import { backPackManagerActive, itemContainerActive } from "../modules.mjs";
 import { calcWeight } from "../VariantEncumbranceImpl.mjs";
@@ -21,31 +15,31 @@ export async function getToken(documentUuid) {
 	return document?.token ?? document;
 }
 
-export function getOwnedTokens(priorityToControlledIfGM: boolean): Token[] {
+export function getOwnedTokens(priorityToControlledIfGM) {
 	const gm = game.user?.isGM;
 	if (gm) {
 		if (priorityToControlledIfGM) {
-			const arr = <Token[]>canvas.tokens?.controlled;
+			const arr = canvas.tokens?.controlled;
 			if (arr && arr.length > 0) {
 				return arr;
 			} else {
-				return <Token[]>canvas.tokens?.placeables;
+				return canvas.tokens?.placeables;
 			}
 		} else {
-			return <Token[]>canvas.tokens?.placeables;
+			return canvas.tokens?.placeables;
 		}
 	}
 	if (priorityToControlledIfGM) {
-		const arr = <Token[]>canvas.tokens?.controlled;
+		const arr = canvas.tokens?.controlled;
 		if (arr && arr.length > 0) {
 			return arr;
 		}
 	}
-	let ownedTokens = <Token[]>(
+	let ownedTokens = (
 		canvas.tokens?.placeables.filter((token) => token.isOwner && (!token.document.hidden || gm))
 	);
 	if (ownedTokens.length === 0 || !canvas.tokens?.controlled[0]) {
-		ownedTokens = <Token[]>(
+		ownedTokens = (
 			canvas.tokens?.placeables.filter(
 				(token) => (token.observer || token.isOwner) && (!token.document.hidden || gm)
 			)
@@ -77,7 +71,7 @@ export function is_real_number(inNumber) {
 }
 
 export function isGMConnected() {
-	return !!Array.from(<Users>game.users).find((user) => user.isGM && user.active);
+	return !!Array.from(game.users).find((user) => user.isGM && user.active);
 }
 
 export function wait(ms) {
@@ -94,7 +88,7 @@ export function getActiveGMs() {
 
 export function isResponsibleGM() {
 	if (!game.user?.isGM) return false;
-	return !getActiveGMs()?.some((other) => other.id < <string>game.user?.id);
+	return !getActiveGMs()?.some((other) => other.id < game.user?.id);
 }
 
 export function firstGM() {
@@ -105,7 +99,7 @@ export function isFirstGM() {
 	return game.user?.id === firstGM()?.id;
 }
 
-export function firstOwner(doc): User | undefined {
+export function firstOwner(doc) {
 	/* null docs could mean an empty lookup, null docs are not owned by anyone */
 	if (!doc) return undefined;
 	const permissionObject = (doc instanceof TokenDocument ? doc.actor?.permission : doc.permission) ?? {};
@@ -114,7 +108,7 @@ export function firstOwner(doc): User | undefined {
 		.map(([id, level]) => id);
 
 	if (playerOwners.length > 0) {
-		return game.users?.get(<string>playerOwners[0]);
+		return game.users?.get(playerOwners[0]);
 	}
 
 	/* if no online player owns this actor, fall back to first GM */
@@ -173,19 +167,19 @@ export function error(error, notify = true) {
 	return new Error(error.replace("<br>", "\n"));
 }
 
-export function timelog(message): void {
+export function timelog(message) {
 	warn(Date.now(), message);
 }
 
-export const i18n = (key: string): string => {
+export const i18n = (key) => {
 	return game.i18n.localize(key)?.trim();
 };
 
-export const i18nFormat = (key: string, data = {}): string => {
+export const i18nFormat = (key, data = {}) => {
 	return game.i18n.format(key, data)?.trim();
 };
 
-// export const setDebugLevel = (debugText: string): void => {
+// export const setDebugLevel = (debugText) => {
 //   debugEnabled = { none: 0, warn: 1, debug: 2, all: 3 }[debugText] || 0;
 //   // 0 = none, warnings = 1, debug = 2, all = 3
 //   if (debugEnabled >= 3) CONFIG.debug.hooks = true;
@@ -201,7 +195,7 @@ export function dialogWarning(message, icon = "fas fa-exclamation-triangle") {
 
 // =========================================================================================
 
-export function cleanUpString(stringToCleanUp: string) {
+export function cleanUpString(stringToCleanUp) {
 	// regex expression to match all non-alphanumeric characters in string
 	const regex = /[^A-Za-z0-9]/g;
 	if (stringToCleanUp) {
@@ -211,7 +205,7 @@ export function cleanUpString(stringToCleanUp: string) {
 	}
 }
 
-export function isStringEquals(stringToCheck1: string, stringToCheck2: string, startsWith = false): boolean {
+export function isStringEquals(stringToCheck1, stringToCheck2, startsWith = false) {
 	if (stringToCheck1 && stringToCheck2) {
 		const s1 = cleanUpString(stringToCheck1) ?? "";
 		const s2 = cleanUpString(stringToCheck2) ?? "";
@@ -229,7 +223,7 @@ export function isStringEquals(stringToCheck1: string, stringToCheck2: string, s
  * The duplicate function of foundry keep converting my string value to "0"
  * i don't know why this methos is a brute force solution for avoid that problem
  */
-export function duplicateExtended(obj: any): any {
+export function duplicateExtended(obj) {
 	try {
 		//@ts-ignore
 		if (structuredClone) {
@@ -255,8 +249,8 @@ export function duplicateExtended(obj: any): any {
  * @href https://www.petermorlion.com/iterating-a-typescript-enum/
  * @returns
  */
-export function enumKeys<O extends object, K extends keyof O = keyof O>(obj: O): K[] {
-	return Object.keys(obj).filter((k) => Number.isNaN(+k)) as K[];
+export function enumKeys(obj) {
+	return Object.keys(obj).filter((k) => Number.isNaN(+k));
 }
 
 /**
@@ -265,7 +259,7 @@ export function enumKeys<O extends object, K extends keyof O = keyof O>(obj: O):
  * @param source
  * @param prop
  */
-export function mergeByProperty(target: any[], source: any[], prop: any) {
+export function mergeByProperty(target, source, prop) {
 	for (const sourceElement of source) {
 		const targetElement = target.find((targetElement) => {
 			return sourceElement[prop] === targetElement[prop];
@@ -278,9 +272,9 @@ export function mergeByProperty(target: any[], source: any[], prop: any) {
 /**
  * Returns the first selected token
  */
-export function getFirstPlayerTokenSelected(): Token | null {
+export function getFirstPlayerTokenSelected() {
 	// Get first token ownted by the player
-	const selectedTokens = <Token[]>canvas.tokens?.controlled;
+	const selectedTokens = canvas.tokens?.controlled;
 	if (selectedTokens.length > 1) {
 		//iteractionFailNotification(i18n("foundryvtt-arms-reach.warningNoSelectMoreThanOneToken"));
 		return null;
@@ -293,48 +287,48 @@ export function getFirstPlayerTokenSelected(): Token | null {
 		return null;
 		//}
 	}
-	return <Token>selectedTokens[0];
+	return selectedTokens[0];
 }
 
 /**
  * Returns a list of selected (or owned, if no token is selected)
  * note: ex getSelectedOrOwnedToken
  */
-export function getFirstPlayerToken(): Token | null {
+export function getFirstPlayerToken() {
 	// Get controlled token
-	let token: Token;
-	const controlled: Token[] = <Token[]>canvas.tokens?.controlled;
+	let token;
+	const controlled = canvas.tokens?.controlled;
 	// Do nothing if multiple tokens are selected
 	if (controlled.length && controlled.length > 1) {
 		//iteractionFailNotification(i18n("foundryvtt-arms-reach.warningNoSelectMoreThanOneToken"));
 		return null;
 	}
 	// If exactly one token is selected, take that
-	token = <Token>controlled[0];
+	token = controlled[0];
 	if (!token) {
 		if (!controlled.length || controlled.length === 0) {
 			// If no token is selected use the token of the users character
-			token = <Token>canvas.tokens?.placeables.find((token) => token.id === game.user?.character?.id);
+			token = canvas.tokens?.placeables.find((token) => token.id === game.user?.character?.id);
 		}
 		// If no token is selected use the first owned token of the users character you found
 		if (!token) {
-			token = <Token>canvas.tokens?.ownedTokens[0];
+			token = canvas.tokens?.ownedTokens[0];
 		}
 	}
 	return token;
 }
 
-function getElevationToken(token: Token): number {
+function getElevationToken(token) {
 	const base = token.document;
 	return getElevationPlaceableObject(base);
 }
 
-function getElevationWall(wall: Wall): number {
+function getElevationWall(wall) {
 	const base = wall.document;
 	return getElevationPlaceableObject(base);
 }
 
-function getElevationPlaceableObject(placeableObject: any): number {
+function getElevationPlaceableObject(placeableObject) {
 	let base = placeableObject;
 	if (base.document) {
 		base = base.document;
@@ -359,21 +353,21 @@ function getElevationPlaceableObject(placeableObject: any): number {
 // Module specific function
 // =============================
 
-export function convertPoundsToKg(valNum: number): number {
+export function convertPoundsToKg(valNum) {
 	return valNum / 2.20462262;
 }
 
-export function convertKgToPounds(valNum: number): number {
+export function convertKgToPounds(valNum) {
 	return valNum * 2.20462262;
 }
 
-export function checkBulkCategory(weight: number, item: Item | undefined): BulkData {
-	let bulkRef = <number>weight ?? 0;
+export function checkBulkCategory(weight, item) {
+	let bulkRef = weight ?? 0;
 	if (item && hasProperty(item, `flags.itemcollection`) && itemContainerActive) {
-		const useEquippedUnequippedItemCollectionFeature = <boolean>(
+		const useEquippedUnequippedItemCollectionFeature = (
 			game.settings.get(CONSTANTS.MODULE_NAME, "useEquippedUnequippedItemCollectionFeature")
 		);
-		const doNotApplyWeightForEquippedArmor = <boolean>(
+		const doNotApplyWeightForEquippedArmor = (
 			game.settings.get(CONSTANTS.MODULE_NAME, "doNotApplyWeightForEquippedArmor")
 		);
 		// TODO IS OK TO DO THIS FOR ITEM CONTAINER ????
@@ -402,7 +396,7 @@ export function checkBulkCategory(weight: number, item: Item | undefined): BulkD
 	}
 }
 
-export function retrieveAttributeEncumbranceMax(actorEntity: Actor, standardValueN: number): number {
+export function retrieveAttributeEncumbranceMax(actorEntity, standardValueN) {
 	// const standardValueS = getProperty(actor, 'system.attributes.encumbrance.max');
 	// let standardValueN = 0;
 	// try {
@@ -439,7 +433,7 @@ export function retrieveAttributeEncumbranceMax(actorEntity: Actor, standardValu
 	}
 }
 
-export function retrieveAttributeCapacityCargo(actor: Actor, standardValueN: number): number {
+export function retrieveAttributeCapacityCargo(actor, standardValueN) {
 	// const standardValueS = getProperty(actor, 'system.attributes.capacity.cargo');
 	// let standardValueN = 0;
 	// try {
@@ -476,29 +470,29 @@ export function retrieveAttributeCapacityCargo(actor: Actor, standardValueN: num
 	}
 }
 
-export function retrieveActiveEffectDataChangeByKey(actor: Actor, key: string): EffectChangeDataProperties | undefined {
+export function retrieveActiveEffectDataChangeByKey(actor, key) {
 	if (!actor) {
 		return undefined;
 	}
 	if (actor.documentName !== "Actor") {
 		return undefined;
 	}
-	const isPlayerOwned = <boolean>actor.token?.isOwner;
+	const isPlayerOwned = actor.token?.isOwner;
 	if (!game.user?.isGM && !isPlayerOwned) {
 		return undefined;
 	}
-	// let sourceToken = <Token>actor.token?.object;
+	// let sourceToken = actor.token?.object;
 	// if (!sourceToken) {
-	//   sourceToken = <Token>canvas.tokens?.placeables.find((t) => {
-	//     return <string>t.actor?.id === <string>actor.id;
+	//   sourceToken = canvas.tokens?.placeables.find((t) => {
+	//     return t.actor?.id === actor.id;
 	//   });
 	// }
 	// if (!sourceToken) {
 	//   return;
 	// }
 	//@ts-ignore
-	let valueDefault: EffectChangeDataProperties | undefined = undefined;
-	const actorEffects = <EmbeddedCollection<typeof ActiveEffect, ActorData>>actor?.effects;
+	let valueDefault = undefined;
+	const actorEffects = actor?.effects;
 	for (const aef of actorEffects) {
 		//@ts-ignore
 		if (aef.disabled) {
@@ -515,12 +509,12 @@ export function retrieveActiveEffectDataChangeByKey(actor: Actor, key: string): 
 }
 
 export function retrieveActiveEffectDataChangeByKeyFromActiveEffect(
-	actor: Actor,
-	activeEffectDataChangeKey: string,
-	effectChanges: EffectChangeData[]
-): EffectChangeDataProperties | undefined {
-	const effectEntityChanges = effectChanges.sort((a, b) => <number>a.priority - <number>b.priority);
-	const atcvEffectChangeData = <EffectChangeData | undefined>effectEntityChanges.find((aee) => {
+	actor,
+	activeEffectDataChangeKey,
+	effectChanges
+) {
+	const effectEntityChanges = effectChanges.sort((a, b) => a.priority - b.priority);
+	const atcvEffectChangeData = effectEntityChanges.find((aee) => {
 		if (aee.key === activeEffectDataChangeKey && aee.value) {
 			return aee;
 		}
@@ -599,7 +593,7 @@ export function retrieveActiveEffectDataChangeByKeyFromActiveEffect(
 	};
 }
 
-export function getItemWeight(item: Item): number {
+export function getItemWeight(item) {
 	//@ts-ignore
 	const itemWeight = is_real_number(item.system.weight)
 		? //@ts-ignore
@@ -608,7 +602,7 @@ export function getItemWeight(item: Item): number {
 	return itemWeight ?? 0;
 }
 
-export function getItemQuantity(item: Item): number {
+export function getItemQuantity(item) {
 	//@ts-ignore
 	const itemQuantity = is_real_number(item.system.quantity)
 		? //@ts-ignore
@@ -617,24 +611,24 @@ export function getItemQuantity(item: Item): number {
 	return itemQuantity ?? 0;
 }
 
-export function getItemBulk(item: Item): number {
+export function getItemBulk(item) {
 	const itemBulk = getProperty(item, `flags.${CONSTANTS.MODULE_NAME}.bulk`);
-	const itemWeightBulk = is_real_number(itemBulk) ? <number>itemBulk : 0;
+	const itemWeightBulk = is_real_number(itemBulk) ? itemBulk : 0;
 	return itemWeightBulk ?? 0;
 }
 
-export function getBulkLabel(): string {
+export function getBulkLabel() {
 	// i18n('variant-encumbrance-dnd5e.label.bulk.ItemContainerCapacityBulk') ??
 	const bulkLabelI18n = i18n("variant-encumbrance-dnd5e.label.bulk.Bulk");
-	const displayedUnits = <string>game.settings.get(CONSTANTS.MODULE_NAME, "unitsBulk");
+	const displayedUnits = game.settings.get(CONSTANTS.MODULE_NAME, "unitsBulk");
 	const bulkLabel = capitalizeFirstLetter(displayedUnits ?? bulkLabelI18n);
 	return bulkLabel;
 }
 
-export function getWeightLabel(): string {
+export function getWeightLabel() {
 	const displayedUnits = game.settings.get("dnd5e", "metricWeightUnits")
-		? <string>game.settings.get(CONSTANTS.MODULE_NAME, "unitsMetric")
-		: <string>game.settings.get(CONSTANTS.MODULE_NAME, "units");
+		? game.settings.get(CONSTANTS.MODULE_NAME, "unitsMetric")
+		: game.settings.get(CONSTANTS.MODULE_NAME, "units");
 	const bulkLabel = capitalizeFirstLetter(displayedUnits);
 	return bulkLabel;
 }
@@ -644,7 +638,7 @@ function capitalizeFirstLetter(string) {
 }
 
 /* Whether this is a valid item to put in a backpack. */
-export function isValidBackPackManagerItem(item): boolean {
+export function isValidBackPackManagerItem(item) {
 	if (!backPackManagerActive) {
 		return false;
 	}
@@ -678,7 +672,7 @@ export function isValidBackPackManagerItem(item): boolean {
 }
 
 /* Whether this is a valid item to put in a backpack. */
-export function retrieveBackPackManagerItem(item: Item): Actor | undefined {
+export function retrieveBackPackManagerItem(item) {
 	if (!backPackManagerActive || !item) {
 		return undefined;
 	}
@@ -692,7 +686,7 @@ export function retrieveBackPackManagerItem(item: Item): Actor | undefined {
 		return undefined;
 	}
 	//@ts-ignore
-	const backpack = <Actor>fromUuidSync(uuid);
+	const backpack = fromUuidSync(uuid);
 	if (!backpack) {
 		warn(`No backpack (Actor) is been found with uuid:${uuid} on item: ${item.name}`);
 		return undefined;
@@ -708,19 +702,19 @@ export function retrieveBackPackManagerItem(item: Item): Actor | undefined {
 }
 
 // The items stowed on the Backpack Actor.
-export function stowedItemBackPackManager(bag: Actor): Item[] {
+export function stowedItemBackPackManager(bag) {
 	return bag.items
 		.filter((item) => {
 			return isValidBackPackManagerItem(item);
 		})
-		.sort((a: Item, b: Item) => {
+		.sort((a, b) => {
 			//@ts-ignore
 			return a.name.localeCompare(b.name);
 		});
 }
 
 // // The items held on the Actor.
-// export function itemItemBackPackManager(bag: Actor) {
+// export function itemItemBackPackManager(bag) {
 // 	return this.actor.items
 // 		.filter((item) => {
 // 			return isValidBackPackManagerItem(item);
@@ -730,14 +724,14 @@ export function stowedItemBackPackManager(bag: Actor): Item[] {
 // 		});
 // }
 
-export function calculateBackPackManagerWeight(item: Item, bag: Actor, ignoreCurrency: boolean) {
-	const data = <any>{};
+export function calculateBackPackManagerWeight(item, bag, ignoreCurrency) {
+	const data = {};
 	const stowed = stowedItemBackPackManager(bag);
 	//@ts-ignore
 	const type = item.system.capacity.type;
 	if (type === "weight") {
 		const backpackManagerWeight =
-			<number>API.calculateWeightOnActorWithItems(bag, stowed, ignoreCurrency)?.totalWeight ??
+			API.calculateWeightOnActorWithItems(bag, stowed, ignoreCurrency)?.totalWeight ??
 			getItemWeight(item);
 		data.bagValue = backpackManagerWeight;
 	} else if (type === "items") {
@@ -749,14 +743,14 @@ export function calculateBackPackManagerWeight(item: Item, bag: Actor, ignoreCur
 	return data.bagValue;
 }
 
-export function calculateBackPackManagerBulk(item: Item, bag: Actor, ignoreCurrency: boolean) {
-	const data = <any>{};
+export function calculateBackPackManagerBulk(item, bag, ignoreCurrency) {
+	const data = {};
 	const stowed = stowedItemBackPackManager(bag);
 	//@ts-ignore
 	const type = item.system.capacity.type;
 	if (type === "weight") {
 		const backpackManagerBulk =
-			<number>API.calculateBulkOnActorWithItems(bag, stowed, ignoreCurrency)?.totalWeight ?? getItemBulk(item);
+			API.calculateBulkOnActorWithItems(bag, stowed, ignoreCurrency)?.totalWeight ?? getItemBulk(item);
 		data.bagValue = backpackManagerBulk;
 	} else if (type === "items") {
 		data.bagValue = stowed.reduce((acc, item) => {

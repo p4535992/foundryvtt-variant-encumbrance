@@ -9,7 +9,7 @@ import {
 	BulkData,
 	SUPPORTED_SHEET,
 	EncumbranceBulkData
-} from "./VariantEncumbranceModels";
+} from "./VariantEncumbranceModels.mjs";
 import {
 	checkBulkCategory,
 	convertPoundsToKg,
@@ -29,9 +29,7 @@ import CONSTANTS from "./constants.mjs";
 import { registerSocket } from "./socket.mjs";
 import API from "./api.mjs";
 import { calcBulk, VariantEncumbranceBulkImpl } from "./VariantEncumbranceBulkImpl.mjs";
-import { setApi } from "../module";
-import type { ActiveEffectManagerLibApi } from "./effects/effect-api.mjs";
-import type { ItemData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/module.mjs";
+import { setApi } from "../module.js";
 
 export let ENCUMBRANCE_STATE = {
 	UNENCUMBERED: "", // "Unencumbered",
@@ -40,13 +38,13 @@ export let ENCUMBRANCE_STATE = {
 	OVERBURDENED: "" // "Overburdened"
 };
 
-export let invPlusActive: boolean;
-export let itemContainerActive: boolean;
-export let dfredsConvenientEffectsActive: boolean;
-export let invMidiQol: boolean;
-export let dfQualityLifeActive: boolean;
-export let daeActive: boolean;
-export let backPackManagerActive: boolean;
+export let invPlusActive = false;
+export let itemContainerActive = false;
+export let dfredsConvenientEffectsActive = false;
+export let invMidiQol = false;
+export let dfQualityLifeActive = false;
+export let daeActive = false;
+export let backPackManagerActive = false;
 
 export const initHooks = () => {
 	// warn("Init Hooks processing");
@@ -60,7 +58,7 @@ export const initHooks = () => {
 	//       debug(`Registered hook: ${hook}`);
 	//     } else {
 	//       for (const innerHook of Object.values(hook)) {
-	//         Hooks.on(<string>innerHook, (...args) => debug(`Hook called: ${innerHook}`, ...args));
+	//         Hooks.on(innerHook, (...args) => debug(`Hook called: ${innerHook}`, ...args));
 	//         debug(`Registered hook: ${innerHook}`);
 	//       }
 	//     }
@@ -125,13 +123,13 @@ export const initHooks = () => {
 	}
 	// CONFIG.debug.hooks = true; // For debugging only
 
-	invPlusActive = <boolean>game.modules.get(CONSTANTS.INVENTORY_PLUS_MODULE_NAME)?.active;
-	invMidiQol = <boolean>game.modules.get(CONSTANTS.MIDI_QOL_MODULE_NAME)?.active;
-	itemContainerActive = <boolean>game.modules.get(CONSTANTS.ITEM_COLLECTION_MODULE_NAME)?.active;
-	dfredsConvenientEffectsActive = <boolean>game.modules.get(CONSTANTS.DFREDS_CONVENIENT_EFFECTS_MODULE_NAME)?.active;
-	dfQualityLifeActive = <boolean>game.modules.get(CONSTANTS.DF_QUALITY_OF_LIFE_MODULE_NAME)?.active;
-	daeActive = <boolean>game.modules.get(CONSTANTS.DAE_MODULE_NAME)?.active;
-	backPackManagerActive = <boolean>game.modules.get(CONSTANTS.BACKPACK_MANAGER_MODULE_NAME)?.active;
+	invPlusActive = game.modules.get(CONSTANTS.INVENTORY_PLUS_MODULE_NAME)?.active;
+	invMidiQol = game.modules.get(CONSTANTS.MIDI_QOL_MODULE_NAME)?.active;
+	itemContainerActive = game.modules.get(CONSTANTS.ITEM_COLLECTION_MODULE_NAME)?.active;
+	dfredsConvenientEffectsActive = game.modules.get(CONSTANTS.DFREDS_CONVENIENT_EFFECTS_MODULE_NAME)?.active;
+	dfQualityLifeActive = game.modules.get(CONSTANTS.DF_QUALITY_OF_LIFE_MODULE_NAME)?.active;
+	daeActive = game.modules.get(CONSTANTS.DAE_MODULE_NAME)?.active;
+	backPackManagerActive = game.modules.get(CONSTANTS.BACKPACK_MANAGER_MODULE_NAME)?.active;
 };
 
 export const setupHooks = async () => {
@@ -202,11 +200,11 @@ export const readyHooks = async () => {
 		// ===================
 		// Bulk management
 		// ===================
-		Hooks.on("renderItemSheet", (app: ItemSheet, html: JQuery<HTMLElement>, data: any) => {
+		Hooks.on("renderItemSheet", (app, html, data) => {
 			if (!app.object) {
 				return;
 			}
-			const item: Item = app.object;
+			const item = app.object;
 			module.renderItemSheetBulkSystem(app, html, data.system, item);
 		});
 		// =====================
@@ -223,12 +221,12 @@ export const readyHooks = async () => {
 
 	Hooks.on(
 		"renderActorSheet",
-		async function (actorSheet: ActorSheet, htmlElement: JQuery<HTMLElement>, actorObject: any) {
-			const actorEntityTmp: any = <Actor>game.actors?.get(actorObject.actor._id); //duplicate(actorEntity) ;
+		async function (actorSheet, htmlElement, actorObject) {
+			const actorEntityTmp = game.actors?.get(actorObject.actor._id); //duplicate(actorEntity) ;
 			if (isEnabledActorType(actorEntityTmp)) {
 				const htmlElementEncumbranceVariant = htmlElement.find(".encumbrance").addClass("encumbrance-variant");
 				//@ts-ignore
-				let sheetClass: string = actorSheet.object.flags?.core?.sheetClass ?? "";
+				let sheetClass = actorSheet.object.flags?.core?.sheetClass ?? "";
 				if (!sheetClass) {
 					for (const obj of SUPPORTED_SHEET) {
 						if (game.modules.get(obj.moduleId)?.active && actorSheet.template.includes(obj.templateId)) {
@@ -253,7 +251,7 @@ export const readyHooks = async () => {
 				const listHeaders = htmlElement.find("li.items-header .item-weight");
 				for (const liHeaderB of listHeaders) {
 					//@ts-ignore
-					const liHeader = <JQuery<HTMLElement>>$(liHeaderB);
+					const liHeader = $(liHeaderB);
 					if (isBulkEnable) {
 						if (hideStandardWeightUnits) {
 							liHeader.text(`${getBulkLabel()}`);
@@ -264,17 +262,17 @@ export const readyHooks = async () => {
 					}
 				}
 
-				const inventoryItems: Item[] = [];
+				const inventoryItems = [];
 				const physicalItems = ["weapon", "equipment", "consumable", "tool", "backpack", "loot"];
-				actorEntityTmp.items.contents.forEach((im: Item) => {
+				actorEntityTmp.items.contents.forEach((im) => {
 					if (im && physicalItems.includes(im.type)) {
 						inventoryItems.push(im);
 					}
 				});
-				const encumbranceData = <EncumbranceData>(
+				const encumbranceData = (
 					VariantEncumbranceImpl.calculateEncumbrance(actorEntityTmp, inventoryItems, false, invPlusActive)
 				);
-				const encumbranceDataBulk = <EncumbranceBulkData>(
+				const encumbranceDataBulk = (
 					VariantEncumbranceBulkImpl.calculateEncumbrance(
 						actorEntityTmp,
 						inventoryItems,
@@ -284,10 +282,10 @@ export const readyHooks = async () => {
 				);
 				const listItem = htmlElement.find("li.item .item-weight");
 				for (const liItemB of listItem) {
-					const liItem = <JQuery<HTMLElement>>$(liItemB);
+					const liItem = $(liItemB);
 					const itemId = liItem.parent().attr("data-item-id");
 					const itemName = liItem.parent().find(".item-name h4").html().replace(/\n/g, "").trim();
-					const item = <Item>inventoryItems.find((im: Item) => {
+					const item = inventoryItems.find((im) => {
 						return im.id === itemId || im.name === itemName;
 					});
 					if (item) {
@@ -302,7 +300,7 @@ export const readyHooks = async () => {
 								if (replaceStandardWeightValue) {
 									if (currentTextB) {
 										const weight =
-											encumbranceData.mapItemEncumbrance[<string>item.id]?.toNearest(0.1) ??
+											encumbranceData.mapItemEncumbrance[item.id]?.toNearest(0.1) ??
 											(quantity * getItemWeight(item)).toNearest(0.1) ??
 											0;
 										const totalWeightS = `${weight} ${getWeightLabel()}`;
@@ -311,7 +309,7 @@ export const readyHooks = async () => {
 								}
 								if (isBulkEnable) {
 									const bulk =
-										encumbranceDataBulk.mapItemEncumbrance[<string>item.id]?.toNearest(0.1) ??
+										encumbranceDataBulk.mapItemEncumbrance[item.id]?.toNearest(0.1) ??
 										(quantity * getItemBulk(item)).toNearest(0.1) ??
 										0;
 									const totalBulkS = `${bulk} ${getBulkLabel()}`;
@@ -334,7 +332,7 @@ export const readyHooks = async () => {
 								if (replaceStandardWeightValue) {
 									if (currentTextB) {
 										const weight =
-											encumbranceData.mapItemEncumbrance[<string>item.id]?.toNearest(0.1) ??
+											encumbranceData.mapItemEncumbrance[item.id]?.toNearest(0.1) ??
 											(quantity * getItemWeight(item)).toNearest(0.1) ??
 											0;
 										const totalWeightS = `${weight} ${getWeightLabel()}`;
@@ -343,7 +341,7 @@ export const readyHooks = async () => {
 								}
 								if (isBulkEnable) {
 									const bulk =
-										encumbranceDataBulk.mapItemEncumbrance[<string>item.id]?.toNearest(0.1) ??
+										encumbranceDataBulk.mapItemEncumbrance[item.id]?.toNearest(0.1) ??
 										(quantity * getItemBulk(item)).toNearest(0.1) ??
 										0;
 									const totalBulkS = `${bulk} ${getBulkLabel()}`;
@@ -387,14 +385,14 @@ export const readyHooks = async () => {
 				if (game.settings.get(CONSTANTS.MODULE_NAME, "hideStandardEncumbranceBar")) {
 					const element = htmlElement.find(".encumbrance-variant");
 					if (element && element.length > 0) {
-						(<HTMLElement>element[0]).style.display = "none";
+						(element[0]).style.display = "none";
 					}
 				}
 			}
 		}
 	);
 
-	Hooks.on("updateActor", async (actorEntity: Actor, update) => {
+	Hooks.on("updateActor", async (actorEntity, update) => {
 		if (!actorEntity) {
 			return;
 		}
@@ -458,7 +456,7 @@ export const readyHooks = async () => {
 						await VariantEncumbranceImpl.updateEncumbrance(
 							actorEntity,
 							undefined,
-							<boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE),
+							actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE),
 							EncumbranceMode.ADD
 						);
 					}
@@ -466,7 +464,7 @@ export const readyHooks = async () => {
 						await VariantEncumbranceBulkImpl.updateEncumbrance(
 							actorEntity,
 							undefined,
-							<boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE_BULK),
+							actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE_BULK),
 							EncumbranceMode.ADD
 						);
 					}
@@ -475,18 +473,18 @@ export const readyHooks = async () => {
 		}
 	});
 
-	Hooks.on("getActorSheetHeaderButtons", async (app, buttons: any[]) => {
-		const actorSheet = <ActorSheet>app.object.sheet;
-		const actorEntity = <Actor>actorSheet.actor;
+	Hooks.on("getActorSheetHeaderButtons", async (app, buttons) => {
+		const actorSheet = app.object.sheet;
+		const actorEntity = actorSheet.actor;
 
 		if (!actorEntity) {
 			return;
 		}
 
-		const enableVarianEncumbranceOnSpecificActor = <boolean>(
+		const enableVarianEncumbranceOnSpecificActor = (
 			game.settings.get(CONSTANTS.MODULE_NAME, "enableVarianEncumbranceOnSpecificActor")
 		);
-		const removeLabelButtonsSheetHeader = <boolean>(
+		const removeLabelButtonsSheetHeader = (
 			game.settings.get(CONSTANTS.MODULE_NAME, "removeLabelButtonsSheetHeader")
 		);
 
@@ -504,7 +502,7 @@ export const readyHooks = async () => {
 							enableVarianEncumbranceEffectsOnSpecificActorFlag
 						);
 					} else {
-						enableVarianEncumbranceEffectsOnSpecificActorFlag = <boolean>(
+						enableVarianEncumbranceEffectsOnSpecificActorFlag = (
 							actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE)
 						);
 					}
@@ -517,7 +515,7 @@ export const readyHooks = async () => {
 							enableVarianEncumbranceWeightOnSpecificActorFlag
 						);
 					} else {
-						enableVarianEncumbranceWeightOnSpecificActorFlag = <boolean>(
+						enableVarianEncumbranceWeightOnSpecificActorFlag = (
 							actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_WE)
 						);
 					}
@@ -656,7 +654,7 @@ export const readyHooks = async () => {
 							enableVarianEncumbranceEffectsBulkOnSpecificActorFlag
 						);
 					} else {
-						enableVarianEncumbranceEffectsBulkOnSpecificActorFlag = <boolean>(
+						enableVarianEncumbranceEffectsBulkOnSpecificActorFlag = (
 							actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE_BULK)
 						);
 					}
@@ -669,7 +667,7 @@ export const readyHooks = async () => {
 							enableVarianEncumbranceWeightBulkOnSpecificActorFlag
 						);
 					} else {
-						enableVarianEncumbranceWeightBulkOnSpecificActorFlag = <boolean>(
+						enableVarianEncumbranceWeightBulkOnSpecificActorFlag = (
 							actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_WE_BULK)
 						);
 					}
@@ -823,14 +821,14 @@ export const readyHooks = async () => {
 	});
 
 	// Hooks.on("preCreateActiveEffect", (activeEffect, _config, _userId) => {
-	// 	const actorEntity = activeEffect?.parent instanceof Actor ? <Actor>activeEffect?.parent : undefined;
+	// 	const actorEntity = activeEffect?.parent instanceof Actor ? activeEffect?.parent : undefined;
 	// 	if (!actorEntity) {
 	// 		return;
 	// 	}
 	// 	if (!actorEntity.effects) {
 	// 		return;
 	// 	}
-	// 	if (<boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE)) {
+	// 	if (actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE)) {
 	// 		let effectEntityPresent: ActiveEffect | undefined = undefined;
 	// 		for (const effectEntity of actorEntity.effects) {
 	// 			//@ts-ignore
@@ -905,12 +903,12 @@ export const readyHooks = async () => {
 
 	// 		//let encumbranceDataBulk;
 	// 		// if (hasProperty(actorObject, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.DATA_BULK}`)) {
-	// 		//   encumbranceDataBulk = <EncumbranceData>getProperty(actorObject,`flags.${CONSTANTS.FLAG}.${EncumbranceFlags.DATA_BULK}`);
+	// 		//   encumbranceDataBulk = getProperty(actorObject,`flags.${CONSTANTS.FLAG}.${EncumbranceFlags.DATA_BULK}`);
 	// 		// }
 
 	// 		let encumbranceData: EncumbranceData | undefined = undefined;
 	// 		if (hasProperty(actorEntity, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.DATA}`)) {
-	// 			encumbranceData = <EncumbranceData>(
+	// 			encumbranceData = (
 	// 				getProperty(actorEntity, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.DATA}`)
 	// 			);
 	// 		}
@@ -947,7 +945,7 @@ export const readyHooks = async () => {
 };
 
 // export function getEmbeddedDocument(wrapped, embeddedName, id, { strict = false } = {}) {
-//   const actorEntity: Actor = this.actor;
+//   const actorEntity = this.actor;
 //   if (actorEntity && (actorEntity.type === EncumbranceActorType.CHARACTER || actorEntity.type === EncumbranceActorType.VEHICLE)) {
 //     VariantEncumbranceImpl.updateEncumbrance(actorEntity, undefined, undefined, EncumbranceMode.ADD);
 //     if (game.settings.get(CONSTANTS.MODULE_NAME, 'enableBulkSystem')) {
@@ -958,13 +956,13 @@ export const readyHooks = async () => {
 // }
 
 export async function createEmbeddedDocuments(wrapped, embeddedName, data, context) {
-	const actorEntity: Actor = this.actor;
+	const actorEntity = this.actor;
 	if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enabled")) {
 			await VariantEncumbranceImpl.updateEncumbrance(
 				actorEntity,
 				data,
-				<boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE),
+				actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE),
 				EncumbranceMode.ADD
 			);
 		}
@@ -972,7 +970,7 @@ export async function createEmbeddedDocuments(wrapped, embeddedName, data, conte
 			await VariantEncumbranceBulkImpl.updateEncumbrance(
 				actorEntity,
 				data,
-				<boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE_BULK),
+				actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE_BULK),
 				EncumbranceMode.ADD
 			);
 		}
@@ -981,13 +979,13 @@ export async function createEmbeddedDocuments(wrapped, embeddedName, data, conte
 }
 
 export async function deleteEmbeddedDocuments(wrapped, embeddedName, ids = [], options = {}) {
-	const actorEntity: Actor = this.actor;
+	const actorEntity = this.actor;
 	if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enabled")) {
 			await VariantEncumbranceImpl.updateEncumbrance(
 				actorEntity,
 				ids,
-				<boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE),
+				actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE),
 				EncumbranceMode.DELETE
 			);
 		}
@@ -995,7 +993,7 @@ export async function deleteEmbeddedDocuments(wrapped, embeddedName, ids = [], o
 			await VariantEncumbranceBulkImpl.updateEncumbrance(
 				actorEntity,
 				ids,
-				<boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE_BULK),
+				actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE_BULK),
 				EncumbranceMode.DELETE
 			);
 		}
@@ -1004,13 +1002,13 @@ export async function deleteEmbeddedDocuments(wrapped, embeddedName, ids = [], o
 }
 
 export async function updateEmbeddedDocuments(wrapped, embeddedName, data, options) {
-	const actorEntity: Actor = this.actor;
+	const actorEntity = this.actor;
 	if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enabled")) {
 			await VariantEncumbranceImpl.updateEncumbrance(
 				actorEntity,
 				data,
-				<boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE),
+				actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE),
 				EncumbranceMode.UPDATE
 			);
 		}
@@ -1018,7 +1016,7 @@ export async function updateEmbeddedDocuments(wrapped, embeddedName, data, optio
 			await VariantEncumbranceImpl.updateEncumbrance(
 				actorEntity,
 				data,
-				<boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE_BULK),
+				actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE_BULK),
 				EncumbranceMode.UPDATE
 			);
 		}
@@ -1028,13 +1026,13 @@ export async function updateEmbeddedDocuments(wrapped, embeddedName, data, optio
 // START REMOVED 2022-01-29
 export async function createDocuments(wrapped, data, context = { parent: {}, pack: {}, options: {} }) {
 	const { parent, pack, options } = context;
-	const actorEntity: Actor = <Actor>parent;
+	const actorEntity = parent;
 	if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enabled")) {
 			await VariantEncumbranceImpl.updateEncumbrance(
 				actorEntity,
 				data,
-				<boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE),
+				actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE),
 				EncumbranceMode.ADD
 			);
 		}
@@ -1042,7 +1040,7 @@ export async function createDocuments(wrapped, data, context = { parent: {}, pac
 			await VariantEncumbranceBulkImpl.updateEncumbrance(
 				actorEntity,
 				data,
-				<boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE_BULK),
+				actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE_BULK),
 				EncumbranceMode.ADD
 			);
 		}
@@ -1052,13 +1050,13 @@ export async function createDocuments(wrapped, data, context = { parent: {}, pac
 
 export async function updateDocuments(wrapped, updates = [], context = { parent: {}, pack: {}, options: {} }) {
 	const { parent, pack, options } = context;
-	const actorEntity: Actor = <Actor>parent;
+	const actorEntity = parent;
 	if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enabled")) {
 			await VariantEncumbranceImpl.updateEncumbrance(
 				actorEntity,
 				updates,
-				<boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE),
+				actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE),
 				EncumbranceMode.UPDATE
 			);
 		}
@@ -1066,7 +1064,7 @@ export async function updateDocuments(wrapped, updates = [], context = { parent:
 			await VariantEncumbranceBulkImpl.updateEncumbrance(
 				actorEntity,
 				updates,
-				<boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE_BULK),
+				actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE_BULK),
 				EncumbranceMode.UPDATE
 			);
 		}
@@ -1076,13 +1074,13 @@ export async function updateDocuments(wrapped, updates = [], context = { parent:
 
 export async function deleteDocuments(wrapped, ids = [], context = { parent: {}, pack: {}, options: {} }) {
 	const { parent, pack, options } = context;
-	const actorEntity: Actor = <Actor>parent;
+	const actorEntity = parent;
 	if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enabled")) {
 			await VariantEncumbranceImpl.updateEncumbrance(
 				actorEntity,
 				ids,
-				<boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE),
+				actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE),
 				EncumbranceMode.DELETE
 			);
 		}
@@ -1090,7 +1088,7 @@ export async function deleteDocuments(wrapped, ids = [], context = { parent: {},
 			await VariantEncumbranceBulkImpl.updateEncumbrance(
 				actorEntity,
 				ids,
-				<boolean>actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE_BULK),
+				actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE_BULK),
 				EncumbranceMode.DELETE
 			);
 		}
@@ -1136,13 +1134,13 @@ export async function deleteDocuments(wrapped, ids = [], context = { parent: {},
 
 const module = {
 	async renderActorSheetVariant(
-		actorSheet: ActorSheet,
-		htmlElement: JQuery<HTMLElement>,
-		actorObject: any,
-		actorEntityTmp: Actor,
+		actorSheet,
+		htmlElement,
+		actorObject,
+		actorEntityTmp,
 		htmlElementEncumbranceVariant,
-		sheetClass: string
-	): Promise<void> {
+		sheetClass
+	) {
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enabled")) {
 			// ===============================
 			// CUSTOMIZE ENCUMBRANCE VARIANT
@@ -1163,16 +1161,16 @@ const module = {
 			}
 
 			//if (actorObject.isCharacter || actorObject.isVehicle) {
-			// const actorEntity = <Actor>game.actors?.get(actorObject.actor._id);
+			// const actorEntity = game.actors?.get(actorObject.actor._id);
 			// Do no touch the true actor again
 
 			let encumbranceData;
 			// if (hasProperty(actorObject, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.DATA}`)) {
-			//   encumbranceData = <EncumbranceData>getProperty(actorObject,`flags.${CONSTANTS.FLAG}.${EncumbranceFlags.DATA}`);
+			//   encumbranceData = getProperty(actorObject,`flags.${CONSTANTS.FLAG}.${EncumbranceFlags.DATA}`);
 			// }
 			if (!encumbranceData) {
-				// const itemsCurrent = <Item[]>actorEntity.items.contents;//actorObject.items;// STRANGE BUG actorEntity.items.contents
-				// const actorEntityCurrent = <ActorData>actorObject.actor; // STRANGE BUG <Actor>game.actors?.get(actorObject.actor._id);
+				// const itemsCurrent = actorEntity.items.contents;//actorObject.items;// STRANGE BUG actorEntity.items.contents
+				// const actorEntityCurrent = <ActorData>actorObject.actor; // STRANGE BUG game.actors?.get(actorObject.actor._id);
 				// STRANGE BEHAVIOUR
 				if (actorObject.actor?.flags) {
 					// mergeObject(<any>actorEntity.flags, <any>actorObject.actor.flags);
@@ -1183,10 +1181,10 @@ const module = {
 				// 	setProperty(actorEntityTmp, "system", actorObject.system);
 				// }
 				// mergeObject(actorEntity.items, actorObject.items);
-				let itemsToCheck = <Item[]>[];
+				let itemsToCheck = [];
 				// if (actorObject.items && actorObject.items instanceof Array) {
 				//   for (const itemM of actorEntityTmp.items.contents) {
-				//     const itemToMerge = <ItemData>actorObject.items.find((z: ItemData) => {
+				//     const itemToMerge = <ItemData>actorObject.items.find((zData) => {
 				//       return z._id === itemM.id;
 				//     });
 				//     const newItem = <any>duplicate(itemM);
@@ -1199,11 +1197,11 @@ const module = {
 				itemsToCheck = actorEntityTmp.items.contents;
 				// }
 
-				encumbranceData = <EncumbranceData>(
+				encumbranceData = (
 					VariantEncumbranceImpl.calculateEncumbrance(actorEntityTmp, itemsToCheck, false, invPlusActive)
 				);
 				// TODO THIS LAUNCH A ERROR ON THE SEMAPHORE SYNCHRONIZE...
-				// if (<boolean>actorEntityTmp.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE)) {
+				// if (actorEntityTmp.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE)) {
 				// 	await VariantEncumbranceImpl.manageActiveEffect(actorEntityTmp, encumbranceData.encumbranceTier);
 				// }
 			}
@@ -1217,7 +1215,7 @@ const module = {
 					(game.modules.get("dndbeyond-character-sheet")?.active &&
 						actorSheet.template.includes("dndbeyond-character-sheet")))
 			) {
-				const encumbranceElementsTmp: any = htmlElement.find(".encumberance")[0]?.children;
+				const encumbranceElementsTmp = htmlElement.find(".encumberance")[0]?.children;
 
 				encumbranceElementsTmp[0].textContent =
 					"Weight Carried: " +
@@ -1342,13 +1340,13 @@ const module = {
 		}
 	},
 	async renderActorSheetBulkSystem(
-		actorSheet: ActorSheet,
-		htmlElement: JQuery<HTMLElement>,
-		actorObject: any,
-		actorEntityTmp: Actor,
+		actorSheet,
+		htmlElement,
+		actorObject,
+		actorEntityTmp,
 		encumbranceElement,
-		sheetClass: string
-	): Promise<void> {
+		sheetClass
+	) {
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "enableBulkSystem")) {
 			// ===============================
 			// CUSTOMIZE ENCUMBRANCE
@@ -1383,11 +1381,11 @@ const module = {
 
 			let encumbranceDataBulk;
 			// if (hasProperty(actorObject, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.DATA_BULK}`)) {
-			//   encumbranceDataBulk = <EncumbranceData>getProperty(actorObject,`flags.${CONSTANTS.FLAG}.${EncumbranceFlags.DATA_BULK}`);
+			//   encumbranceDataBulk = getProperty(actorObject,`flags.${CONSTANTS.FLAG}.${EncumbranceFlags.DATA_BULK}`);
 			// }
 			if (!encumbranceDataBulk) {
-				// const itemsCurrent = <Item[]>actorEntity.items.contents;//actorObject.items;// STRANGE BUG actorEntity.items.contents
-				// const actorEntityCurrent = <ActorData>actorObject.actor; // STRANGE BUG <Actor>game.actors?.get(actorObject.actor._id);
+				// const itemsCurrent = actorEntity.items.contents;//actorObject.items;// STRANGE BUG actorEntity.items.contents
+				// const actorEntityCurrent = <ActorData>actorObject.actor; // STRANGE BUG game.actors?.get(actorObject.actor._id);
 				// STRANGE BEHAVIOUR
 				if (actorObject.actor?.flags) {
 					// mergeObject(<any>actorEntity.flags, <any>actorObject.actor.flags);
@@ -1398,10 +1396,10 @@ const module = {
 				// 	setProperty(actorEntityTmp, "system", actorObject.system);
 				// }
 				// mergeObject(actorEntity.items, actorObject.items);
-				let itemsToCheck = <Item[]>[];
+				let itemsToCheck = [];
 				// if (actorObject.items && actorObject.items instanceof Array) {
 				//   for (const itemM of actorEntityTmp.items.contents) {
-				//     const itemToMerge = <ItemData>actorObject.items.find((z: ItemData) => {
+				//     const itemToMerge = <ItemData>actorObject.items.find((zData) => {
 				//       return z._id === itemM.id;
 				//     });
 				//     const newItem = <any>duplicate(itemM);
@@ -1422,13 +1420,13 @@ const module = {
 				);
 
 				// TODO THIS LAUNCH A ERROR ON THE SEMAPHORE SYNCHRONIZE...
-				// if (<boolean>actorEntityTmp.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE_BULK)) {
+				// if (actorEntityTmp.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE_BULK)) {
 				// 	await VariantEncumbranceBulkImpl.manageActiveEffect(actorEntityTmp, encumbranceDataBulk.encumbranceTier);
 				// }
 			}
 
 			const displayedUnitsBulk =
-				encumbranceDataBulk.unit ?? <string>game.settings.get(CONSTANTS.MODULE_NAME, "unitsBulk");
+				encumbranceDataBulk.unit ?? game.settings.get(CONSTANTS.MODULE_NAME, "unitsBulk");
 
 			if (
 				!encumbranceElementsBulk &&
@@ -1437,7 +1435,7 @@ const module = {
 					(game.modules.get("dndbeyond-character-sheet")?.active &&
 						actorSheet.template.includes("dndbeyond-character-sheet")))
 			) {
-				const encumbranceElementsTmp: any = htmlElementEncumbranceBulk[0]?.children;
+				const encumbranceElementsTmp = htmlElementEncumbranceBulk[0]?.children;
 
 				encumbranceElementsTmp[0].textContent =
 					"Bulk Carried: " +
@@ -1499,12 +1497,12 @@ const module = {
 						`<div class="encumbrance-breakpoint-label-bulk VELabel">${encumbranceDataBulk.mediumMax}<div>`
 					);
 
-				(<HTMLElement>(
+				((
 					$(encumbranceElementsBulk)
 						.parent()
 						.find(".encumbrance-breakpoint.encumbrance-33.arrow-up.encumbrance-breakpoint-bulk")[0]
 				)).style.display = "none";
-				(<HTMLElement>(
+				((
 					$(encumbranceElementsBulk)
 						.parent()
 						.find(".encumbrance-breakpoint.encumbrance-33.arrow-down.encumbrance-breakpoint-bulk")[0]
@@ -1524,10 +1522,10 @@ const module = {
 			}
 		}
 	},
-	renderItemSheetBulkSystem(app: ItemSheet, html: JQuery<HTMLElement>, data: any, itemTmp: Item): void {
+	renderItemSheetBulkSystem(app, html, data, itemTmp) {
 		// Size
 		const item = app.object;
-		const options: string[] = [];
+		const options = [];
 		// options.push(
 		//   `<option data-image="icons/svg/mystery-man.svg" value="">${i18n(`${CONSTANTS.MODULE_NAME}.default`)}</option>`,
 		// );
