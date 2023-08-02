@@ -220,7 +220,8 @@ export const readyHooks = async () => {
   };
 
   Hooks.on("renderActorSheet", async function (actorSheet, htmlElement, actorObject) {
-    const actorEntityTmp = game.actors?.get(actorObject.actor._id); //duplicate(actorEntity) ;
+    // Can't necessarily go straight to the supplied object, as it may not have the proper type if the actor is an unlinked Token actor
+    const actorEntityTmp = (actorObject && actorObject.type) ? actorObject : actorObject.actor;
     if (isEnabledActorType(actorEntityTmp)) {
       const htmlElementEncumbranceVariant = htmlElement.find(".encumbrance").addClass("encumbrance-variant");
       //@ts-ignore
@@ -406,7 +407,7 @@ export const readyHooks = async () => {
         doTheUpdate = true;
         noActiveEffect = false;
       }
-      // For our purpose we filter only the invenctory-plus modifier action
+      // For our purpose we filter only the inventory-plus modifier action
       if (invPlusActive && update?.flags && hasProperty(update, `flags.${CONSTANTS.INVENTORY_PLUS_MODULE_NAME}`)) {
         doTheUpdate = true;
         noActiveEffect = false;
