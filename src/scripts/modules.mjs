@@ -221,7 +221,7 @@ export const readyHooks = async () => {
 
   Hooks.on("renderActorSheet", async function (actorSheet, htmlElement, actorObject) {
     // Can't necessarily go straight to the supplied object, as it may not have the proper type if the actor is an unlinked Token actor
-    const actorEntityTmp = (actorObject && actorObject.type) ? actorObject : actorObject.actor;
+    const actorEntityTmp = actorObject && actorObject.type ? actorObject : actorObject.actor;
     if (isEnabledActorType(actorEntityTmp)) {
       const htmlElementEncumbranceVariant = htmlElement.find(".encumbrance").addClass("encumbrance-variant");
       //@ts-ignore

@@ -1,3 +1,7 @@
+## 0.13.2
+
+- Fixed an issue with encumbrance on actor-unlinked tokens ty to @IHaveThatPower
+
 ## 0.13.1 
 
 - Some bug fix
