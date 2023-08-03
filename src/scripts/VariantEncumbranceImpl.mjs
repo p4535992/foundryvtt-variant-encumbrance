@@ -1516,22 +1516,30 @@ export function calcWeight(
   }
   // IF IS A BACKPACK
   // MOD 4535992 Removed variant encumbrance take care of this
+
+  // FVTT10
   // if (this.parent instanceof Actor && (!this.system.equipped && this.system.capacity.weightlessUnequipped)) return 0;
   // const weightless = getProperty(this, "system.capacity.weightless") ?? false;
   // if (weightless) return getProperty(this, "flags.itemcollection.bagWeight") || 0;
-  let itemWeight = getItemWeight(item) || 0;
+
+  // FVTT11
+  // if (this.parent instanceof Actor && (!this.system.equipped && this.flags.itemcollection.weightlessUnequipped)) return 0;
+  // const weightless = getProperty(this, "system.capacity.weightless") ?? false;
+  // let itemWeight = getItemWeight(item) || 0;
+  // if (weightless) return getProperty(this, "flags.itemcollection.bagWeight") ?? 0;
+
   //@ts-ignore
-  if (useEquippedUnequippedItemCollectionFeature && !isEquipped && item.system?.capacity?.weightlessUnequipped) {
+  if (useEquippedUnequippedItemCollectionFeature && !isEquipped && item.flags?.itemcollection?.weightlessUnequipped) {
     return 0;
   }
   // END MOD 4535992
   const weightless = getProperty(item, "system.capacity.weightless") ?? false;
   if (weightless) {
-    itemWeight = getProperty(item, "flags.itemcollection.bagWeight") || 0;
+    itemWeight = getProperty(item, "flags.itemcollection.bagWeight") ?? 0;
   } else {
     itemWeight =
       calcItemWeight(item, ignoreCurrency, { ignoreItems, ignoreTypes }) +
-      (getProperty(item, "flags.itemcollection.bagWeight") || 0);
+      (getProperty(item, "flags.itemcollection.bagWeight") ?? 0);
   }
   if (isEquipped) {
     if (isProficient) {
@@ -1553,6 +1561,18 @@ export function calcWeight(
   return itemWeight;
 }
 
+// if (this.type !== "backpack" || this.items === undefined) return _calcItemWeight(this);
+// const weight = this.items.reduce((acc, item) => {
+//   if (ignoreTypes?.some(name => item.name.includes(name))) return acc;
+//   //@ts-expect-error
+//   if (ignoreItems?.includes(item.name)) return acc;
+//   return acc + (calcWeight.bind(item)() || 0);
+// }, (this.type === "backpack" ? 0 : (_calcItemWeight(this)) || 0));
+// if (!game.settings.get(game.system.id, "currencyWeight")) return Math.round(weight);
+// const currency = this.system.currency ?? {};
+// const numCoins = currency ? Object.keys(currency).reduce((val, denom) => val + currency[denom], 0) : 0;
+// return Math.round(weight + numCoins / 50);
+
 function calcItemWeight(
   item,
   ignoreCurrency,
@@ -1562,11 +1582,8 @@ function calcItemWeight(
   if (item.type !== "backpack" || item.items === undefined) {
     return _calcItemWeight(item);
   }
-  //@ts-ignore
   let weight = item.items.reduce((acc, item) => {
-    //@ts-ignore
     if (ignoreTypes?.some((name) => item.name.includes(name))) return acc;
-    //@ts-ignore
     if (ignoreItems?.includes(item.name)) return acc;
     return acc + (item.calcWeight() || 0); // TODO convert this in a static method ???
   }, (item.type === "backpack" ? 0 : _calcItemWeight(item)) || 0);
@@ -1598,12 +1615,14 @@ function calcItemWeight(
   return weight;
 }
 
+// const quantity = item.system.quantity || 1;
+// const weight = item.system.weight || 0;
+// return Math.round(weight * quantity * 100000) / 100000;
+
 function _calcItemWeight(item) {
-  // const quantity = getItemQuantity(item);
-  // const weight = getItemWeight(item);
   const quantity = getItemQuantity(item);
   const weight = getItemWeight(item);
-  return Math.round(weight * quantity * 100) / 100;
+  return Math.round(weight * quantity * 100000) / 100000;
 }
 
 // ============================
