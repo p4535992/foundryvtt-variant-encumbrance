@@ -549,27 +549,35 @@ export const VariantEncumbranceBulkImpl = {
       // End inventory+ module is active 2
       // END TOTAL WEIGHT
 
-      // ON BULK SYSTEM THERE ISN'T [Optional] add Currency Weight (for non-transformed actors)
-      /*
-			//@ts-ignore
-			if (!ignoreCurrency && game.settings.get(CONSTANTS.MODULE_NAME, 'enableCurrencyWeight') && game.settings.get('dnd5e', 'currencyWeight') && actorEntity.system.currency) {
-				//@ts-ignore
-				const currency = actorEntity.system.currency;
-				const numCoins = (
-				Object.values(currency).reduce((val, denom) => (val += Math.max(denom, 0)), 0)
-				);
+      // [Optional] add Currency Weight (for non-transformed actors)
+      if (
+        !ignoreCurrency &&
+        game.settings.get(CONSTANTS.MODULE_NAME, "enableCurrencyWeight") &&
+        game.settings.get("dnd5e", "currencyWeight") &&
+        actorEntity.system.currency
+      ) {
+        //@ts-ignore
+        const currency = actorEntity.system.currency;
+        const numCoins = Object.values(currency).reduce((val, denom) => (val += Math.max(denom, 0)), 0);
 
-				const currencyPerWeight = game.settings.get('dnd5e', 'metricWeightUnits')
-				? game.settings.get(CONSTANTS.MODULE_NAME, 'fakeMetricSystem')
-					? game.settings.get(CONSTANTS.MODULE_NAME, 'currencyWeight')
-					: game.settings.get(CONSTANTS.MODULE_NAME, 'currencyWeightMetric')
-				: game.settings.get(CONSTANTS.MODULE_NAME, 'currencyWeight');
-				totalWeight += numCoins / currencyPerWeight;
-				debug(
-				`Actor '${actorEntity.name}' : ${numCoins} / ${currencyPerWeight} = ${numCoins / currencyPerWeight} => ${totalWeight}`,
-				);
-			}
-			*/
+        // const currencyPerWeight = game.settings.get('dnd5e', 'metricWeightUnits')
+        // ? game.settings.get(CONSTANTS.MODULE_NAME, 'fakeMetricSystem')
+        // 	? game.settings.get(CONSTANTS.MODULE_NAME, 'currencyWeight')
+        // 	: game.settings.get(CONSTANTS.MODULE_NAME, 'currencyWeightMetric')
+        // : game.settings.get(CONSTANTS.MODULE_NAME, 'currencyWeight');
+        const currencyPerWeight = game.settings.get(CONSTANTS.MODULE_NAME, "currencyWeightBulk") ?? 100;
+        if (currencyPerWeight == 0) {
+          totalWeight += 0;
+        } else {
+          totalWeight += numCoins / currencyPerWeight;
+        }
+        debug(
+          `Actor '${actorEntity.name}' : ${numCoins} / ${currencyPerWeight} = ${
+            currencyPerWeight == 0 ? 0 : numCoins / currencyPerWeight
+          } => ${totalWeight}`
+        );
+      }
+
       // Compute Encumbrance percentage
       totalWeight = totalWeight.toNearest(0.1);
       debug(`Actor '${actorEntity.name}' => ${totalWeight}`);
@@ -1487,18 +1495,27 @@ function calcItemBulk(
     const currency = item.system.currency ?? {};
     const numCoins = Object.values(currency).reduce((val, denom) => (val += Math.max(denom, 0)), 0);
 
-    const currencyPerWeight = game.settings.get("dnd5e", "metricWeightUnits")
-      ? game.settings.get(CONSTANTS.MODULE_NAME, "fakeMetricSystem")
-        ? game.settings.get(CONSTANTS.MODULE_NAME, "currencyWeight")
-        : game.settings.get(CONSTANTS.MODULE_NAME, "currencyWeightMetric")
-      : game.settings.get(CONSTANTS.MODULE_NAME, "currencyWeight");
-
-    weight = Math.round(weight + numCoins / currencyPerWeight);
+    // const currencyPerWeight = game.settings.get("dnd5e", "metricWeightUnits")
+    //   ? game.settings.get(CONSTANTS.MODULE_NAME, "fakeMetricSystem")
+    //     ? game.settings.get(CONSTANTS.MODULE_NAME, "currencyWeight")
+    //     : game.settings.get(CONSTANTS.MODULE_NAME, "currencyWeightMetric")
+    //   : game.settings.get(CONSTANTS.MODULE_NAME, "currencyWeight");
+    const currencyPerWeight = game.settings.get(CONSTANTS.MODULE_NAME, "currencyWeightBulk") ?? 100;
+    if (currencyPerWeight == 0) {
+      weight = Math.round(weight + 0);
+    } else {
+      weight = Math.round(weight + numCoins / currencyPerWeight);
+    }
+    debug(
+      `Actor '${actorEntity.name}' : ${numCoins} / ${currencyPerWeight} = ${
+        currencyPerWeight == 0 ? 0 : numCoins / currencyPerWeight
+      } => ${totalWeight}`
+    );
   } else {
     //@ts-ignore
     const currency = item.system.currency ?? {};
     const numCoins = currency ? Object.keys(currency).reduce((val, denom) => val + currency[denom], 0) : 0;
-    weight = Math.round(weight + numCoins / 50);
+    weight = Math.round(weight + numCoins / 100);
   }
   return weight;
 }

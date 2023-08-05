@@ -399,6 +399,15 @@ export const registerSettings = function () {
     default: false,
   });
 
+  game.settings.register(CONSTANTS.MODULE_NAME, "currencyWeightBulk", {
+    name: i18n(CONSTANTS.MODULE_NAME + ".setting.currencyWeightBulk.name"),
+    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.currencyWeightBulk.hint"),
+    scope: "world",
+    config: true,
+    type: Number,
+    default: 100,
+  });
+
   game.settings.register(CONSTANTS.MODULE_NAME, "hideStandardEncumbranceBar", {
     name: i18n(CONSTANTS.MODULE_NAME + ".setting.hideStandardEncumbranceBar.name"),
     hint: i18n(CONSTANTS.MODULE_NAME + ".setting.hideStandardEncumbranceBar.hint"),

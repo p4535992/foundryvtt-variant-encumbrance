@@ -645,10 +645,14 @@ export const VariantEncumbranceImpl = {
             ? game.settings.get(CONSTANTS.MODULE_NAME, "currencyWeight")
             : game.settings.get(CONSTANTS.MODULE_NAME, "currencyWeightMetric")
           : game.settings.get(CONSTANTS.MODULE_NAME, "currencyWeight");
-        totalWeight += numCoins / currencyPerWeight;
+        if (currencyPerWeight == 0) {
+          totalWeight += 0;
+        } else {
+          totalWeight += numCoins / currencyPerWeight;
+        }
         debug(
           `Actor '${actorEntity.name}' : ${numCoins} / ${currencyPerWeight} = ${
-            numCoins / currencyPerWeight
+            currencyPerWeight == 0 ? 0 : numCoins / currencyPerWeight
           } => ${totalWeight}`
         );
       }
@@ -1604,8 +1608,16 @@ function calcItemWeight(
         ? game.settings.get(CONSTANTS.MODULE_NAME, "currencyWeight")
         : game.settings.get(CONSTANTS.MODULE_NAME, "currencyWeightMetric")
       : game.settings.get(CONSTANTS.MODULE_NAME, "currencyWeight");
-
-    weight = Math.round(weight + numCoins / currencyPerWeight);
+    if (currencyPerWeight == 0) {
+      weight = Math.round(weight + 0);
+    } else {
+      weight = Math.round(weight + numCoins / currencyPerWeight);
+    }
+    debug(
+      `Actor '${actorEntity.name}' : ${numCoins} / ${currencyPerWeight} = ${
+        currencyPerWeight == 0 ? 0 : numCoins / currencyPerWeight
+      } => ${totalWeight}`
+    );
   } else {
     //@ts-ignore
     const currency = item.system.currency ?? {};

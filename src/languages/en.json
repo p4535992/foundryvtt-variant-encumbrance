@@ -113,6 +113,9 @@
   "variant-encumbrance-dnd5e.setting.automaticApplySuggestedBulk.name": "Automatic apply suggested bulk (Bulk System)",
   "variant-encumbrance-dnd5e.setting.automaticApplySuggestedBulk.hint": "WARNING: THIS IS DANGEROUS, IT WILL UPDATE THE BULK DATA ON EVERY ITEM BEEN RENDERED IF THE BULK VALUE IS 0. This is usually save time if you don't want to manually set every item (the advisable way)",
 
+  "variant-encumbrance-dnd5e.setting.currencyWeightBulk.name": "Currency Per Bulk Unit (Bulk System)",
+  "variant-encumbrance-dnd5e.setting.currencyWeightBulk.hint": "This parameter allows for the weight of coins to be taken into account in the Bulk system. If you do not like it you can disable it by setting it to 0, the default value provided is 100, so the calculation formula will be 'number of coins / 100' for example 'Krazak finds a rotting chest that holds 1,900 assorted copper coins (19 bulk carried)'",
+
   "variant-encumbrance-dnd5e.setting.hideStandardEncumbranceBar.name": "Remove standard encumbrance bar from the character sheet",
   "variant-encumbrance-dnd5e.setting.hideStandardEncumbranceBar.hint": "If enabled it will hide the standard bar of encumbrance, is useful only for people using the bulk bar and do not want to see two graphic bars",
 
