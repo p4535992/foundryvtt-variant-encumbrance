@@ -27,8 +27,6 @@ The effects of this module are currently purely visual, although restricting mov
 
 For D&D5e 1.4.2 and newer the system supports a core implementation of this encumbrance rule. The module should be synchronized with the core functionality, but this module will permit more customised rules for your weight calculations/thresholds and the speed penalties are integrated with active effect.
 
-## NOTE: If you are a javascript developer and not a typescript developer, you can just use the javascript files under the dist folder
-
 ![tutorial](./wiki/tutorial_ve_2022.gif)
 
 ## Installation

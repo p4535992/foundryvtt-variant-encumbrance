@@ -1,3 +1,8 @@
+## 0.13.3 
+
+- Bug fix : https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/2 
+- Bug fix : https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/21
+ 
 ## 0.13.2
 
 - Fixed an issue with encumbrance on actor-unlinked tokens ty to @IHaveThatPower

@@ -1585,7 +1585,7 @@ function calcItemWeight(
   let weight = item.items.reduce((acc, item) => {
     if (ignoreTypes?.some((name) => item.name.includes(name))) return acc;
     if (ignoreItems?.includes(item.name)) return acc;
-    return acc + (item.calcWeight() || 0); // TODO convert this in a static method ???
+    return acc + (getItemWeight(item) || 0); // Removed item.calcWeight() is ok ???
   }, (item.type === "backpack" ? 0 : _calcItemWeight(item)) || 0);
   // [Optional] add Currency Weight (for non-transformed actors)
   if (
@@ -1936,7 +1936,7 @@ function _standardVehicleWeightCalculation(actorEntity) {
       const weight = getItemWeight(item);
 
       //@ts-ignore
-      totalWeight += weight * quantity;
+      totalWeight += Math.round(weight * quantity * 100000) / 100000;
       //@ts-ignore
       // actorEntity._prepareEncumbrance();
       //@ts-ignore
@@ -1967,7 +1967,7 @@ function _standardVehicleWeightCalculation(actorEntity) {
         const quantity = getItemQuantity(item);
         const weight = getItemWeight(item);
 
-        totalWeight += weight * quantity;
+        totalWeight += Math.round(weight * quantity * 100000) / 100000;
       }
     }
   }
