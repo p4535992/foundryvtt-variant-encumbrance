@@ -1531,7 +1531,7 @@ export function calcWeight(
   // const weightless = getProperty(this, "system.capacity.weightless") ?? false;
   // let itemWeight = getItemWeight(item) || 0;
   // if (weightless) return getProperty(this, "flags.itemcollection.bagWeight") ?? 0;
-
+  let itemWeight = getItemWeight(item) || 0;
   //@ts-ignore
   if (useEquippedUnequippedItemCollectionFeature && !isEquipped && item.flags?.itemcollection?.weightlessUnequipped) {
     return 0;
@@ -1565,18 +1565,6 @@ export function calcWeight(
   return itemWeight;
 }
 
-// if (this.type !== "backpack" || this.items === undefined) return _calcItemWeight(this);
-// const weight = this.items.reduce((acc, item) => {
-//   if (ignoreTypes?.some(name => item.name.includes(name))) return acc;
-//   //@ts-expect-error
-//   if (ignoreItems?.includes(item.name)) return acc;
-//   return acc + (calcWeight.bind(item)() || 0);
-// }, (this.type === "backpack" ? 0 : (_calcItemWeight(this)) || 0));
-// if (!game.settings.get(game.system.id, "currencyWeight")) return Math.round(weight);
-// const currency = this.system.currency ?? {};
-// const numCoins = currency ? Object.keys(currency).reduce((val, denom) => val + currency[denom], 0) : 0;
-// return Math.round(weight + numCoins / 50);
-
 function calcItemWeight(
   item,
   ignoreCurrency,
@@ -1589,7 +1577,7 @@ function calcItemWeight(
   let weight = item.items.reduce((acc, item) => {
     if (ignoreTypes?.some((name) => item.name.includes(name))) return acc;
     if (ignoreItems?.includes(item.name)) return acc;
-    return acc + (getItemWeight(item) || 0); // Removed item.calcWeight() is ok ???
+    return acc + (getItemWeight(item) * getItemQuantity(item));
   }, (item.type === "backpack" ? 0 : _calcItemWeight(item)) || 0);
   // [Optional] add Currency Weight (for non-transformed actors)
   if (
@@ -1609,27 +1597,25 @@ function calcItemWeight(
         : game.settings.get(CONSTANTS.MODULE_NAME, "currencyWeightMetric")
       : game.settings.get(CONSTANTS.MODULE_NAME, "currencyWeight");
     if (currencyPerWeight == 0) {
-      weight = Math.round(weight + 0);
+      weight = weight + 0;
     } else {
-      weight = Math.round(weight + numCoins / currencyPerWeight);
+      weight = weight + numCoins / currencyPerWeight;
     }
+    weight = Math.round(weight * 100000) / 100000;
     debug(
-      `Actor '${actorEntity.name}' : ${numCoins} / ${currencyPerWeight} = ${
+      `Backpack : ${numCoins} / ${currencyPerWeight} = ${
         currencyPerWeight == 0 ? 0 : numCoins / currencyPerWeight
-      } => ${totalWeight}`
+      } => ${weight}`
     );
   } else {
     //@ts-ignore
     const currency = item.system.currency ?? {};
     const numCoins = currency ? Object.keys(currency).reduce((val, denom) => val + currency[denom], 0) : 0;
-    weight = Math.round(weight + numCoins / 50);
+    weight = weight + (numCoins / 50);
+    weight = Math.round(weight * 100000) / 100000;
   }
   return weight;
 }
-
-// const quantity = item.system.quantity || 1;
-// const weight = item.system.weight || 0;
-// return Math.round(weight * quantity * 100000) / 100000;
 
 function _calcItemWeight(item) {
   const quantity = getItemQuantity(item);
