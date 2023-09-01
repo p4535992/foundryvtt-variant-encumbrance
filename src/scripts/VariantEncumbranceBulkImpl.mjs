@@ -368,7 +368,7 @@ export const VariantEncumbranceBulkImpl = {
           itemWeight = weightless ? itemWeight : itemWeight + backpackManagerWeight;
 
           debug(
-            `Is BackpackManager! Actor '${actorEntity.name}, Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`
+            `Is BackpackManager! Actor '${actorEntity.name}', Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`
           );
           mapItemEncumbrance[item.id] = itemQuantity * itemWeight;
           return weight + itemQuantity * itemWeight;
@@ -381,7 +381,7 @@ export const VariantEncumbranceBulkImpl = {
           //@ts-ignore
           item.system.proficient ? item.system.proficient : false;
 
-        debug(`Actor '${actorEntity.name}, Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`);
+        debug(`Actor '${actorEntity.name}', Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`);
 
         // let ignoreEquipmentCheck = false;
 
@@ -389,7 +389,7 @@ export const VariantEncumbranceBulkImpl = {
 
         // Start Item container check
         if (hasProperty(item, `flags.itemcollection`) && itemContainerActive) {
-          itemWeight = calcBulk(
+          itemWeight = calcBulkItemCollection(
             item,
             useEquippedUnequippedItemCollectionFeature,
             doNotApplyWeightForEquippedArmor,
@@ -532,7 +532,7 @@ export const VariantEncumbranceBulkImpl = {
         let appliedWeight = itemQuantity * itemWeight;
 
         debug(
-          `Actor '${actorEntity.name}, Item '${item.name}', Equipped '${isEquipped}', Proficient ${isProficient} :
+          `Actor '${actorEntity.name}', Item '${item.name}', Equipped '${isEquipped}', Proficient ${isProficient} :
              ${itemQuantity} * ${itemWeight} = ${appliedWeight} on total ${weight} => ${weight + appliedWeight}`
         );
         mapItemEncumbrance[item.id] = appliedWeight;
@@ -1344,7 +1344,7 @@ export const VariantEncumbranceBulkImpl = {
 // Item Collection/Container SUPPORT
 // ===========================
 
-export function calcBulk(
+export function calcBulkItemCollection(
   item,
   useEquippedUnequippedItemCollectionFeature,
   doNotApplyWeightForEquippedArmor,

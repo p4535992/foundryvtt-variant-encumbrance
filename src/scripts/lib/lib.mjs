@@ -369,7 +369,7 @@ export function checkBulkCategory(weight, item) {
       "doNotApplyWeightForEquippedArmor"
     );
     // TODO IS OK TO DO THIS FOR ITEM CONTAINER ????
-    // bulkRef = calcWeight(item, useEquippedUnequippedItemCollectionFeature, doNotApplyWeightForEquippedArmor, false);
+    // bulkRef = calcWeightItemCollection(item, useEquippedUnequippedItemCollectionFeature, doNotApplyWeightForEquippedArmor, false);
     // if (game.settings.get("dnd5e", "metricWeightUnits")) {
     // 	bulkRef = bulkRef <= 0 ? 0 : convertPoundsToKg(bulkRef);
     // }
