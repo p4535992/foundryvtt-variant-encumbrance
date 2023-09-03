@@ -1,8 +1,8 @@
 import { BULK_CATEGORY, BulkData, EncumbranceActorType } from "./../VariantEncumbranceModels.mjs";
 import CONSTANTS from "../constants.mjs";
-import { calcBulk } from "../VariantEncumbranceBulkImpl.mjs";
+import { calcBulkItemCollection } from "../VariantEncumbranceBulkImpl.mjs";
 import { backPackManagerActive, itemContainerActive } from "../modules.mjs";
-import { calcWeight } from "../VariantEncumbranceImpl.mjs";
+import { calcWeightItemCollection } from "../VariantEncumbranceImpl.mjs";
 import API from "../api.mjs";
 
 // =============================
@@ -368,12 +368,22 @@ export function checkBulkCategory(weight, item) {
       CONSTANTS.MODULE_NAME,
       "doNotApplyWeightForEquippedArmor"
     );
+    const doNotIncreaseWeightByQuantityForNoAmmunition = game.settings.get(
+      CONSTANTS.MODULE_NAME,
+      "doNotIncreaseWeightByQuantityForNoAmmunition"
+    );
     // TODO IS OK TO DO THIS FOR ITEM CONTAINER ????
-    // bulkRef = calcWeightItemCollection(item, useEquippedUnequippedItemCollectionFeature, doNotApplyWeightForEquippedArmor, false);
+    // bulkRef = calcWeightItemCollection(item, useEquippedUnequippedItemCollectionFeature, doNotApplyWeightForEquippedArmor, false, doNotIncreaseWeightByQuantityForNoAmmunition);
     // if (game.settings.get("dnd5e", "metricWeightUnits")) {
     // 	bulkRef = bulkRef <= 0 ? 0 : convertPoundsToKg(bulkRef);
     // }
-    bulkRef = calcBulk(item, useEquippedUnequippedItemCollectionFeature, doNotApplyWeightForEquippedArmor, false);
+    bulkRef = calcBulkItemCollection(
+      item,
+      useEquippedUnequippedItemCollectionFeature,
+      doNotApplyWeightForEquippedArmor,
+      false,
+      doNotIncreaseWeightByQuantityForNoAmmunition
+    );
   }
   if (bulkRef <= 0) {
     return BULK_CATEGORY.NONE;

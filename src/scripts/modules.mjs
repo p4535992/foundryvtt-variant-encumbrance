@@ -28,7 +28,7 @@ import {
 import CONSTANTS from "./constants.mjs";
 import { registerSocket } from "./socket.mjs";
 import API from "./api.mjs";
-import { calcBulk, VariantEncumbranceBulkImpl } from "./VariantEncumbranceBulkImpl.mjs";
+import { calcBulkItemCollection, VariantEncumbranceBulkImpl } from "./VariantEncumbranceBulkImpl.mjs";
 import { setApi } from "../module.js";
 
 export let ENCUMBRANCE_STATE = {
@@ -1181,7 +1181,10 @@ const module = {
         const encumbranceElementsTmp = htmlElement.find(".encumberance")[0]?.children;
 
         encumbranceElementsTmp[0].textContent =
-          "Weight Carried: " + Math.round(encumbranceData.totalWeightToDisplay * 100000) / 100000 + " " + displayedUnits;
+          "Weight Carried: " +
+          Math.round(encumbranceData.totalWeightToDisplay * 100000) / 100000 +
+          " " +
+          displayedUnits;
 
         encumbranceElementsTmp[1].textContent = "Max: " + encumbranceData.heavyMax + " " + displayedUnits;
         // TODO visual integration with compact-beyond-5e-sheet
@@ -1411,7 +1414,7 @@ const module = {
           "width: " +
           Math.min(Math.max((encumbranceDataBulk.totalWeightToDisplay / encumbranceDataBulk.heavyMax) * 100, 0), 99.8) +
           "%;";
-        
+
         encumbranceElementsBulk[1].textContent =
           Math.round(encumbranceDataBulk.totalWeightToDisplay * 100000) / 100000 +
           "/" +

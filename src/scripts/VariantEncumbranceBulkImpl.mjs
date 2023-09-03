@@ -386,16 +386,20 @@ export const VariantEncumbranceBulkImpl = {
         // let ignoreEquipmentCheck = false;
 
         // External modules calculation
-
+        let ignoreQuantityCheckForItemCollection = false;
         // Start Item container check
         if (hasProperty(item, `flags.itemcollection`) && itemContainerActive) {
           itemWeight = calcBulkItemCollection(
             item,
             useEquippedUnequippedItemCollectionFeature,
             doNotApplyWeightForEquippedArmor,
-            ignoreCurrency
+            ignoreCurrency,
+            doNotIncreaseWeightByQuantityForNoAmmunition
           );
-        } else {
+          ignoreQuantityCheckForItemCollection = true;
+        }
+        // End Item container check
+        else {
           // Does the weight of the items in the container carry over to the actor?
           // TODO  wait for 2.2.0
           const weightless = getProperty(item, "system.capacity.weightless") ?? false;
@@ -458,8 +462,15 @@ export const VariantEncumbranceBulkImpl = {
           } else {
             itemWeight *= game.settings.get(CONSTANTS.MODULE_NAME, "unequippedMultiplier");
           }
+
+          // Feature: Do Not increase weight by quantity for no ammunition item
+          if (doNotIncreaseWeightByQuantityForNoAmmunition) {
+            //@ts-ignore
+            if (item.system?.consumableType !== "ammo") {
+              itemQuantity = 1;
+            }
+          }
         }
-        // End Item container check
         // Start inventory+ module is active
         if (invPlusActiveTmp) {
           // Retrieve flag 'categorys' from inventory plus module
@@ -521,15 +532,12 @@ export const VariantEncumbranceBulkImpl = {
 
         // End External modules calculation
 
-        // Feature: Do Not increase weight by quantity for no ammunition item
-        if (doNotIncreaseWeightByQuantityForNoAmmunition) {
-          //@ts-ignore
-          if (item.system?.consumableType !== "ammo") {
-            itemQuantity = 1;
-          }
+        let appliedWeight = 0;
+        if (ignoreQuantityCheckForItemCollection) {
+          appliedWeight = itemWeight;
+        } else {
+          appliedWeight = itemQuantity * itemWeight;
         }
-
-        let appliedWeight = itemQuantity * itemWeight;
 
         debug(
           `Actor '${actorEntity.name}', Item '${item.name}', Equipped '${isEquipped}', Proficient ${isProficient} :
@@ -1349,6 +1357,7 @@ export function calcBulkItemCollection(
   useEquippedUnequippedItemCollectionFeature,
   doNotApplyWeightForEquippedArmor,
   ignoreCurrency,
+  doNotIncreaseWeightByQuantityForNoAmmunition,
   { ignoreItems, ignoreTypes } = { ignoreItems: undefined, ignoreTypes: undefined }
 ) {
   const isEquipped =
@@ -1362,11 +1371,13 @@ export function calcBulkItemCollection(
   //@ts-ignore
   if (item.type !== "backpack" || !item.flags.itemcollection) {
     debug(`calcBulkItemCollection | Is not a 'backpack' and is not flagged as itemcollection`);
-    let currentItemWeight = calcItemBulk(item, ignoreCurrency);
+    let currentItemWeight = calcItemBulk(item, ignoreCurrency, doNotIncreaseWeightByQuantityForNoAmmunition);
     const itemArmorTypes = ["clothing", "light", "medium", "heavy", "natural"];
     //@ts-ignore
     if (isEquipped && doNotApplyWeightForEquippedArmor && itemArmorTypes.includes(item.system.armor?.type)) {
-        debug(`calcBulkItemCollection | Is not a 'backpack' and is not flagged as itemcollection | Equipped = true, doNotApplyWeightForEquippedArmor = true, Armor Type = true (${item.system.armor?.type})`);
+      debug(
+        `calcBulkItemCollection | Is not a 'backpack' and is not flagged as itemcollection | Equipped = true, doNotApplyWeightForEquippedArmor = true, Armor Type = true (${item.system.armor?.type})`
+      );
       const applyWeightMultiplierForEquippedArmorClothing =
         game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorClothing") || 0;
       const applyWeightMultiplierForEquippedArmorLight =
@@ -1379,44 +1390,78 @@ export function calcBulkItemCollection(
         game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorNatural") || 0;
       //@ts-ignore
       if (item.system.armor?.type === "clothing") {
-        debug(`calcBulkItemCollection | applyWeightMultiplierForEquippedArmorClothing with value ${applyWeightMultiplierForEquippedArmorClothing} : ${currentItemWeight} => ${currentItemWeight * applyWeightMultiplierForEquippedArmorClothing}`);
+        debug(
+          `calcBulkItemCollection | applyWeightMultiplierForEquippedArmorClothing with value ${applyWeightMultiplierForEquippedArmorClothing} : ${currentItemWeight} => ${
+            currentItemWeight * applyWeightMultiplierForEquippedArmorClothing
+          }`
+        );
         currentItemWeight *= applyWeightMultiplierForEquippedArmorClothing;
       }
       //@ts-ignore
       else if (item.system.armor?.type === "light") {
-        debug(`calcBulkItemCollection | applyWeightMultiplierForEquippedArmorLight  with value ${applyWeightMultiplierForEquippedArmorLight} :${currentItemWeight} => ${currentItemWeight * applyWeightMultiplierForEquippedArmorLight}`);
+        debug(
+          `calcBulkItemCollection | applyWeightMultiplierForEquippedArmorLight  with value ${applyWeightMultiplierForEquippedArmorLight} :${currentItemWeight} => ${
+            currentItemWeight * applyWeightMultiplierForEquippedArmorLight
+          }`
+        );
         currentItemWeight *= applyWeightMultiplierForEquippedArmorLight;
       }
       //@ts-ignore
       else if (item.system.armor?.type === "medium") {
-        debug(`calcBulkItemCollection | applyWeightMultiplierForEquippedArmorMedium with value ${applyWeightMultiplierForEquippedArmorMedium} : ${currentItemWeight} => ${currentItemWeight * applyWeightMultiplierForEquippedArmorMedium}`);
+        debug(
+          `calcBulkItemCollection | applyWeightMultiplierForEquippedArmorMedium with value ${applyWeightMultiplierForEquippedArmorMedium} : ${currentItemWeight} => ${
+            currentItemWeight * applyWeightMultiplierForEquippedArmorMedium
+          }`
+        );
         currentItemWeight *= applyWeightMultiplierForEquippedArmorMedium;
       }
       //@ts-ignore
       else if (item.system.armor?.type === "heavy") {
-        debug(`calcBulkItemCollection | applyWeightMultiplierForEquippedArmorArmorHeavy with value ${applyWeightMultiplierForEquippedArmorHeavy} : ${currentItemWeight} => ${currentItemWeight * applyWeightMultiplierForEquippedArmorHeavy}`);
+        debug(
+          `calcBulkItemCollection | applyWeightMultiplierForEquippedArmorArmorHeavy with value ${applyWeightMultiplierForEquippedArmorHeavy} : ${currentItemWeight} => ${
+            currentItemWeight * applyWeightMultiplierForEquippedArmorHeavy
+          }`
+        );
         currentItemWeight *= applyWeightMultiplierForEquippedArmorHeavy;
       }
       //@ts-ignore
       else if (item.system.armor?.type === "natural") {
-        debug(`calcBulkItemCollection | applyWeightMultiplierForEquippedArmorNatural with value ${applyWeightMultiplierForEquippedArmorNatural} : ${currentItemWeight} => ${currentItemWeight * applyWeightMultiplierForEquippedArmorNatural}`);
+        debug(
+          `calcBulkItemCollection | applyWeightMultiplierForEquippedArmorNatural with value ${applyWeightMultiplierForEquippedArmorNatural} : ${currentItemWeight} => ${
+            currentItemWeight * applyWeightMultiplierForEquippedArmorNatural
+          }`
+        );
         currentItemWeight *= applyWeightMultiplierForEquippedArmorNatural;
       }
       //@ts-ignore
       else {
-        debug(`calcBulkItemCollection | doNotApplyWeightForEquippedArmor with value ${0} : ${currentItemWeight} => ${0}`);
+        debug(
+          `calcBulkItemCollection | doNotApplyWeightForEquippedArmor with value ${0} : ${currentItemWeight} => ${0}`
+        );
         currentItemWeight *= 0;
       }
     } else if (isEquipped) {
       if (isProficient) {
-        debug(`calcBulkItemCollection | Equipped = true, Proficient = true : ${currentItemWeight} => ${currentItemWeight * game.settings.get(CONSTANTS.MODULE_NAME, "profEquippedMultiplier")}`);
+        debug(
+          `calcBulkItemCollection | Equipped = true, Proficient = true : ${currentItemWeight} => ${
+            currentItemWeight * game.settings.get(CONSTANTS.MODULE_NAME, "profEquippedMultiplier")
+          }`
+        );
         currentItemWeight *= game.settings.get(CONSTANTS.MODULE_NAME, "profEquippedMultiplier");
       } else {
-        debug(`calcBulkItemCollection | Equipped = true, Proficient = false : ${currentItemWeight} => ${currentItemWeight * game.settings.get(CONSTANTS.MODULE_NAME, "equippedMultiplier")}`);
+        debug(
+          `calcBulkItemCollection | Equipped = true, Proficient = false : ${currentItemWeight} => ${
+            currentItemWeight * game.settings.get(CONSTANTS.MODULE_NAME, "equippedMultiplier")
+          }`
+        );
         currentItemWeight *= game.settings.get(CONSTANTS.MODULE_NAME, "equippedMultiplier");
       }
     } else {
-      debug(`calcBulkItemCollection | Equipped = false, Proficient = false : ${currentItemWeight} => ${currentItemWeight * game.settings.get(CONSTANTS.MODULE_NAME, "unequippedMultiplier")}`);
+      debug(
+        `calcBulkItemCollection | Equipped = false, Proficient = false : ${currentItemWeight} => ${
+          currentItemWeight * game.settings.get(CONSTANTS.MODULE_NAME, "unequippedMultiplier")
+        }`
+      );
       currentItemWeight *= game.settings.get(CONSTANTS.MODULE_NAME, "unequippedMultiplier");
     }
     return currentItemWeight;
@@ -1445,7 +1490,9 @@ export function calcBulkItemCollection(
   if (weightless) {
     itemWeight = getItemBulk(item) ?? 0;
   } else {
-    itemWeight = calcItemBulk(item, ignoreCurrency, { ignoreItems, ignoreTypes }) + (getItemBulk(item) ?? 0);
+    itemWeight =
+      calcItemBulk(item, ignoreCurrency, doNotIncreaseWeightByQuantityForNoAmmunition, { ignoreItems, ignoreTypes }) +
+      (getItemBulk(item) ?? 0);
   }
   if (isEquipped) {
     if (isProficient) {
@@ -1470,19 +1517,25 @@ export function calcBulkItemCollection(
 function calcItemBulk(
   item,
   ignoreCurrency,
+  doNotIncreaseWeightByQuantityForNoAmmunition,
   { ignoreItems, ignoreTypes } = { ignoreItems: undefined, ignoreTypes: undefined }
 ) {
   //@ts-ignore
   if (item.type !== "backpack" || item.items === undefined) {
-    debug(`calcItemBulk | Is not a backpack or has not items on it => ${_calcItemWeight(item)}` );
-    return _calcItemBulk(item);
+    debug(
+      `calcItemBulk | Is not a backpack or has not items on it => ${_calcItemBulk(
+        item,
+        doNotIncreaseWeightByQuantityForNoAmmunition
+      )}`
+    );
+    return _calcItemBulk(item, doNotIncreaseWeightByQuantityForNoAmmunition);
   }
   //@ts-ignore
   let weight = item.items.reduce((acc, item) => {
     if (ignoreTypes?.some((name) => item.name.includes(name))) return acc;
     if (ignoreItems?.includes(item.name)) return acc;
-    return acc + (getItemBulk(item) * getItemQuantity(item));
-  }, (item.type === "backpack" ? 0 : _calcItemBulk(item)) ?? 0);
+    return acc + getItemBulk(item) * getItemQuantity(item);
+  }, (item.type === "backpack" ? 0 : _calcItemBulk(item, doNotIncreaseWeightByQuantityForNoAmmunition)) ?? 0);
   // [Optional] add Currency Weight (for non-transformed actors)
   if (
     !ignoreCurrency &&
@@ -1491,7 +1544,7 @@ function calcItemBulk(
     //@ts-ignore
     item.system.currency
   ) {
-    debug(`calcItemBulk | Check out currency = true => ${weight}` );
+    debug(`calcItemBulk | Check out currency = true => ${weight}`);
     //@ts-ignore
     const currency = item.system.currency ?? {};
     const numCoins = Object.values(currency).reduce((val, denom) => (val += Math.max(denom, 0)), 0);
@@ -1514,19 +1567,29 @@ function calcItemBulk(
       } => ${weight}`
     );
   } else {
-    debug(`calcItemBulk | Check out currency = false => ${weight}` );
+    debug(`calcItemBulk | Check out currency = false => ${weight}`);
     //@ts-ignore
     const currency = item.system.currency ?? {};
     const numCoins = currency ? Object.keys(currency).reduce((val, denom) => val + currency[denom], 0) : 0;
-    weight = weight + (numCoins / 100);
+    weight = weight + numCoins / 100;
     weight = Math.round(weight * 100000) / 100000;
     debug(`calcItemBulk | Backpack : ${numCoins} / ${50} = ${numCoins / 50} => ${weight}`);
   }
   return weight;
 }
 
-function _calcItemBulk(item) {
-  const quantity = getItemQuantity(item);
+function _calcItemBulk(item, doNotIncreaseWeightByQuantityForNoAmmunition) {
+  let quantity = 1;
+  // Feature: Do Not increase weight by quantity for no ammunition item
+  if (doNotIncreaseWeightByQuantityForNoAmmunition) {
+    if (item.system?.consumableType !== "ammo") {
+      quantity = 1;
+    } else {
+      quantity = getItemQuantity(item);
+    }
+  } else {
+    quantity = getItemQuantity(item);
+  }
   const weight = getItemBulk(item);
   return Math.round(weight * quantity * 100000) / 100000;
 }
