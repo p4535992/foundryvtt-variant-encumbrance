@@ -535,14 +535,18 @@ export const VariantEncumbranceBulkImpl = {
         let appliedWeight = 0;
         if (ignoreQuantityCheckForItemCollection) {
           appliedWeight = itemWeight;
+          debug(
+            `Actor '${actorEntity.name}', Item '${item.name}', Equipped '${isEquipped}', Proficient ${isProficient} :
+               1 * ${itemWeight} = ${appliedWeight} on total ${weight} => ${weight + appliedWeight}`
+          );
         } else {
           appliedWeight = itemQuantity * itemWeight;
+          debug(
+            `Actor '${actorEntity.name}', Item '${item.name}', Equipped '${isEquipped}', Proficient ${isProficient} :
+               ${itemQuantity} * ${itemWeight} = ${appliedWeight} on total ${weight} => ${weight + appliedWeight}`
+          );
         }
 
-        debug(
-          `Actor '${actorEntity.name}', Item '${item.name}', Equipped '${isEquipped}', Proficient ${isProficient} :
-             ${itemQuantity} * ${itemWeight} = ${appliedWeight} on total ${weight} => ${weight + appliedWeight}`
-        );
         mapItemEncumbrance[item.id] = appliedWeight;
         return weight + appliedWeight;
       }, 0);

@@ -1,3 +1,6 @@
+## 0.13.7
+
+- Just update a debug log
 ## 0.13.6
 
 - Bug fix: https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/22
@@ -7,20 +10,20 @@
 
 - Many bug fixing for stupid error on developer side
 
-## 0.13.4 
+## 0.13.4
 
 - Add feature : https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/17
 
-## 0.13.3 
+## 0.13.3
 
-- Bug fix : https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/2 
+- Bug fix : https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/2
 - Bug fix : https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/21
- 
+
 ## 0.13.2
 
 - Fixed an issue with encumbrance on actor-unlinked tokens ty to @IHaveThatPower
 
-## 0.13.1 
+## 0.13.1
 
 - Some bug fix
 
@@ -32,7 +35,7 @@
 - Abbadoned Typescript in favor of javascript+svelte integration with tyhponjs plugins
 - Fix: https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/18
 
-## 0.12.9 
+## 0.12.9
 
 - Bug fix: https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/16
 
@@ -41,19 +44,19 @@
 - Bug fix: https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/15
 - Possible fix: https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/13
 
-### 0.12.7 
+### 0.12.7
 
-- Add module settings 'replaceStandardWeightValue' by default is true 
+- Add module settings 'replaceStandardWeightValue' by default is true
 - bug fix backpack manager build weight calculation
 
-### 0.12.6 
+### 0.12.6
 
-- Bug fix : https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/14 
+- Bug fix : https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/14
 - Add new module setting "Feature: Equipped Container/Backpack Weight Multiplier" for homebrew rule
 
-### 0.12.5 
+### 0.12.5
 
-- Better integration with [Backpack Manager](https://github.com/krbz999/backpack-manager) 
+- Better integration with [Backpack Manager](https://github.com/krbz999/backpack-manager)
 
 ### 0.12.4
 
@@ -70,7 +73,7 @@
 
 ### 0.12.1
 
-- Bug fix: https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/12 
+- Bug fix: https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/12
 
 ### 0.12.0 [BREAKING CHANGES]
 
