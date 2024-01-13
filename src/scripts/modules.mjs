@@ -81,13 +81,11 @@ export const initHooks = () => {
   // };
 
   //@ts-ignore
-  CONFIG.DND5E.encumbrance.strMultiplier.imperial =
-    game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplier") ?? 15;
+  CONFIG.DND5E.encumbrance.strMultiplier.imperial = game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplier") ?? 15;
 
   if (game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")) {
     //@ts-ignore
-    CONFIG.DND5E.encumbrance.strMultiplier.metric =
-      game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplier") ?? 15;
+    CONFIG.DND5E.encumbrance.strMultiplier.metric = game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplier") ?? 15;
   } else {
     //@ts-ignore
     CONFIG.DND5E.encumbrance.strMultiplier.metric =
@@ -95,13 +93,11 @@ export const initHooks = () => {
   }
 
   //@ts-ignore
-  CONFIG.DND5E.encumbrance.currencyPerWeight.imperial =
-    game.settings.get(CONSTANTS.MODULE_ID, "currencyWeight") ?? 50;
+  CONFIG.DND5E.encumbrance.currencyPerWeight.imperial = game.settings.get(CONSTANTS.MODULE_ID, "currencyWeight") ?? 50;
 
   if (game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")) {
     //@ts-ignore
-    CONFIG.DND5E.encumbrance.currencyPerWeight.metric =
-      game.settings.get(CONSTANTS.MODULE_ID, "currencyWeight") ?? 50;
+    CONFIG.DND5E.encumbrance.currencyPerWeight.metric = game.settings.get(CONSTANTS.MODULE_ID, "currencyWeight") ?? 50;
   } else {
     //@ts-ignore
     CONFIG.DND5E.encumbrance.currencyPerWeight.metric =

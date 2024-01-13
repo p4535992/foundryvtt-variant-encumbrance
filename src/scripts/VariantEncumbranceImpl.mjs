@@ -392,10 +392,7 @@ export const VariantEncumbranceImpl = {
       CONSTANTS.MODULE_ID,
       "doNotIncreaseWeightByQuantityForNoAmmunition"
     );
-    const doNotApplyWeightForEquippedArmor = game.settings.get(
-      CONSTANTS.MODULE_ID,
-      "doNotApplyWeightForEquippedArmor"
-    );
+    const doNotApplyWeightForEquippedArmor = game.settings.get(CONSTANTS.MODULE_ID, "doNotApplyWeightForEquippedArmor");
     const useEquippedUnequippedItemCollectionFeature = game.settings.get(
       CONSTANTS.MODULE_ID,
       "useEquippedUnequippedItemCollectionFeature"
@@ -1403,9 +1400,8 @@ export const VariantEncumbranceImpl = {
         effect.isDynamic;
       ceFlags[CONSTANTS.DFREDS_CONVENIENT_EFFECTS_MODULE_ID][CONSTANTS.DFREDS_CONVENIENT_EFFECTS.FLAGS.IS_VIEWABLE] =
         effect.isViewable;
-      ceFlags[CONSTANTS.DFREDS_CONVENIENT_EFFECTS_MODULE_ID][
-        CONSTANTS.DFREDS_CONVENIENT_EFFECTS.FLAGS.NESTED_EFFECTS
-      ] = effect.nestedEffects;
+      ceFlags[CONSTANTS.DFREDS_CONVENIENT_EFFECTS_MODULE_ID][CONSTANTS.DFREDS_CONVENIENT_EFFECTS.FLAGS.NESTED_EFFECTS] =
+        effect.nestedEffects;
       ceFlags[CONSTANTS.DFREDS_CONVENIENT_EFFECTS_MODULE_ID][CONSTANTS.DFREDS_CONVENIENT_EFFECTS.FLAGS.SUB_EFFECTS] =
         effect.subEffects;
 

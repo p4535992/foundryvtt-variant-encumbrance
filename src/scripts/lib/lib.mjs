@@ -364,10 +364,7 @@ export function checkBulkCategory(weight, item) {
       CONSTANTS.MODULE_ID,
       "useEquippedUnequippedItemCollectionFeature"
     );
-    const doNotApplyWeightForEquippedArmor = game.settings.get(
-      CONSTANTS.MODULE_ID,
-      "doNotApplyWeightForEquippedArmor"
-    );
+    const doNotApplyWeightForEquippedArmor = game.settings.get(CONSTANTS.MODULE_ID, "doNotApplyWeightForEquippedArmor");
     const doNotIncreaseWeightByQuantityForNoAmmunition = game.settings.get(
       CONSTANTS.MODULE_ID,
       "doNotIncreaseWeightByQuantityForNoAmmunition"
