@@ -1,6 +1,6 @@
 import { VariantEncumbranceImpl } from "./VariantEncumbranceImpl.mjs";
 import CONSTANTS from "./constants.mjs";
-import Effect from "./effects/effect.mjs";
+// import Effect from "./effects/effect.mjs";
 import { checkBulkCategory, error, isStringEquals, warn } from "./lib/lib.mjs";
 import { VariantEncumbranceBulkImpl } from "./VariantEncumbranceBulkImpl.mjs";
 import { invPlusActive } from "./modules.mjs";

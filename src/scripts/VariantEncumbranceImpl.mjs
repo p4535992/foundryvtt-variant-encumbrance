@@ -7,7 +7,7 @@ import {
   EncumbranceMode,
   ENCUMBRANCE_TIERS,
 } from "./VariantEncumbranceModels.mjs";
-import Effect from "./effects/effect.mjs";
+// import Effect from "./effects/effect.mjs";
 import {
   daeActive,
   dfQualityLifeActive,
