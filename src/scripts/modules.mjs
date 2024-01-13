@@ -51,7 +51,7 @@ export const initHooks = () => {
 
   Hooks.once("socketlib.ready", registerSocket);
 
-  // if (game.settings.get(CONSTANTS.MODULE_NAME, 'debugHooks')) {
+  // if (game.settings.get(CONSTANTS.MODULE_ID, 'debugHooks')) {
   //   for (const hook of Object.values(HOOKS)) {
   //     if (typeof hook === 'string') {
   //       Hooks.on(hook, (...args) => debug(`Hook called: ${hook}`, ...args));
@@ -82,54 +82,54 @@ export const initHooks = () => {
 
   //@ts-ignore
   CONFIG.DND5E.encumbrance.strMultiplier.imperial =
-    game.settings.get(CONSTANTS.MODULE_NAME, "strengthMultiplier") ?? 15;
+    game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplier") ?? 15;
 
-  if (game.settings.get(CONSTANTS.MODULE_NAME, "fakeMetricSystem")) {
+  if (game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")) {
     //@ts-ignore
     CONFIG.DND5E.encumbrance.strMultiplier.metric =
-      game.settings.get(CONSTANTS.MODULE_NAME, "strengthMultiplier") ?? 15;
+      game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplier") ?? 15;
   } else {
     //@ts-ignore
     CONFIG.DND5E.encumbrance.strMultiplier.metric =
-      game.settings.get(CONSTANTS.MODULE_NAME, "strengthMultiplierMetric") ?? 6.8;
+      game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplierMetric") ?? 6.8;
   }
 
   //@ts-ignore
   CONFIG.DND5E.encumbrance.currencyPerWeight.imperial =
-    game.settings.get(CONSTANTS.MODULE_NAME, "currencyWeight") ?? 50;
+    game.settings.get(CONSTANTS.MODULE_ID, "currencyWeight") ?? 50;
 
-  if (game.settings.get(CONSTANTS.MODULE_NAME, "fakeMetricSystem")) {
+  if (game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")) {
     //@ts-ignore
     CONFIG.DND5E.encumbrance.currencyPerWeight.metric =
-      game.settings.get(CONSTANTS.MODULE_NAME, "currencyWeight") ?? 50;
+      game.settings.get(CONSTANTS.MODULE_ID, "currencyWeight") ?? 50;
   } else {
     //@ts-ignore
     CONFIG.DND5E.encumbrance.currencyPerWeight.metric =
-      game.settings.get(CONSTANTS.MODULE_NAME, "currencyWeightMetric") ?? 110;
+      game.settings.get(CONSTANTS.MODULE_ID, "currencyWeightMetric") ?? 110;
   }
 
   //@ts-ignore
   CONFIG.DND5E.encumbrance.vehicleWeightMultiplier.imperial =
-    game.settings.get(CONSTANTS.MODULE_NAME, "vehicleWeightMultiplier") ?? 2000; // 2000 lbs in an imperial ton
+    game.settings.get(CONSTANTS.MODULE_ID, "vehicleWeightMultiplier") ?? 2000; // 2000 lbs in an imperial ton
 
-  if (game.settings.get(CONSTANTS.MODULE_NAME, "fakeMetricSystem")) {
+  if (game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")) {
     //@ts-ignore
     CONFIG.DND5E.encumbrance.vehicleWeightMultiplier.metric =
-      game.settings.get(CONSTANTS.MODULE_NAME, "vehicleWeightMultiplier") ?? 2000; // 2000 lbs in an imperial ton
+      game.settings.get(CONSTANTS.MODULE_ID, "vehicleWeightMultiplier") ?? 2000; // 2000 lbs in an imperial ton
   } else {
     //@ts-ignore
     CONFIG.DND5E.encumbrance.vehicleWeightMultiplier.metric =
-      game.settings.get(CONSTANTS.MODULE_NAME, "vehicleWeightMultiplierMetric") ?? 1000; // 1000 kg in a metric ton
+      game.settings.get(CONSTANTS.MODULE_ID, "vehicleWeightMultiplierMetric") ?? 1000; // 1000 kg in a metric ton
   }
   // CONFIG.debug.hooks = true; // For debugging only
 
-  invPlusActive = game.modules.get(CONSTANTS.INVENTORY_PLUS_MODULE_NAME)?.active;
-  invMidiQol = game.modules.get(CONSTANTS.MIDI_QOL_MODULE_NAME)?.active;
-  itemContainerActive = game.modules.get(CONSTANTS.ITEM_COLLECTION_MODULE_NAME)?.active;
-  dfredsConvenientEffectsActive = game.modules.get(CONSTANTS.DFREDS_CONVENIENT_EFFECTS_MODULE_NAME)?.active;
-  dfQualityLifeActive = game.modules.get(CONSTANTS.DF_QUALITY_OF_LIFE_MODULE_NAME)?.active;
-  daeActive = game.modules.get(CONSTANTS.DAE_MODULE_NAME)?.active;
-  backPackManagerActive = game.modules.get(CONSTANTS.BACKPACK_MANAGER_MODULE_NAME)?.active;
+  invPlusActive = game.modules.get(CONSTANTS.INVENTORY_PLUS_MODULE_ID)?.active;
+  invMidiQol = game.modules.get(CONSTANTS.MIDI_QOL_MODULE_ID)?.active;
+  itemContainerActive = game.modules.get(CONSTANTS.ITEM_COLLECTION_MODULE_ID)?.active;
+  dfredsConvenientEffectsActive = game.modules.get(CONSTANTS.DFREDS_CONVENIENT_EFFECTS_MODULE_ID)?.active;
+  dfQualityLifeActive = game.modules.get(CONSTANTS.DF_QUALITY_OF_LIFE_MODULE_ID)?.active;
+  daeActive = game.modules.get(CONSTANTS.DAE_MODULE_ID)?.active;
+  backPackManagerActive = game.modules.get(CONSTANTS.BACKPACK_MANAGER_MODULE_ID)?.active;
 };
 
 export const setupHooks = async () => {
@@ -139,7 +139,7 @@ export const setupHooks = async () => {
 
   // //@ts-ignore
   // libWrapper.register(
-  //   CONSTANTS.MODULE_NAME,
+  //   CONSTANTS.MODULE_ID,
   //   'CONFIG.Item.documentClass.prototype.getEmbeddedDocument',
   //   getEmbeddedDocument,
   //   'MIXED',
@@ -148,55 +148,55 @@ export const setupHooks = async () => {
   // START RMOEVED 2022-02-01
   // //@ts-ignore
   // libWrapper.register(
-  //   CONSTANTS.MODULE_NAME,
+  //   CONSTANTS.MODULE_ID,
   //   'CONFIG.Item.documentClass.prototype.createEmbeddedDocuments',
   //   createEmbeddedDocuments,
   //   'MIXED',
   // );
   // //@ts-ignore
   // libWrapper.register(
-  //   CONSTANTS.MODULE_NAME,
+  //   CONSTANTS.MODULE_ID,
   //   'CONFIG.Item.documentClass.prototype.deleteEmbeddedDocuments',
   //   deleteEmbeddedDocuments,
   //   'MIXED',
   // );
   // //@ts-ignore
   // libWrapper.register(
-  //   CONSTANTS.MODULE_NAME,
+  //   CONSTANTS.MODULE_ID,
   //   'CONFIG.Item.documentClass.prototype.updateEmbeddedDocuments',
   //   updateEmbeddedDocuments,
   //   'MIXED',
   // );
   // END RMOEVED 2022-02-01
   //@ts-ignore
-  // libWrapper.register(CONSTANTS.MODULE_NAME, "CONFIG.Item.documentClass.prototype.prepareEmbeddedEntities", prepareEmbeddedEntities, "WRAPPER");
+  // libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.prototype.prepareEmbeddedEntities", prepareEmbeddedEntities, "WRAPPER");
   //@ts-ignore
-  // libWrapper.register(CONSTANTS.MODULE_NAME, "CONFIG.Item.documentClass.prototype.getEmbeddedCollection", getEmbeddedCollection, "MIXED")
-  // libWrapper.register(CONSTANTS.MODULE_NAME, "CONFIG.Item.documentClass.prototype.prepareDerivedData", prepareDerivedData, "WRAPPER");
+  // libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.prototype.getEmbeddedCollection", getEmbeddedCollection, "MIXED")
+  // libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.prototype.prepareDerivedData", prepareDerivedData, "WRAPPER");
 
   //@ts-ignore
-  // libWrapper.register(CONSTANTS.MODULE_NAME, "CONFIG.Item.documentClass.prototype.actor", getActor, "OVERRIDE")
+  // libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.prototype.actor", getActor, "OVERRIDE")
   //@ts-ignore
-  // libWrapper.register(CONSTANTS.MODULE_NAME, "CONFIG.Item.documentClass.prototype.update", _update, "MIXED")
+  // libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.prototype.update", _update, "MIXED")
   //@ts-ignore
-  // libWrapper.register(CONSTANTS.MODULE_NAME, "CONFIG.Item.documentClass.prototype.delete", _delete, "MIXED")
+  // libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.prototype.delete", _delete, "MIXED")
   //@ts-ignore
-  // libWrapper.register(MODULE_NAME, "CONFIG.Item.documentClass.prototype.isEmbedded", isEmbedded, "OVERRIDE")
+  // libWrapper.register(MODULE_ID, "CONFIG.Item.documentClass.prototype.isEmbedded", isEmbedded, "OVERRIDE")
 
   //@ts-ignore
-  // libWrapper.register(CONSTANTS.MODULE_NAME, "CONFIG.Item.documentClass._onCreateDocuments", _onCreateDocuments, "MIXED")
+  // libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass._onCreateDocuments", _onCreateDocuments, "MIXED")
 
   //@ts-ignore
-  libWrapper.register(CONSTANTS.MODULE_NAME, "CONFIG.Item.documentClass.createDocuments", createDocuments, "MIXED");
+  libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.createDocuments", createDocuments, "MIXED");
   //@ts-ignore
-  libWrapper.register(CONSTANTS.MODULE_NAME, "CONFIG.Item.documentClass.deleteDocuments", deleteDocuments, "MIXED");
+  libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.deleteDocuments", deleteDocuments, "MIXED");
   //@ts-ignore
-  libWrapper.register(CONSTANTS.MODULE_NAME, "CONFIG.Item.documentClass.updateDocuments", updateDocuments, "MIXED");
+  libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.updateDocuments", updateDocuments, "MIXED");
 };
 
 export const readyHooks = async () => {
   // effectInterface.initialize();
-  if (game.settings.get(CONSTANTS.MODULE_NAME, "enableBulkSystem")) {
+  if (game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem")) {
     // ===================
     // Bulk management
     // ===================
@@ -213,10 +213,10 @@ export const readyHooks = async () => {
   }
 
   ENCUMBRANCE_STATE = {
-    UNENCUMBERED: i18n(CONSTANTS.MODULE_NAME + ".effect.name.unencumbered"), // "Unencumbered",
-    ENCUMBERED: i18n(CONSTANTS.MODULE_NAME + ".effect.name.encumbered"), // "Encumbered",
-    HEAVILY_ENCUMBERED: i18n(CONSTANTS.MODULE_NAME + ".effect.name.heavily_encumbered"), // "Heavily Encumbered",
-    OVERBURDENED: i18n(CONSTANTS.MODULE_NAME + ".effect.name.overburdened"), // "Overburdened"
+    UNENCUMBERED: i18n(CONSTANTS.MODULE_ID + ".effect.name.unencumbered"), // "Unencumbered",
+    ENCUMBERED: i18n(CONSTANTS.MODULE_ID + ".effect.name.encumbered"), // "Encumbered",
+    HEAVILY_ENCUMBERED: i18n(CONSTANTS.MODULE_ID + ".effect.name.heavily_encumbered"), // "Heavily Encumbered",
+    OVERBURDENED: i18n(CONSTANTS.MODULE_ID + ".effect.name.overburdened"), // "Overburdened"
   };
 
   Hooks.on("renderActorSheet", async function (actorSheet, htmlElement, actorObject) {
@@ -240,9 +240,9 @@ export const readyHooks = async () => {
       // ======================================================
       // CUSTOMIZE INVENTORY
       // ======================================================
-      const hideStandardWeightUnits = game.settings.get(CONSTANTS.MODULE_NAME, "hideStandardWeightUnits");
-      const replaceStandardWeightValue = game.settings.get(CONSTANTS.MODULE_NAME, "replaceStandardWeightValue");
-      const isBulkEnable = game.settings.get(CONSTANTS.MODULE_NAME, "enableBulkSystem");
+      const hideStandardWeightUnits = game.settings.get(CONSTANTS.MODULE_ID, "hideStandardWeightUnits");
+      const replaceStandardWeightValue = game.settings.get(CONSTANTS.MODULE_ID, "replaceStandardWeightValue");
+      const isBulkEnable = game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem");
 
       const listHeaders = htmlElement.find("li.items-header .item-weight");
       for (const liHeaderB of listHeaders) {
@@ -373,7 +373,7 @@ export const readyHooks = async () => {
         sheetClass
       );
 
-      if (game.settings.get(CONSTANTS.MODULE_NAME, "hideStandardEncumbranceBar")) {
+      if (game.settings.get(CONSTANTS.MODULE_ID, "hideStandardEncumbranceBar")) {
         const element = htmlElement.find(".encumbrance-variant");
         if (element && element.length > 0) {
           element[0].style.display = "none";
@@ -408,7 +408,7 @@ export const readyHooks = async () => {
         noActiveEffect = false;
       }
       // For our purpose we filter only the inventory-plus modifier action
-      if (invPlusActive && update?.flags && hasProperty(update, `flags.${CONSTANTS.INVENTORY_PLUS_MODULE_NAME}`)) {
+      if (invPlusActive && update?.flags && hasProperty(update, `flags.${CONSTANTS.INVENTORY_PLUS_MODULE_ID}`)) {
         doTheUpdate = true;
         noActiveEffect = false;
       }
@@ -421,10 +421,10 @@ export const readyHooks = async () => {
       // Do the update
       if (doTheUpdate) {
         if (noActiveEffect) {
-          if (game.settings.get(CONSTANTS.MODULE_NAME, "enabled")) {
+          if (game.settings.get(CONSTANTS.MODULE_ID, "enabled")) {
             VariantEncumbranceImpl.calculateEncumbrance(actorEntity, actorEntity.items.contents, false, invPlusActive);
           }
-          if (game.settings.get(CONSTANTS.MODULE_NAME, "enableBulkSystem")) {
+          if (game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem")) {
             VariantEncumbranceBulkImpl.calculateEncumbrance(
               actorEntity,
               actorEntity.items.contents,
@@ -433,7 +433,7 @@ export const readyHooks = async () => {
             );
           }
         } else {
-          if (game.settings.get(CONSTANTS.MODULE_NAME, "enabled")) {
+          if (game.settings.get(CONSTANTS.MODULE_ID, "enabled")) {
             await VariantEncumbranceImpl.updateEncumbrance(
               actorEntity,
               undefined,
@@ -441,7 +441,7 @@ export const readyHooks = async () => {
               EncumbranceMode.ADD
             );
           }
-          if (game.settings.get(CONSTANTS.MODULE_NAME, "enableBulkSystem")) {
+          if (game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem")) {
             await VariantEncumbranceBulkImpl.updateEncumbrance(
               actorEntity,
               undefined,
@@ -463,17 +463,17 @@ export const readyHooks = async () => {
     }
 
     const enableVarianEncumbranceOnSpecificActor = game.settings.get(
-      CONSTANTS.MODULE_NAME,
+      CONSTANTS.MODULE_ID,
       "enableVarianEncumbranceOnSpecificActor"
     );
-    const removeLabelButtonsSheetHeader = game.settings.get(CONSTANTS.MODULE_NAME, "removeLabelButtonsSheetHeader");
+    const removeLabelButtonsSheetHeader = game.settings.get(CONSTANTS.MODULE_ID, "removeLabelButtonsSheetHeader");
 
     if (isEnabledActorType(actorEntity)) {
       if (enableVarianEncumbranceOnSpecificActor) {
         // ================
         // Encumbrance system
         // ================
-        if (game.settings.get(CONSTANTS.MODULE_NAME, "enabled")) {
+        if (game.settings.get(CONSTANTS.MODULE_ID, "enabled")) {
           let enableVarianEncumbranceEffectsOnSpecificActorFlag = true;
           if (!hasProperty(actorEntity, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.ENABLED_AE}`)) {
             await actorEntity.setFlag(
@@ -611,7 +611,7 @@ export const readyHooks = async () => {
         // ================
         // Bulk system
         // ================
-        if (game.settings.get(CONSTANTS.MODULE_NAME, "enableBulkSystem")) {
+        if (game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem")) {
           let enableVarianEncumbranceEffectsBulkOnSpecificActorFlag = true;
           if (!hasProperty(actorEntity, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.ENABLED_AE_BULK}`)) {
             await actorEntity.setFlag(
@@ -890,7 +890,7 @@ export const readyHooks = async () => {
   // 				effectName = null;
   // 		}
 
-  // 		if (!game.settings.get(CONSTANTS.MODULE_NAME, "useVariantEncumbrance")) {
+  // 		if (!game.settings.get(CONSTANTS.MODULE_ID, "useVariantEncumbrance")) {
   // 			effectName = ENCUMBRANCE_STATE.UNENCUMBERED;
   // 		}
 
@@ -908,7 +908,7 @@ export const readyHooks = async () => {
 //   const actorEntity = this.actor;
 //   if (actorEntity && (actorEntity.type === EncumbranceActorType.CHARACTER || actorEntity.type === EncumbranceActorType.VEHICLE)) {
 //     VariantEncumbranceImpl.updateEncumbrance(actorEntity, undefined, undefined, EncumbranceMode.ADD);
-//     if (game.settings.get(CONSTANTS.MODULE_NAME, 'enableBulkSystem')) {
+//     if (game.settings.get(CONSTANTS.MODULE_ID, 'enableBulkSystem')) {
 //        VariantEncumbranceBulkImpl.updateEncumbrance(actorEntity, undefined, undefined, EncumbranceMode.ADD);
 //     }
 //   }
@@ -918,7 +918,7 @@ export const readyHooks = async () => {
 export async function createEmbeddedDocuments(wrapped, embeddedName, data, context) {
   const actorEntity = this.actor;
   if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
-    if (game.settings.get(CONSTANTS.MODULE_NAME, "enabled")) {
+    if (game.settings.get(CONSTANTS.MODULE_ID, "enabled")) {
       await VariantEncumbranceImpl.updateEncumbrance(
         actorEntity,
         data,
@@ -926,7 +926,7 @@ export async function createEmbeddedDocuments(wrapped, embeddedName, data, conte
         EncumbranceMode.ADD
       );
     }
-    if (game.settings.get(CONSTANTS.MODULE_NAME, "enableBulkSystem")) {
+    if (game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem")) {
       await VariantEncumbranceBulkImpl.updateEncumbrance(
         actorEntity,
         data,
@@ -941,7 +941,7 @@ export async function createEmbeddedDocuments(wrapped, embeddedName, data, conte
 export async function deleteEmbeddedDocuments(wrapped, embeddedName, ids = [], options = {}) {
   const actorEntity = this.actor;
   if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
-    if (game.settings.get(CONSTANTS.MODULE_NAME, "enabled")) {
+    if (game.settings.get(CONSTANTS.MODULE_ID, "enabled")) {
       await VariantEncumbranceImpl.updateEncumbrance(
         actorEntity,
         ids,
@@ -949,7 +949,7 @@ export async function deleteEmbeddedDocuments(wrapped, embeddedName, ids = [], o
         EncumbranceMode.DELETE
       );
     }
-    if (game.settings.get(CONSTANTS.MODULE_NAME, "enableBulkSystem")) {
+    if (game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem")) {
       await VariantEncumbranceBulkImpl.updateEncumbrance(
         actorEntity,
         ids,
@@ -964,7 +964,7 @@ export async function deleteEmbeddedDocuments(wrapped, embeddedName, ids = [], o
 export async function updateEmbeddedDocuments(wrapped, embeddedName, data, options) {
   const actorEntity = this.actor;
   if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
-    if (game.settings.get(CONSTANTS.MODULE_NAME, "enabled")) {
+    if (game.settings.get(CONSTANTS.MODULE_ID, "enabled")) {
       await VariantEncumbranceImpl.updateEncumbrance(
         actorEntity,
         data,
@@ -972,7 +972,7 @@ export async function updateEmbeddedDocuments(wrapped, embeddedName, data, optio
         EncumbranceMode.UPDATE
       );
     }
-    if (game.settings.get(CONSTANTS.MODULE_NAME, "enableBulkSystem")) {
+    if (game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem")) {
       await VariantEncumbranceImpl.updateEncumbrance(
         actorEntity,
         data,
@@ -988,7 +988,7 @@ export async function createDocuments(wrapped, data, context = { parent: {}, pac
   const { parent, pack, options } = context;
   const actorEntity = parent;
   if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
-    if (game.settings.get(CONSTANTS.MODULE_NAME, "enabled")) {
+    if (game.settings.get(CONSTANTS.MODULE_ID, "enabled")) {
       await VariantEncumbranceImpl.updateEncumbrance(
         actorEntity,
         data,
@@ -996,7 +996,7 @@ export async function createDocuments(wrapped, data, context = { parent: {}, pac
         EncumbranceMode.ADD
       );
     }
-    if (game.settings.get(CONSTANTS.MODULE_NAME, "enableBulkSystem")) {
+    if (game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem")) {
       await VariantEncumbranceBulkImpl.updateEncumbrance(
         actorEntity,
         data,
@@ -1012,7 +1012,7 @@ export async function updateDocuments(wrapped, updates = [], context = { parent:
   const { parent, pack, options } = context;
   const actorEntity = parent;
   if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
-    if (game.settings.get(CONSTANTS.MODULE_NAME, "enabled")) {
+    if (game.settings.get(CONSTANTS.MODULE_ID, "enabled")) {
       await VariantEncumbranceImpl.updateEncumbrance(
         actorEntity,
         updates,
@@ -1020,7 +1020,7 @@ export async function updateDocuments(wrapped, updates = [], context = { parent:
         EncumbranceMode.UPDATE
       );
     }
-    if (game.settings.get(CONSTANTS.MODULE_NAME, "enableBulkSystem")) {
+    if (game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem")) {
       await VariantEncumbranceBulkImpl.updateEncumbrance(
         actorEntity,
         updates,
@@ -1036,7 +1036,7 @@ export async function deleteDocuments(wrapped, ids = [], context = { parent: {},
   const { parent, pack, options } = context;
   const actorEntity = parent;
   if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
-    if (game.settings.get(CONSTANTS.MODULE_NAME, "enabled")) {
+    if (game.settings.get(CONSTANTS.MODULE_ID, "enabled")) {
       await VariantEncumbranceImpl.updateEncumbrance(
         actorEntity,
         ids,
@@ -1044,7 +1044,7 @@ export async function deleteDocuments(wrapped, ids = [], context = { parent: {},
         EncumbranceMode.DELETE
       );
     }
-    if (game.settings.get(CONSTANTS.MODULE_NAME, "enableBulkSystem")) {
+    if (game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem")) {
       await VariantEncumbranceBulkImpl.updateEncumbrance(
         actorEntity,
         ids,
@@ -1101,7 +1101,7 @@ const module = {
     htmlElementEncumbranceVariant,
     sheetClass
   ) {
-    if (game.settings.get(CONSTANTS.MODULE_NAME, "enabled")) {
+    if (game.settings.get(CONSTANTS.MODULE_ID, "enabled")) {
       // ===============================
       // CUSTOMIZE ENCUMBRANCE VARIANT
       // =============================
@@ -1271,7 +1271,7 @@ const module = {
           encumbranceElements[0].classList.add("max");
         }
 
-        if (game.settings.get(CONSTANTS.MODULE_NAME, "enableBulkSystem")) {
+        if (game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem")) {
           htmlElementEncumbranceVariant
             .find(".encumbrance-breakpoint-variant.encumbrance-33.arrow-up")
             .parent()
@@ -1304,7 +1304,7 @@ const module = {
     encumbranceElement,
     sheetClass
   ) {
-    if (game.settings.get(CONSTANTS.MODULE_NAME, "enableBulkSystem")) {
+    if (game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem")) {
       // ===============================
       // CUSTOMIZE ENCUMBRANCE
       // ===============================
@@ -1380,7 +1380,7 @@ const module = {
         // }
       }
 
-      const displayedUnitsBulk = encumbranceDataBulk.unit ?? game.settings.get(CONSTANTS.MODULE_NAME, "unitsBulk");
+      const displayedUnitsBulk = encumbranceDataBulk.unit ?? game.settings.get(CONSTANTS.MODULE_ID, "unitsBulk");
 
       if (
         !encumbranceElementsBulk &&
@@ -1471,7 +1471,7 @@ const module = {
     const item = app.object;
     const options = [];
     // options.push(
-    //   `<option data-image="icons/svg/mystery-man.svg" value="">${i18n(`${CONSTANTS.MODULE_NAME}.default`)}</option>`,
+    //   `<option data-image="icons/svg/mystery-man.svg" value="">${i18n(`${CONSTANTS.MODULE_ID}.default`)}</option>`,
     // );
     const weight = data.weight ?? 0;
     let suggestedBulkWeight = 0;
@@ -1480,8 +1480,8 @@ const module = {
       suggestedBulkWeight = suggestedBulk.bulk;
     }
     // NOTE: we use the parent no the data
-    let bulk = getProperty(data, `parent.flags.${CONSTANTS.MODULE_NAME}.bulk`) ?? 0;
-    if (bulk <= 0 && game.settings.get(CONSTANTS.MODULE_NAME, "automaticApplySuggestedBulk")) {
+    let bulk = getProperty(data, `parent.flags.${CONSTANTS.MODULE_ID}.bulk`) ?? 0;
+    if (bulk <= 0 && game.settings.get(CONSTANTS.MODULE_ID, "automaticApplySuggestedBulk")) {
       bulk = suggestedBulkWeight;
     }
 

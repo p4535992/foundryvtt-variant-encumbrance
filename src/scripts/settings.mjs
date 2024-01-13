@@ -3,81 +3,81 @@ import CONSTANTS from "./constants.mjs";
 import { i18n } from "./lib/lib.mjs";
 
 export const registerSettings = function () {
-  game.settings.registerMenu(CONSTANTS.MODULE_NAME, "resetAllSettings", {
-    name: `${CONSTANTS.MODULE_NAME}.setting.reset.name`,
-    hint: `${CONSTANTS.MODULE_NAME}.setting.reset.hint`,
+  game.settings.registerMenu(CONSTANTS.MODULE_ID, "resetAllSettings", {
+    name: `${CONSTANTS.MODULE_ID}.setting.reset.name`,
+    hint: `${CONSTANTS.MODULE_ID}.setting.reset.hint`,
     icon: "fas fa-coins",
     type: ResetSettingsDialog,
     restricted: true,
   });
 
   // Removed on 0.6.5
-  game.settings.register(CONSTANTS.MODULE_NAME, "enabled", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.enabled.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.enabled.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "enabled", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.enabled.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.enabled.hint"),
     scope: "world",
     config: true,
     type: Boolean,
     default: true,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "useVarianEncumbranceWithSpecificType", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.useVarianEncumbranceWithSpecificType.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.useVarianEncumbranceWithSpecificType.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "useVarianEncumbranceWithSpecificType", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.useVarianEncumbranceWithSpecificType.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.useVarianEncumbranceWithSpecificType.hint"),
     scope: "world",
     config: true,
     type: String,
     default: "character,vehicle",
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "fakeMetricSystem", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.fakeMetricSystem.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.fakeMetricSystem.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "fakeMetricSystem", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.fakeMetricSystem.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.fakeMetricSystem.hint"),
     scope: "world",
     config: true,
     type: Boolean,
     default: false,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "lightMultiplier", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.lightMultiplier.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.lightMultiplier.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "lightMultiplier", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.lightMultiplier.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.lightMultiplier.hint"),
     scope: "world",
     config: true,
     type: Number,
     default: 5,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "lightMultiplierMetric", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.lightMultiplierMetric.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.lightMultiplierMetric.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "lightMultiplierMetric", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.lightMultiplierMetric.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.lightMultiplierMetric.hint"),
     scope: "world",
     config: true,
     type: Number,
     default: 2.5,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "mediumMultiplier", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.mediumMultiplier.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.mediumMultiplier.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "mediumMultiplier", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.mediumMultiplier.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.mediumMultiplier.hint"),
     scope: "world",
     config: true,
     type: Number,
     default: 10,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "mediumMultiplierMetric", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.mediumMultiplierMetric.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.mediumMultiplierMetric.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "mediumMultiplierMetric", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.mediumMultiplierMetric.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.mediumMultiplierMetric.hint"),
     scope: "world",
     config: true,
     type: Number,
     default: 5,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "heavyMultiplier", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.heavyMultiplier.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.heavyMultiplier.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "heavyMultiplier", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.heavyMultiplier.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.heavyMultiplier.hint"),
     scope: "world",
     config: true,
     type: Number,
@@ -88,9 +88,9 @@ export const registerSettings = function () {
     },
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "heavyMultiplierMetric", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.heavyMultiplierMetric.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.heavyMultiplierMetric.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "heavyMultiplierMetric", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.heavyMultiplierMetric.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.heavyMultiplierMetric.hint"),
     scope: "world",
     config: true,
     type: Number,
@@ -101,18 +101,18 @@ export const registerSettings = function () {
     },
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "useStrengthMultiplier", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.useStrengthMultiplier.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.useStrengthMultiplier.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "useStrengthMultiplier", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.useStrengthMultiplier.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.useStrengthMultiplier.hint"),
     scope: "world",
     config: true,
     type: Boolean,
     default: false,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "strengthMultiplier", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.strengthMultiplier.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.strengthMultiplier.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "strengthMultiplier", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.strengthMultiplier.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.strengthMultiplier.hint"),
     scope: "world",
     config: true,
     type: Number,
@@ -123,9 +123,9 @@ export const registerSettings = function () {
     },
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "strengthMultiplierMetric", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.strengthMultiplierMetric.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.strengthMultiplierMetric.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "strengthMultiplierMetric", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.strengthMultiplierMetric.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.strengthMultiplierMetric.hint"),
     scope: "world",
     config: true,
     type: Number,
@@ -136,54 +136,54 @@ export const registerSettings = function () {
     },
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "useVariantEncumbrance", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.useVariantEncumbrance.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.useVariantEncumbrance.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "useVariantEncumbrance", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.useVariantEncumbrance.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.useVariantEncumbrance.hint"),
     scope: "world",
     config: true,
     type: Boolean,
     default: true,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "unequippedMultiplier", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.unequippedMultiplier.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.unequippedMultiplier.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "unequippedMultiplier", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.unequippedMultiplier.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.unequippedMultiplier.hint"),
     scope: "world",
     config: true,
     type: Number,
     default: 1,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "equippedMultiplier", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.equippedMultiplier.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.equippedMultiplier.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "equippedMultiplier", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.equippedMultiplier.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.equippedMultiplier.hint"),
     scope: "world",
     config: true,
     type: Number,
     default: 1,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "profEquippedMultiplier", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.profEquippedMultiplier.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.profEquippedMultiplier.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "profEquippedMultiplier", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.profEquippedMultiplier.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.profEquippedMultiplier.hint"),
     scope: "world",
     config: true,
     type: Number,
     default: 1,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "enableCurrencyWeight", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.enableCurrencyWeight.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.enableCurrencyWeight.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "enableCurrencyWeight", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.enableCurrencyWeight.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.enableCurrencyWeight.hint"),
     scope: "world",
     config: true,
     type: Boolean,
     default: true,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "currencyWeight", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.currencyWeight.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.currencyWeight.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "currencyWeight", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.currencyWeight.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.currencyWeight.hint"),
     scope: "world",
     config: true,
     type: Number,
@@ -194,9 +194,9 @@ export const registerSettings = function () {
     },
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "currencyWeightMetric", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.currencyWeightMetric.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.currencyWeightMetric.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "currencyWeightMetric", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.currencyWeightMetric.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.currencyWeightMetric.hint"),
     scope: "world",
     config: true,
     type: Number,
@@ -207,9 +207,9 @@ export const registerSettings = function () {
     },
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "vehicleWeightMultiplier", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.vehicleWeightMultiplier.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.vehicleWeightMultiplier.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "vehicleWeightMultiplier", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.vehicleWeightMultiplier.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.vehicleWeightMultiplier.hint"),
     scope: "world",
     config: true,
     type: Number,
@@ -220,9 +220,9 @@ export const registerSettings = function () {
     },
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "vehicleWeightMultiplierMetric", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.vehicleWeightMultiplierMetric.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.vehicleWeightMultiplierMetric.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "vehicleWeightMultiplierMetric", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.vehicleWeightMultiplierMetric.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.vehicleWeightMultiplierMetric.hint"),
     scope: "world",
     config: true,
     type: Number,
@@ -233,126 +233,126 @@ export const registerSettings = function () {
     },
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "sizeMultipliers", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.sizeMultipliers.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.sizeMultipliers.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "sizeMultipliers", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.sizeMultipliers.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.sizeMultipliers.hint"),
     scope: "world",
     config: true,
     type: Boolean,
     default: true,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "units", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.units.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.units.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "units", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.units.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.units.hint"),
     scope: "world",
     config: true,
     type: String,
     default: "lbs.",
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "unitsMetric", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.unitsMetric.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.unitsMetric.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "unitsMetric", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.unitsMetric.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.unitsMetric.hint"),
     scope: "world",
     config: true,
     type: String,
     default: "kg.",
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "lightWeightDecrease", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.lightWeightDecrease.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.lightWeightDecrease.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "lightWeightDecrease", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.lightWeightDecrease.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.lightWeightDecrease.hint"),
     scope: "world",
     config: true,
     type: Number,
     default: 10,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "lightWeightDecreaseMetric", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.lightWeightDecreaseMetric.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.lightWeightDecreaseMetric.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "lightWeightDecreaseMetric", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.lightWeightDecreaseMetric.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.lightWeightDecreaseMetric.hint"),
     scope: "world",
     config: true,
     type: Number,
     default: 3,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "heavyWeightDecrease", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.heavyWeightDecrease.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.heavyWeightDecrease.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "heavyWeightDecrease", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.heavyWeightDecrease.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.heavyWeightDecrease.hint"),
     scope: "world",
     config: true,
     type: Number,
     default: 20,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "heavyWeightDecreaseMetric", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.heavyWeightDecreaseMetric.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.heavyWeightDecreaseMetric.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "heavyWeightDecreaseMetric", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.heavyWeightDecreaseMetric.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.heavyWeightDecreaseMetric.hint"),
     scope: "world",
     config: true,
     type: Number,
     default: 6,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "enablePreCheckEncumbranceTier", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.enablePreCheckEncumbranceTier.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.enablePreCheckEncumbranceTier.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "enablePreCheckEncumbranceTier", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.enablePreCheckEncumbranceTier.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.enablePreCheckEncumbranceTier.hint"),
     scope: "world",
     config: true,
     type: Boolean,
     default: false,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "enableVarianEncumbranceOnSpecificActor", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.enableVarianEncumbranceOnSpecificActor.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.enableVarianEncumbranceOnSpecificActor.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "enableVarianEncumbranceOnSpecificActor", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.enableVarianEncumbranceOnSpecificActor.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.enableVarianEncumbranceOnSpecificActor.hint"),
     scope: "world",
     config: true,
     type: Boolean,
     default: true,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "removeLabelButtonsSheetHeader", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.removeLabelButtonsSheetHeader.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.removeLabelButtonsSheetHeader.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "removeLabelButtonsSheetHeader", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.removeLabelButtonsSheetHeader.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.removeLabelButtonsSheetHeader.hint"),
     scope: "world",
     config: true,
     type: Boolean,
     default: true,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "useStandardWeightCalculation", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.useStandardWeightCalculation.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.useStandardWeightCalculation.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "useStandardWeightCalculation", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.useStandardWeightCalculation.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.useStandardWeightCalculation.hint"),
     scope: "world",
     config: true,
     type: Boolean,
     default: false,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "useEquippedUnequippedItemCollectionFeature", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.useEquippedUnequippedItemCollectionFeature.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.useEquippedUnequippedItemCollectionFeature.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "useEquippedUnequippedItemCollectionFeature", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.useEquippedUnequippedItemCollectionFeature.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.useEquippedUnequippedItemCollectionFeature.hint"),
     scope: "world",
     config: true,
     type: Boolean,
     default: false,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "enableDAEIntegration", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.enableDAEIntegration.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.enableDAEIntegration.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "enableDAEIntegration", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.enableDAEIntegration.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.enableDAEIntegration.hint"),
     scope: "world",
     config: true,
     type: Boolean,
     default: true,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "replaceStandardWeightValue", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.replaceStandardWeightValue.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.replaceStandardWeightValue.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "replaceStandardWeightValue", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.replaceStandardWeightValue.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.replaceStandardWeightValue.hint"),
     scope: "world",
     config: true,
     type: Boolean,
@@ -363,63 +363,63 @@ export const registerSettings = function () {
   // BULK SYSTEM
   // ======================================================
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "enableBulkSystem", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.enableBulkSystem.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.enableBulkSystem.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "enableBulkSystem", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.enableBulkSystem.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.enableBulkSystem.hint"),
     scope: "world",
     config: true,
     type: Boolean,
     default: false,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "unitsBulk", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.unitsBulk.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.unitsBulk.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "unitsBulk", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.unitsBulk.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.unitsBulk.hint"),
     scope: "world",
     config: true,
     type: String,
     default: "bulk",
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "heavyWeightDecreaseBulk", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.heavyWeightDecreaseBulk.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.heavyWeightDecreaseBulk.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "heavyWeightDecreaseBulk", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.heavyWeightDecreaseBulk.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.heavyWeightDecreaseBulk.hint"),
     scope: "world",
     config: true,
     type: Number,
     default: 0.5,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "automaticApplySuggestedBulk", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.automaticApplySuggestedBulk.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.automaticApplySuggestedBulk.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "automaticApplySuggestedBulk", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.automaticApplySuggestedBulk.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.automaticApplySuggestedBulk.hint"),
     scope: "world",
     config: true,
     type: Boolean,
     default: false,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "currencyWeightBulk", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.currencyWeightBulk.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.currencyWeightBulk.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "currencyWeightBulk", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.currencyWeightBulk.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.currencyWeightBulk.hint"),
     scope: "world",
     config: true,
     type: Number,
     default: 100,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "hideStandardEncumbranceBar", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.hideStandardEncumbranceBar.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.hideStandardEncumbranceBar.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "hideStandardEncumbranceBar", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.hideStandardEncumbranceBar.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.hideStandardEncumbranceBar.hint"),
     scope: "world",
     config: true,
     type: Boolean,
     default: false,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "hideStandardWeightUnits", {
-    name: i18n(CONSTANTS.MODULE_NAME + ".setting.hideStandardWeightUnits.name"),
-    hint: i18n(CONSTANTS.MODULE_NAME + ".setting.hideStandardWeightUnits.hint"),
+  game.settings.register(CONSTANTS.MODULE_ID, "hideStandardWeightUnits", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.hideStandardWeightUnits.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.hideStandardWeightUnits.hint"),
     scope: "world",
     config: true,
     type: Boolean,
@@ -430,81 +430,81 @@ export const registerSettings = function () {
   // Homebrew Rule
   // ======================================================
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "doNotIncreaseWeightByQuantityForNoAmmunition", {
-    name: `${CONSTANTS.MODULE_NAME}.setting.doNotIncreaseWeightByQuantityForNoAmmunition.name`,
-    hint: `${CONSTANTS.MODULE_NAME}.setting.doNotIncreaseWeightByQuantityForNoAmmunition.hint`,
+  game.settings.register(CONSTANTS.MODULE_ID, "doNotIncreaseWeightByQuantityForNoAmmunition", {
+    name: `${CONSTANTS.MODULE_ID}.setting.doNotIncreaseWeightByQuantityForNoAmmunition.name`,
+    hint: `${CONSTANTS.MODULE_ID}.setting.doNotIncreaseWeightByQuantityForNoAmmunition.hint`,
     scope: "world",
     config: true,
     default: false,
     type: Boolean,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "doNotApplyWeightForEquippedArmor", {
-    name: `${CONSTANTS.MODULE_NAME}.setting.doNotApplyWeightForEquippedArmor.name`,
-    hint: `${CONSTANTS.MODULE_NAME}.setting.doNotApplyWeightForEquippedArmor.hint`,
+  game.settings.register(CONSTANTS.MODULE_ID, "doNotApplyWeightForEquippedArmor", {
+    name: `${CONSTANTS.MODULE_ID}.setting.doNotApplyWeightForEquippedArmor.name`,
+    hint: `${CONSTANTS.MODULE_ID}.setting.doNotApplyWeightForEquippedArmor.hint`,
     scope: "world",
     config: true,
     default: false,
     type: Boolean,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorClothing", {
-    name: `${CONSTANTS.MODULE_NAME}.setting.applyWeightMultiplierForEquippedArmorClothing.name`,
-    hint: `${CONSTANTS.MODULE_NAME}.setting.applyWeightMultiplierForEquippedArmorClothing.hint`,
+  game.settings.register(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmorClothing", {
+    name: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForEquippedArmorClothing.name`,
+    hint: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForEquippedArmorClothing.hint`,
     scope: "world",
     config: true,
     default: 0,
     type: Number,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorLight", {
-    name: `${CONSTANTS.MODULE_NAME}.setting.applyWeightMultiplierForEquippedArmorLight.name`,
-    hint: `${CONSTANTS.MODULE_NAME}.setting.applyWeightMultiplierForEquippedArmorLight.hint`,
+  game.settings.register(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmorLight", {
+    name: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForEquippedArmorLight.name`,
+    hint: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForEquippedArmorLight.hint`,
     scope: "world",
     config: true,
     default: 0,
     type: Number,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorMedium", {
-    name: `${CONSTANTS.MODULE_NAME}.setting.applyWeightMultiplierForEquippedArmorMedium.name`,
-    hint: `${CONSTANTS.MODULE_NAME}.setting.applyWeightMultiplierForEquippedArmorMedium.hint`,
+  game.settings.register(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmorMedium", {
+    name: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForEquippedArmorMedium.name`,
+    hint: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForEquippedArmorMedium.hint`,
     scope: "world",
     config: true,
     default: 0,
     type: Number,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorHeavy", {
-    name: `${CONSTANTS.MODULE_NAME}.setting.applyWeightMultiplierForEquippedArmorHeavy.name`,
-    hint: `${CONSTANTS.MODULE_NAME}.setting.applyWeightMultiplierForEquippedArmorHeavy.hint`,
+  game.settings.register(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmorHeavy", {
+    name: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForEquippedArmorHeavy.name`,
+    hint: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForEquippedArmorHeavy.hint`,
     scope: "world",
     config: true,
     default: 0,
     type: Number,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorNatural", {
-    name: `${CONSTANTS.MODULE_NAME}.setting.applyWeightMultiplierForEquippedArmorNatural.name`,
-    hint: `${CONSTANTS.MODULE_NAME}.setting.applyWeightMultiplierForEquippedArmorNatural.hint`,
+  game.settings.register(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmorNatural", {
+    name: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForEquippedArmorNatural.name`,
+    hint: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForEquippedArmorNatural.hint`,
     scope: "world",
     config: true,
     default: 0,
     type: Number,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedContainer", {
-    name: `${CONSTANTS.MODULE_NAME}.setting.applyWeightMultiplierForEquippedContainer.name`,
-    hint: `${CONSTANTS.MODULE_NAME}.setting.applyWeightMultiplierForEquippedContainer.hint`,
+  game.settings.register(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedContainer", {
+    name: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForEquippedContainer.name`,
+    hint: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForEquippedContainer.hint`,
     scope: "world",
     config: true,
     default: -1,
     type: Number,
   });
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "useStrValueInsteadStrModOnBulk", {
-    name: `${CONSTANTS.MODULE_NAME}.setting.useStrValueInsteadStrModOnBulk.name`,
-    hint: `${CONSTANTS.MODULE_NAME}.setting.useStrValueInsteadStrModOnBulk.hint`,
+  game.settings.register(CONSTANTS.MODULE_ID, "useStrValueInsteadStrModOnBulk", {
+    name: `${CONSTANTS.MODULE_ID}.setting.useStrValueInsteadStrModOnBulk.name`,
+    hint: `${CONSTANTS.MODULE_ID}.setting.useStrValueInsteadStrModOnBulk.hint`,
     scope: "world",
     config: true,
     default: false,
@@ -513,9 +513,9 @@ export const registerSettings = function () {
 
   // =============================================================================================================
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "debug", {
-    name: `${CONSTANTS.MODULE_NAME}.setting.debug.name`,
-    hint: `${CONSTANTS.MODULE_NAME}.setting.debug.hint`,
+  game.settings.register(CONSTANTS.MODULE_ID, "debug", {
+    name: `${CONSTANTS.MODULE_ID}.setting.debug.name`,
+    hint: `${CONSTANTS.MODULE_ID}.setting.debug.hint`,
     scope: "world",
     config: true,
     default: false,
@@ -529,19 +529,19 @@ class ResetSettingsDialog extends FormApplication {
     super(...args);
     //@ts-ignore
     return new Dialog({
-      title: game.i18n.localize(`${CONSTANTS.MODULE_NAME}.dialogs.resetsettings.title`),
+      title: game.i18n.localize(`${CONSTANTS.MODULE_ID}.dialogs.resetsettings.title`),
       content:
         '<p style="margin-bottom:1rem;">' +
-        game.i18n.localize(`${CONSTANTS.MODULE_NAME}.dialogs.resetsettings.content`) +
+        game.i18n.localize(`${CONSTANTS.MODULE_ID}.dialogs.resetsettings.content`) +
         "</p>",
       buttons: {
         confirm: {
           icon: '<i class="fas fa-check"></i>',
-          label: game.i18n.localize(`${CONSTANTS.MODULE_NAME}.dialogs.resetsettings.confirm`),
+          label: game.i18n.localize(`${CONSTANTS.MODULE_ID}.dialogs.resetsettings.confirm`),
           callback: async () => {
             const worldSettings = game.settings.storage
               ?.get("world")
-              ?.filter((setting) => setting.key.startsWith(`${CONSTANTS.MODULE_NAME}.`));
+              ?.filter((setting) => setting.key.startsWith(`${CONSTANTS.MODULE_ID}.`));
             for (let setting of worldSettings) {
               console.log(`Reset setting '${setting.key}'`);
               await setting.delete();
@@ -551,7 +551,7 @@ class ResetSettingsDialog extends FormApplication {
         },
         cancel: {
           icon: '<i class="fas fa-times"></i>',
-          label: game.i18n.localize(`${CONSTANTS.MODULE_NAME}.dialogs.resetsettings.cancel`),
+          label: game.i18n.localize(`${CONSTANTS.MODULE_ID}.dialogs.resetsettings.cancel`),
         },
       },
       default: "cancel",

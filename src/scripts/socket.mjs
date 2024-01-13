@@ -30,7 +30,7 @@ export function registerSocket() {
     return variantEncumbranceSocket;
   }
   //@ts-ignore
-  variantEncumbranceSocket = socketlib.registerModule(CONSTANTS.MODULE_NAME);
+  variantEncumbranceSocket = socketlib.registerModule(CONSTANTS.MODULE_ID);
 
   // variantEncumbranceSocket.register(SOCKET_HANDLERS.ON_RENDER_TOKEN_CONFIG, (...args) =>
   //   API._onRenderTokenConfig(...args),

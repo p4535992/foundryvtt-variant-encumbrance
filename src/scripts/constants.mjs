@@ -1,14 +1,14 @@
 const CONSTANTS = {
-  MODULE_NAME: "variant-encumbrance-dnd5e",
+  MODULE_ID: "variant-encumbrance-dnd5e",
   PATH: `modules/variant-encumbrance-dnd5e/`,
   FLAG: "variant-encumbrance-dnd5e",
-  INVENTORY_PLUS_MODULE_NAME: "inventory-plus",
-  MIDI_QOL_MODULE_NAME: "midi-qol",
-  ITEM_COLLECTION_MODULE_NAME: "itemcollection",
-  DFREDS_CONVENIENT_EFFECTS_MODULE_NAME: "dfreds-convenient-effects",
-  DF_QUALITY_OF_LIFE_MODULE_NAME: "df-qol",
-  DAE_MODULE_NAME: "dae",
-  BACKPACK_MANAGER_MODULE_NAME: "backpack-manager",
+  INVENTORY_PLUS_MODULE_ID: "inventory-plus",
+  MIDI_QOL_MODULE_ID: "midi-qol",
+  ITEM_COLLECTION_MODULE_ID: "itemcollection",
+  DFREDS_CONVENIENT_EFFECTS_MODULE_ID: "dfreds-convenient-effects",
+  DF_QUALITY_OF_LIFE_MODULE_ID: "df-qol",
+  DAE_MODULE_ID: "dae",
+  BACKPACK_MANAGER_MODULE_ID: "backpack-manager",
   DFREDS_CONVENIENT_EFFECTS: {
     FLAGS: {
       DESCRIPTION: "description",
@@ -38,6 +38,6 @@ const CONSTANTS = {
   },
 };
 
-CONSTANTS.PATH = `modules/${CONSTANTS.MODULE_NAME}/`;
+CONSTANTS.PATH = `modules/${CONSTANTS.MODULE_ID}/`;
 
 export default CONSTANTS;

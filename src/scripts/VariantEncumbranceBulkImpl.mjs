@@ -145,7 +145,7 @@ export const VariantEncumbranceBulkImpl = {
     );
 
     // SEEM NOT NECESSARY Add pre check for encumbrance tier
-    if (game.settings.get(CONSTANTS.MODULE_NAME, "enablePreCheckEncumbranceTier")) {
+    if (game.settings.get(CONSTANTS.MODULE_ID, "enablePreCheckEncumbranceTier")) {
       if (hasProperty(actorEntity, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.DATA_BULK}`)) {
         const encumbranceDataCurrent = actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.DATA_BULK);
         if (encumbranceDataCurrent.encumbranceTier === encumbranceDataBulk.encumbranceTier) {
@@ -266,7 +266,7 @@ export const VariantEncumbranceBulkImpl = {
         effectName = null;
     }
 
-    if (!game.settings.get(CONSTANTS.MODULE_NAME, "useVariantEncumbrance")) {
+    if (!game.settings.get(CONSTANTS.MODULE_ID, "useVariantEncumbrance")) {
       effectName = ENCUMBRANCE_STATE.UNENCUMBERED;
     }
 
@@ -327,18 +327,18 @@ export const VariantEncumbranceBulkImpl = {
       CONSTANTS.FLAG,
       EncumbranceFlags.ENABLED_WE_BULK
     );
-    const useStandardWeightCalculation = game.settings.get(CONSTANTS.MODULE_NAME, "useStandardWeightCalculation");
+    const useStandardWeightCalculation = game.settings.get(CONSTANTS.MODULE_ID, "useStandardWeightCalculation");
     const doNotIncreaseWeightByQuantityForNoAmmunition = game.settings.get(
-      CONSTANTS.MODULE_NAME,
+      CONSTANTS.MODULE_ID,
       "doNotIncreaseWeightByQuantityForNoAmmunition"
     );
     const doNotApplyWeightForEquippedArmor = game.settings.get(
-      CONSTANTS.MODULE_NAME,
+      CONSTANTS.MODULE_ID,
       "doNotApplyWeightForEquippedArmor"
     );
-    const useStrValueInsteadStrModOnBulk = game.settings.get(CONSTANTS.MODULE_NAME, "useStrValueInsteadStrModOnBulk");
+    const useStrValueInsteadStrModOnBulk = game.settings.get(CONSTANTS.MODULE_ID, "useStrValueInsteadStrModOnBulk");
     const useEquippedUnequippedItemCollectionFeature = game.settings.get(
-      CONSTANTS.MODULE_NAME,
+      CONSTANTS.MODULE_ID,
       "useEquippedUnequippedItemCollectionFeature"
     );
     if (!enableVarianEncumbranceWeightBulkOnActorFlag) {
@@ -412,15 +412,15 @@ export const VariantEncumbranceBulkImpl = {
             itemArmorTypes.includes(item.system.armor?.type)
           ) {
             const applyWeightMultiplierForEquippedArmorClothing =
-              game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorClothing") || 0;
+              game.settings.get(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmorClothing") || 0;
             const applyWeightMultiplierForEquippedArmorLight =
-              game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorLight") || 0;
+              game.settings.get(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmorLight") || 0;
             const applyWeightMultiplierForEquippedArmorMedium =
-              game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorMedium") || 0;
+              game.settings.get(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmorMedium") || 0;
             const applyWeightMultiplierForEquippedArmorHeavy =
-              game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorHeavy") || 0;
+              game.settings.get(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmorHeavy") || 0;
             const applyWeightMultiplierForEquippedArmorNatural =
-              game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorNatural") || 0;
+              game.settings.get(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmorNatural") || 0;
             //@ts-ignore
             if (item.system.armor?.type === "clothing") {
               itemWeight *= applyWeightMultiplierForEquippedArmorClothing;
@@ -447,20 +447,20 @@ export const VariantEncumbranceBulkImpl = {
             }
           } else if (isEquipped) {
             if (isProficient) {
-              itemWeight *= game.settings.get(CONSTANTS.MODULE_NAME, "profEquippedMultiplier");
+              itemWeight *= game.settings.get(CONSTANTS.MODULE_ID, "profEquippedMultiplier");
             } else {
               const applyWeightMultiplierForEquippedContainer =
                 item.type === "backpack"
-                  ? game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedContainer") || -1
+                  ? game.settings.get(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedContainer") || -1
                   : -1;
               if (applyWeightMultiplierForEquippedContainer > -1) {
                 itemWeight *= applyWeightMultiplierForEquippedContainer;
               } else {
-                itemWeight *= game.settings.get(CONSTANTS.MODULE_NAME, "equippedMultiplier");
+                itemWeight *= game.settings.get(CONSTANTS.MODULE_ID, "equippedMultiplier");
               }
             }
           } else {
-            itemWeight *= game.settings.get(CONSTANTS.MODULE_NAME, "unequippedMultiplier");
+            itemWeight *= game.settings.get(CONSTANTS.MODULE_ID, "unequippedMultiplier");
           }
 
           // Feature: Do Not increase weight by quantity for no ammunition item
@@ -474,7 +474,7 @@ export const VariantEncumbranceBulkImpl = {
         // Start inventory+ module is active
         if (invPlusActiveTmp) {
           // Retrieve flag 'categorys' from inventory plus module
-          const inventoryPlusCategories = actorEntity.getFlag(CONSTANTS.INVENTORY_PLUS_MODULE_NAME, "categorys");
+          const inventoryPlusCategories = actorEntity.getFlag(CONSTANTS.INVENTORY_PLUS_MODULE_ID, "categorys");
           if (inventoryPlusCategories) {
             // "weapon", "equipment", "consumable", "tool", "backpack", "loot"
             let actorHasCustomCategories = false;
@@ -485,7 +485,7 @@ export const VariantEncumbranceBulkImpl = {
                 //@ts-ignore
                 item.flags &&
                 //@ts-ignore
-                item.flags[CONSTANTS.INVENTORY_PLUS_MODULE_NAME]?.category === categoryId
+                item.flags[CONSTANTS.INVENTORY_PLUS_MODULE_ID]?.category === categoryId
               ) {
                 // Ignore weight
                 if (section?.ignoreBulk === true) {
@@ -564,7 +564,7 @@ export const VariantEncumbranceBulkImpl = {
       // [Optional] add Currency Weight (for non-transformed actors)
       if (
         !ignoreCurrency &&
-        game.settings.get(CONSTANTS.MODULE_NAME, "enableCurrencyWeight") &&
+        game.settings.get(CONSTANTS.MODULE_ID, "enableCurrencyWeight") &&
         game.settings.get("dnd5e", "currencyWeight") &&
         actorEntity.system.currency
       ) {
@@ -573,11 +573,11 @@ export const VariantEncumbranceBulkImpl = {
         const numCoins = Object.values(currency).reduce((val, denom) => (val += Math.max(denom, 0)), 0);
 
         // const currencyPerWeight = game.settings.get('dnd5e', 'metricWeightUnits')
-        // ? game.settings.get(CONSTANTS.MODULE_NAME, 'fakeMetricSystem')
-        // 	? game.settings.get(CONSTANTS.MODULE_NAME, 'currencyWeight')
-        // 	: game.settings.get(CONSTANTS.MODULE_NAME, 'currencyWeightMetric')
-        // : game.settings.get(CONSTANTS.MODULE_NAME, 'currencyWeight');
-        const currencyPerWeight = game.settings.get(CONSTANTS.MODULE_NAME, "currencyWeightBulk") ?? 100;
+        // ? game.settings.get(CONSTANTS.MODULE_ID, 'fakeMetricSystem')
+        // 	? game.settings.get(CONSTANTS.MODULE_ID, 'currencyWeight')
+        // 	: game.settings.get(CONSTANTS.MODULE_ID, 'currencyWeightMetric')
+        // : game.settings.get(CONSTANTS.MODULE_ID, 'currencyWeight');
+        const currencyPerWeight = game.settings.get(CONSTANTS.MODULE_ID, "currencyWeightBulk") ?? 100;
         if (currencyPerWeight == 0) {
           totalWeight += 0;
         } else {
@@ -802,7 +802,7 @@ export const VariantEncumbranceBulkImpl = {
       }
 
       let modForSize = 1; //actorEntity.system.abilities.str.value;
-      if (game.settings.get(CONSTANTS.MODULE_NAME, "sizeMultipliers")) {
+      if (game.settings.get(CONSTANTS.MODULE_ID, "sizeMultipliers")) {
         //@ts-ignore
         const size = actorEntity.system.traits.size;
         if (size === "tiny") {
@@ -830,14 +830,14 @@ export const VariantEncumbranceBulkImpl = {
       }
 
       let strengthMultiplier = 1;
-      if (game.settings.get(CONSTANTS.MODULE_NAME, "useStrengthMultiplier")) {
+      if (game.settings.get(CONSTANTS.MODULE_ID, "useStrengthMultiplier")) {
         strengthMultiplier = game.settings.get("dnd5e", "metricWeightUnits")
-          ? game.settings.get(CONSTANTS.MODULE_NAME, "fakeMetricSystem")
-            ? game.settings.get(CONSTANTS.MODULE_NAME, "strengthMultiplier")
-            : game.settings.get(CONSTANTS.MODULE_NAME, "strengthMultiplierMetric")
-          : game.settings.get(CONSTANTS.MODULE_NAME, "strengthMultiplier");
+          ? game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")
+            ? game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplier")
+            : game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplierMetric")
+          : game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplier");
       }
-      const displayedUnits = game.settings.get(CONSTANTS.MODULE_NAME, "unitsBulk");
+      const displayedUnits = game.settings.get(CONSTANTS.MODULE_ID, "unitsBulk");
       const lightMax = 0;
       const mediumMax = inventorySlot * 0.5; // This is a fixed value to half of the inventory
       const heavyMax = inventorySlot;
@@ -856,7 +856,7 @@ export const VariantEncumbranceBulkImpl = {
         //@ts-ignore
         max = actorEntity.system.abilities.str.value * strengthMultiplier * modForSize;
         const daeValueAttributeEncumbranceMax =
-          daeActive && game.settings.get(CONSTANTS.MODULE_NAME, "enableDAEIntegration")
+          daeActive && game.settings.get(CONSTANTS.MODULE_ID, "enableDAEIntegration")
             ? retrieveAttributeEncumbranceMax(actorEntity, max)
             : 0;
         if (daeValueAttributeEncumbranceMax && daeValueAttributeEncumbranceMax > 0) {
@@ -873,7 +873,7 @@ export const VariantEncumbranceBulkImpl = {
         // const max = actorData.system.attributes.capacity.cargo;
         max = capacityCargo * strengthMultiplier * modForSize;
         const daeValueAttributeCapacityCargo =
-          daeActive && game.settings.get(CONSTANTS.MODULE_NAME, "enableDAEIntegration")
+          daeActive && game.settings.get(CONSTANTS.MODULE_ID, "enableDAEIntegration")
             ? retrieveAttributeCapacityCargo(actorEntity, max)
             : 0;
         if (daeValueAttributeCapacityCargo && daeValueAttributeCapacityCargo > 0) {
@@ -888,7 +888,7 @@ export const VariantEncumbranceBulkImpl = {
         //@ts-ignore
         max = actorEntity.system.abilities.str.value * strengthMultiplier * modForSize;
         const daeValueAttributeEncumbranceMax =
-          daeActive && game.settings.get(CONSTANTS.MODULE_NAME, "enableDAEIntegration")
+          daeActive && game.settings.get(CONSTANTS.MODULE_ID, "enableDAEIntegration")
             ? retrieveAttributeEncumbranceMax(actorEntity, max)
             : 0;
         if (daeValueAttributeEncumbranceMax && daeValueAttributeEncumbranceMax > 0) {
@@ -940,7 +940,7 @@ export const VariantEncumbranceBulkImpl = {
    * @param {Actor5e} actor - the effected actor
    */
   addDynamicEffects: async function (effectName, actor, speedDecrease) {
-    // const invMidiQol = game.modules.get(CONSTANTS.MIDI_QOL_MODULE_NAME)?.active;
+    // const invMidiQol = game.modules.get(CONSTANTS.MIDI_QOL_MODULE_ID)?.active;
     switch (effectName.toLowerCase()) {
       case ENCUMBRANCE_STATE.ENCUMBERED.toLowerCase():
       case ENCUMBRANCE_STATE.HEAVILY_ENCUMBERED.toLowerCase(): {
@@ -951,7 +951,7 @@ export const VariantEncumbranceBulkImpl = {
           effect = VariantEncumbranceBulkImpl._bulkHeavilyEncumberedNoMidi();
         }
         const speedDecreased =
-          speedDecrease > 0 ? speedDecrease : game.settings.get(CONSTANTS.MODULE_NAME, "heavyWeightDecreaseBulk");
+          speedDecrease > 0 ? speedDecrease : game.settings.get(CONSTANTS.MODULE_ID, "heavyWeightDecreaseBulk");
         VariantEncumbranceBulkImpl._addEncumbranceEffects(effect, actor, speedDecreased);
         return effect;
       }
@@ -1270,9 +1270,9 @@ export const VariantEncumbranceBulkImpl = {
     if (encumbranceTier === ENCUMBRANCE_TIERS.NONE) {
       speedDecrease = 1;
     } else if (encumbranceTier === ENCUMBRANCE_TIERS.LIGHT) {
-      speedDecrease = game.settings.get(CONSTANTS.MODULE_NAME, "heavyWeightDecreaseBulk");
+      speedDecrease = game.settings.get(CONSTANTS.MODULE_ID, "heavyWeightDecreaseBulk");
     } else if (encumbranceTier === ENCUMBRANCE_TIERS.HEAVY) {
-      speedDecrease = game.settings.get(CONSTANTS.MODULE_NAME, "heavyWeightDecreaseBulk");
+      speedDecrease = game.settings.get(CONSTANTS.MODULE_ID, "heavyWeightDecreaseBulk");
     } else if (encumbranceTier === ENCUMBRANCE_TIERS.MAX) {
       speedDecrease = null;
     }
@@ -1302,20 +1302,20 @@ export const VariantEncumbranceBulkImpl = {
       //     },
       //   };
       // }
-      ceFlags[CONSTANTS.DFREDS_CONVENIENT_EFFECTS_MODULE_NAME] = {};
-      ceFlags[CONSTANTS.DFREDS_CONVENIENT_EFFECTS_MODULE_NAME][CONSTANTS.DFREDS_CONVENIENT_EFFECTS.FLAGS.DESCRIPTION] =
+      ceFlags[CONSTANTS.DFREDS_CONVENIENT_EFFECTS_MODULE_ID] = {};
+      ceFlags[CONSTANTS.DFREDS_CONVENIENT_EFFECTS_MODULE_ID][CONSTANTS.DFREDS_CONVENIENT_EFFECTS.FLAGS.DESCRIPTION] =
         effect.description;
-      ceFlags[CONSTANTS.DFREDS_CONVENIENT_EFFECTS_MODULE_NAME][
+      ceFlags[CONSTANTS.DFREDS_CONVENIENT_EFFECTS_MODULE_ID][
         CONSTANTS.DFREDS_CONVENIENT_EFFECTS.FLAGS.IS_CONVENIENT
       ] = true;
-      ceFlags[CONSTANTS.DFREDS_CONVENIENT_EFFECTS_MODULE_NAME][CONSTANTS.DFREDS_CONVENIENT_EFFECTS.FLAGS.IS_DYNAMIC] =
+      ceFlags[CONSTANTS.DFREDS_CONVENIENT_EFFECTS_MODULE_ID][CONSTANTS.DFREDS_CONVENIENT_EFFECTS.FLAGS.IS_DYNAMIC] =
         effect.isDynamic;
-      ceFlags[CONSTANTS.DFREDS_CONVENIENT_EFFECTS_MODULE_NAME][CONSTANTS.DFREDS_CONVENIENT_EFFECTS.FLAGS.IS_VIEWABLE] =
+      ceFlags[CONSTANTS.DFREDS_CONVENIENT_EFFECTS_MODULE_ID][CONSTANTS.DFREDS_CONVENIENT_EFFECTS.FLAGS.IS_VIEWABLE] =
         effect.isViewable;
-      ceFlags[CONSTANTS.DFREDS_CONVENIENT_EFFECTS_MODULE_NAME][
+      ceFlags[CONSTANTS.DFREDS_CONVENIENT_EFFECTS_MODULE_ID][
         CONSTANTS.DFREDS_CONVENIENT_EFFECTS.FLAGS.NESTED_EFFECTS
       ] = effect.nestedEffects;
-      ceFlags[CONSTANTS.DFREDS_CONVENIENT_EFFECTS_MODULE_NAME][CONSTANTS.DFREDS_CONVENIENT_EFFECTS.FLAGS.SUB_EFFECTS] =
+      ceFlags[CONSTANTS.DFREDS_CONVENIENT_EFFECTS_MODULE_ID][CONSTANTS.DFREDS_CONVENIENT_EFFECTS.FLAGS.SUB_EFFECTS] =
         effect.subEffects;
 
       const changes = effect._handleIntegrations();
@@ -1383,15 +1383,15 @@ export function calcBulkItemCollection(
         `calcBulkItemCollection | Is not a 'backpack' and is not flagged as itemcollection | Equipped = true, doNotApplyWeightForEquippedArmor = true, Armor Type = true (${item.system.armor?.type})`
       );
       const applyWeightMultiplierForEquippedArmorClothing =
-        game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorClothing") || 0;
+        game.settings.get(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmorClothing") || 0;
       const applyWeightMultiplierForEquippedArmorLight =
-        game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorLight") || 0;
+        game.settings.get(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmorLight") || 0;
       const applyWeightMultiplierForEquippedArmorMedium =
-        game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorMedium") || 0;
+        game.settings.get(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmorMedium") || 0;
       const applyWeightMultiplierForEquippedArmorHeavy =
-        game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorHeavy") || 0;
+        game.settings.get(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmorHeavy") || 0;
       const applyWeightMultiplierForEquippedArmorNatural =
-        game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedArmorNatural") || 0;
+        game.settings.get(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmorNatural") || 0;
       //@ts-ignore
       if (item.system.armor?.type === "clothing") {
         debug(
@@ -1448,25 +1448,25 @@ export function calcBulkItemCollection(
       if (isProficient) {
         debug(
           `calcBulkItemCollection | Equipped = true, Proficient = true : ${currentItemWeight} => ${
-            currentItemWeight * game.settings.get(CONSTANTS.MODULE_NAME, "profEquippedMultiplier")
+            currentItemWeight * game.settings.get(CONSTANTS.MODULE_ID, "profEquippedMultiplier")
           }`
         );
-        currentItemWeight *= game.settings.get(CONSTANTS.MODULE_NAME, "profEquippedMultiplier");
+        currentItemWeight *= game.settings.get(CONSTANTS.MODULE_ID, "profEquippedMultiplier");
       } else {
         debug(
           `calcBulkItemCollection | Equipped = true, Proficient = false : ${currentItemWeight} => ${
-            currentItemWeight * game.settings.get(CONSTANTS.MODULE_NAME, "equippedMultiplier")
+            currentItemWeight * game.settings.get(CONSTANTS.MODULE_ID, "equippedMultiplier")
           }`
         );
-        currentItemWeight *= game.settings.get(CONSTANTS.MODULE_NAME, "equippedMultiplier");
+        currentItemWeight *= game.settings.get(CONSTANTS.MODULE_ID, "equippedMultiplier");
       }
     } else {
       debug(
         `calcBulkItemCollection | Equipped = false, Proficient = false : ${currentItemWeight} => ${
-          currentItemWeight * game.settings.get(CONSTANTS.MODULE_NAME, "unequippedMultiplier")
+          currentItemWeight * game.settings.get(CONSTANTS.MODULE_ID, "unequippedMultiplier")
         }`
       );
-      currentItemWeight *= game.settings.get(CONSTANTS.MODULE_NAME, "unequippedMultiplier");
+      currentItemWeight *= game.settings.get(CONSTANTS.MODULE_ID, "unequippedMultiplier");
     }
     return currentItemWeight;
   }
@@ -1500,20 +1500,20 @@ export function calcBulkItemCollection(
   }
   if (isEquipped) {
     if (isProficient) {
-      itemWeight *= game.settings.get(CONSTANTS.MODULE_NAME, "profEquippedMultiplier");
+      itemWeight *= game.settings.get(CONSTANTS.MODULE_ID, "profEquippedMultiplier");
     } else {
       const applyWeightMultiplierForEquippedContainer =
         item.type === "backpack"
-          ? game.settings.get(CONSTANTS.MODULE_NAME, "applyWeightMultiplierForEquippedContainer") || -1
+          ? game.settings.get(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedContainer") || -1
           : -1;
       if (applyWeightMultiplierForEquippedContainer > -1) {
         itemWeight *= applyWeightMultiplierForEquippedContainer;
       } else {
-        itemWeight *= game.settings.get(CONSTANTS.MODULE_NAME, "equippedMultiplier");
+        itemWeight *= game.settings.get(CONSTANTS.MODULE_ID, "equippedMultiplier");
       }
     }
   } else {
-    itemWeight *= game.settings.get(CONSTANTS.MODULE_NAME, "unequippedMultiplier");
+    itemWeight *= game.settings.get(CONSTANTS.MODULE_ID, "unequippedMultiplier");
   }
   return itemWeight;
 }
@@ -1543,7 +1543,7 @@ function calcItemBulk(
   // [Optional] add Currency Weight (for non-transformed actors)
   if (
     !ignoreCurrency &&
-    game.settings.get(CONSTANTS.MODULE_NAME, "enableCurrencyWeight") &&
+    game.settings.get(CONSTANTS.MODULE_ID, "enableCurrencyWeight") &&
     game.settings.get("dnd5e", "currencyWeight") &&
     //@ts-ignore
     item.system.currency
@@ -1554,11 +1554,11 @@ function calcItemBulk(
     const numCoins = Object.values(currency).reduce((val, denom) => (val += Math.max(denom, 0)), 0);
 
     // const currencyPerWeight = game.settings.get("dnd5e", "metricWeightUnits")
-    //   ? game.settings.get(CONSTANTS.MODULE_NAME, "fakeMetricSystem")
-    //     ? game.settings.get(CONSTANTS.MODULE_NAME, "currencyWeight")
-    //     : game.settings.get(CONSTANTS.MODULE_NAME, "currencyWeightMetric")
-    //   : game.settings.get(CONSTANTS.MODULE_NAME, "currencyWeight");
-    const currencyPerWeight = game.settings.get(CONSTANTS.MODULE_NAME, "currencyWeightBulk") ?? 100;
+    //   ? game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")
+    //     ? game.settings.get(CONSTANTS.MODULE_ID, "currencyWeight")
+    //     : game.settings.get(CONSTANTS.MODULE_ID, "currencyWeightMetric")
+    //   : game.settings.get(CONSTANTS.MODULE_ID, "currencyWeight");
+    const currencyPerWeight = game.settings.get(CONSTANTS.MODULE_ID, "currencyWeightBulk") ?? 100;
     if (currencyPerWeight == 0) {
       weight = weight + 0;
     } else {
