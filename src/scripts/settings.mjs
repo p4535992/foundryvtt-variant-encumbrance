@@ -525,9 +525,8 @@ export const registerSettings = function () {
 
 class ResetSettingsDialog extends FormApplication {
   constructor(...args) {
-    //@ts-ignore
     super(...args);
-    //@ts-ignore
+
     return new Dialog({
       title: game.i18n.localize(`${CONSTANTS.MODULE_ID}.dialogs.resetsettings.title`),
       content:

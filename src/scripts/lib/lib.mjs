@@ -4,6 +4,7 @@ import { calcBulkItemCollection } from "../VariantEncumbranceBulkImpl.mjs";
 import { backPackManagerActive, itemContainerActive } from "../modules.mjs";
 import { calcWeightItemCollection } from "../VariantEncumbranceImpl.mjs";
 import API from "../api.mjs";
+import Logger from "../Logger.mjs";
 
 // =============================
 // Module Generic function
@@ -11,7 +12,7 @@ import API from "../api.mjs";
 
 export async function getToken(documentUuid) {
   const document = await fromUuid(documentUuid);
-  //@ts-ignore
+
   return document?.token ?? document;
 }
 
@@ -44,7 +45,7 @@ export function getOwnedTokens(priorityToControlledIfGM) {
   return ownedTokens;
 }
 
-export function is_UUID(inId) {
+export function isUUID(inId) {
   return typeof inId === "string" && (inId.match(/\./g) || []).length && !inId.endsWith(".");
 }
 
@@ -62,7 +63,7 @@ export function getDocument(target) {
   return target?.document;
 }
 
-export function is_real_number(inNumber) {
+export function isRealNumber(inNumber) {
   return !isNaN(inNumber) && typeof inNumber === "number" && isFinite(inNumber);
 }
 
@@ -123,70 +124,44 @@ export function isFirstOwner(doc) {
 // export let debugEnabled = 0;
 // 0 = none, warnings = 1, debug = 2, all = 3
 
-export function debug(msg, args = "") {
-  if (game.settings.get(CONSTANTS.MODULE_ID, "debug")) {
-    console.log(`DEBUG | ${CONSTANTS.MODULE_ID} | ${msg}`, args);
-  }
-  return msg;
+export function debug(msg, ...args) {
+  return Logger.debug(msg, args);
 }
 
-export function log(message) {
-  message = `${CONSTANTS.MODULE_ID} | ${message}`;
-  console.log(message.replace("<br>", "\n"));
-  return message;
+export function log(message, ...args) {
+  return Logger.log(message, args);
 }
 
-export function notify(message) {
-  message = `${CONSTANTS.MODULE_ID} | ${message}`;
-  ui.notifications?.notify(message);
-  console.log(message.replace("<br>", "\n"));
-  return message;
+export function notify(message, ...args) {
+  return Logger.notify(message, args);
 }
 
-export function info(info, notify = false) {
-  info = `${CONSTANTS.MODULE_ID} | ${info}`;
-  if (notify) ui.notifications?.info(info);
-  console.log(info.replace("<br>", "\n"));
-  return info;
+export function info(info, notify = false, ...args) {
+  return Logger.info(info, notify, args);
 }
 
-export function warn(warning, notify = false) {
-  warning = `${CONSTANTS.MODULE_ID} | ${warning}`;
-  if (notify) ui.notifications?.warn(warning);
-  console.warn(warning.replace("<br>", "\n"));
-  return warning;
+export function warn(warning, notify = false, ...args) {
+  return Logger.warn(warning, notify, args);
 }
 
-export function error(error, notify = true) {
-  error = `${CONSTANTS.MODULE_ID} | ${error}`;
-  if (notify) ui.notifications?.error(error);
-  return new Error(error.replace("<br>", "\n"));
+export function error(error, notify = true, ...args) {
+  return Logger.error(error, notify, args);
 }
 
 export function timelog(message) {
-  warn(Date.now(), message);
+  return Logger.timelog(message);
 }
 
 export const i18n = (key) => {
-  return game.i18n.localize(key)?.trim();
+  return Logger.i18n(key);
 };
 
 export const i18nFormat = (key, data = {}) => {
-  return game.i18n.format(key, data)?.trim();
+  return Logger.i18nFormat(key, data);
 };
 
-// export const setDebugLevel = (debugText) => {
-//   debugEnabled = { none: 0, warn: 1, debug: 2, all: 3 }[debugText] || 0;
-//   // 0 = none, warnings = 1, debug = 2, all = 3
-//   if (debugEnabled >= 3) CONFIG.debug.hooks = true;
-// };
-
 export function dialogWarning(message, icon = "fas fa-exclamation-triangle") {
-  return `<p class="${CONSTANTS.MODULE_ID}-dialog">
-        <i style="font-size:3rem;" class="${icon}"></i><br><br>
-        <strong style="font-size:1.2rem;">${CONSTANTS.MODULE_ID}</strong>
-        <br><br>${message}
-    </p>`;
+  return Logger.dialogWarning(message, icon);
 }
 
 // =========================================================================================
@@ -215,135 +190,53 @@ export function isStringEquals(stringToCheck1, stringToCheck2, startsWith = fals
   }
 }
 
-/**
- * The duplicate function of foundry keep converting my string value to "0"
- * i don't know why this methos is a brute force solution for avoid that problem
- */
-export function duplicateExtended(obj) {
-  try {
-    //@ts-ignore
-    if (structuredClone) {
-      //@ts-ignore
-      return structuredClone(obj);
-    } else {
-      // Shallow copy
-      // const newObject = jQuery.extend({}, oldObject);
-      // Deep copy
-      // const newObject = jQuery.extend(true, {}, oldObject);
-      return jQuery.extend(true, {}, obj);
-    }
-  } catch (e) {
-    return duplicate(obj);
-  }
-}
+// /**
+//  * The duplicate function of foundry keep converting my string value to "0"
+//  * i don't know why this methos is a brute force solution for avoid that problem
+//  */
+// export function duplicateExtended(obj) {
+//   try {
+//
+//     if (structuredClone) {
+//
+//       return structuredClone(obj);
+//     } else {
+//       // Shallow copy
+//       // const newObject = jQuery.extend({}, oldObject);
+//       // Deep copy
+//       // const newObject = jQuery.extend(true, {}, oldObject);
+//       return jQuery.extend(true, {}, obj);
+//     }
+//   } catch (e) {
+//     return duplicate(obj);
+//   }
+// }
 
-// =========================================================================================
+// /**
+//  *
+//  * @param obj Little helper for loop enum element on typescript
+//  * @href https://www.petermorlion.com/iterating-a-typescript-enum/
+//  * @returns
+//  */
+// export function enumKeys(obj) {
+//   return Object.keys(obj).filter((k) => Number.isNaN(+k));
+// }
 
-/**
- *
- * @param obj Little helper for loop enum element on typescript
- * @href https://www.petermorlion.com/iterating-a-typescript-enum/
- * @returns
- */
-export function enumKeys(obj) {
-  return Object.keys(obj).filter((k) => Number.isNaN(+k));
-}
-
-/**
- * @href https://stackoverflow.com/questions/7146217/merge-2-arrays-of-objects
- * @param target
- * @param source
- * @param prop
- */
-export function mergeByProperty(target, source, prop) {
-  for (const sourceElement of source) {
-    const targetElement = target.find((targetElement) => {
-      return sourceElement[prop] === targetElement[prop];
-    });
-    targetElement ? Object.assign(targetElement, sourceElement) : target.push(sourceElement);
-  }
-  return target;
-}
-
-/**
- * Returns the first selected token
- */
-export function getFirstPlayerTokenSelected() {
-  // Get first token ownted by the player
-  const selectedTokens = canvas.tokens?.controlled;
-  if (selectedTokens.length > 1) {
-    //iteractionFailNotification(i18n("foundryvtt-arms-reach.warningNoSelectMoreThanOneToken"));
-    return null;
-  }
-  if (!selectedTokens || selectedTokens.length === 0) {
-    //if(game.user.character.token){
-    //  //@ts-ignore
-    //  return game.user.character.token;
-    //}else{
-    return null;
-    //}
-  }
-  return selectedTokens[0];
-}
-
-/**
- * Returns a list of selected (or owned, if no token is selected)
- * note: ex getSelectedOrOwnedToken
- */
-export function getFirstPlayerToken() {
-  // Get controlled token
-  let token;
-  const controlled = canvas.tokens?.controlled;
-  // Do nothing if multiple tokens are selected
-  if (controlled.length && controlled.length > 1) {
-    //iteractionFailNotification(i18n("foundryvtt-arms-reach.warningNoSelectMoreThanOneToken"));
-    return null;
-  }
-  // If exactly one token is selected, take that
-  token = controlled[0];
-  if (!token) {
-    if (!controlled.length || controlled.length === 0) {
-      // If no token is selected use the token of the users character
-      token = canvas.tokens?.placeables.find((token) => token.id === game.user?.character?.id);
-    }
-    // If no token is selected use the first owned token of the users character you found
-    if (!token) {
-      token = canvas.tokens?.ownedTokens[0];
-    }
-  }
-  return token;
-}
-
-function getElevationToken(token) {
-  const base = token.document;
-  return getElevationPlaceableObject(base);
-}
-
-function getElevationWall(wall) {
-  const base = wall.document;
-  return getElevationPlaceableObject(base);
-}
-
-function getElevationPlaceableObject(placeableObject) {
-  let base = placeableObject;
-  if (base.document) {
-    base = base.document;
-  }
-  const base_elevation =
-    //@ts-ignore
-    typeof _levels !== "undefined" &&
-    //@ts-ignore
-    _levels?.advancedLOS &&
-    (placeableObject instanceof Token || placeableObject instanceof TokenDocument)
-      ? //@ts-ignore
-        _levels.getTokenLOSheight(placeableObject)
-      : base.elevation ??
-        base.flags["levels"]?.elevation ??
-        base.flags["levels"]?.rangeBottom ??
-        base.flags["wallHeight"]?.wallHeightBottom ??
-        0;
-  return base_elevation;
-}
+// /**
+//  * @href https://stackoverflow.com/questions/7146217/merge-2-arrays-of-objects
+//  * @param target
+//  * @param source
+//  * @param prop
+//  */
+// export function mergeByProperty(target, source, prop) {
+//   for (const sourceElement of source) {
+//     const targetElement = target.find((targetElement) => {
+//       return sourceElement[prop] === targetElement[prop];
+//     });
+//     targetElement ? Object.assign(targetElement, sourceElement) : target.push(sourceElement);
+//   }
+//   return target;
+// }
 
 // =============================
 // Module specific function
@@ -495,15 +388,14 @@ export function retrieveActiveEffectDataChangeByKey(actor, key) {
   // if (!sourceToken) {
   //   return;
   // }
-  //@ts-ignore
+
   let valueDefault = undefined;
   const actorEffects = actor?.effects;
   for (const aef of actorEffects) {
-    //@ts-ignore
     if (aef.disabled) {
       continue;
     }
-    //@ts-ignore
+
     const c = retrieveActiveEffectDataChangeByKeyFromActiveEffect(actor, key, aef.changes);
     if (c && c.value) {
       valueDefault = c;
@@ -595,26 +487,18 @@ export function retrieveActiveEffectDataChangeByKeyFromActiveEffect(actor, activ
 }
 
 export function getItemWeight(item) {
-  //@ts-ignore
-  const itemWeight = is_real_number(item.system.weight)
-    ? //@ts-ignore
-      item.system.weight
-    : 0;
+  const itemWeight = isRealNumber(item.system.weight) ? item.system.weight : 0;
   return itemWeight ?? 0;
 }
 
 export function getItemQuantity(item) {
-  //@ts-ignore
-  const itemQuantity = is_real_number(item.system.quantity)
-    ? //@ts-ignore
-      item.system.quantity
-    : 0;
+  const itemQuantity = isRealNumber(item.system.quantity) ? item.system.quantity : 0;
   return itemQuantity ?? 0;
 }
 
 export function getItemBulk(item) {
   const itemBulk = getProperty(item, `flags.${CONSTANTS.MODULE_ID}.bulk`);
-  const itemWeightBulk = is_real_number(itemBulk) ? itemBulk : 0;
+  const itemWeightBulk = isRealNumber(itemBulk) ? itemBulk : 0;
   return itemWeightBulk ?? 0;
 }
 
@@ -660,7 +544,7 @@ export function isValidBackPackManagerItem(item) {
   if (!uuid) {
     return true;
   }
-  //@ts-ignore
+
   const backpack = fromUuidSync(uuid);
   if (!backpack) {
     return true;
@@ -686,7 +570,7 @@ export function retrieveBackPackManagerItem(item) {
   if (!uuid) {
     return undefined;
   }
-  //@ts-ignore
+
   const backpack = fromUuidSync(uuid);
   if (!backpack) {
     warn(`No backpack (Actor) is been found with uuid:${uuid} on item: ${item.name}`);
@@ -709,7 +593,6 @@ export function stowedItemBackPackManager(bag) {
       return isValidBackPackManagerItem(item);
     })
     .sort((a, b) => {
-      //@ts-ignore
       return a.name.localeCompare(b.name);
     });
 }
@@ -728,7 +611,7 @@ export function stowedItemBackPackManager(bag) {
 export function calculateBackPackManagerWeight(item, bag, ignoreCurrency) {
   const data = {};
   const stowed = stowedItemBackPackManager(bag);
-  //@ts-ignore
+
   const type = item.system.capacity.type;
   if (type === "weight") {
     const backpackManagerWeight =
@@ -746,7 +629,7 @@ export function calculateBackPackManagerWeight(item, bag, ignoreCurrency) {
 export function calculateBackPackManagerBulk(item, bag, ignoreCurrency) {
   const data = {};
   const stowed = stowedItemBackPackManager(bag);
-  //@ts-ignore
+
   const type = item.system.capacity.type;
   if (type === "weight") {
     const backpackManagerBulk =

@@ -22,7 +22,7 @@ import {
   error,
   i18n,
   isGMConnected,
-  is_real_number,
+  isRealNumber,
   retrieveAttributeEncumbranceMax,
   retrieveAttributeCapacityCargo,
   getItemQuantity,
@@ -81,7 +81,7 @@ export const VariantEncumbranceBulkImpl = {
               }
             }
             updatedItem = updatedItem2;
-            //@ts-ignore
+
             mergeObject(itemCurrent.system, updatedItem);
           } catch (e) {
             error(e?.message);
@@ -172,7 +172,6 @@ export const VariantEncumbranceBulkImpl = {
     let effectEntityPresent;
 
     for (const effectEntity of actorEntity.effects) {
-      //@ts-ignore
       const effectNameToSet = effectEntity.label;
 
       //const effectIsApplied = await VariantEncumbranceBulkImpl.hasEffectAppliedFromId(effectEntity, actorEntity);
@@ -190,7 +189,7 @@ export const VariantEncumbranceBulkImpl = {
       // Remove all encumbrance effect renamed from the player
       if (
         // encumbranceData.encumbranceTier &&
-        //@ts-ignore
+
         effectEntity.flags &&
         hasProperty(effectEntity, `flags.${CONSTANTS.FLAG}`) &&
         effectNameToSet !== ENCUMBRANCE_STATE.UNENCUMBERED &&
@@ -203,7 +202,7 @@ export const VariantEncumbranceBulkImpl = {
       }
 
       // Remove Old settings
-      //@ts-ignore
+
       if (effectEntity.flags && hasProperty(effectEntity, `flags.VariantEncumbrance`)) {
         await VariantEncumbranceBulkImpl.removeEffectFromId(effectEntity, actorEntity);
         continue;
@@ -271,7 +270,6 @@ export const VariantEncumbranceBulkImpl = {
     }
 
     if (effectName && effectName !== "") {
-      //@ts-ignore
       if (effectName === effectEntityPresent?.label) {
         // Skip if name is the same and the active effect is already present.
       } else {
@@ -371,12 +369,8 @@ export const VariantEncumbranceBulkImpl = {
           return weight + itemQuantity * itemWeight;
         }
 
-        const isEquipped =
-          //@ts-ignore
-          item.system.equipped ? true : false;
-        const isProficient =
-          //@ts-ignore
-          item.system.proficient ? item.system.proficient : false;
+        const isEquipped = item.system.equipped ? true : false;
+        const isProficient = item.system.proficient ? item.system.proficient : false;
 
         debug(`Actor '${actorEntity.name}', Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`);
 
@@ -402,12 +396,7 @@ export const VariantEncumbranceBulkImpl = {
           const weightless = getProperty(item, "system.capacity.weightless") ?? false;
 
           const itemArmorTypes = ["clothing", "light", "medium", "heavy", "natural"];
-          if (
-            isEquipped &&
-            doNotApplyWeightForEquippedArmor &&
-            //@ts-ignore
-            itemArmorTypes.includes(item.system.armor?.type)
-          ) {
+          if (isEquipped && doNotApplyWeightForEquippedArmor && itemArmorTypes.includes(item.system.armor?.type)) {
             const applyWeightMultiplierForEquippedArmorClothing =
               game.settings.get(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmorClothing") || 0;
             const applyWeightMultiplierForEquippedArmorLight =
@@ -418,28 +407,18 @@ export const VariantEncumbranceBulkImpl = {
               game.settings.get(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmorHeavy") || 0;
             const applyWeightMultiplierForEquippedArmorNatural =
               game.settings.get(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmorNatural") || 0;
-            //@ts-ignore
+
             if (item.system.armor?.type === "clothing") {
               itemWeight *= applyWeightMultiplierForEquippedArmorClothing;
-            }
-            //@ts-ignore
-            else if (item.system.armor?.type === "light") {
+            } else if (item.system.armor?.type === "light") {
               itemWeight *= applyWeightMultiplierForEquippedArmorLight;
-            }
-            //@ts-ignore
-            else if (item.system.armor?.type === "medium") {
+            } else if (item.system.armor?.type === "medium") {
               itemWeight *= applyWeightMultiplierForEquippedArmorMedium;
-            }
-            //@ts-ignore
-            else if (item.system.armor?.type === "heavy") {
+            } else if (item.system.armor?.type === "heavy") {
               itemWeight *= applyWeightMultiplierForEquippedArmorHeavy;
-            }
-            //@ts-ignore
-            else if (item.system.armor?.type === "natural") {
+            } else if (item.system.armor?.type === "natural") {
               itemWeight *= applyWeightMultiplierForEquippedArmorNatural;
-            }
-            //@ts-ignore
-            else {
+            } else {
               itemWeight *= 0;
             }
           } else if (isEquipped) {
@@ -462,7 +441,6 @@ export const VariantEncumbranceBulkImpl = {
 
           // Feature: Do Not increase weight by quantity for no ammunition item
           if (doNotIncreaseWeightByQuantityForNoAmmunition) {
-            //@ts-ignore
             if (item.system?.consumableType !== "ammo") {
               itemQuantity = 1;
             }
@@ -479,9 +457,8 @@ export const VariantEncumbranceBulkImpl = {
               const section = inventoryPlusCategories[categoryId];
               if (
                 // This is a error from the inventory plus developer flags stay on 'item' not on the 'item'
-                //@ts-ignore
+
                 item.flags &&
-                //@ts-ignore
                 item.flags[CONSTANTS.INVENTORY_PLUS_MODULE_ID]?.category === categoryId
               ) {
                 // Ignore weight
@@ -565,7 +542,6 @@ export const VariantEncumbranceBulkImpl = {
         game.settings.get("dnd5e", "currencyWeight") &&
         actorEntity.system.currency
       ) {
-        //@ts-ignore
         const currency = actorEntity.system.currency;
         const numCoins = Object.values(currency).reduce((val, denom) => (val += Math.max(denom, 0)), 0);
 
@@ -594,11 +570,10 @@ export const VariantEncumbranceBulkImpl = {
       let minimumBulk = 0;
       let inventorySlot = 0;
 
-      //@ts-ignore
       const sizeOri = actorEntity.system.traits.size;
       let size = sizeOri;
       // Manage pworful build for bulk inveotry slot
-      //@ts-ignore
+
       if (actorEntity.flags?.dnd5e?.powerfulBuild) {
         if (size === "tiny") {
           size = "sm";
@@ -618,179 +593,150 @@ export const VariantEncumbranceBulkImpl = {
       if (actorEntity.type === EncumbranceActorType.CHARACTER) {
         if (size === "tiny") {
           minimumBulk = 5;
-          //@ts-ignore
+
           inventorySlot =
             6 +
             (useStrValueInsteadStrModOnBulk
-              ? //@ts-ignore
-                actorEntity.system.abilities.str.value
-              : //@ts-ignore
-                actorEntity.system.abilities.str.mod);
+              ? actorEntity.system.abilities.str.value
+              : actorEntity.system.abilities.str.mod);
         } else if (size === "sm") {
           minimumBulk = 10;
-          //@ts-ignore
+
           inventorySlot =
             14 +
             (useStrValueInsteadStrModOnBulk
-              ? //@ts-ignore
-                actorEntity.system.abilities.str.value
-              : //@ts-ignore
-                actorEntity.system.abilities.str.mod);
+              ? actorEntity.system.abilities.str.value
+              : actorEntity.system.abilities.str.mod);
         } else if (size === "med") {
           minimumBulk = 20;
-          //@ts-ignore
+
           inventorySlot =
             18 +
             (useStrValueInsteadStrModOnBulk
-              ? //@ts-ignore
-                actorEntity.system.abilities.str.value
-              : //@ts-ignore
-                actorEntity.system.abilities.str.mod);
+              ? actorEntity.system.abilities.str.value
+              : actorEntity.system.abilities.str.mod);
         } else if (size === "lg") {
           minimumBulk = 40;
-          //@ts-ignore
+
           inventorySlot =
             22 +
             (useStrValueInsteadStrModOnBulk
-              ? //@ts-ignore
-                actorEntity.system.abilities.str.value
-              : //@ts-ignore
-                actorEntity.system.abilities.str.mod * 2);
+              ? actorEntity.system.abilities.str.value
+              : actorEntity.system.abilities.str.mod * 2);
         } else if (size === "huge") {
           minimumBulk = 80;
-          //@ts-ignore
+
           inventorySlot =
             30 +
             (useStrValueInsteadStrModOnBulk
-              ? //@ts-ignore
-                actorEntity.system.abilities.str.value
-              : //@ts-ignore
-                actorEntity.system.abilities.str.mod * 4);
+              ? actorEntity.system.abilities.str.value
+              : actorEntity.system.abilities.str.mod * 4);
         } else if (size === "grg") {
           minimumBulk = 160;
-          //@ts-ignore
+
           inventorySlot =
             46 +
             (useStrValueInsteadStrModOnBulk
-              ? //@ts-ignore
-                actorEntity.system.abilities.str.value
-              : //@ts-ignore
-                actorEntity.system.abilities.str.mod * 8);
+              ? actorEntity.system.abilities.str.value
+              : actorEntity.system.abilities.str.mod * 8);
         } else {
           minimumBulk = 20;
-          //@ts-ignore
+
           inventorySlot =
             18 +
             (useStrValueInsteadStrModOnBulk
-              ? //@ts-ignore
-                actorEntity.system.abilities.str.value
-              : //@ts-ignore
-                actorEntity.system.abilities.str.mod);
+              ? actorEntity.system.abilities.str.value
+              : actorEntity.system.abilities.str.mod);
         }
       } else if (actorEntity.type === EncumbranceActorType.VEHICLE) {
-        //@ts-ignore
         // const capacityCargo = actorEntity.system.attributes.capacity.cargo;
         if (size === "tiny") {
           minimumBulk = 20;
-          //@ts-ignore
+
           inventorySlot = 20;
         } else if (size === "sm") {
           minimumBulk = 60;
-          //@ts-ignore
+
           inventorySlot = 60;
         } else if (size === "med") {
           minimumBulk = 180;
-          //@ts-ignore
+
           inventorySlot = 180;
         } else if (size === "lg") {
           minimumBulk = 540;
-          //@ts-ignore
+
           inventorySlot = 540;
         } else if (size === "huge") {
           minimumBulk = 1620;
-          //@ts-ignore
+
           inventorySlot = 1620;
         } else if (size === "grg") {
           minimumBulk = 4860;
-          //@ts-ignore
+
           inventorySlot = 4860;
         } else {
           minimumBulk = 180;
-          //@ts-ignore
+
           inventorySlot = 180;
         }
       } else {
         // Like character by default
         if (size === "tiny") {
           minimumBulk = 5;
-          //@ts-ignore
+
           inventorySlot =
             6 +
             (useStrValueInsteadStrModOnBulk
-              ? //@ts-ignore
-                actorEntity.system.abilities.str.value
-              : //@ts-ignore
-                actorEntity.system.abilities.str.mod);
+              ? actorEntity.system.abilities.str.value
+              : actorEntity.system.abilities.str.mod);
         } else if (size === "sm") {
           minimumBulk = 10;
-          //@ts-ignore
+
           inventorySlot =
             14 +
             (useStrValueInsteadStrModOnBulk
-              ? //@ts-ignore
-                actorEntity.system.abilities.str.value
-              : //@ts-ignore
-                actorEntity.system.abilities.str.mod);
+              ? actorEntity.system.abilities.str.value
+              : actorEntity.system.abilities.str.mod);
         } else if (size === "med") {
           minimumBulk = 20;
-          //@ts-ignore
+
           inventorySlot =
             18 +
             (useStrValueInsteadStrModOnBulk
-              ? //@ts-ignore
-                actorEntity.system.abilities.str.value
-              : //@ts-ignore
-                actorEntity.system.abilities.str.mod);
+              ? actorEntity.system.abilities.str.value
+              : actorEntity.system.abilities.str.mod);
         } else if (size === "lg") {
           minimumBulk = 40;
-          //@ts-ignore
+
           inventorySlot =
             22 +
             (useStrValueInsteadStrModOnBulk
-              ? //@ts-ignore
-                actorEntity.system.abilities.str.value
-              : //@ts-ignore
-                actorEntity.system.abilities.str.mod * 2);
+              ? actorEntity.system.abilities.str.value
+              : actorEntity.system.abilities.str.mod * 2);
         } else if (size === "huge") {
           minimumBulk = 80;
-          //@ts-ignore
+
           inventorySlot =
             30 +
             (useStrValueInsteadStrModOnBulk
-              ? //@ts-ignore
-                actorEntity.system.abilities.str.value
-              : //@ts-ignore
-                actorEntity.system.abilities.str.mod * 4);
+              ? actorEntity.system.abilities.str.value
+              : actorEntity.system.abilities.str.mod * 4);
         } else if (size === "grg") {
           minimumBulk = 160;
-          //@ts-ignore
+
           inventorySlot =
             46 +
             (useStrValueInsteadStrModOnBulk
-              ? //@ts-ignore
-                actorEntity.system.abilities.str.value
-              : //@ts-ignore
-                actorEntity.system.abilities.str.mod * 8);
+              ? actorEntity.system.abilities.str.value
+              : actorEntity.system.abilities.str.mod * 8);
         } else {
           minimumBulk = 20;
-          //@ts-ignore
+
           inventorySlot =
             18 +
             (useStrValueInsteadStrModOnBulk
-              ? //@ts-ignore
-                actorEntity.system.abilities.str.value
-              : //@ts-ignore
-                actorEntity.system.abilities.str.mod);
+              ? actorEntity.system.abilities.str.value
+              : actorEntity.system.abilities.str.mod);
         }
       }
 
@@ -800,7 +746,6 @@ export const VariantEncumbranceBulkImpl = {
 
       let modForSize = 1; //actorEntity.system.abilities.str.value;
       if (game.settings.get(CONSTANTS.MODULE_ID, "sizeMultipliers")) {
-        //@ts-ignore
         const size = actorEntity.system.traits.size;
         if (size === "tiny") {
           modForSize *= 0.5;
@@ -818,7 +763,7 @@ export const VariantEncumbranceBulkImpl = {
           modForSize *= 1;
         }
         // Powerful build support
-        //@ts-ignore
+
         if (actorEntity.flags?.dnd5e?.powerfulBuild) {
           //jshint ignore:line
           // mod *= 2;
@@ -850,7 +795,7 @@ export const VariantEncumbranceBulkImpl = {
         // CHARACTER
         // ==================
         // const max = (actorEntity.system.abilities.str.value * strengthMultiplier * modForSize).toNearest(0.1);
-        //@ts-ignore
+
         max = actorEntity.system.abilities.str.value * strengthMultiplier * modForSize;
         const daeValueAttributeEncumbranceMax =
           daeActive && game.settings.get(CONSTANTS.MODULE_ID, "enableDAEIntegration")
@@ -864,7 +809,7 @@ export const VariantEncumbranceBulkImpl = {
         // ===============================
         // VEHICLE
         // ===============================
-        //@ts-ignore
+
         const capacityCargo = actorEntity.system.attributes.capacity.cargo;
         // Compute overall encumbrance
         // const max = actorData.system.attributes.capacity.cargo;
@@ -882,7 +827,7 @@ export const VariantEncumbranceBulkImpl = {
         // NO CHARACTER, NO VEHICLE (BY DEFAULT THE CHARACTER)
         // ===========================
         // const max = (actorEntity.system.abilities.str.value * strengthMultiplier * modForSize).toNearest(0.1);
-        //@ts-ignore
+
         max = actorEntity.system.abilities.str.value * strengthMultiplier * modForSize;
         const daeValueAttributeEncumbranceMax =
           daeActive && game.settings.get(CONSTANTS.MODULE_ID, "enableDAEIntegration")
@@ -901,7 +846,6 @@ export const VariantEncumbranceBulkImpl = {
         encumbranceTier = ENCUMBRANCE_TIERS.MAX;
       }
 
-      //@ts-ignore
       const dataEncumbrance = {
         value: totalWeightOriginal.toNearest(0.1),
         max: max.toNearest(0.1),
@@ -1110,7 +1054,6 @@ export const VariantEncumbranceBulkImpl = {
   },
 
   _addEncumbranceEffects: function (effect, actor, value) {
-    //@ts-ignore
     const movement = actor.system.attributes.movement;
     // if (!daeActive) {
     effect.changes.push({
@@ -1360,20 +1303,16 @@ export function calcBulkItemCollection(
   doNotIncreaseWeightByQuantityForNoAmmunition,
   { ignoreItems, ignoreTypes } = { ignoreItems: undefined, ignoreTypes: undefined }
 ) {
-  const isEquipped =
-    //@ts-ignore
-    item.system?.equipped ? true : false;
-  const isProficient =
-    //@ts-ignore
-    item.system?.proficient ? item.system?.proficient : false;
+  const isEquipped = item.system?.equipped ? true : false;
+  const isProficient = item.system?.proficient ? item.system?.proficient : false;
 
   // IF IS NOT A BACKPACK
-  //@ts-ignore
+
   if (item.type !== "backpack" || !item.flags.itemcollection) {
     debug(`calcBulkItemCollection | Is not a 'backpack' and is not flagged as itemcollection`);
     let currentItemWeight = calcItemBulk(item, ignoreCurrency, doNotIncreaseWeightByQuantityForNoAmmunition);
     const itemArmorTypes = ["clothing", "light", "medium", "heavy", "natural"];
-    //@ts-ignore
+
     if (isEquipped && doNotApplyWeightForEquippedArmor && itemArmorTypes.includes(item.system.armor?.type)) {
       debug(
         `calcBulkItemCollection | Is not a 'backpack' and is not flagged as itemcollection | Equipped = true, doNotApplyWeightForEquippedArmor = true, Armor Type = true (${item.system.armor?.type})`
@@ -1388,7 +1327,7 @@ export function calcBulkItemCollection(
         game.settings.get(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmorHeavy") || 0;
       const applyWeightMultiplierForEquippedArmorNatural =
         game.settings.get(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmorNatural") || 0;
-      //@ts-ignore
+
       if (item.system.armor?.type === "clothing") {
         debug(
           `calcBulkItemCollection | applyWeightMultiplierForEquippedArmorClothing with value ${applyWeightMultiplierForEquippedArmorClothing} : ${currentItemWeight} => ${
@@ -1396,45 +1335,35 @@ export function calcBulkItemCollection(
           }`
         );
         currentItemWeight *= applyWeightMultiplierForEquippedArmorClothing;
-      }
-      //@ts-ignore
-      else if (item.system.armor?.type === "light") {
+      } else if (item.system.armor?.type === "light") {
         debug(
           `calcBulkItemCollection | applyWeightMultiplierForEquippedArmorLight  with value ${applyWeightMultiplierForEquippedArmorLight} :${currentItemWeight} => ${
             currentItemWeight * applyWeightMultiplierForEquippedArmorLight
           }`
         );
         currentItemWeight *= applyWeightMultiplierForEquippedArmorLight;
-      }
-      //@ts-ignore
-      else if (item.system.armor?.type === "medium") {
+      } else if (item.system.armor?.type === "medium") {
         debug(
           `calcBulkItemCollection | applyWeightMultiplierForEquippedArmorMedium with value ${applyWeightMultiplierForEquippedArmorMedium} : ${currentItemWeight} => ${
             currentItemWeight * applyWeightMultiplierForEquippedArmorMedium
           }`
         );
         currentItemWeight *= applyWeightMultiplierForEquippedArmorMedium;
-      }
-      //@ts-ignore
-      else if (item.system.armor?.type === "heavy") {
+      } else if (item.system.armor?.type === "heavy") {
         debug(
           `calcBulkItemCollection | applyWeightMultiplierForEquippedArmorArmorHeavy with value ${applyWeightMultiplierForEquippedArmorHeavy} : ${currentItemWeight} => ${
             currentItemWeight * applyWeightMultiplierForEquippedArmorHeavy
           }`
         );
         currentItemWeight *= applyWeightMultiplierForEquippedArmorHeavy;
-      }
-      //@ts-ignore
-      else if (item.system.armor?.type === "natural") {
+      } else if (item.system.armor?.type === "natural") {
         debug(
           `calcBulkItemCollection | applyWeightMultiplierForEquippedArmorNatural with value ${applyWeightMultiplierForEquippedArmorNatural} : ${currentItemWeight} => ${
             currentItemWeight * applyWeightMultiplierForEquippedArmorNatural
           }`
         );
         currentItemWeight *= applyWeightMultiplierForEquippedArmorNatural;
-      }
-      //@ts-ignore
-      else {
+      } else {
         debug(
           `calcBulkItemCollection | doNotApplyWeightForEquippedArmor with value ${0} : ${currentItemWeight} => ${0}`
         );
@@ -1481,7 +1410,7 @@ export function calcBulkItemCollection(
   // if (weightless) return getProperty(this, "flags.itemcollection.bagWeight") ?? 0;
 
   let itemWeight = getItemBulk(item) || 0;
-  //@ts-ignore
+
   if (useEquippedUnequippedItemCollectionFeature && !isEquipped && item.flags?.itemcollection?.weightlessUnequipped) {
     return 0;
   }
@@ -1520,7 +1449,6 @@ function calcItemBulk(
   doNotIncreaseWeightByQuantityForNoAmmunition,
   { ignoreItems, ignoreTypes } = { ignoreItems: undefined, ignoreTypes: undefined }
 ) {
-  //@ts-ignore
   if (item.type !== "backpack" || item.items === undefined) {
     debug(
       `calcItemBulk | Is not a backpack or has not items on it => ${_calcItemBulk(
@@ -1530,7 +1458,7 @@ function calcItemBulk(
     );
     return _calcItemBulk(item, doNotIncreaseWeightByQuantityForNoAmmunition);
   }
-  //@ts-ignore
+
   let weight = item.items.reduce((acc, item) => {
     if (ignoreTypes?.some((name) => item.name.includes(name))) return acc;
     if (ignoreItems?.includes(item.name)) return acc;
@@ -1541,11 +1469,10 @@ function calcItemBulk(
     !ignoreCurrency &&
     game.settings.get(CONSTANTS.MODULE_ID, "enableCurrencyWeight") &&
     game.settings.get("dnd5e", "currencyWeight") &&
-    //@ts-ignore
     item.system.currency
   ) {
     debug(`calcItemBulk | Check out currency = true => ${weight}`);
-    //@ts-ignore
+
     const currency = item.system.currency ?? {};
     const numCoins = Object.values(currency).reduce((val, denom) => (val += Math.max(denom, 0)), 0);
 
@@ -1568,7 +1495,7 @@ function calcItemBulk(
     );
   } else {
     debug(`calcItemBulk | Check out currency = false => ${weight}`);
-    //@ts-ignore
+
     const currency = item.system.currency ?? {};
     const numCoins = currency ? Object.keys(currency).reduce((val, denom) => val + currency[denom], 0) : 0;
     weight = weight + numCoins / 100;

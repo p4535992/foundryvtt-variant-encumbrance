@@ -14,7 +14,6 @@ import {
   checkBulkCategory,
   convertPoundsToKg,
   debug,
-  duplicateExtended,
   getBulkLabel,
   getItemBulk,
   getItemQuantity,
@@ -22,7 +21,7 @@ import {
   getWeightLabel,
   i18n,
   i18nFormat,
-  is_real_number,
+  isRealNumber,
   warn,
 } from "./lib/lib.mjs";
 import CONSTANTS from "./constants.mjs";
@@ -80,40 +79,31 @@ export const initHooks = () => {
   //   }
   // };
 
-  //@ts-ignore
   CONFIG.DND5E.encumbrance.strMultiplier.imperial = game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplier") ?? 15;
 
   if (game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")) {
-    //@ts-ignore
     CONFIG.DND5E.encumbrance.strMultiplier.metric = game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplier") ?? 15;
   } else {
-    //@ts-ignore
     CONFIG.DND5E.encumbrance.strMultiplier.metric =
       game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplierMetric") ?? 6.8;
   }
 
-  //@ts-ignore
   CONFIG.DND5E.encumbrance.currencyPerWeight.imperial = game.settings.get(CONSTANTS.MODULE_ID, "currencyWeight") ?? 50;
 
   if (game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")) {
-    //@ts-ignore
     CONFIG.DND5E.encumbrance.currencyPerWeight.metric = game.settings.get(CONSTANTS.MODULE_ID, "currencyWeight") ?? 50;
   } else {
-    //@ts-ignore
     CONFIG.DND5E.encumbrance.currencyPerWeight.metric =
       game.settings.get(CONSTANTS.MODULE_ID, "currencyWeightMetric") ?? 110;
   }
 
-  //@ts-ignore
   CONFIG.DND5E.encumbrance.vehicleWeightMultiplier.imperial =
     game.settings.get(CONSTANTS.MODULE_ID, "vehicleWeightMultiplier") ?? 2000; // 2000 lbs in an imperial ton
 
   if (game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")) {
-    //@ts-ignore
     CONFIG.DND5E.encumbrance.vehicleWeightMultiplier.metric =
       game.settings.get(CONSTANTS.MODULE_ID, "vehicleWeightMultiplier") ?? 2000; // 2000 lbs in an imperial ton
   } else {
-    //@ts-ignore
     CONFIG.DND5E.encumbrance.vehicleWeightMultiplier.metric =
       game.settings.get(CONSTANTS.MODULE_ID, "vehicleWeightMultiplierMetric") ?? 1000; // 1000 kg in a metric ton
   }
@@ -133,7 +123,7 @@ export const setupHooks = async () => {
 
   // module specific
 
-  // //@ts-ignore
+  //
   // libWrapper.register(
   //   CONSTANTS.MODULE_ID,
   //   'CONFIG.Item.documentClass.prototype.getEmbeddedDocument',
@@ -142,21 +132,21 @@ export const setupHooks = async () => {
   // );
 
   // START RMOEVED 2022-02-01
-  // //@ts-ignore
+  //
   // libWrapper.register(
   //   CONSTANTS.MODULE_ID,
   //   'CONFIG.Item.documentClass.prototype.createEmbeddedDocuments',
   //   createEmbeddedDocuments,
   //   'MIXED',
   // );
-  // //@ts-ignore
+  //
   // libWrapper.register(
   //   CONSTANTS.MODULE_ID,
   //   'CONFIG.Item.documentClass.prototype.deleteEmbeddedDocuments',
   //   deleteEmbeddedDocuments,
   //   'MIXED',
   // );
-  // //@ts-ignore
+  //
   // libWrapper.register(
   //   CONSTANTS.MODULE_ID,
   //   'CONFIG.Item.documentClass.prototype.updateEmbeddedDocuments',
@@ -164,29 +154,26 @@ export const setupHooks = async () => {
   //   'MIXED',
   // );
   // END RMOEVED 2022-02-01
-  //@ts-ignore
+
   // libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.prototype.prepareEmbeddedEntities", prepareEmbeddedEntities, "WRAPPER");
-  //@ts-ignore
+
   // libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.prototype.getEmbeddedCollection", getEmbeddedCollection, "MIXED")
   // libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.prototype.prepareDerivedData", prepareDerivedData, "WRAPPER");
 
-  //@ts-ignore
   // libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.prototype.actor", getActor, "OVERRIDE")
-  //@ts-ignore
+
   // libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.prototype.update", _update, "MIXED")
-  //@ts-ignore
+
   // libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.prototype.delete", _delete, "MIXED")
-  //@ts-ignore
+
   // libWrapper.register(MODULE_ID, "CONFIG.Item.documentClass.prototype.isEmbedded", isEmbedded, "OVERRIDE")
 
-  //@ts-ignore
   // libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass._onCreateDocuments", _onCreateDocuments, "MIXED")
 
-  //@ts-ignore
   libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.createDocuments", createDocuments, "MIXED");
-  //@ts-ignore
+
   libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.deleteDocuments", deleteDocuments, "MIXED");
-  //@ts-ignore
+
   libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.updateDocuments", updateDocuments, "MIXED");
 };
 
@@ -220,7 +207,7 @@ export const readyHooks = async () => {
     const actorEntityTmp = actorObject && actorObject.type ? actorObject : actorObject.actor;
     if (isEnabledActorType(actorEntityTmp)) {
       const htmlElementEncumbranceVariant = htmlElement.find(".encumbrance").addClass("encumbrance-variant");
-      //@ts-ignore
+
       let sheetClass = actorSheet.object.flags?.core?.sheetClass ?? "";
       if (!sheetClass) {
         for (const obj of SUPPORTED_SHEET) {
@@ -242,7 +229,6 @@ export const readyHooks = async () => {
 
       const listHeaders = htmlElement.find("li.items-header .item-weight");
       for (const liHeaderB of listHeaders) {
-        //@ts-ignore
         const liHeader = $(liHeaderB);
         if (isBulkEnable) {
           if (hideStandardWeightUnits) {
@@ -388,11 +374,9 @@ export const readyHooks = async () => {
       let noActiveEffect = false;
 
       // For our purpose we filter only the STR modifier action
-      //@ts-ignore
+
       if (update?.system?.abilities?.str) {
-        //@ts-ignore
         if (actorEntity.system.abilities.str.value !== update?.system.abilities?.str.value) {
-          //@ts-ignore
           actorEntity.system.abilities.str.value = update?.system.abilities?.str.value;
         }
         doTheUpdate = true;
@@ -787,7 +771,7 @@ export const readyHooks = async () => {
   // 	if (actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE)) {
   // 		let effectEntityPresent: ActiveEffect | undefined = undefined;
   // 		for (const effectEntity of actorEntity.effects) {
-  // 			//@ts-ignore
+  //
   // 			const effectNameToSet = effectEntity.label;
 
   // 			//const effectIsApplied = await VariantEncumbranceImpl.hasEffectAppliedFromId(effectEntity, actorEntity);
@@ -804,7 +788,7 @@ export const readyHooks = async () => {
   // 			// Remove all encumbrance effect renamed from the player
   // 			if (
   // 				// encumbranceData.encumbranceTier &&
-  // 				//@ts-ignore
+  //
   // 				effectEntity.flags &&
   // 				hasProperty(effectEntity, `flags.${CONSTANTS.FLAG}`) &&
   // 				effectNameToSet !== ENCUMBRANCE_STATE.UNENCUMBERED &&
@@ -816,7 +800,7 @@ export const readyHooks = async () => {
   // 			}
 
   // 			// Remove Old settings
-  // 			//@ts-ignore
+  //
   // 			if (effectEntity.flags && hasProperty(effectEntity, `flags.VariantEncumbrance`)) {
   // 				continue;
   // 			}
@@ -891,7 +875,7 @@ export const readyHooks = async () => {
   // 		}
 
   // 		if (effectName && effectName !== "") {
-  // 			//@ts-ignore
+  //
   // 			if (effectName === effectEntityPresent?.label) {
   // 			}
   // 		}
