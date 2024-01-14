@@ -50,14 +50,14 @@ export const VariantEncumbranceImpl = {
 
   _updateEncumbranceInternal: async function (actorEntity, updatedItem, updatedEffect = undefined, mode = undefined) {
     // Remove old flags
-    if (hasProperty(actorEntity, `flags.${CONSTANTS.FLAG}.weight`)) {
-      await actorEntity.unsetFlag(CONSTANTS.FLAG, "weight");
+    if (hasProperty(actorEntity, `flags.${CONSTANTS.MODULE_ID}.weight`)) {
+      await actorEntity.unsetFlag(CONSTANTS.MODULE_ID, "weight");
     }
-    if (hasProperty(actorEntity, `flags.${CONSTANTS.FLAG}.VariantEncumbrance`)) {
-      await actorEntity.unsetFlag(CONSTANTS.FLAG, "VariantEncumbrance");
+    if (hasProperty(actorEntity, `flags.${CONSTANTS.MODULE_ID}.VariantEncumbrance`)) {
+      await actorEntity.unsetFlag(CONSTANTS.MODULE_ID, "VariantEncumbrance");
     }
     if (hasProperty(actorEntity, "flags.VariantEncumbrance")) {
-      await actorEntity.unsetFlag(CONSTANTS.FLAG, "VariantEncumbrance");
+      await actorEntity.unsetFlag(CONSTANTS.MODULE_ID, "VariantEncumbrance");
     }
 
     if (updatedItem) {
@@ -135,25 +135,25 @@ export const VariantEncumbranceImpl = {
 
     // Finalize some flag (maybe to remove...)
 
-    const burrow = hasProperty(actorEntity, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.BURROW}`)
-      ? actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.BURROW)
+    const burrow = hasProperty(actorEntity, `flags.${CONSTANTS.MODULE_ID}.${EncumbranceFlags.BURROW}`)
+      ? actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.BURROW)
       : {};
-    const climb = hasProperty(actorEntity, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.CLIMB}`)
-      ? actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.CLIMB)
+    const climb = hasProperty(actorEntity, `flags.${CONSTANTS.MODULE_ID}.${EncumbranceFlags.CLIMB}`)
+      ? actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.CLIMB)
       : {};
-    const fly = hasProperty(actorEntity, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.FLY}`)
-      ? actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.FLY)
+    const fly = hasProperty(actorEntity, `flags.${CONSTANTS.MODULE_ID}.${EncumbranceFlags.FLY}`)
+      ? actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.FLY)
       : {};
-    const swim = hasProperty(actorEntity, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.SWIM}`)
-      ? actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.SWIM)
+    const swim = hasProperty(actorEntity, `flags.${CONSTANTS.MODULE_ID}.${EncumbranceFlags.SWIM}`)
+      ? actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.SWIM)
       : {};
-    const walk = hasProperty(actorEntity, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.WALK}`)
-      ? actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.WALK)
+    const walk = hasProperty(actorEntity, `flags.${CONSTANTS.MODULE_ID}.${EncumbranceFlags.WALK}`)
+      ? actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.WALK)
       : {};
 
     if (burrow !== actorEntity.system.attributes.movement.burrow) {
       await actorEntity.setFlag(
-        CONSTANTS.FLAG,
+        CONSTANTS.MODULE_ID,
         EncumbranceFlags.BURROW,
 
         actorEntity.system.attributes.movement.burrow
@@ -162,7 +162,7 @@ export const VariantEncumbranceImpl = {
 
     if (climb !== actorEntity.system.attributes.movement.climb) {
       await actorEntity.setFlag(
-        CONSTANTS.FLAG,
+        CONSTANTS.MODULE_ID,
         EncumbranceFlags.CLIMB,
 
         actorEntity.system.attributes.movement.climb
@@ -171,7 +171,7 @@ export const VariantEncumbranceImpl = {
 
     if (fly !== actorEntity.system.attributes.movement.fly) {
       await actorEntity.setFlag(
-        CONSTANTS.FLAG,
+        CONSTANTS.MODULE_ID,
         EncumbranceFlags.FLY,
 
         actorEntity.system.attributes.movement.fly
@@ -180,7 +180,7 @@ export const VariantEncumbranceImpl = {
 
     if (swim !== actorEntity.system.attributes.movement.swim) {
       await actorEntity.setFlag(
-        CONSTANTS.FLAG,
+        CONSTANTS.MODULE_ID,
         EncumbranceFlags.SWIM,
 
         actorEntity.system.attributes.movement.swim
@@ -189,7 +189,7 @@ export const VariantEncumbranceImpl = {
 
     if (walk !== actorEntity.system.attributes.movement.walk) {
       await actorEntity.setFlag(
-        CONSTANTS.FLAG,
+        CONSTANTS.MODULE_ID,
         EncumbranceFlags.WALK,
 
         actorEntity.system.attributes.movement.walk
@@ -213,21 +213,21 @@ export const VariantEncumbranceImpl = {
 
     // SEEM NOT NECESSARY Add pre check for encumbrance tier
     if (game.settings.get(CONSTANTS.MODULE_ID, "enablePreCheckEncumbranceTier")) {
-      if (hasProperty(actorEntity, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.DATA}`)) {
-        const encumbranceDataCurrent = actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.DATA);
+      if (hasProperty(actorEntity, `flags.${CONSTANTS.MODULE_ID}.${EncumbranceFlags.DATA}`)) {
+        const encumbranceDataCurrent = actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.DATA);
         if (encumbranceDataCurrent.encumbranceTier === encumbranceData.encumbranceTier) {
           //We ignore all the AE check
-          await actorEntity.setFlag(CONSTANTS.FLAG, EncumbranceFlags.DATA, encumbranceData);
+          await actorEntity.setFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.DATA, encumbranceData);
           return encumbranceData;
         }
       }
     }
 
-    const enableVarianEncumbranceEffectsOnActorFlag = actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_AE);
+    const enableVarianEncumbranceEffectsOnActorFlag = actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.ENABLED_AE);
     if (enableVarianEncumbranceEffectsOnActorFlag) {
       await VariantEncumbranceImpl.manageActiveEffect(actorEntity, encumbranceData.encumbranceTier);
     }
-    await actorEntity.setFlag(CONSTANTS.FLAG, EncumbranceFlags.DATA, encumbranceData);
+    await actorEntity.setFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.DATA, encumbranceData);
     return encumbranceData;
   },
 
@@ -240,7 +240,7 @@ export const VariantEncumbranceImpl = {
       //const effectIsApplied = await VariantEncumbranceImpl.hasEffectAppliedFromId(effectEntity, actorEntity);
 
       // Remove AE with empty a label but with flag of variant encumbrance ???
-      if (!effectNameToSet && hasProperty(effectEntity, `flags.${CONSTANTS.FLAG}`)) {
+      if (!effectNameToSet && hasProperty(effectEntity, `flags.${CONSTANTS.MODULE_ID}`)) {
         await VariantEncumbranceImpl.removeEffectFromId(effectEntity, actorEntity);
         continue;
       }
@@ -254,7 +254,7 @@ export const VariantEncumbranceImpl = {
         // encumbranceData.encumbranceTier &&
 
         effectEntity.flags &&
-        hasProperty(effectEntity, `flags.${CONSTANTS.FLAG}`) &&
+        hasProperty(effectEntity, `flags.${CONSTANTS.MODULE_ID}`) &&
         effectNameToSet !== ENCUMBRANCE_STATE.UNENCUMBERED &&
         effectNameToSet !== ENCUMBRANCE_STATE.ENCUMBERED &&
         effectNameToSet !== ENCUMBRANCE_STATE.HEAVILY_ENCUMBERED &&
@@ -273,7 +273,7 @@ export const VariantEncumbranceImpl = {
 
       // Ignore all non encumbrance effect renamed from the player (again)
       if (
-        !hasProperty(effectEntity, `flags.${CONSTANTS.FLAG}`) &&
+        !hasProperty(effectEntity, `flags.${CONSTANTS.MODULE_ID}`) &&
         effectNameToSet !== ENCUMBRANCE_STATE.UNENCUMBERED &&
         effectNameToSet !== ENCUMBRANCE_STATE.ENCUMBERED &&
         effectNameToSet !== ENCUMBRANCE_STATE.HEAVILY_ENCUMBERED &&
@@ -284,7 +284,7 @@ export const VariantEncumbranceImpl = {
 
       // Remove encumbrance effect with same name used in this module
       if (
-        !hasProperty(effectEntity, `flags.${CONSTANTS.FLAG}`) &&
+        !hasProperty(effectEntity, `flags.${CONSTANTS.MODULE_ID}`) &&
         (effectNameToSet === ENCUMBRANCE_STATE.UNENCUMBERED ||
           effectNameToSet === ENCUMBRANCE_STATE.ENCUMBERED ||
           effectNameToSet === ENCUMBRANCE_STATE.HEAVILY_ENCUMBERED ||
@@ -295,7 +295,7 @@ export const VariantEncumbranceImpl = {
       }
 
       if (
-        hasProperty(effectEntity, `flags.${CONSTANTS.FLAG}`) &&
+        hasProperty(effectEntity, `flags.${CONSTANTS.MODULE_ID}`) &&
         (effectNameToSet === ENCUMBRANCE_STATE.UNENCUMBERED ||
           effectNameToSet === ENCUMBRANCE_STATE.ENCUMBERED ||
           effectNameToSet === ENCUMBRANCE_STATE.HEAVILY_ENCUMBERED ||
@@ -384,7 +384,7 @@ export const VariantEncumbranceImpl = {
     invPlusActiveTmp
   ) {
     const mapItemEncumbrance = {};
-    const enableVarianEncumbranceWeightOnActorFlag = actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.ENABLED_WE);
+    const enableVarianEncumbranceWeightOnActorFlag = actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.ENABLED_WE);
     const useStandardWeightCalculation = game.settings.get(CONSTANTS.MODULE_ID, "useStandardWeightCalculation");
     const doNotIncreaseWeightByQuantityForNoAmmunition = game.settings.get(
       CONSTANTS.MODULE_ID,
@@ -396,8 +396,8 @@ export const VariantEncumbranceImpl = {
       "useEquippedUnequippedItemCollectionFeature"
     );
     if (!enableVarianEncumbranceWeightOnActorFlag && !useStandardWeightCalculation) {
-      // if (hasProperty(actorEntity, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.DATA}`)) {
-      //   return actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.DATA);
+      // if (hasProperty(actorEntity, `flags.${CONSTANTS.MODULE_ID}.${EncumbranceFlags.DATA}`)) {
+      //   return actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.DATA);
       // } else {
       // Inventory encumbrance STANDARD
       const dataEncumbrance = _standardActorWeightCalculation(actorEntity) ?? actorEntity.system.attributes.encumbrance;

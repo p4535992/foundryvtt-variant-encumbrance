@@ -146,24 +146,24 @@ export const VariantEncumbranceBulkImpl = {
 
     // SEEM NOT NECESSARY Add pre check for encumbrance tier
     if (game.settings.get(CONSTANTS.MODULE_ID, "enablePreCheckEncumbranceTier")) {
-      if (hasProperty(actorEntity, `flags.${CONSTANTS.FLAG}.${EncumbranceFlags.DATA_BULK}`)) {
-        const encumbranceDataCurrent = actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.DATA_BULK);
+      if (hasProperty(actorEntity, `flags.${CONSTANTS.MODULE_ID}.${EncumbranceFlags.DATA_BULK}`)) {
+        const encumbranceDataCurrent = actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.DATA_BULK);
         if (encumbranceDataCurrent.encumbranceTier === encumbranceDataBulk.encumbranceTier) {
           //We ignore all the AE check
-          await actorEntity.setFlag(CONSTANTS.FLAG, EncumbranceFlags.DATA_BULK, encumbranceDataBulk);
+          await actorEntity.setFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.DATA_BULK, encumbranceDataBulk);
           return encumbranceDataBulk;
         }
       }
     }
 
     const enableVarianEncumbranceEffectsOnActorFlag = actorEntity.getFlag(
-      CONSTANTS.FLAG,
+      CONSTANTS.MODULE_ID,
       EncumbranceFlags.ENABLED_AE_BULK
     );
     if (enableVarianEncumbranceEffectsOnActorFlag) {
       await VariantEncumbranceBulkImpl.manageActiveEffect(actorEntity, encumbranceDataBulk.encumbranceTier);
     }
-    await actorEntity.setFlag(CONSTANTS.FLAG, EncumbranceFlags.DATA_BULK, encumbranceDataBulk);
+    await actorEntity.setFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.DATA_BULK, encumbranceDataBulk);
 
     return encumbranceDataBulk;
   },
@@ -177,7 +177,7 @@ export const VariantEncumbranceBulkImpl = {
       //const effectIsApplied = await VariantEncumbranceBulkImpl.hasEffectAppliedFromId(effectEntity, actorEntity);
 
       // Remove AE with empty a label but with flag of variant encumbrance ???
-      if (!effectNameToSet && hasProperty(effectEntity, `flags.${CONSTANTS.FLAG}`)) {
+      if (!effectNameToSet && hasProperty(effectEntity, `flags.${CONSTANTS.MODULE_ID}`)) {
         await VariantEncumbranceBulkImpl.removeEffectFromId(effectEntity, actorEntity);
         continue;
       }
@@ -191,7 +191,7 @@ export const VariantEncumbranceBulkImpl = {
         // encumbranceData.encumbranceTier &&
 
         effectEntity.flags &&
-        hasProperty(effectEntity, `flags.${CONSTANTS.FLAG}`) &&
+        hasProperty(effectEntity, `flags.${CONSTANTS.MODULE_ID}`) &&
         effectNameToSet !== ENCUMBRANCE_STATE.UNENCUMBERED &&
         effectNameToSet !== ENCUMBRANCE_STATE.ENCUMBERED &&
         effectNameToSet !== ENCUMBRANCE_STATE.HEAVILY_ENCUMBERED &&
@@ -210,7 +210,7 @@ export const VariantEncumbranceBulkImpl = {
 
       // Ignore all non encumbrance effect renamed from the player (again)
       if (
-        !hasProperty(effectEntity, `flags.${CONSTANTS.FLAG}`) &&
+        !hasProperty(effectEntity, `flags.${CONSTANTS.MODULE_ID}`) &&
         effectNameToSet !== ENCUMBRANCE_STATE.UNENCUMBERED &&
         effectNameToSet !== ENCUMBRANCE_STATE.ENCUMBERED &&
         effectNameToSet !== ENCUMBRANCE_STATE.HEAVILY_ENCUMBERED &&
@@ -221,7 +221,7 @@ export const VariantEncumbranceBulkImpl = {
 
       // Remove encumbrance effect with same name used in this module
       if (
-        !hasProperty(effectEntity, `flags.${CONSTANTS.FLAG}`) &&
+        !hasProperty(effectEntity, `flags.${CONSTANTS.MODULE_ID}`) &&
         (effectNameToSet === ENCUMBRANCE_STATE.UNENCUMBERED ||
           effectNameToSet === ENCUMBRANCE_STATE.ENCUMBERED ||
           effectNameToSet === ENCUMBRANCE_STATE.HEAVILY_ENCUMBERED ||
@@ -232,7 +232,7 @@ export const VariantEncumbranceBulkImpl = {
       }
 
       if (
-        hasProperty(effectEntity, `flags.${CONSTANTS.FLAG}`) &&
+        hasProperty(effectEntity, `flags.${CONSTANTS.MODULE_ID}`) &&
         (effectNameToSet === ENCUMBRANCE_STATE.UNENCUMBERED ||
           effectNameToSet === ENCUMBRANCE_STATE.ENCUMBERED ||
           effectNameToSet === ENCUMBRANCE_STATE.HEAVILY_ENCUMBERED ||
@@ -322,7 +322,7 @@ export const VariantEncumbranceBulkImpl = {
   ) {
     const mapItemEncumbrance = {};
     const enableVarianEncumbranceWeightBulkOnActorFlag = actorEntity.getFlag(
-      CONSTANTS.FLAG,
+      CONSTANTS.MODULE_ID,
       EncumbranceFlags.ENABLED_WE_BULK
     );
     const useStandardWeightCalculation = game.settings.get(CONSTANTS.MODULE_ID, "useStandardWeightCalculation");
@@ -337,7 +337,7 @@ export const VariantEncumbranceBulkImpl = {
       "useEquippedUnequippedItemCollectionFeature"
     );
     if (!enableVarianEncumbranceWeightBulkOnActorFlag) {
-      return actorEntity.getFlag(CONSTANTS.FLAG, EncumbranceFlags.DATA_BULK) || {};
+      return actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.DATA_BULK) || {};
     } else if (enableVarianEncumbranceWeightBulkOnActorFlag) {
       const invPlusCategoriesWeightToAdd = new Map();
 
