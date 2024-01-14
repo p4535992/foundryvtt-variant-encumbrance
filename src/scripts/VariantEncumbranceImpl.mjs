@@ -432,6 +432,9 @@ export const VariantEncumbranceImpl = {
         let itemQuantity = getItemQuantity(item);
         let itemWeight = getItemWeight(item);
 
+        const isEquipped = item.system.equipped ? true : false;
+        const isProficient = item.system.proficient ? item.system.proficient : false;
+
         let backpackManager = retrieveBackPackManagerItem(item);
         if (backpackManager) {
           // Does the weight of the items in the container carry over to the actor?
@@ -441,15 +444,30 @@ export const VariantEncumbranceImpl = {
           const backpackManagerWeight = calculateBackPackManagerWeight(item, backpackManager, ignoreCurrency);
           itemWeight = weightless ? itemWeight : itemWeight + backpackManagerWeight;
 
+          if (isEquipped) {
+            if (isProficient) {
+              itemWeight *= game.settings.get(CONSTANTS.MODULE_ID, "profEquippedMultiplier");
+            } else {
+              const applyWeightMultiplierForEquippedContainer =
+                item.type === "backpack"
+                  ? game.settings.get(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedContainer") || -1
+                  : -1;
+              if (applyWeightMultiplierForEquippedContainer > -1) {
+                itemWeight *= applyWeightMultiplierForEquippedContainer;
+              } else {
+                itemWeight *= game.settings.get(CONSTANTS.MODULE_ID, "equippedMultiplier");
+              }
+            }
+          } else {
+            itemWeight *= game.settings.get(CONSTANTS.MODULE_ID, "unequippedMultiplier");
+          }
+
           debug(
             `Is BackpackManager! Actor '${actorEntity.name}', Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`
           );
           mapItemEncumbrance[item.id] = itemQuantity * itemWeight;
           return weight + itemQuantity * itemWeight;
         }
-
-        const isEquipped = item.system.equipped ? true : false;
-        const isProficient = item.system.proficient ? item.system.proficient : false;
 
         debug(`Actor '${actorEntity.name}', Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`);
 
@@ -500,7 +518,13 @@ export const VariantEncumbranceImpl = {
             } else {
               itemWeight *= 0;
             }
-          } else if (isEquipped) {
+          }
+          // if is a loot ignore any equipped or unequipped
+          else if (item.type === "loot") {
+            // DO NOTHING
+          }
+          //
+          else if (isEquipped) {
             if (isProficient) {
               itemWeight *= game.settings.get(CONSTANTS.MODULE_ID, "profEquippedMultiplier");
             } else {
@@ -1507,7 +1531,13 @@ export function calcWeightItemCollection(
         );
         currentItemWeight *= 0;
       }
-    } else if (isEquipped) {
+    }
+    // if is a loot ignore any equipped or unequipped
+    else if (item.type === "loot") {
+      // DO NOTHING
+    }
+    //
+    else if (isEquipped) {
       if (isProficient) {
         debug(
           `calcWeightItemCollection | Equipped = true, Proficient = true : ${currentItemWeight} => ${
@@ -1560,7 +1590,12 @@ export function calcWeightItemCollection(
       calcItemWeight(item, ignoreCurrency, doNotIncreaseWeightByQuantityForNoAmmunition, { ignoreItems, ignoreTypes }) +
       (getProperty(item, "flags.itemcollection.bagWeight") ?? 0);
   }
-  if (isEquipped) {
+  // if is a loot ignore any equipped or unequipped
+  if (item.type === "loot") {
+    // DO NOTHING
+  }
+  //
+  else if (isEquipped) {
     if (isProficient) {
       itemWeight *= game.settings.get(CONSTANTS.MODULE_ID, "profEquippedMultiplier");
     } else {

@@ -1,3 +1,7 @@
+### 0.13.9 
+
+- Fixed Back Pack manager module compatibility with unequipped feature
+
 ### 0.13.8
 
 - Cleanup and add some best practices
