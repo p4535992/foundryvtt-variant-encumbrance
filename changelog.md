@@ -1,33 +1,37 @@
-## 0.13.7
+### 0.13.8
+
+- Cleanup and add some best practices
+
+### 0.13.7
 
 - Just update a debug log
-## 0.13.6
+### 0.13.6
 
 - Bug fix: https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/22
 - Bug fix: https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/21
 
-## 0.13.5
+### 0.13.5
 
 - Many bug fixing for stupid error on developer side
 
-## 0.13.4
+### 0.13.4
 
 - Add feature : https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/17
 
-## 0.13.3
+### 0.13.3
 
 - Bug fix : https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/2
 - Bug fix : https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/21
 
-## 0.13.2
+### 0.13.2
 
 - Fixed an issue with encumbrance on actor-unlinked tokens ty to @IHaveThatPower
 
-## 0.13.1
+### 0.13.1
 
 - Some bug fix
 
-## 0.13.0
+### 0.13.0
 
 - Upgrade for v11
 - Remove dependencies to 'Active Effect Manager' in favor o Dfred Active Effect
@@ -35,7 +39,7 @@
 - Abbadoned Typescript in favor of javascript+svelte integration with tyhponjs plugins
 - Fix: https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/18
 
-## 0.12.9
+### 0.12.9
 
 - Bug fix: https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/16
 
