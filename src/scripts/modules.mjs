@@ -28,7 +28,6 @@ import CONSTANTS from "./constants.mjs";
 import { registerSocket } from "./socket.mjs";
 import API from "./api.mjs";
 import { calcBulkItemCollection, VariantEncumbranceBulkImpl } from "./VariantEncumbranceBulkImpl.mjs";
-import { setApi } from "../module.js";
 
 export let ENCUMBRANCE_STATE = {
   UNENCUMBERED: "", // "Unencumbered",
@@ -119,7 +118,7 @@ export const initHooks = () => {
 };
 
 export const setupHooks = async () => {
-  setApi(API);
+  game.modules.get(CONSTANTS.MODULE_ID).api = API;
 
   // module specific
 

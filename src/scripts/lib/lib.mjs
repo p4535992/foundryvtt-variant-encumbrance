@@ -4,7 +4,51 @@ import { calcBulkItemCollection } from "../VariantEncumbranceBulkImpl.mjs";
 import { backPackManagerActive, itemContainerActive } from "../modules.mjs";
 import { calcWeightItemCollection } from "../VariantEncumbranceImpl.mjs";
 import API from "../api.mjs";
-import Logger from "../Logger.mjs";
+import Logger from "./Logger.js";
+
+// ================================
+// Logger utility
+// ================================
+
+export function debug(msg, ...args) {
+  return Logger.debug(msg, args);
+}
+
+export function log(message, ...args) {
+  return Logger.log(message, args);
+}
+
+export function notify(message, ...args) {
+  return Logger.notify(message, args);
+}
+
+export function info(info, notify = false, ...args) {
+  return Logger.info(info, notify, args);
+}
+
+export function warn(warning, notify = false, ...args) {
+  return Logger.warn(warning, notify, args);
+}
+
+export function error(error, notify = true, ...args) {
+  return Logger.error(error, notify, args);
+}
+
+export function timelog(message) {
+  return Logger.timelog(message);
+}
+
+export const i18n = (key) => {
+  return Logger.i18n(key);
+};
+
+export const i18nFormat = (key, data = {}) => {
+  return Logger.i18nFormat(key, data);
+};
+
+export function dialogWarning(message, icon = "fas fa-exclamation-triangle") {
+  return Logger.dialogWarning(message, icon);
+}
 
 // =============================
 // Module Generic function
@@ -115,53 +159,6 @@ export function firstOwner(doc) {
 /* Players first, then GM */
 export function isFirstOwner(doc) {
   return game.user?.id === firstOwner(doc)?.id;
-}
-
-// ================================
-// Logger utility
-// ================================
-
-// export let debugEnabled = 0;
-// 0 = none, warnings = 1, debug = 2, all = 3
-
-export function debug(msg, ...args) {
-  return Logger.debug(msg, args);
-}
-
-export function log(message, ...args) {
-  return Logger.log(message, args);
-}
-
-export function notify(message, ...args) {
-  return Logger.notify(message, args);
-}
-
-export function info(info, notify = false, ...args) {
-  return Logger.info(info, notify, args);
-}
-
-export function warn(warning, notify = false, ...args) {
-  return Logger.warn(warning, notify, args);
-}
-
-export function error(error, notify = true, ...args) {
-  return Logger.error(error, notify, args);
-}
-
-export function timelog(message) {
-  return Logger.timelog(message);
-}
-
-export const i18n = (key) => {
-  return Logger.i18n(key);
-};
-
-export const i18nFormat = (key, data = {}) => {
-  return Logger.i18nFormat(key, data);
-};
-
-export function dialogWarning(message, icon = "fas fa-exclamation-triangle") {
-  return Logger.dialogWarning(message, icon);
 }
 
 // =========================================================================================

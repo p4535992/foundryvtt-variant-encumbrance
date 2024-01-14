@@ -1,7 +1,6 @@
 import CONSTANTS from "./constants.mjs";
 import API from "./api.mjs";
 import { debug } from "./lib/lib.mjs";
-import { setSocket } from "../module";
 
 // export const SOCKET_HANDLERS = {
 // 	/**
@@ -45,7 +44,7 @@ export function registerSocket() {
   );
   variantEncumbranceSocket.register("calculateWeightOnActor", (...args) => API.calculateWeightOnActorArr(...args));
 
-  setSocket(variantEncumbranceSocket);
+  game.modules.get(CONSTANTS.MODULE_ID).socket = variantEncumbranceSocket;
   return variantEncumbranceSocket;
 }
 
