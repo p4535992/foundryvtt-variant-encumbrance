@@ -7,7 +7,7 @@ import {
   EncumbranceMode,
   ENCUMBRANCE_TIERS,
 } from "./VariantEncumbranceModels.mjs";
-// import Effect from "./effects/effect.mjs";
+import Effect from "./effects/effect.mjs";
 import {
   daeActive,
   dfQualityLifeActive,
@@ -223,7 +223,10 @@ export const VariantEncumbranceImpl = {
       }
     }
 
-    const enableVarianEncumbranceEffectsOnActorFlag = actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.ENABLED_AE);
+    const enableVarianEncumbranceEffectsOnActorFlag = actorEntity.getFlag(
+      CONSTANTS.MODULE_ID,
+      EncumbranceFlags.ENABLED_AE
+    );
     if (enableVarianEncumbranceEffectsOnActorFlag) {
       await VariantEncumbranceImpl.manageActiveEffect(actorEntity, encumbranceData.encumbranceTier);
     }
@@ -384,7 +387,10 @@ export const VariantEncumbranceImpl = {
     invPlusActiveTmp
   ) {
     const mapItemEncumbrance = {};
-    const enableVarianEncumbranceWeightOnActorFlag = actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.ENABLED_WE);
+    const enableVarianEncumbranceWeightOnActorFlag = actorEntity.getFlag(
+      CONSTANTS.MODULE_ID,
+      EncumbranceFlags.ENABLED_WE
+    );
     const useStandardWeightCalculation = game.settings.get(CONSTANTS.MODULE_ID, "useStandardWeightCalculation");
     const doNotIncreaseWeightByQuantityForNoAmmunition = game.settings.get(
       CONSTANTS.MODULE_ID,
@@ -1390,16 +1396,16 @@ export const VariantEncumbranceImpl = {
         duration: duration,
         flags: foundry.utils.mergeObject(ceFlags, effect.flags),
         icon: effect.icon, // icon
-        // @ts-ignore
+
         name: effectName, // label
         origin: origin, // origin
         transfer: false,
-        // @ts-ignore
+
         statuses: [`Convenient Effect: ${effectName}`],
       });
-      // @ts-ignore
+
       const activeEffectsAdded = (await actor.createEmbeddedDocuments("ActiveEffect", [activeEffectData])) || [];
-      // @ts-ignore
+
       return activeEffectsAdded[0];
     }
     return undefined;

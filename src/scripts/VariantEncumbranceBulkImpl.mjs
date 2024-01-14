@@ -7,7 +7,7 @@ import {
   EncumbranceMode,
   ENCUMBRANCE_TIERS,
 } from "./VariantEncumbranceModels.mjs";
-// import Effect from "./effects/effect.mjs";
+import Effect from "./effects/effect.mjs";
 import {
   daeActive,
   dfQualityLifeActive,
@@ -1275,16 +1275,16 @@ export const VariantEncumbranceBulkImpl = {
         duration: duration,
         flags: foundry.utils.mergeObject(ceFlags, effect.flags),
         icon: effect.icon, // icon
-        // @ts-ignore
+
         name: effectName, // label
         origin: origin, // origin
         transfer: false,
-        // @ts-ignore
+
         statuses: [`Convenient Effect: ${effectName}`],
       });
-      // @ts-ignore
+
       const activeEffectsAdded = (await actor.createEmbeddedDocuments("ActiveEffect", [activeEffectData])) || [];
-      // @ts-ignore
+
       return activeEffectsAdded[0];
     }
     return undefined;

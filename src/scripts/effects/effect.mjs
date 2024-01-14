@@ -2,37 +2,7 @@
  * Data class for defining an effect
  */
 export default class Effect {
-  customId = "";
-  /** @deprecated use instead label */
-  name = "";
-  label = "";
-  description = "";
-  icon = "icons/svg/aura.svg";
-  tint = "";
-  seconds = 0;
-  rounds = 0;
-  turns = 0;
-  isDynamic = false;
-  isViewable = true;
-  flags = {};
-  changes = [];
-  atlChanges = [];
-  tokenMagicChanges = [];
-  nestedEffects = [];
-  subEffects = [];
-  // ADDED FROM 4535992
-  isDisabled = false;
-  isTemporary = false;
-  isSuppressed = false;
-
-  transfer = false;
-  atcvChanges = [];
-  dae = {};
-  overlay = false;
-  // Optional
-  origin = "";
   // END ADDED FROM 4535992
-
   constructor({
     customId = "",
     name = "",
@@ -61,6 +31,19 @@ export default class Effect {
     overlay = false,
     // END ADDED FROM 4535992
   }) {
+    this.icon = "icons/svg/aura.svg";
+    this.isDynamic = false;
+    this.isViewable = true;
+    this.changes = [];
+    this.atlChanges = [];
+    this.tokenMagicChanges = [];
+    this.nestedEffects = [];
+    this.subEffects = [];
+    this.transfer = false;
+    this.atcvChanges = [];
+    this.overlay = false;
+    // Optional
+    this.origin = "";
     this.customId = customId;
     this.name = name;
     this.label = label;
@@ -88,7 +71,6 @@ export default class Effect {
     this.isSuppressed = isSuppressed;
     this.overlay = overlay;
   }
-
   /**
    * Converts the effect data to an active effect data object
    *
@@ -109,16 +91,14 @@ export default class Effect {
     }
     const isPassive = !this.isTemporary;
     const currentDae = this._isEmptyObject(this.dae) ? this.flags.dae : this.dae;
-
     const convenientDescription = this.description
       ? i18n(this.description) ?? "Applies custom effects"
       : this.description;
-
     return {
       id: this._id,
       // name: i18n(this.name),
       label: i18n(this.label),
-      description: i18n(this.description), // 4535992 this not make sense, but it doesn't hurt either
+      description: i18n(this.description),
       icon: this.icon,
       tint: this.tint,
       duration: this._getDurationData(),
@@ -141,7 +121,7 @@ export default class Effect {
             : {}
           : currentDae,
       }),
-      origin: origin ? origin : this.origin ? this.origin : "", // MOD 4535992
+      origin: origin ? origin : this.origin ? this.origin : "",
       transfer: isPassive ? false : this.transfer,
       //changes: this.changes, // MOD 4535992
       changes: this._handleIntegrations(),
@@ -151,7 +131,6 @@ export default class Effect {
       // isSuppressed: this.isSuppressed ?? false,
     };
   }
-
   /**
    * Converts the effect data to an active effect data object
    *
@@ -173,20 +152,18 @@ export default class Effect {
     const rounds = this.rounds;
     const seconds = this.seconds;
     const turns = this.turns;
-
-    if (!flags.core) {
-      flags.core = {};
-    }
-    flags.core.statusId = `Convenient Effect: ${label}`;
-
-    flags[Constants.MODULE_ID] = {};
-    flags[Constants.MODULE_ID][Constants.FLAGS.DESCRIPTION] = description;
-    flags[Constants.MODULE_ID][Constants.FLAGS.IS_CONVENIENT] = true;
-    flags[Constants.MODULE_ID][Constants.FLAGS.IS_DYNAMIC] = isDynamic;
-    flags[Constants.MODULE_ID][Constants.FLAGS.IS_VIEWABLE] = isViewable;
-    flags[Constants.MODULE_ID][Constants.FLAGS.NESTED_EFFECTS] = nestedEffects;
-    flags[Constants.MODULE_ID][Constants.FLAGS.SUB_EFFECTS] = subEffects;
-
+    let ceFlags = {
+      core: {
+        statusId: `Convenient Effect: ${label}`,
+      },
+    };
+    ceFlags[Constants.MODULE_ID] = {};
+    ceFlags[Constants.MODULE_ID][Constants.FLAGS.DESCRIPTION] = description;
+    ceFlags[Constants.MODULE_ID][Constants.FLAGS.IS_CONVENIENT] = true;
+    ceFlags[Constants.MODULE_ID][Constants.FLAGS.IS_DYNAMIC] = isDynamic;
+    ceFlags[Constants.MODULE_ID][Constants.FLAGS.IS_VIEWABLE] = isViewable;
+    ceFlags[Constants.MODULE_ID][Constants.FLAGS.NESTED_EFFECTS] = nestedEffects;
+    ceFlags[Constants.MODULE_ID][Constants.FLAGS.SUB_EFFECTS] = subEffects;
     let duration = {
       rounds: rounds ?? seconds / CONFIG.time.roundTime,
       seconds: seconds,
@@ -199,16 +176,14 @@ export default class Effect {
       changes,
       disabled: false,
       duration,
-      flags,
+      flags: foundry.utils.mergeObject(ceFlags, flags),
       icon,
       label,
       origin,
       transfer: false,
     });
-
     return effect;
   }
-
   /**
    * Converts the Effect into an object
    *
@@ -217,15 +192,13 @@ export default class Effect {
   convertToObject() {
     return deepClone({ ...this });
   }
-
   get _id() {
     const label = this.label ? this.label : this.name;
     return `Convenient Effect: ${label}`;
   }
-
   _getDurationData() {
     // let duration = {
-    // 	rounds: this._getCombatRounds() ?? this._getCombatRounds() / CONFIG.time.roundTime,
+    // 	rounds: this._getCombatRounds() ?? <number>this._getCombatRounds() / CONFIG.time.roundTime,
     // 	seconds: this._getSeconds(),
     // 	startRound: game.combat?.round,
     // 	startTime: game.time.worldTime,
@@ -262,33 +235,25 @@ export default class Effect {
       }
     }
   }
-
   _getCombatRounds() {
     if (this.rounds) {
       return this.rounds;
     }
-
     if (this.seconds) {
       return this.seconds / Constants.SECONDS.IN_ONE_ROUND;
     }
-
     return undefined;
   }
-
   _getSeconds() {
     if (this.seconds) {
       return this.seconds;
     }
-
     if (this.rounds) {
       return this.rounds * Constants.SECONDS.IN_ONE_ROUND;
     }
-
     return undefined;
   }
-
   // =============================================
-
   isDuplicateEffectChange(aeKey, arrChanges) {
     let isDuplicate = false;
     for (const aec of arrChanges) {
@@ -299,7 +264,6 @@ export default class Effect {
     }
     return isDuplicate;
   }
-
   _handleIntegrations() {
     const arrChanges = [];
     for (const change of this?.changes) {
@@ -308,7 +272,6 @@ export default class Effect {
       }
       arrChanges.push(change);
     }
-
     if (this.atlChanges.length > 0) {
       for (const atlChange of this.atlChanges) {
         if (arrChanges.filter((e) => e.key === atlChange.key).length <= 0) {
@@ -321,7 +284,6 @@ export default class Effect {
         }
       }
     }
-
     if (this.tokenMagicChanges.length > 0) {
       for (const tokenMagicChange of this.tokenMagicChanges) {
         if (arrChanges.filter((e) => e.key === tokenMagicChange.key).length <= 0) {
@@ -334,7 +296,6 @@ export default class Effect {
         }
       }
     }
-
     if (this.atcvChanges.length > 0) {
       for (const atcvChange of this.atcvChanges) {
         if (arrChanges.filter((e) => e.key === atcvChange.key).length <= 0) {
@@ -348,21 +309,20 @@ export default class Effect {
       }
     }
     /*
-    if (this.atlChanges.length > 0) {
-      arrChanges.push(...this.atlChanges);
-    }
-
-    if (this.tokenMagicChanges.length > 0) {
-      arrChanges.push(...this.tokenMagicChanges);
-    }
-
-    if (this.atcvChanges.length > 0) {
-      arrChanges.push(...this.atcvChanges);
-    }
-    */
-    return arrChanges;
+  if (this.atlChanges.length > 0) {
+    arrChanges.push(...this.atlChanges);
   }
 
+  if (this.tokenMagicChanges.length > 0) {
+    arrChanges.push(...this.tokenMagicChanges);
+  }
+
+  if (this.atcvChanges.length > 0) {
+    arrChanges.push(...this.atcvChanges);
+  }
+  */
+    return arrChanges;
+  }
   _isEmptyObject(obj) {
     // because Object.keys(new Date()).length === 0;
     // we have to do some additional check
@@ -375,50 +335,42 @@ export default class Effect {
     return result;
   }
 }
-
 // =========================
 // FLAGS SUPPORT
 // =========================
-
 /**
  * Contains any constants for the application
  */
-export class Constants {
-  static MODULE_ID = "dfreds-convenient-effects";
-  static FLAGS = {
-    DESCRIPTION: "description",
-    IS_CONVENIENT: "isConvenient",
-    IS_DYNAMIC: "isDynamic",
-    IS_VIEWABLE: "isViewable",
-    NESTED_EFFECTS: "nestedEffects",
-    SUB_EFFECTS: "subEffects",
-  };
-
-  static COLORS = {
-    COLD_FIRE: "#389888",
-    FIRE: "#f98026",
-    WHITE: "#ffffff",
-    MOON_TOUCHED: "#f4f1c9",
-  };
-
-  static SECONDS = {
-    IN_ONE_ROUND: CONFIG.time.roundTime || 6,
-    IN_ONE_MINUTE: 60,
-    IN_TEN_MINUTES: 600,
-    IN_ONE_HOUR: 3600,
-    IN_SIX_HOURS: 21600,
-    IN_EIGHT_HOURS: 28800,
-    IN_ONE_DAY: 86400,
-    IN_ONE_WEEK: 604800,
-  };
-
-  static SIZES_ORDERED = ["tiny", "sm", "med", "lg", "huge", "grg"];
-}
-
+export class Constants {}
+Constants.MODULE_ID = "dfreds-convenient-effects";
+Constants.FLAGS = {
+  DESCRIPTION: "description",
+  IS_CONVENIENT: "isConvenient",
+  IS_DYNAMIC: "isDynamic",
+  IS_VIEWABLE: "isViewable",
+  NESTED_EFFECTS: "nestedEffects",
+  SUB_EFFECTS: "subEffects",
+};
+Constants.COLORS = {
+  COLD_FIRE: "#389888",
+  FIRE: "#f98026",
+  WHITE: "#ffffff",
+  MOON_TOUCHED: "#f4f1c9",
+};
+Constants.SECONDS = {
+  IN_ONE_ROUND: CONFIG.time.roundTime || 6,
+  IN_ONE_MINUTE: 60,
+  IN_TEN_MINUTES: 600,
+  IN_ONE_HOUR: 3600,
+  IN_SIX_HOURS: 21600,
+  IN_EIGHT_HOURS: 28800,
+  IN_ONE_DAY: 86400,
+  IN_ONE_WEEK: 604800,
+};
+Constants.SIZES_ORDERED = ["tiny", "sm", "med", "lg", "huge", "grg"];
 // ===========================
 // UTILITIES
 // ===========================
-
 function cleanUpString(stringToCleanUp) {
   // regex expression to match all non-alphanumeric characters in string
   const regex = /[^A-Za-z0-9]/g;
@@ -428,7 +380,6 @@ function cleanUpString(stringToCleanUp) {
     return stringToCleanUp;
   }
 }
-
 function isStringEquals(stringToCheck1, stringToCheck2, startsWith = false) {
   if (stringToCheck1 && stringToCheck2) {
     const s1 = cleanUpString(stringToCheck1) ?? "";
@@ -442,11 +393,9 @@ function isStringEquals(stringToCheck1, stringToCheck2, startsWith = false) {
     return stringToCheck1 === stringToCheck2;
   }
 }
-
 function is_real_number(inNumber) {
   return !isNaN(inNumber) && typeof inNumber === "number" && isFinite(inNumber);
 }
-
 const i18n = (key) => {
   return game.i18n.localize(key)?.trim();
 };
