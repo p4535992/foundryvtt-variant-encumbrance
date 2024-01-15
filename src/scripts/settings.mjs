@@ -516,7 +516,7 @@ export const registerSettings = function () {
   game.settings.register(CONSTANTS.MODULE_ID, "debug", {
     name: `${CONSTANTS.MODULE_ID}.setting.debug.name`,
     hint: `${CONSTANTS.MODULE_ID}.setting.debug.hint`,
-    scope: "world",
+    scope: "client",
     config: true,
     default: false,
     type: Boolean,
