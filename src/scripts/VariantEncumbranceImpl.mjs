@@ -480,7 +480,6 @@ export const VariantEncumbranceImpl = {
           itemWeight = calcWeightItemCollection(
             item,
             useEquippedUnequippedItemCollectionFeature,
-            doNotApplyWeightForEquippedArmor,
             ignoreCurrency,
             doNotIncreaseWeightByQuantityForNoAmmunition
           );
@@ -1460,14 +1459,13 @@ export const isEnabledActorType = function (actorEntity) {
 export function calcWeightItemCollection(
   item,
   useEquippedUnequippedItemCollectionFeature,
-  doNotApplyWeightForEquippedArmor,
   ignoreCurrency,
   doNotIncreaseWeightByQuantityForNoAmmunition,
   { ignoreItems, ignoreTypes } = { ignoreItems: undefined, ignoreTypes: undefined }
 ) {
   const isEquipped = item.system?.equipped ? true : false;
   const isProficient = item.system?.proficient ? item.system?.proficient : false;
-
+  const doNotApplyWeightForEquippedArmor = game.settings.get(CONSTANTS.MODULE_ID, "doNotApplyWeightForEquippedArmor");
   // IF IS NOT A BACKPACK
 
   if (item.type !== "backpack" || !item.flags.itemcollection) {

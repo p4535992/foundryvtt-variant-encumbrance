@@ -254,20 +254,18 @@ export function checkBulkCategory(weight, item) {
       CONSTANTS.MODULE_ID,
       "useEquippedUnequippedItemCollectionFeature"
     );
-    const doNotApplyWeightForEquippedArmor = game.settings.get(CONSTANTS.MODULE_ID, "doNotApplyWeightForEquippedArmor");
     const doNotIncreaseWeightByQuantityForNoAmmunition = game.settings.get(
       CONSTANTS.MODULE_ID,
       "doNotIncreaseWeightByQuantityForNoAmmunition"
     );
     // TODO IS OK TO DO THIS FOR ITEM CONTAINER ????
-    // bulkRef = calcWeightItemCollection(item, useEquippedUnequippedItemCollectionFeature, doNotApplyWeightForEquippedArmor, false, doNotIncreaseWeightByQuantityForNoAmmunition);
+    // bulkRef = calcWeightItemCollection(item, useEquippedUnequippedItemCollectionFeature, false, doNotIncreaseWeightByQuantityForNoAmmunition);
     // if (game.settings.get("dnd5e", "metricWeightUnits")) {
     // 	bulkRef = bulkRef <= 0 ? 0 : convertPoundsToKg(bulkRef);
     // }
     bulkRef = calcBulkItemCollection(
       item,
       useEquippedUnequippedItemCollectionFeature,
-      doNotApplyWeightForEquippedArmor,
       false,
       doNotIncreaseWeightByQuantityForNoAmmunition
     );
