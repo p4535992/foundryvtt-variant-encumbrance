@@ -438,14 +438,23 @@ export const registerSettings = function () {
     default: false,
     type: Boolean,
   });
-
+  // Setting nascosto
   game.settings.register(CONSTANTS.MODULE_ID, "doNotApplyWeightForEquippedArmor", {
     name: `${CONSTANTS.MODULE_ID}.setting.doNotApplyWeightForEquippedArmor.name`,
     hint: `${CONSTANTS.MODULE_ID}.setting.doNotApplyWeightForEquippedArmor.hint`,
     scope: "world",
-    config: true,
+    config: false,
     default: false,
     type: Boolean,
+  });
+
+  game.settings.register(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmor", {
+    name: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForEquippedArmor.name`,
+    hint: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForEquippedArmor.hint`,
+    scope: "world",
+    config: true,
+    default: -1,
+    type: Number,
   });
 
   game.settings.register(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmorClothing", {
