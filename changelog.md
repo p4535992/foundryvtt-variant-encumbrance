@@ -1,3 +1,7 @@
+### 0.13.12 
+
+- Add common helpers for the Equipped and Unequipped Feature
+
 ### 0.13.10-11 [BREAKING CHANGES] 
 
 - Replace the module setting 'Feature: Do Not apply weight for equipped armor item' with 'Feature: Equipped Armor Weight Multiplier' for manage more use cases and for a more dynamic behavior

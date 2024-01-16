@@ -31,6 +31,7 @@ import {
   calculateBackPackManagerBulk,
 } from "./lib/lib.mjs";
 import API from "./api.mjs";
+import { VariantEncumbranceDnd5eHelpers } from "./lib/variant-encumbrance-dnd5e-helpers";
 
 /* ------------------------------------ */
 /* Constants         					*/
@@ -371,23 +372,7 @@ export const VariantEncumbranceBulkImpl = {
           const backpackManagerWeight = calculateBackPackManagerBulk(item, backpackManager, ignoreCurrency);
           itemWeight = weightless ? itemWeight : itemWeight + backpackManagerWeight;
 
-          if (isEquipped) {
-            if (isProficient) {
-              itemWeight *= game.settings.get(CONSTANTS.MODULE_ID, "profEquippedMultiplier");
-            } else {
-              const applyWeightMultiplierForEquippedContainer =
-                item.type === "backpack"
-                  ? game.settings.get(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedContainer") || -1
-                  : -1;
-              if (applyWeightMultiplierForEquippedContainer > -1) {
-                itemWeight *= applyWeightMultiplierForEquippedContainer;
-              } else {
-                itemWeight *= game.settings.get(CONSTANTS.MODULE_ID, "equippedMultiplier");
-              }
-            }
-          } else {
-            itemWeight *= game.settings.get(CONSTANTS.MODULE_ID, "unequippedMultiplier");
-          }
+          itemWeight = VariantEncumbranceDnd5eHelpers.manageEquippedAndUnEquippedFeature(item, itemWeight);
 
           debug(
             `Is BackpackManager! Actor '${actorEntity.name}', Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`
@@ -418,64 +403,7 @@ export const VariantEncumbranceBulkImpl = {
           // TODO  wait for 2.2.0
           const weightless = getProperty(item, "system.capacity.weightless") ?? false;
 
-          const itemArmorTypes = ["clothing", "light", "medium", "heavy", "natural"];
-
-          if (isEquipped && !doNotApplyWeightForEquippedArmor && itemArmorTypes.includes(item.system.armor?.type)) {
-            if (applyWeightMultiplierForEquippedArmor > 0) {
-              itemWeight *= applyWeightMultiplierForEquippedArmor;
-            }
-          } else if (
-            isEquipped &&
-            doNotApplyWeightForEquippedArmor &&
-            itemArmorTypes.includes(item.system.armor?.type)
-          ) {
-            const applyWeightMultiplierForEquippedArmorClothing =
-              game.settings.get(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmorClothing") || 0;
-            const applyWeightMultiplierForEquippedArmorLight =
-              game.settings.get(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmorLight") || 0;
-            const applyWeightMultiplierForEquippedArmorMedium =
-              game.settings.get(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmorMedium") || 0;
-            const applyWeightMultiplierForEquippedArmorHeavy =
-              game.settings.get(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmorHeavy") || 0;
-            const applyWeightMultiplierForEquippedArmorNatural =
-              game.settings.get(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmorNatural") || 0;
-
-            if (item.system.armor?.type === "clothing") {
-              itemWeight *= applyWeightMultiplierForEquippedArmorClothing;
-            } else if (item.system.armor?.type === "light") {
-              itemWeight *= applyWeightMultiplierForEquippedArmorLight;
-            } else if (item.system.armor?.type === "medium") {
-              itemWeight *= applyWeightMultiplierForEquippedArmorMedium;
-            } else if (item.system.armor?.type === "heavy") {
-              itemWeight *= applyWeightMultiplierForEquippedArmorHeavy;
-            } else if (item.system.armor?.type === "natural") {
-              itemWeight *= applyWeightMultiplierForEquippedArmorNatural;
-            } else {
-              itemWeight *= 0;
-            }
-          }
-          // if is a loot ignore any equipped or unequipped
-          else if (item.type === "loot") {
-            // DO NOTHING
-          }
-          //
-          else if (isEquipped) {
-            if (isProficient) {
-              itemWeight *= game.settings.get(CONSTANTS.MODULE_ID, "profEquippedMultiplier");
-            } else {
-              const applyWeightMultiplierForEquippedContainer =
-                item.type === "backpack"
-                  ? game.settings.get(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedContainer") || -1
-                  : -1;
-              if (applyWeightMultiplierForEquippedContainer > -1) {
-                itemWeight *= applyWeightMultiplierForEquippedContainer;
-              } else {
-                itemWeight *= game.settings.get(CONSTANTS.MODULE_ID, "equippedMultiplier");
-              }
-            }
-          } else {
-            itemWeight *= game.settings.get(CONSTANTS.MODULE_ID, "unequippedMultiplier");
-          }
+          itemWeight = VariantEncumbranceDnd5eHelpers.manageEquippedAndUnEquippedFeature(item, itemWeight);
 
           // Feature: Do Not increase weight by quantity for no ammunition item
           if (doNotIncreaseWeightByQuantityForNoAmmunition) {
@@ -1347,107 +1275,15 @@ export function calcBulkItemCollection(
     CONSTANTS.MODULE_ID,
     "applyWeightMultiplierForEquippedArmor"
   );
-  const doNotApplyWeightForEquippedArmor = String(applyWeightMultiplierForEquippedArmor) === "0";
+
   // IF IS NOT A BACKPACK
 
   if (item.type !== "backpack" || !item.flags.itemcollection) {
     debug(`calcBulkItemCollection | Is not a 'backpack' and is not flagged as itemcollection`);
     let currentItemWeight = calcItemBulk(item, ignoreCurrency, doNotIncreaseWeightByQuantityForNoAmmunition);
-    const itemArmorTypes = ["clothing", "light", "medium", "heavy", "natural"];
 
-    if (isEquipped && !doNotApplyWeightForEquippedArmor && itemArmorTypes.includes(item.system.armor?.type)) {
-      debug(
-        `calcBulkItemCollection | Is not a 'backpack' and is not flagged as itemcollection | Equipped = true, doNotApplyWeightForEquippedArmor = false, Armor Type = true (${item.system.armor?.type})`
-      );
-      if (applyWeightMultiplierForEquippedArmor > 0) {
-        currentItemWeight *= applyWeightMultiplierForEquippedArmor;
-      }
-    } else if (isEquipped && doNotApplyWeightForEquippedArmor && itemArmorTypes.includes(item.system.armor?.type)) {
-      debug(
-        `calcBulkItemCollection | Is not a 'backpack' and is not flagged as itemcollection | Equipped = true, doNotApplyWeightForEquippedArmor = true, Armor Type = true (${item.system.armor?.type})`
-      );
-      const applyWeightMultiplierForEquippedArmorClothing =
-        game.settings.get(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmorClothing") || 0;
-      const applyWeightMultiplierForEquippedArmorLight =
-        game.settings.get(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmorLight") || 0;
-      const applyWeightMultiplierForEquippedArmorMedium =
-        game.settings.get(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmorMedium") || 0;
-      const applyWeightMultiplierForEquippedArmorHeavy =
-        game.settings.get(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmorHeavy") || 0;
-      const applyWeightMultiplierForEquippedArmorNatural =
-        game.settings.get(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedArmorNatural") || 0;
+    currentItemWeight = VariantEncumbranceDnd5eHelpers.manageEquippedAndUnEquippedFeature(item, currentItemWeight);
 
-      if (item.system.armor?.type === "clothing") {
-        debug(
-          `calcBulkItemCollection | applyWeightMultiplierForEquippedArmorClothing with value ${applyWeightMultiplierForEquippedArmorClothing} : ${currentItemWeight} => ${
-            currentItemWeight * applyWeightMultiplierForEquippedArmorClothing
-          }`
-        );
-        currentItemWeight *= applyWeightMultiplierForEquippedArmorClothing;
-      } else if (item.system.armor?.type === "light") {
-        debug(
-          `calcBulkItemCollection | applyWeightMultiplierForEquippedArmorLight  with value ${applyWeightMultiplierForEquippedArmorLight} :${currentItemWeight} => ${
-            currentItemWeight * applyWeightMultiplierForEquippedArmorLight
-          }`
-        );
-        currentItemWeight *= applyWeightMultiplierForEquippedArmorLight;
-      } else if (item.system.armor?.type === "medium") {
-        debug(
-          `calcBulkItemCollection | applyWeightMultiplierForEquippedArmorMedium with value ${applyWeightMultiplierForEquippedArmorMedium} : ${currentItemWeight} => ${
-            currentItemWeight * applyWeightMultiplierForEquippedArmorMedium
-          }`
-        );
-        currentItemWeight *= applyWeightMultiplierForEquippedArmorMedium;
-      } else if (item.system.armor?.type === "heavy") {
-        debug(
-          `calcBulkItemCollection | applyWeightMultiplierForEquippedArmorArmorHeavy with value ${applyWeightMultiplierForEquippedArmorHeavy} : ${currentItemWeight} => ${
-            currentItemWeight * applyWeightMultiplierForEquippedArmorHeavy
-          }`
-        );
-        currentItemWeight *= applyWeightMultiplierForEquippedArmorHeavy;
-      } else if (item.system.armor?.type === "natural") {
-        debug(
-          `calcBulkItemCollection | applyWeightMultiplierForEquippedArmorNatural with value ${applyWeightMultiplierForEquippedArmorNatural} : ${currentItemWeight} => ${
-            currentItemWeight * applyWeightMultiplierForEquippedArmorNatural
-          }`
-        );
-        currentItemWeight *= applyWeightMultiplierForEquippedArmorNatural;
-      } else {
-        debug(
-          `calcBulkItemCollection | doNotApplyWeightForEquippedArmor with value ${0} : ${currentItemWeight} => ${0}`
-        );
-        currentItemWeight *= 0;
-      }
-    }
-    // if is a loot ignore any equipped or unequipped
-    else if (item.type === "loot") {
-      // DO NOTHING
-    }
-    //
-    else if (isEquipped) {
-      if (isProficient) {
-        debug(
-          `calcBulkItemCollection | Equipped = true, Proficient = true : ${currentItemWeight} => ${
-            currentItemWeight * game.settings.get(CONSTANTS.MODULE_ID, "profEquippedMultiplier")
-          }`
-        );
-        currentItemWeight *= game.settings.get(CONSTANTS.MODULE_ID, "profEquippedMultiplier");
-      } else {
-        debug(
-          `calcBulkItemCollection | Equipped = true, Proficient = false : ${currentItemWeight} => ${
-            currentItemWeight * game.settings.get(CONSTANTS.MODULE_ID, "equippedMultiplier")
-          }`
-        );
-        currentItemWeight *= game.settings.get(CONSTANTS.MODULE_ID, "equippedMultiplier");
-      }
-    } else {
-      debug(
-        `calcBulkItemCollection | Equipped = false, Proficient = false : ${currentItemWeight} => ${
-          currentItemWeight * game.settings.get(CONSTANTS.MODULE_ID, "unequippedMultiplier")
-        }`
-      );
-      currentItemWeight *= game.settings.get(CONSTANTS.MODULE_ID, "unequippedMultiplier");
-    }
     return currentItemWeight;
   }
   // IF IS A BACKPACK
@@ -1478,28 +1314,9 @@ export function calcBulkItemCollection(
       calcItemBulk(item, ignoreCurrency, doNotIncreaseWeightByQuantityForNoAmmunition, { ignoreItems, ignoreTypes }) +
       (getItemBulk(item) ?? 0);
   }
-  // if is a loot ignore any equipped or unequipped
-  if (item.type === "loot") {
-    // DO NOTHING
-  }
-  //
-  else if (isEquipped) {
-    if (isProficient) {
-      itemWeight *= game.settings.get(CONSTANTS.MODULE_ID, "profEquippedMultiplier");
-    } else {
-      const applyWeightMultiplierForEquippedContainer =
-        item.type === "backpack"
-          ? game.settings.get(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedContainer") || -1
-          : -1;
-      if (applyWeightMultiplierForEquippedContainer > -1) {
-        itemWeight *= applyWeightMultiplierForEquippedContainer;
-      } else {
-        itemWeight *= game.settings.get(CONSTANTS.MODULE_ID, "equippedMultiplier");
-      }
-    }
-  } else {
-    itemWeight *= game.settings.get(CONSTANTS.MODULE_ID, "unequippedMultiplier");
-  }
+
+  itemWeight = VariantEncumbranceDnd5eHelpers.manageEquippedAndUnEquippedFeature(item, itemWeight);
+
   return itemWeight;
 }
 
