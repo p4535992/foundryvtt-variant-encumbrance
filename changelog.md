@@ -1,3 +1,12 @@
+### 0.14.0 [BREAKING CHANGES]
+
+- Add module setting: applyWeightMultiplierForProficientArmor
+- Add module setting: applyWeightMultiplierForProficientArmorClothing
+- Add module setting: applyWeightMultiplierForProficientArmorLight
+- Add module setting: applyWeightMultiplierForProficientArmorMedium
+- Add module setting: applyWeightMultiplierForProficientArmorHeavy
+- Add module setting: applyWeightMultiplierForProficientArmorNatural
+
 ### 0.13.12 
 
 - Add common helpers for the Equipped and Unequipped Feature

@@ -128,6 +128,12 @@ const SETTINGS = {
   APPLY_WEIGHT_MULTIPLIER_FOR_EQUIPPED_ARMOR_MEDIUM: "applyWeightMultiplierForEquippedArmorMedium",
   APPLY_WEIGHT_MULTIPLIER_FOR_EQUIPPED_ARMOR_HEAVY: "applyWeightMultiplierForEquippedArmorHeavy",
   APPLY_WEIGHT_MULTIPLIER_FOR_EQUIPPED_ARMOR_NATURAL: "applyWeightMultiplierForEquippedArmorNatural",
+  APPLY_WEIGHT_MULTIPLIER_FOR_PROFICIENT_ARMOR: "applyWeightMultiplierForProficientArmor",
+  APPLY_WEIGHT_MULTIPLIER_FOR_PROFICIENT_ARMOR_CLOTHING: "applyWeightMultiplierForProficientArmorClothing",
+  APPLY_WEIGHT_MULTIPLIER_FOR_PROFICIENT_ARMOR_LIGHT: "applyWeightMultiplierForProficientArmorLight",
+  APPLY_WEIGHT_MULTIPLIER_FOR_PROFICIENT_ARMOR_MEDIUM: "applyWeightMultiplierForProficientArmorMedium",
+  APPLY_WEIGHT_MULTIPLIER_FOR_PROFICIENT_ARMOR_HEAVY: "applyWeightMultiplierForProficientArmorHeavy",
+  APPLY_WEIGHT_MULTIPLIER_FOR_PROFICIENT_ARMOR_NATURAL: "applyWeightMultiplierForProficientArmorNatural",
   APPLY_WEIGHT_MULTIPLIER_FOR_EQUIPPED_CONTAINER: "applyWeightMultiplierForEquippedContainer",
   USE_STR_VALUE_INSTEAD_STR_MOD_ON_BULK: "useStrValueInsteadStrModOnBulk",
 

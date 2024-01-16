@@ -186,6 +186,21 @@
   "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForProficientArmor.name": "Feature: Proficient Armor Weight Multiplier",
   "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForProficientArmor.hint": "This is a homebrew rule, for proficient Armor types, if the weight is set to -1 is not applied, this will override the setting from 'Proficient Equipped Item Weight Multiplier'. NOTE: The item MUST BE EQUIPPED.",
 
+  "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForProficientArmorClothing.name": "Feature: Proficient Armor Weight Multiplier for 'Clothing Armor'",
+  "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForProficientArmorClothing.hint": "This is a homebrew rule, and is mostly an upgrade of the existing feature 'Proficient Equipped Item Weight Multiplier' for proficient armor types 'clothing', a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from 'Feature: Proficient Armor Weight Multiplier' IS EQUAL TO 0, the value by default the value is 0.",
+
+  "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForProficientArmorLight.name": "Feature: Proficient Armor Weight Multiplier for 'Light Armor'",
+  "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForProficientArmorLight.hint": "This is a homebrew rule, and is mostly an upgrade of the existing feature 'Proficient Equipped Item Weight Multiplier' for proficient armor types 'light', a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from 'Feature: Proficient Armor Weight Multiplier' IS EQUAL TO 0, the value by default the value is 0.",
+
+  "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForProficientArmorMedium.name": "Feature: Proficient Armor Weight Multiplier for 'Medium Armor'",
+  "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForProficientArmorMedium.hint": "This is a homebrew rule, and is mostly an upgrade of the existing feature 'Proficient Equipped Item Weight Multiplier' for proficient armor types 'medium', a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from 'Feature: Proficient Armor Weight Multiplier' IS EQUAL TO 0, the value by default the value is 0.",
+
+  "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForProficientArmorHeavy.name": "Feature: Proficient Armor Weight Multiplier for 'Heavy Armor'",
+  "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForProficientArmorHeavy.hint": "This is a homebrew rule, and is mostly an upgrade of the existing feature 'Proficient Equipped Item Weight Multiplier' for proficient armor types 'heavy', a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from 'Feature: Proficient Armor Weight Multiplier' IS EQUAL TO 0, the value by default the value is 0.",
+
+  "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForProficientArmorNatural.name": "Feature: Proficient Armor Weight Multiplier for 'Natural Armor'",
+  "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForProficientArmorNatural.hint": "This is a homebrew rule, and is mostly an upgrade of the existing feature 'Proficient Equipped Item Weight Multiplier' for proficient armor types 'natural', a specific multiplier is applied to the weight value. NOTE: This setting is working only with the feature from 'Feature: Proficient Armor Weight Multiplier' IS EQUAL TO 0, the value by default the value is 0.",
+
   "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForEquippedContainer.name": "Feature: Equipped Container/Backpack Weight Multiplier",
   "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForEquippedContainer.hint": "This is a homebrew rule, for equipped container/backpack types, if the weight is set to -1 is not applied, this will override the setting from 'Equipped Item Weight Multiplier'.",
 

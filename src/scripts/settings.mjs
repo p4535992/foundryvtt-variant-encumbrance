@@ -502,6 +502,60 @@ export const registerSettings = function () {
     type: Number,
   });
 
+  game.settings.register(CONSTANTS.MODULE_ID, "applyWeightMultiplierForProficientArmor", {
+    name: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForProficientArmor.name`,
+    hint: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForProficientArmor.hint`,
+    scope: "world",
+    config: true,
+    default: -1,
+    type: Number,
+  });
+
+  game.settings.register(CONSTANTS.MODULE_ID, "applyWeightMultiplierForProficientArmorClothing", {
+    name: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForProficientArmorClothing.name`,
+    hint: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForProficientArmorClothing.hint`,
+    scope: "world",
+    config: true,
+    default: 0,
+    type: Number,
+  });
+
+  game.settings.register(CONSTANTS.MODULE_ID, "applyWeightMultiplierForProficientArmorLight", {
+    name: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForProficientArmorLight.name`,
+    hint: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForProficientArmorLight.hint`,
+    scope: "world",
+    config: true,
+    default: 0,
+    type: Number,
+  });
+
+  game.settings.register(CONSTANTS.MODULE_ID, "applyWeightMultiplierForProficientArmorMedium", {
+    name: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForProficientArmorMedium.name`,
+    hint: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForProficientArmorMedium.hint`,
+    scope: "world",
+    config: true,
+    default: 0,
+    type: Number,
+  });
+
+  game.settings.register(CONSTANTS.MODULE_ID, "applyWeightMultiplierForProficientArmorHeavy", {
+    name: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForProficientArmorHeavy.name`,
+    hint: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForProficientArmorHeavy.hint`,
+    scope: "world",
+    config: true,
+    default: 0,
+    type: Number,
+  });
+
+  game.settings.register(CONSTANTS.MODULE_ID, "applyWeightMultiplierForProficientArmorNatural", {
+    name: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForProficientArmorNatural.name`,
+    hint: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForProficientArmorNatural.hint`,
+    scope: "world",
+    config: true,
+    default: 0,
+    type: Number,
+  });
+
   game.settings.register(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedContainer", {
     name: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForEquippedContainer.name`,
     hint: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForEquippedContainer.hint`,

@@ -243,6 +243,18 @@ Add new buttons on the header sheet of the actors for choose when to avoid to ad
 
 **Feature: Equipped Armor Weight Multiplier for 'Natural Armor':** This is a homebrew rule, and is mostly an upgrade of the existing feature _'Equipped Item Weight Multiplier'_ for equipped armor types **'natural'**, a specific multiplier is applied to the weight value. **NOTE:** This setting is working only with the feature from _'Feature: Equipped Armor Weight Multiplier'_ IS EQUAL TO 0, the value by default the value is 0.
 
+**Feature: Proficient Armor Weight Multiplier:** This is a homebrew rule, for proficient Armor types, if the weight is set to -1 is not applied, this will override the setting from _'Proficient Equipped Item Weight Multiplier'_. **NOTE:** The item MUST BE EQUIPPED.
+
+**Feature: Proficient Armor Weight Multiplier for 'Clothing Armor':** This is a homebrew rule, and is mostly an upgrade of the existing feature _'Proficient Equipped Item Weight Multiplier'_ for proficient armor types **'clothing'**, a specific multiplier is applied to the weight value. **NOTE:** This setting is working only with the feature from _'Feature: Proficient Armor Weight Multiplier'_ IS EQUAL TO 0, the value by default the value is 0.
+
+**Feature: Proficient Armor Weight Multiplier for 'Light Armor':** This is a homebrew rule, and is mostly an upgrade of the existing feature _'Proficient Equipped Item Weight Multiplier'_ for proficient armor types **'light'**, a specific multiplier is applied to the weight value. **NOTE:** This setting is working only with the feature from _'Feature: Proficient Armor Weight Multiplier'_ IS EQUAL TO 0, the value by default the value is 0.
+
+**Feature: Proficient Armor Weight Multiplier for 'Medium Armor':** This is a homebrew rule, and is mostly an upgrade of the existing feature _'Proficient Equipped Item Weight Multiplier'_ for proficient armor types **'medium'**, a specific multiplier is applied to the weight value. **NOTE:** This setting is working only with the feature from _'Feature: Proficient Armor Weight Multiplier'_ IS EQUAL TO 0, the value by default the value is 0.
+
+**Feature: Proficient Armor Weight Multiplier for 'Heavy Armor':** This is a homebrew rule, and is mostly an upgrade of the existing feature _'Proficient Equipped Item Weight Multiplier'_ for proficient armor types **'heavy'**, a specific multiplier is applied to the weight value. **NOTE:** This setting is working only with the feature from _'Feature: Proficient Armor Weight Multiplier'_ IS EQUAL TO 0, the value by default the value is 0.
+
+**Feature: Proficient Armor Weight Multiplier for 'Natural Armor':** This is a homebrew rule, and is mostly an upgrade of the existing feature _'Proficient Equipped Item Weight Multiplier'_ for proficient armor types **'natural'**, a specific multiplier is applied to the weight value. **NOTE:** This setting is working only with the feature from _'Feature: Proficient Armor Weight Multiplier'_ IS EQUAL TO 0, the value by default the value is 0.
+
 **Feature: Equipped Container/Backpack Weight Multiplier:** This is a homebrew rule, for equipped container/backpack types, if the weight is set to -1 is not applied, this will override the setting from 'Equipped Item Weight Multiplier'.
 
 **Feature: Use STR flat value instead STR MOD on Bulk:** This is a homebrew rule, ONLY FOR BULK calculation. Currently there is no way to adjust the maximum bulk for a creature, which is tied to size and STR MOD, now you can use the flat value of force to handle it.
