@@ -4,6 +4,7 @@ import CONSTANTS from "./constants.mjs";
 import { checkBulkCategory, error, isStringEquals, warn } from "./lib/lib.mjs";
 import { VariantEncumbranceBulkImpl } from "./VariantEncumbranceBulkImpl.mjs";
 import { invPlusActive } from "./modules.mjs";
+import { VariantEncumbranceDnd5eHelpers } from "./lib/variant-encumbrance-dnd5e-helpers";
 
 const API = {
   async calculateWeightOnActorFromIdArr(...inAttributes) {
@@ -198,6 +199,24 @@ const API = {
     }
     const encumbranceData = VariantEncumbranceBulkImpl.calculateEncumbrance(actor, items, ignoreCurrency, false);
     return encumbranceData;
+  },
+
+  // ================================================
+
+  calculateWeightOnItem(item) {
+    if (!item) {
+      warn(`No item is been passed`);
+      return;
+    }
+    return VariantEncumbranceDnd5eHelpers.manageItemWeight(item);
+  },
+
+  calculateBulkOnItem(item) {
+    if (!item) {
+      warn(`No item is been passed`);
+      return;
+    }
+    return VariantEncumbranceDnd5eHelpers.manageItemBulk(item);
   },
 };
 

@@ -1,5 +1,14 @@
+import { calcWeightItemCollection } from "../VariantEncumbranceImpl.mjs";
 import CONSTANTS from "../constants.mjs";
-import { debug } from "./lib.mjs";
+import {
+  calculateBackPackManagerBulk,
+  calculateBackPackManagerWeight,
+  debug,
+  getItemBulk,
+  getItemQuantity,
+  getItemWeight,
+  retrieveBackPackManagerItem,
+} from "./lib.mjs";
 
 export class VariantEncumbranceDnd5eHelpers {
   static manageEquippedAndUnEquippedFeature(item, itemWeight) {
@@ -323,5 +332,272 @@ export class VariantEncumbranceDnd5eHelpers {
       `manageEquippedAndUnEquippedFeature | FINAL | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon} : ${itemWeightOri} => ${itemWeight}`
     );
     return itemWeight;
+  }
+
+  static manageItemWeight(item) {
+    let itemQuantity = getItemQuantity(item);
+    let itemWeight = getItemWeight(item);
+
+    const isEquipped = item.system.equipped ? true : false;
+    const isProficient = item.system.proficient === 1 ? true : false;
+
+    let backpackManager = retrieveBackPackManagerItem(item);
+    if (backpackManager) {
+      // Does the weight of the items in the container carry over to the actor?
+      const weightless = getProperty(item, "system.capacity.weightless") ?? false;
+      // const backpackManagerWeight =
+      // 	API.calculateWeightOnActor(backpackManager)?.totalWeight ?? itemWeight;
+      const backpackManagerWeight = calculateBackPackManagerWeight(item, backpackManager, ignoreCurrency);
+      itemWeight = weightless ? itemWeight : itemWeight + backpackManagerWeight;
+
+      itemWeight = VariantEncumbranceDnd5eHelpers.manageEquippedAndUnEquippedFeature(item, itemWeight);
+
+      debug(`Is BackpackManager! Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`);
+      // mapItemEncumbrance[item.id] = itemQuantity * itemWeight;
+      return itemQuantity * itemWeight;
+    }
+
+    debug(`Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`);
+
+    // let ignoreEquipmentCheck = false;
+
+    // External modules calculation
+    let ignoreQuantityCheckForItemCollection = false;
+    // Start Item container check
+    if (hasProperty(item, `flags.itemcollection`) && itemContainerActive) {
+      itemWeight = calcWeightItemCollection(
+        item,
+        useEquippedUnequippedItemCollectionFeature,
+        ignoreCurrency,
+        doNotIncreaseWeightByQuantityForNoAmmunition
+      );
+      ignoreQuantityCheckForItemCollection = true;
+    }
+    // End Item container check
+    else {
+      // Does the weight of the items in the container carry over to the actor?
+      // TODO  wait for 2.2.0
+      const weightless = getProperty(item, "system.capacity.weightless") ?? false;
+
+      itemWeight = VariantEncumbranceDnd5eHelpers.manageEquippedAndUnEquippedFeature(item, itemWeight);
+
+      // Feature: Do Not increase weight by quantity for no ammunition item
+      if (doNotIncreaseWeightByQuantityForNoAmmunition) {
+        if (item.system?.consumableType !== "ammo") {
+          itemQuantity = 1;
+        }
+      }
+    }
+    // Start inventory+ module is active
+    if (invPlusActiveTmp) {
+      // Retrieve flag 'categorys' from inventory plus module
+      const inventoryPlusCategories = actorEntity.getFlag(CONSTANTS.INVENTORY_PLUS_MODULE_ID, "categorys");
+      if (inventoryPlusCategories) {
+        // "weapon", "equipment", "consumable", "tool", "backpack", "loot"
+        let actorHasCustomCategories = false;
+        for (const categoryId in inventoryPlusCategories) {
+          const section = inventoryPlusCategories[categoryId];
+          if (
+            // This is a error from the inventory plus developer flags stay on 'item' not on the 'item'
+
+            item.flags &&
+            item.flags[CONSTANTS.INVENTORY_PLUS_MODULE_ID]?.category === categoryId
+          ) {
+            // Ignore weight
+            if (section?.ignoreWeight === true) {
+              itemWeight = 0;
+              // ignoreEquipmentCheck = true;
+            }
+            // EXIT FOR
+            actorHasCustomCategories = true;
+          }
+
+          // Inherent weight
+          if (Number(section?.ownWeight) > 0) {
+            // if (!invPlusCategoriesWeightToAdd.has(categoryId)) {
+            //   invPlusCategoriesWeightToAdd.set(categoryId, Number(section.ownWeight));
+            // }
+          }
+          if (actorHasCustomCategories) {
+            break;
+          }
+        }
+        if (!actorHasCustomCategories) {
+          for (const categoryId in inventoryPlusCategories) {
+            if (item.type === categoryId) {
+              const section = inventoryPlusCategories[categoryId];
+              // Ignore weight
+              if (section?.ignoreWeight === true) {
+                itemWeight = 0;
+                // ignoreEquipmentCheck = true;
+              }
+              // Inherent weight
+              if (Number(section?.ownWeight) > 0) {
+                // if (!invPlusCategoriesWeightToAdd.has(categoryId)) {
+                //   invPlusCategoriesWeightToAdd.set(categoryId, Number(section.ownWeight));
+                // }
+              }
+              // EXIT FOR
+              break;
+            }
+          }
+        }
+      }
+    }
+    // End Inventory+ module is active
+
+    // End External modules calculation
+
+    let appliedWeight = 0;
+    if (ignoreQuantityCheckForItemCollection) {
+      appliedWeight = itemWeight;
+      debug(
+        `Item '${item.name}', Equipped '${isEquipped}', Proficient ${isProficient} :
+           1 * ${itemWeight} = ${appliedWeight}`
+      );
+    } else {
+      appliedWeight = itemQuantity * itemWeight;
+      debug(
+        `Item '${item.name}', Equipped '${isEquipped}', Proficient ${isProficient} :
+           ${itemQuantity} * ${itemWeight} = ${appliedWeight}`
+      );
+    }
+    // mapItemEncumbrance[item.id] = appliedWeight;
+    // return weight + appliedWeight;
+    return appliedWeight;
+  }
+
+  static manageItemBulk(item) {
+    let itemQuantity = getItemQuantity(item);
+    let itemWeight = getItemBulk(item);
+
+    const isEquipped = item.system.equipped ? true : false;
+    const isProficient = item.system.proficient === 1 ? true : false;
+
+    let backpackManager = retrieveBackPackManagerItem(item);
+    if (backpackManager) {
+      // Does the weight of the items in the container carry over to the actor?
+      const weightless = getProperty(item, "system.capacity.weightless") ?? false;
+      // const backpackManagerWeight =
+      // 	API.calculateBulkOnActor(backpackManager)?.totalWeight ?? itemWeight;
+      const backpackManagerWeight = calculateBackPackManagerBulk(item, backpackManager, ignoreCurrency);
+      itemWeight = weightless ? itemWeight : itemWeight + backpackManagerWeight;
+
+      itemWeight = VariantEncumbranceDnd5eHelpers.manageEquippedAndUnEquippedFeature(item, itemWeight);
+
+      debug(`Is BackpackManager! Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`);
+      // mapItemEncumbrance[item.id] = itemQuantity * itemWeight;
+      return weight + itemQuantity * itemWeight;
+    }
+
+    debug(`Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`);
+
+    // let ignoreEquipmentCheck = false;
+
+    // External modules calculation
+    let ignoreQuantityCheckForItemCollection = false;
+    // Start Item container check
+    if (hasProperty(item, `flags.itemcollection`) && itemContainerActive) {
+      itemWeight = calcBulkItemCollection(
+        item,
+        useEquippedUnequippedItemCollectionFeature,
+        ignoreCurrency,
+        doNotIncreaseWeightByQuantityForNoAmmunition
+      );
+      ignoreQuantityCheckForItemCollection = true;
+    }
+    // End Item container check
+    else {
+      // Does the weight of the items in the container carry over to the actor?
+      // TODO  wait for 2.2.0
+      const weightless = getProperty(item, "system.capacity.weightless") ?? false;
+
+      itemWeight = VariantEncumbranceDnd5eHelpers.manageEquippedAndUnEquippedFeature(item, itemWeight);
+
+      // Feature: Do Not increase weight by quantity for no ammunition item
+      if (doNotIncreaseWeightByQuantityForNoAmmunition) {
+        if (item.system?.consumableType !== "ammo") {
+          itemQuantity = 1;
+        }
+      }
+    }
+    // Start inventory+ module is active
+    if (invPlusActiveTmp) {
+      // Retrieve flag 'categorys' from inventory plus module
+      const inventoryPlusCategories = actorEntity.getFlag(CONSTANTS.INVENTORY_PLUS_MODULE_ID, "categorys");
+      if (inventoryPlusCategories) {
+        // "weapon", "equipment", "consumable", "tool", "backpack", "loot"
+        let actorHasCustomCategories = false;
+        for (const categoryId in inventoryPlusCategories) {
+          const section = inventoryPlusCategories[categoryId];
+          if (
+            // This is a error from the inventory plus developer flags stay on 'item' not on the 'item'
+
+            item.flags &&
+            item.flags[CONSTANTS.INVENTORY_PLUS_MODULE_ID]?.category === categoryId
+          ) {
+            // Ignore weight
+            if (section?.ignoreBulk === true) {
+              itemWeight = 0;
+              // ignoreEquipmentCheck = true;
+            }
+            // EXIT FOR
+            actorHasCustomCategories = true;
+          }
+
+          // Inherent weight
+          if (section?.ownBulk > 0) {
+            // if (!invPlusCategoriesWeightToAdd.has(categoryId)) {
+            //   invPlusCategoriesWeightToAdd.set(categoryId, section.ownBulk);
+            // }
+          }
+          if (actorHasCustomCategories) {
+            break;
+          }
+        }
+        if (!actorHasCustomCategories) {
+          for (const categoryId in inventoryPlusCategories) {
+            if (item.type === categoryId) {
+              const section = inventoryPlusCategories[categoryId];
+              // Ignore weight
+              if (section?.ignoreBulk === true) {
+                itemWeight = 0;
+                // ignoreEquipmentCheck = true;
+              }
+              // Inherent weight
+              if (section?.ownBulk > 0) {
+                // if (!invPlusCategoriesWeightToAdd.has(categoryId)) {
+                //   invPlusCategoriesWeightToAdd.set(categoryId, section.ownBulk);
+                // }
+              }
+              // EXIT FOR
+              break;
+            }
+          }
+        }
+      }
+    }
+    // End Inventory+ module is active
+
+    // End External modules calculation
+
+    let appliedWeight = 0;
+    if (ignoreQuantityCheckForItemCollection) {
+      appliedWeight = itemWeight;
+      debug(
+        `Item '${item.name}', Equipped '${isEquipped}', Proficient ${isProficient} :
+           1 * ${itemWeight} = ${appliedWeight}`
+      );
+    } else {
+      appliedWeight = itemQuantity * itemWeight;
+      debug(
+        `Item '${item.name}', Equipped '${isEquipped}', Proficient ${isProficient} :
+           ${itemQuantity} * ${itemWeight} = ${appliedWeight}`
+      );
+    }
+
+    // mapItemEncumbrance[item.id] = appliedWeight;
+    // return weight + appliedWeight;
+    return appliedWeight;
   }
 }
