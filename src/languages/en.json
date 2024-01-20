@@ -215,6 +215,9 @@
   "variant-encumbrance-dnd5e.label.convertTitle": "Convert Cargo Capacity",
   "variant-encumbrance-dnd5e.label.convertContent": "Would you like to convert the current cargo capacity from '{{OLD}}' to '{{NEW}}'?",
 
+  "variant-encumbrance-dnd5e.label.veweight.VEWeight": "VE Weight",
+  "variant-encumbrance-dnd5e.label.bulk.VEBulk": "Bulk Weight",
+
   "variant-encumbrance-dnd5e.label.bulk.ItemContainerCapacityBulk": "Bulk",
   "variant-encumbrance-dnd5e.label.bulk.Bulk": "Bulk",
   "variant-encumbrance-dnd5e.label.bulk.suggestedValue": "Suggested Bulk value: {suggestedBulkWeight}",

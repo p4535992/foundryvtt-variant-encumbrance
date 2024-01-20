@@ -50,6 +50,13 @@ export const VariantEncumbranceBulkImpl = {
   },
 
   _updateEncumbranceInternal: async function (actorEntity, updatedItem, updatedEffect = undefined, mode = undefined) {
+    if (
+      hasProperty(updatedItem || {}, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}`) ||
+      hasProperty(updatedItem || {}, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}`)
+    ) {
+      return;
+    }
+    
     if (updatedItem) {
       let itemID;
       if (typeof updatedItem === "string" || updatedItem instanceof String) {
@@ -378,6 +385,10 @@ export const VariantEncumbranceBulkImpl = {
             `Is BackpackManager! Actor '${actorEntity.name}', Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`
           );
           mapItemEncumbrance[item.id] = itemQuantity * itemWeight;
+          if (getProperty(item, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}`) !== itemWeight) {
+            // NOTE IS ASYNC
+            item.setFlag(CONSTANTS.MODULE_ID, CONSTANTS.FLAGS.ITEM.bulk, itemWeight);
+          }
           return weight + itemQuantity * itemWeight;
         }
 
@@ -488,6 +499,10 @@ export const VariantEncumbranceBulkImpl = {
         }
 
         mapItemEncumbrance[item.id] = appliedWeight;
+        if (getProperty(item, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}`) !== itemWeight) {
+          // NOTE IS ASYNC
+          item.setFlag(CONSTANTS.MODULE_ID, CONSTANTS.FLAGS.ITEM.bulk, itemWeight);
+        }
         return weight + appliedWeight;
       }, 0);
 

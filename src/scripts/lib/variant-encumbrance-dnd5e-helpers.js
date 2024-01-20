@@ -1,4 +1,5 @@
-import { calcWeightItemCollection } from "../VariantEncumbranceImpl.mjs";
+import { isEmptyObject } from "jquery";
+import { calcWeightItemCollection, isEnabledActorType } from "../VariantEncumbranceImpl.mjs";
 import CONSTANTS from "../constants.mjs";
 import {
   calculateBackPackManagerBulk,
@@ -9,6 +10,7 @@ import {
   getItemWeight,
   retrieveBackPackManagerItem,
 } from "./lib.mjs";
+import { invPlusActive } from "../modules.mjs";
 
 export class VariantEncumbranceDnd5eHelpers {
   static manageEquippedAndUnEquippedFeature(item, itemWeight) {
@@ -354,7 +356,8 @@ export class VariantEncumbranceDnd5eHelpers {
 
       debug(`Is BackpackManager! Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`);
       // mapItemEncumbrance[item.id] = itemQuantity * itemWeight;
-      return itemQuantity * itemWeight;
+      // return itemQuantity * itemWeight;
+      return itemWeight;
     }
 
     debug(`Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`);
@@ -464,7 +467,7 @@ export class VariantEncumbranceDnd5eHelpers {
     }
     // mapItemEncumbrance[item.id] = appliedWeight;
     // return weight + appliedWeight;
-    return appliedWeight;
+    return itemWeight;
   }
 
   static manageItemBulk(item) {
@@ -487,7 +490,8 @@ export class VariantEncumbranceDnd5eHelpers {
 
       debug(`Is BackpackManager! Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`);
       // mapItemEncumbrance[item.id] = itemQuantity * itemWeight;
-      return weight + itemQuantity * itemWeight;
+      // return itemQuantity * itemWeight;
+      return itemWeight;
     }
 
     debug(`Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`);
@@ -597,7 +601,67 @@ export class VariantEncumbranceDnd5eHelpers {
     }
 
     // mapItemEncumbrance[item.id] = appliedWeight;
-    // return weight + appliedWeight;
-    return appliedWeight;
+    // return appliedWeight;
+    return itemWeight;
+  }
+
+  /**
+   *
+   * @param {Actor} actorEntity
+   * @param {Object} update
+   * @returns {{doTheUpdate:boolean, noActiveEffect:boolean}}
+   */
+  static isAEncumbranceUpdated(actorEntity, update) {
+    //  && actorEntity.sheet?.rendered
+    let doTheUpdate = false;
+    let noActiveEffect = false;
+    if (isEmptyObject(update)) {
+      // DO NOTHING
+    } else if (isEnabledActorType(actorEntity)) {
+      //  && actorEntity.sheet?.rendered
+      let doTheUpdate = false;
+      let noActiveEffect = false;
+
+      // For our purpose we filter only the STR modifier action
+
+      if (update?.system?.abilities?.str) {
+        if (actorEntity.system.abilities.str.value !== update?.system.abilities?.str.value) {
+          actorEntity.system.abilities.str.value = update?.system.abilities?.str.value;
+        }
+        doTheUpdate = true;
+        noActiveEffect = false;
+      }
+      // For our purpose we filter only the CURRENCY modifier action
+      if (update?.system?.currency) {
+        doTheUpdate = true;
+        noActiveEffect = false;
+      }
+      // For our purpose we filter only the inventory-plus modifier action
+      if (invPlusActive && update?.flags && hasProperty(update, `flags.${CONSTANTS.INVENTORY_PLUS_MODULE_ID}`)) {
+        doTheUpdate = true;
+        noActiveEffect = false;
+      }
+      // Check change on the cargo property of vehicle
+      if (update?.system?.attributes?.capacity?.cargo) {
+        doTheUpdate = true;
+        noActiveEffect = true;
+      }
+      // Check if the update is about some item flag
+      if (
+        hasProperty(actorEntity, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}`) ||
+        hasProperty(actorEntity, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}`)
+      ) {
+        doTheUpdate = false;
+        noActiveEffect = true;
+      }
+    } else {
+      doTheUpdate = false;
+      noActiveEffect = true;
+    }
+
+    return {
+      doTheUpdate: doTheUpdate,
+      noActiveEffect: noActiveEffect,
+    };
   }
 }

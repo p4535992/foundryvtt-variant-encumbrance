@@ -6,6 +6,9 @@
 - Add module setting: applyWeightMultiplierForProficientArmorMedium
 - Add module setting: applyWeightMultiplierForProficientArmorHeavy
 - Add module setting: applyWeightMultiplierForProficientArmorNatural
+- Update constants for flags
+- Add flag veweight for see the updated weight on the item sheet with additionial check
+- Add pre filter on wrapper method updateDocuments ?
 
 ### 0.13.12 
 

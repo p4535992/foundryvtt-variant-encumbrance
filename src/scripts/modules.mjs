@@ -28,6 +28,7 @@ import CONSTANTS from "./constants.mjs";
 import { registerSocket } from "./socket.mjs";
 import API from "./api.mjs";
 import { calcBulkItemCollection, VariantEncumbranceBulkImpl } from "./VariantEncumbranceBulkImpl.mjs";
+import { VariantEncumbranceDnd5eHelpers } from "./lib/variant-encumbrance-dnd5e-helpers";
 
 export let ENCUMBRANCE_STATE = {
   UNENCUMBERED: "", // "Unencumbered",
@@ -178,21 +179,23 @@ export const setupHooks = async () => {
 
 export const readyHooks = async () => {
   // effectInterface.initialize();
-  if (game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem")) {
+
+  Hooks.on("renderItemSheet", (app, html, data) => {
+    if (!app.object) {
+      return;
+    }
+    const item = app.object;
+    module.renderItemSheetVEWeightSystem(app, html, data.system, item);
     // ===================
     // Bulk management
     // ===================
-    Hooks.on("renderItemSheet", (app, html, data) => {
-      if (!app.object) {
-        return;
-      }
-      const item = app.object;
+    if (game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem")) {
       module.renderItemSheetBulkSystem(app, html, data.system, item);
-    });
+    }
     // =====================
     // End bulk management
     // =====================
-  }
+  });
 
   ENCUMBRANCE_STATE = {
     UNENCUMBERED: i18n(CONSTANTS.MODULE_ID + ".effect.name.unencumbered"), // "Unencumbered",
@@ -367,67 +370,39 @@ export const readyHooks = async () => {
     if (!actorEntity) {
       return;
     }
-    if (isEnabledActorType(actorEntity)) {
-      //  && actorEntity.sheet?.rendered
-      let doTheUpdate = false;
-      let noActiveEffect = false;
 
-      // For our purpose we filter only the STR modifier action
+    const { doTheUpdate, noActiveEffect } = VariantEncumbranceDnd5eHelpers.isAEncumbranceUpdated(actorEntity, update);
 
-      if (update?.system?.abilities?.str) {
-        if (actorEntity.system.abilities.str.value !== update?.system.abilities?.str.value) {
-          actorEntity.system.abilities.str.value = update?.system.abilities?.str.value;
+    // Do the update
+    if (doTheUpdate) {
+      if (noActiveEffect) {
+        if (game.settings.get(CONSTANTS.MODULE_ID, "enabled")) {
+          VariantEncumbranceImpl.calculateEncumbrance(actorEntity, actorEntity.items.contents, false, invPlusActive);
         }
-        doTheUpdate = true;
-        noActiveEffect = false;
-      }
-      // For our purpose we filter only the CURRENCY modifier action
-      if (update?.system?.currency) {
-        doTheUpdate = true;
-        noActiveEffect = false;
-      }
-      // For our purpose we filter only the inventory-plus modifier action
-      if (invPlusActive && update?.flags && hasProperty(update, `flags.${CONSTANTS.INVENTORY_PLUS_MODULE_ID}`)) {
-        doTheUpdate = true;
-        noActiveEffect = false;
-      }
-      // Check change on the cargo property of vehicle
-      if (update?.system?.attributes?.capacity?.cargo) {
-        doTheUpdate = true;
-        noActiveEffect = true;
-      }
-
-      // Do the update
-      if (doTheUpdate) {
-        if (noActiveEffect) {
-          if (game.settings.get(CONSTANTS.MODULE_ID, "enabled")) {
-            VariantEncumbranceImpl.calculateEncumbrance(actorEntity, actorEntity.items.contents, false, invPlusActive);
-          }
-          if (game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem")) {
-            VariantEncumbranceBulkImpl.calculateEncumbrance(
-              actorEntity,
-              actorEntity.items.contents,
-              false,
-              invPlusActive
-            );
-          }
-        } else {
-          if (game.settings.get(CONSTANTS.MODULE_ID, "enabled")) {
-            await VariantEncumbranceImpl.updateEncumbrance(
-              actorEntity,
-              undefined,
-              actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.ENABLED_AE),
-              EncumbranceMode.ADD
-            );
-          }
-          if (game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem")) {
-            await VariantEncumbranceBulkImpl.updateEncumbrance(
-              actorEntity,
-              undefined,
-              actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.ENABLED_AE_BULK),
-              EncumbranceMode.ADD
-            );
-          }
+        if (game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem")) {
+          VariantEncumbranceBulkImpl.calculateEncumbrance(
+            actorEntity,
+            actorEntity.items.contents,
+            false,
+            invPlusActive
+          );
+        }
+      } else {
+        if (game.settings.get(CONSTANTS.MODULE_ID, "enabled")) {
+          await VariantEncumbranceImpl.updateEncumbrance(
+            actorEntity,
+            undefined,
+            actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.ENABLED_AE),
+            EncumbranceMode.ADD
+          );
+        }
+        if (game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem")) {
+          await VariantEncumbranceBulkImpl.updateEncumbrance(
+            actorEntity,
+            undefined,
+            actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.ENABLED_AE_BULK),
+            EncumbranceMode.ADD
+          );
         }
       }
     }
@@ -990,6 +965,10 @@ export async function createDocuments(wrapped, data, context = { parent: {}, pac
 export async function updateDocuments(wrapped, updates = [], context = { parent: {}, pack: {}, options: {} }) {
   const { parent, pack, options } = context;
   const actorEntity = parent;
+  // TODO is working, but we will try later...
+  //const update = updates ? updates[0] : undefined;
+  //const { doTheUpdate, noActiveEffect } = VariantEncumbranceDnd5eHelpers.isAEncumbranceUpdated(actorEntity, update);
+  //if (doTheUpdate && actorEntity.sheet?.rendered) {
   if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
     if (game.settings.get(CONSTANTS.MODULE_ID, "enabled")) {
       await VariantEncumbranceImpl.updateEncumbrance(
@@ -1459,7 +1438,7 @@ const module = {
       suggestedBulkWeight = suggestedBulk.bulk;
     }
     // NOTE: we use the parent no the data
-    let bulk = getProperty(data, `parent.flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}`) ?? 0;
+    let bulk = getProperty(item, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}`) ?? 0;
     if (bulk <= 0 && game.settings.get(CONSTANTS.MODULE_ID, "automaticApplySuggestedBulk")) {
       bulk = suggestedBulkWeight;
     }
@@ -1468,7 +1447,7 @@ const module = {
       suggestedBulkWeight: suggestedBulkWeight,
     });
 
-    let bulkLabel = getBulkLabel();
+    let bulkLabel = i18n("variant-encumbrance-dnd5e.label.bulk.VEBulk");
 
     html
       .find(".item-properties") // <div class="item-properties">
@@ -1479,6 +1458,31 @@ const module = {
           <label>${bulkLabel}</label>
           <input type="text" name="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}" value="${bulk}" data-dtype="Number"/>
           <p class="notes">${suggestedBulkValueS}</p>
+        </div>
+        `
+      );
+  },
+  renderItemSheetVEWeightSystem(app, html, data, itemTmp) {
+    // Size
+    const item = app.object;
+    const options = [];
+    // options.push(
+    //   `<option data-image="icons/svg/mystery-man.svg" value="">${i18n(`${CONSTANTS.MODULE_ID}.default`)}</option>`,
+    // );
+    const veweight =
+      getProperty(item, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}`) ?? data.weight ?? 0;
+
+    let veweightLabel = i18n("variant-encumbrance-dnd5e.label.veweight.VEWeight");
+
+    html
+      .find(".item-properties") // <div class="item-properties">
+      // .closest('item-weight').after(
+      .append(
+        `
+        <div class="form-group">
+          <label>${veweightLabel}</label>
+          <input type="text" readonly name="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}" value="${veweight}" data-dtype="Number"/>
+          <p class="notes"></p>
         </div>
         `
       );

@@ -498,7 +498,6 @@ export function getItemBulk(item) {
 }
 
 export function getBulkLabel() {
-  // i18n('variant-encumbrance-dnd5e.label.bulk.ItemContainerCapacityBulk') ??
   const bulkLabelI18n = i18n("variant-encumbrance-dnd5e.label.bulk.Bulk");
   const displayedUnits = game.settings.get(CONSTANTS.MODULE_ID, "unitsBulk");
   const bulkLabel = capitalizeFirstLetter(displayedUnits ?? bulkLabelI18n);
@@ -509,8 +508,8 @@ export function getWeightLabel() {
   const displayedUnits = game.settings.get("dnd5e", "metricWeightUnits")
     ? game.settings.get(CONSTANTS.MODULE_ID, "unitsMetric")
     : game.settings.get(CONSTANTS.MODULE_ID, "units");
-  const bulkLabel = capitalizeFirstLetter(displayedUnits);
-  return bulkLabel;
+  const weightLabel = capitalizeFirstLetter(displayedUnits);
+  return weightLabel;
 }
 
 function capitalizeFirstLetter(string) {

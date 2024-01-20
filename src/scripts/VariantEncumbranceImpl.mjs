@@ -50,15 +50,11 @@ export const VariantEncumbranceImpl = {
   },
 
   _updateEncumbranceInternal: async function (actorEntity, updatedItem, updatedEffect = undefined, mode = undefined) {
-    // Remove old flags
-    if (hasProperty(actorEntity, `flags.${CONSTANTS.MODULE_ID}.weight`)) {
-      await actorEntity.unsetFlag(CONSTANTS.MODULE_ID, "weight");
-    }
-    if (hasProperty(actorEntity, `flags.${CONSTANTS.MODULE_ID}.VariantEncumbrance`)) {
-      await actorEntity.unsetFlag(CONSTANTS.MODULE_ID, "VariantEncumbrance");
-    }
-    if (hasProperty(actorEntity, "flags.VariantEncumbrance")) {
-      await actorEntity.unsetFlag(CONSTANTS.MODULE_ID, "VariantEncumbrance");
+    if (
+      hasProperty(updatedItem || {}, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}`) ||
+      hasProperty(updatedItem || {}, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}`)
+    ) {
+      return;
     }
 
     if (updatedItem) {
@@ -450,6 +446,10 @@ export const VariantEncumbranceImpl = {
             `Is BackpackManager! Actor '${actorEntity.name}', Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`
           );
           mapItemEncumbrance[item.id] = itemQuantity * itemWeight;
+          if (getProperty(item, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}`) !== itemWeight) {
+            // NOTE IS ASYNC
+            item.setFlag(CONSTANTS.MODULE_ID, CONSTANTS.FLAGS.ITEM.veweight, itemWeight);
+          }
           return weight + itemQuantity * itemWeight;
         }
 
@@ -560,6 +560,10 @@ export const VariantEncumbranceImpl = {
         }
 
         mapItemEncumbrance[item.id] = appliedWeight;
+        if (getProperty(item, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}`) !== itemWeight) {
+          // NOTE IS ASYNC
+          item.setFlag(CONSTANTS.MODULE_ID, CONSTANTS.FLAGS.ITEM.veweight, itemWeight);
+        }
         return weight + appliedWeight;
       }, 0);
 

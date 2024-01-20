@@ -56,6 +56,7 @@ const CONSTANTS = {
     },
     ITEM: {
       bulk: "bulk",
+      veweight: "veweight",
     },
   },
   INVENTORY_PLUS_MODULE_ID: "inventory-plus",
