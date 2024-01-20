@@ -8,6 +8,7 @@ import {
   getItemBulk,
   getItemQuantity,
   getItemWeight,
+  hasProperty2,
   retrieveBackPackManagerItem,
 } from "./lib.mjs";
 import { invPlusActive } from "../modules.mjs";
@@ -613,17 +614,42 @@ export class VariantEncumbranceDnd5eHelpers {
    */
   static isAEncumbranceUpdated(actorEntity, update) {
     //  && actorEntity.sheet?.rendered
+    if (!actorEntity) {
+      return {
+        doTheUpdate: false,
+        noActiveEffect: true,
+      };
+    }
+
     let doTheUpdate = false;
     let noActiveEffect = false;
     if (isEmptyObject(update)) {
       // DO NOTHING
     } else if (isEnabledActorType(actorEntity)) {
       //  && actorEntity.sheet?.rendered
-      let doTheUpdate = false;
-      let noActiveEffect = false;
 
+      // mergeObject(itemCurrent.system, updatedItem);
+      // For our purpose we filter only the equipped action
+      if (hasProperty2(update, `system.quantity`)) {
+        doTheUpdate = true;
+        noActiveEffect = false;
+      }
+      // For our purpose we filter only the equipped action
+      if (hasProperty2(update, `system.weight`)) {
+        doTheUpdate = true;
+        noActiveEffect = false;
+      }
+      // For our purpose we filter only the equipped action
+      if (hasProperty2(update, `system.equipped`)) {
+        doTheUpdate = true;
+        noActiveEffect = false;
+      }
+      // For our purpose we filter only the proficient action
+      if (hasProperty2(update, `system.proficient`)) {
+        doTheUpdate = true;
+        noActiveEffect = false;
+      }
       // For our purpose we filter only the STR modifier action
-
       if (update?.system?.abilities?.str) {
         if (actorEntity.system.abilities.str.value !== update?.system.abilities?.str.value) {
           actorEntity.system.abilities.str.value = update?.system.abilities?.str.value;
@@ -648,8 +674,8 @@ export class VariantEncumbranceDnd5eHelpers {
       }
       // Check if the update is about some item flag
       if (
-        hasProperty(actorEntity, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}`) ||
-        hasProperty(actorEntity, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}`)
+        hasProperty2(update, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}`) ||
+        hasProperty2(update, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}`)
       ) {
         doTheUpdate = false;
         noActiveEffect = true;

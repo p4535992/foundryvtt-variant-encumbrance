@@ -637,3 +637,25 @@ export function calculateBackPackManagerBulk(item, bag, ignoreCurrency) {
 
   return data.bagValue;
 }
+
+/**
+ * A helper function which tests whether an object has a property or nested property given a string key.
+ * The method also supports arrays if the provided key is an integer index of the array.
+ * The string key supports the notation a.b.c which would return true if object[a][b][c] exists
+ * @param {object} object   The object to traverse
+ * @param {string} key      An object property with notation a.b.c
+ * @returns {boolean}       An indicator for whether the property exists
+ */
+export function hasProperty2(object, key) {
+  if (!key) return false;
+  let target = object;
+  const tk = getType(target[key]);
+  if (tk !== "null" && tk !== "undefined") return true;
+  for (let p of key.split(".")) {
+    const t = getType(target);
+    if (!(t === "Object" || t === "Array")) return false;
+    if (p in target) target = target[p];
+    else return false;
+  }
+  return true;
+}

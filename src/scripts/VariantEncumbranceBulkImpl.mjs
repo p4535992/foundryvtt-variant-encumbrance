@@ -56,7 +56,7 @@ export const VariantEncumbranceBulkImpl = {
     ) {
       return;
     }
-    
+
     if (updatedItem) {
       let itemID;
       if (typeof updatedItem === "string" || updatedItem instanceof String) {

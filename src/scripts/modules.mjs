@@ -19,6 +19,7 @@ import {
   getItemQuantity,
   getItemWeight,
   getWeightLabel,
+  hasProperty2,
   i18n,
   i18nFormat,
   isRealNumber,
@@ -733,141 +734,7 @@ export const readyHooks = async () => {
       }
     }
   });
-
-  // Hooks.on("preCreateActiveEffect", (activeEffect, _config, _userId) => {
-  // 	const actorEntity = activeEffect?.parent instanceof Actor ? activeEffect?.parent : undefined;
-  // 	if (!actorEntity) {
-  // 		return;
-  // 	}
-  // 	if (!actorEntity.effects) {
-  // 		return;
-  // 	}
-  // 	if (actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.ENABLED_AE)) {
-  // 		let effectEntityPresent: ActiveEffect | undefined = undefined;
-  // 		for (const effectEntity of actorEntity.effects) {
-  //
-  // 			const effectNameToSet = effectEntity.label;
-
-  // 			//const effectIsApplied = await VariantEncumbranceImpl.hasEffectAppliedFromId(effectEntity, actorEntity);
-
-  // 			// Remove AE with empty a label but with flag of variant encumbrance ???
-  // 			if (!effectNameToSet && hasProperty(effectEntity, `flags.${CONSTANTS.MODULE_ID}`)) {
-  // 				continue;
-  // 			}
-
-  // 			if (!effectNameToSet) {
-  // 				continue;
-  // 			}
-
-  // 			// Remove all encumbrance effect renamed from the player
-  // 			if (
-  // 				// encumbranceData.encumbranceTier &&
-  //
-  // 				effectEntity.flags &&
-  // 				hasProperty(effectEntity, `flags.${CONSTANTS.MODULE_ID}`) &&
-  // 				effectNameToSet !== ENCUMBRANCE_STATE.UNENCUMBERED &&
-  // 				effectNameToSet !== ENCUMBRANCE_STATE.ENCUMBERED &&
-  // 				effectNameToSet !== ENCUMBRANCE_STATE.HEAVILY_ENCUMBERED &&
-  // 				effectNameToSet !== ENCUMBRANCE_STATE.OVERBURDENED
-  // 			) {
-  // 				continue;
-  // 			}
-
-  // 			// Remove Old settings
-  //
-  // 			if (effectEntity.flags && hasProperty(effectEntity, `flags.VariantEncumbrance`)) {
-  // 				continue;
-  // 			}
-
-  // 			// Ignore all non encumbrance effect renamed from the player (again)
-  // 			if (
-  // 				!hasProperty(effectEntity, `flags.${CONSTANTS.MODULE_ID}`) &&
-  // 				effectNameToSet !== ENCUMBRANCE_STATE.UNENCUMBERED &&
-  // 				effectNameToSet !== ENCUMBRANCE_STATE.ENCUMBERED &&
-  // 				effectNameToSet !== ENCUMBRANCE_STATE.HEAVILY_ENCUMBERED &&
-  // 				effectNameToSet !== ENCUMBRANCE_STATE.OVERBURDENED
-  // 			) {
-  // 				continue;
-  // 			}
-
-  // 			// Remove encumbrance effect with same name used in this module
-  // 			if (
-  // 				!hasProperty(effectEntity, `flags.${CONSTANTS.MODULE_ID}`) &&
-  // 				(effectNameToSet === ENCUMBRANCE_STATE.UNENCUMBERED ||
-  // 					effectNameToSet === ENCUMBRANCE_STATE.ENCUMBERED ||
-  // 					effectNameToSet === ENCUMBRANCE_STATE.HEAVILY_ENCUMBERED ||
-  // 					effectNameToSet === ENCUMBRANCE_STATE.OVERBURDENED)
-  // 			) {
-  // 				continue;
-  // 			}
-
-  // 			if (
-  // 				hasProperty(effectEntity, `flags.${CONSTANTS.MODULE_ID}`) &&
-  // 				(effectNameToSet === ENCUMBRANCE_STATE.UNENCUMBERED ||
-  // 					effectNameToSet === ENCUMBRANCE_STATE.ENCUMBERED ||
-  // 					effectNameToSet === ENCUMBRANCE_STATE.HEAVILY_ENCUMBERED ||
-  // 					effectNameToSet === ENCUMBRANCE_STATE.OVERBURDENED)
-  // 			) {
-  // 				if (!effectEntityPresent) {
-  // 					effectEntityPresent = effectEntity;
-  // 					break;
-  // 				}
-  // 			}
-  // 		}
-
-  // 		//let encumbranceDataBulk;
-  // 		// if (hasProperty(actorObject, `flags.${CONSTANTS.MODULE_ID}.${EncumbranceFlags.DATA_BULK}`)) {
-  // 		//   encumbranceDataBulk = getProperty(actorObject,`flags.${CONSTANTS.MODULE_ID}.${EncumbranceFlags.DATA_BULK}`);
-  // 		// }
-
-  // 		let encumbranceData: EncumbranceData | undefined = undefined;
-  // 		if (hasProperty(actorEntity, `flags.${CONSTANTS.MODULE_ID}.${EncumbranceFlags.DATA}`)) {
-  // 			encumbranceData = (
-  // 				getProperty(actorEntity, `flags.${CONSTANTS.MODULE_ID}.${EncumbranceFlags.DATA}`)
-  // 			);
-  // 		}
-  // 		let effectName;
-  // 		switch (encumbranceData?.encumbranceTier) {
-  // 			case ENCUMBRANCE_TIERS.NONE:
-  // 				effectName = ENCUMBRANCE_STATE.UNENCUMBERED;
-  // 				break;
-  // 			case ENCUMBRANCE_TIERS.LIGHT:
-  // 				effectName = ENCUMBRANCE_STATE.ENCUMBERED;
-  // 				break;
-  // 			case ENCUMBRANCE_TIERS.HEAVY:
-  // 				effectName = ENCUMBRANCE_STATE.HEAVILY_ENCUMBERED;
-  // 				break;
-  // 			case ENCUMBRANCE_TIERS.MAX:
-  // 				effectName = ENCUMBRANCE_STATE.OVERBURDENED;
-  // 				break;
-  // 			default:
-  // 				effectName = null;
-  // 		}
-
-  // 		if (!game.settings.get(CONSTANTS.MODULE_ID, "useVariantEncumbrance")) {
-  // 			effectName = ENCUMBRANCE_STATE.UNENCUMBERED;
-  // 		}
-
-  // 		if (effectName && effectName !== "") {
-  //
-  // 			if (effectName === effectEntityPresent?.label) {
-  // 			}
-  // 		}
-  // 	}
-  // 	// TODO add bulk
-  // });
 };
-
-// export function getEmbeddedDocument(wrapped, embeddedName, id, { strict = false } = {}) {
-//   const actorEntity = this.actor;
-//   if (actorEntity && (actorEntity.type === EncumbranceActorType.CHARACTER || actorEntity.type === EncumbranceActorType.VEHICLE)) {
-//     VariantEncumbranceImpl.updateEncumbrance(actorEntity, undefined, undefined, EncumbranceMode.ADD);
-//     if (game.settings.get(CONSTANTS.MODULE_ID, 'enableBulkSystem')) {
-//        VariantEncumbranceBulkImpl.updateEncumbrance(actorEntity, undefined, undefined, EncumbranceMode.ADD);
-//     }
-//   }
-//   return wrapped(embeddedName, id, { strict });
-// }
 
 export async function createEmbeddedDocuments(wrapped, embeddedName, data, context) {
   const actorEntity = this.actor;
@@ -965,26 +832,41 @@ export async function createDocuments(wrapped, data, context = { parent: {}, pac
 export async function updateDocuments(wrapped, updates = [], context = { parent: {}, pack: {}, options: {} }) {
   const { parent, pack, options } = context;
   const actorEntity = parent;
-  // TODO is working, but we will try later...
-  //const update = updates ? updates[0] : undefined;
-  //const { doTheUpdate, noActiveEffect } = VariantEncumbranceDnd5eHelpers.isAEncumbranceUpdated(actorEntity, update);
-  //if (doTheUpdate && actorEntity.sheet?.rendered) {
-  if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
-    if (game.settings.get(CONSTANTS.MODULE_ID, "enabled")) {
-      await VariantEncumbranceImpl.updateEncumbrance(
-        actorEntity,
-        updates,
-        actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.ENABLED_AE),
-        EncumbranceMode.UPDATE
-      );
-    }
-    if (game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem")) {
-      await VariantEncumbranceBulkImpl.updateEncumbrance(
-        actorEntity,
-        updates,
-        actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.ENABLED_AE_BULK),
-        EncumbranceMode.UPDATE
-      );
+
+  const update = updates ? updates[0] : undefined;
+  const { doTheUpdate, noActiveEffect } = VariantEncumbranceDnd5eHelpers.isAEncumbranceUpdated(actorEntity, update);
+  if (doTheUpdate && actorEntity.sheet?.rendered) {
+    // if (
+    //   hasProperty2(update, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}`) ||
+    //   hasProperty2(update, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}`)
+    // ) {
+    //   return wrapped(updates, context);
+    // }
+    // if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
+    if (noActiveEffect) {
+      if (game.settings.get(CONSTANTS.MODULE_ID, "enabled")) {
+        VariantEncumbranceImpl.calculateEncumbrance(actorEntity, actorEntity.items.contents, false, invPlusActive);
+      }
+      if (game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem")) {
+        VariantEncumbranceBulkImpl.calculateEncumbrance(actorEntity, actorEntity.items.contents, false, invPlusActive);
+      }
+    } else {
+      if (game.settings.get(CONSTANTS.MODULE_ID, "enabled")) {
+        await VariantEncumbranceImpl.updateEncumbrance(
+          actorEntity,
+          updates,
+          actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.ENABLED_AE),
+          EncumbranceMode.ADD
+        );
+      }
+      if (game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem")) {
+        await VariantEncumbranceBulkImpl.updateEncumbrance(
+          actorEntity,
+          updates,
+          actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.ENABLED_AE_BULK),
+          EncumbranceMode.ADD
+        );
+      }
     }
   }
   return wrapped(updates, context);
@@ -1014,41 +896,6 @@ export async function deleteDocuments(wrapped, ids = [], context = { parent: {},
   return wrapped(ids, context);
 }
 // END REMOVED 2022-01-29
-//// export function prepareEmbeddedEntities(wrapped) {
-////   const actorEntity:Actor = this.actor;
-////   updateEncumbrance(actorEntity, undefined, undefined, "add");
-////   wrapped();
-////   return;
-//// }
-
-// export function getEmbeddedCollection(wrapped, type) {
-//   const actorEntity:Actor = this.actor;
-//   VariantEncumbranceImpl.updateEncumbrance(actorEntity, undefined, undefined, "add");
-//   return wrapped(type);
-// }
-
-// export async function _onCreateDocuments(wrapped, items, context) {
-//   for ( let item of items ) {
-//     const actorEntity:Actor = item.actor;
-//     VariantEncumbranceImpl.updateEncumbrance(actorEntity, undefined, undefined, "add");
-//   }
-//   return wrapped(items, context);
-// }
-
-// export async function _update(wrapped, data) {
-//   const actorEntity:Actor = this.actor;
-//   const isequipped = data.system.equipped;
-//   if(actorEntity && actorEntity.type === "character"){
-//     await VariantEncumbranceImpl.updateEncumbrance(actorEntity, undefined, undefined, "add");
-//   }
-//   return wrapped(data);
-// }
-
-// export async function _delete(wrapped, data) {
-//   const actorEntity:Actor = this.actor;
-//   VariantEncumbranceImpl.updateEncumbrance(actorEntity, undefined, undefined, "delete");
-//   return wrapped(data);
-// }
 
 const module = {
   async renderActorSheetVariant(
@@ -1454,9 +1301,9 @@ const module = {
       // .closest('item-weight').after(
       .append(
         `
-        <div class="form-group">
-          <label>${bulkLabel}</label>
-          <input type="text" name="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}" value="${bulk}" data-dtype="Number"/>
+        <div class="form-group" style="color:red">
+          <label style="color:red">${bulkLabel}</label>
+          <input style="color:red" type="text" name="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}" value="${bulk}" data-dtype="Number"/>
           <p class="notes">${suggestedBulkValueS}</p>
         </div>
         `
@@ -1479,9 +1326,9 @@ const module = {
       // .closest('item-weight').after(
       .append(
         `
-        <div class="form-group">
-          <label>${veweightLabel}</label>
-          <input type="text" readonly name="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}" value="${veweight}" data-dtype="Number"/>
+        <div class="form-group" style="color:red">
+          <label style="color:red">${veweightLabel}</label>
+          <input style="color:red" type="text" readonly name="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}" value="${veweight}" data-dtype="Number"/>
           <p class="notes"></p>
         </div>
         `
