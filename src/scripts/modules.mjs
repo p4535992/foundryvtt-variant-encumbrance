@@ -1459,14 +1459,16 @@ const module = {
       suggestedBulkWeight = suggestedBulk.bulk;
     }
     // NOTE: we use the parent no the data
-    let bulk = getProperty(data, `parent.flags.${CONSTANTS.MODULE_ID}.bulk`) ?? 0;
+    let bulk = getProperty(data, `parent.flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}`) ?? 0;
     if (bulk <= 0 && game.settings.get(CONSTANTS.MODULE_ID, "automaticApplySuggestedBulk")) {
       bulk = suggestedBulkWeight;
     }
 
-    const suggesteBulkValueS = i18nFormat("variant-encumbrance-dnd5e.label.bulk.suggestedValue", {
+    const suggestedBulkValueS = i18nFormat("variant-encumbrance-dnd5e.label.bulk.suggestedValue", {
       suggestedBulkWeight: suggestedBulkWeight,
     });
+
+    let bulkLabel = getBulkLabel();
 
     html
       .find(".item-properties") // <div class="item-properties">
@@ -1474,9 +1476,9 @@ const module = {
       .append(
         `
         <div class="form-group">
-          <label>${getBulkLabel()}</label>
-          <input type="text" name="flags.variant-encumbrance-dnd5e.bulk" value="${bulk}" data-dtype="Number"/>
-          <p class="notes">${suggesteBulkValueS}</p>
+          <label>${bulkLabel}</label>
+          <input type="text" name="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}" value="${bulk}" data-dtype="Number"/>
+          <p class="notes">${suggestedBulkValueS}</p>
         </div>
         `
       );

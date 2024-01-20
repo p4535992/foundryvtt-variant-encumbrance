@@ -1,3 +1,5 @@
+import CONSTANTS from "./constants.mjs";
+
 export class VariantEncumbranceItemData {
   _id = "";
   weight = 0;
@@ -44,19 +46,19 @@ export class EncumbranceBulkData extends EncumbranceData {
 export const EncumbranceFlags = {
   // TIER: 'tier',
   // WEIGHT: 'weight',
-  BURROW: "burrow",
-  CLIMB: "climb",
-  FLY: "fly",
-  SWIM: "swim",
-  WALK: "walk",
-  DATA: "data",
-  ENABLED_AE: "enabledae",
-  ENABLED_WE: "enabledwe",
+  BURROW: CONSTANTS.FLAGS.ACTOR.burrow,
+  CLIMB: CONSTANTS.FLAGS.ACTOR.climb,
+  FLY: CONSTANTS.FLAGS.ACTOR.fly,
+  SWIM: CONSTANTS.FLAGS.ACTOR.swim,
+  WALK: CONSTANTS.FLAGS.ACTOR.walk,
+  DATA: CONSTANTS.FLAGS.ACTOR.data_base,
+  ENABLED_AE: CONSTANTS.FLAGS.ACTOR.enabledae,
+  ENABLED_WE: CONSTANTS.FLAGS.ACTOR.enabledwe,
   // UNIT: 'unit',
   // System bulk
-  DATA_BULK: "bulk",
-  ENABLED_AE_BULK: "enabledaebulk",
-  ENABLED_WE_BULK: "enabledwebulk",
+  DATA_BULK: CONSTANTS.FLAGS.ACTOR.bulk_base,
+  ENABLED_AE_BULK: CONSTANTS.FLAGS.ACTOR.enabledaebulk,
+  ENABLED_WE_BULK: CONSTANTS.FLAGS.ACTOR.enabledwebulk,
 };
 
 // export class EncumbranceFlagData {
