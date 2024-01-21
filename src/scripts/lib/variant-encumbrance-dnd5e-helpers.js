@@ -18,7 +18,13 @@ export class VariantEncumbranceDnd5eHelpers {
   static manageCustomCodeFeature(item, itemWeight, isBulk) {
     const actor = item.parent;
     let options = {};
-    Hooks.call(`${CONSTANTS.MODULE_ID}.customizeItemWeight`, actor, item, itemWeight, options);
+
+    let typeOfWeight = "veweight";
+    if (isBulk) {
+      typeOfWeight = "bulk";
+    }
+
+    Hooks.call(`${CONSTANTS.MODULE_ID}.customizeItemWeight`, actor, item, itemWeight, typeOfWeight, options);
     let customizedItemWeightFromHook = options.veweight;
     let customizedItemBulkFromHook = options.bulk;
     if (isBulk && isRealNumber(customizedItemBulkFromHook)) {

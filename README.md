@@ -104,12 +104,18 @@ I will check on my side these keys on the options object:
 
 **NOTE:** Is not a async function
 
+**NOTE:** `typeOfWeight` indicate the type of weight used for standard weight the value is `veweight` for bulk is `bulk`
+
 ```javascript
-Hooks.on("variant-encumbrance-dnd5e.customizeItemWeight", (actor, item, itemWeight, options) => {
-  let newWeight = // DO SOMETHING
-  let newBulk = // DO SOMETHING
-  setProperty(options, `veweight`, newWeight); // NOTE : 'weight' value must be a number or it will be ignored
-  setProperty(options, `bulk`, newBulk); // NOTE : 'bulk' value must be a number or it will be ignored
+Hooks.on("variant-encumbrance-dnd5e.customizeItemWeight", (actor, item, itemWeight, typeOfWeight, options) => {
+  if(typeOfWeight === "veweight") {
+    let newWeight = // DO SOMETHING
+    setProperty(options, `veweight`, newWeight); // NOTE : 'weight' value must be a number or it will be ignored
+  }
+  if(typeOfWeight === "bulk") {
+    let newBulk = // DO SOMETHING
+    setProperty(options, `bulk`, newBulk); // NOTE : 'bulk' value must be a number or it will be ignored
+  }
 });
 ```
 

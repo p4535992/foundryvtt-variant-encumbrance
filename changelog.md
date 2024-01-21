@@ -1,3 +1,7 @@
+### 0.14.1 
+
+- Add `typeOfWeight` to the hooks parameters
+
 ### 0.14.0 [BREAKING CHANGES]
 
 - Add module setting: applyWeightMultiplierForProficientArmor
