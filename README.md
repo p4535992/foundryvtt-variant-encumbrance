@@ -321,7 +321,8 @@ FLAGS ON ITEM DOCUMENT
 ```javascript
 variant-encumbrance-dnd5e:
 {
-  bulk: 0
+  bulk: 0,
+  veweight: 0
 }
 ```
 
@@ -396,6 +397,7 @@ variant-encumbrance-dnd5e:
 |Remove standard encumbrance bar from the character sheet| If enabled it will hide the standard bar of encumbrance, is useful only for people using the bulk bar and do not want to see two graphic bars|false|
 |Feature: Do Not increase weight by quantity for no ammunition item| This is a homebrew rule, for non-ammunition items don't increase weight by quantity (so 5 potions = 1 item weight for example). ATTENTION: If the module 'Variant Encumbrance' is present and active this feature is disabled by default if the module settings 'Feature: Integration with Variant Encumbrance' is enabled.|false||
 |Feature: Equipped Armor Weight Multiplier|This is a homebrew rule, for equipped Armor types, if the weight is set to -1 is not applied, this will override the setting from _'Equipped Item Weight Multiplier'_. **NOTE:** The specific armor calculation setting _'Feature: Equipped Armor Weight Multiplier for 'XXX Armor'_ will be override this setting ONLY IF THE VALUE IS EQUAL TO 0.|-1||
+| Disable Equipped/Unequipped/Proficient weight management | It only makes sense to enable this setting if you want to disable the equipped/unequiped/proficient based weight management altogether or if you want to use your own code through the hooks provided by this module. | false ||
 |Feature: Equipped Armor Weight Multiplier for 'Clothing Armor'|This is a homebrew rule, and is mostly an upgrade of the existing feature _'Equipped Item Weight Multiplier'_ for equipped armor types **'clothing'**, a specific multiplier is applied to the weight value. **NOTE:** This setting is working only with the feature from _'Feature: Equipped Armor Weight Multiplier'_ IS EQUAL TO 0, the value by default the value is 0.|0||
 |Feature: Equipped Armor Weight Multiplier for 'Light Armor'|This is a homebrew rule, and is mostly an upgrade of the existing feature _'Equipped Item Weight Multiplier'_ for equipped armor types **'light'**, a specific multiplier is applied to the weight value. **NOTE:** This setting is working only with the feature from _'Feature: Equipped Armor Weight Multiplier'_ IS EQUAL TO 0, the value by default the value is 0.|0||
 |Feature: Equipped Armor Weight Multiplier for 'Medium Armor'|This is a homebrew rule, and is mostly an upgrade of the existing feature _'Equipped Item Weight Multiplier'_ for equipped armor types **'medium'**, a specific multiplier is applied to the weight value. **NOTE:** This setting is working only with the feature from _'Feature: Equipped Armor Weight Multiplier'_ IS EQUAL TO 0, the value by default the value is 0.|0||

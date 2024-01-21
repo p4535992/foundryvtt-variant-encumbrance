@@ -10,8 +10,9 @@
 - Add flag veweight for see the updated weight on the item sheet with additionial check
 - Add pre filter on wrapper method updateDocuments
 - Bug fix: https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/24
-- Add module setting:applyWeightMultiplierForEquippedWeapon
-- Add module setting:applyWeightMultiplierForProficientWeapon
+- Add module setting: applyWeightMultiplierForEquippedWeapon
+- Add module setting: applyWeightMultiplierForProficientWeapon
+- Add module setting: disableEquippedUnequippedProficientWeightManagement
 
 ### 0.13.12 
 

@@ -159,6 +159,9 @@
   "variant-encumbrance-dnd5e.setting.vehicleUnit.name": "Enable Unit of weight for Vehicles",
   "variant-encumbrance-dnd5e.setting.vehicleUnit.hint": "Enables ability to change the base unit for weight used by vehicles",
 
+  "variant-encumbrance-dnd5e.setting.disableEquippedUnequippedProficientWeightManagement.name": "Disable Equipped/Unequipped/Proficient weight management",
+  "variant-encumbrance-dnd5e.setting.disableEquippedUnequippedProficientWeightManagement.hint": "It only makes sense to enable this setting if you want to disable the equipped/unequiped/proficient based weight management altogether or if you want to use your own code through the hooks provided by this module.",
+
   "variant-encumbrance-dnd5e.setting.doNotIncreaseWeightByQuantityForNoAmmunition.name": "Feature: Do Not increase weight by quantity for no ammunition item",
   "variant-encumbrance-dnd5e.setting.doNotIncreaseWeightByQuantityForNoAmmunition.hint": "This is a homebrew rule, for non-ammunition items don't increase weight by quantity (so 5 potions = 1 item weight for example)",
 

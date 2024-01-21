@@ -14,7 +14,16 @@ import { getPropertyPatched, hasPropertyPatched } from "./foundryvtt-utils-patch
 import Logger from "./Logger";
 
 export class VariantEncumbranceDnd5eHelpers {
+  static manageCustomCodeFeature(item, itemWeight) {}
   static manageEquippedAndUnEquippedFeature(item, itemWeight) {
+    const disableEquippedUnequippedProficientWeightManagement = game.settings.get(
+      CONSTANTS.MODULE_ID,
+      "disableEquippedUnequippedProficientWeightManagement"
+    );
+    if (disableEquippedUnequippedProficientWeightManagement) {
+      Logger.debug(`manageEquippedAndUnEquippedFeature | DISABLE`);
+      return itemWeight;
+    }
     const itemWeightOri = itemWeight;
     const isEquipped = item.system.equipped ? true : false;
     const isProficient = item.system.proficient === 1 ? true : false;

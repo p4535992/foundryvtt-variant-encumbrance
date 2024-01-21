@@ -426,6 +426,15 @@ export const registerSettings = function () {
     default: false,
   });
 
+  game.settings.register(CONSTANTS.MODULE_ID, "disableEquippedUnequippedProficientWeightManagement", {
+    name: `${CONSTANTS.MODULE_ID}.setting.disableEquippedUnequippedProficientWeightManagement.name`,
+    hint: `${CONSTANTS.MODULE_ID}.setting.disableEquippedUnequippedProficientWeightManagement.hint`,
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: false,
+  });
+
   // ======================================================
   // Homebrew Rule
   // ======================================================
