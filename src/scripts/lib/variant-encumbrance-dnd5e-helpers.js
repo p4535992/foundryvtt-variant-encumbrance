@@ -7,6 +7,7 @@ import {
   getItemBulk,
   getItemQuantity,
   getItemWeight,
+  isRealNumber,
   retrieveBackPackManagerItem,
 } from "./lib.mjs";
 import { invPlusActive } from "../modules.mjs";
@@ -14,7 +15,21 @@ import { getPropertyPatched, hasPropertyPatched } from "./foundryvtt-utils-patch
 import Logger from "./Logger";
 
 export class VariantEncumbranceDnd5eHelpers {
-  static manageCustomCodeFeature(item, itemWeight) {}
+  static manageCustomCodeFeature(item, itemWeight, isBulk) {
+    const actor = item.parent;
+    let options = {};
+    Hooks.call(`${CONSTANTS.MODULE_ID}.customizeItemWeight`, actor, item, itemWeight, options);
+    let customizedItemWeightFromHook = options.veweight;
+    let customizedItemBulkFromHook = options.bulk;
+    if (isBulk && isRealNumber(customizedItemBulkFromHook)) {
+      return customizedItemBulkFromHook;
+    } else if (isRealNumber(customizedItemWeightFromHook)) {
+      return customizedItemWeightFromHook;
+    } else {
+      return itemWeight;
+    }
+  }
+
   static manageEquippedAndUnEquippedFeature(item, itemWeight) {
     const disableEquippedUnequippedProficientWeightManagement = game.settings.get(
       CONSTANTS.MODULE_ID,

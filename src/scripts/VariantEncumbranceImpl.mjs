@@ -440,6 +440,7 @@ export const VariantEncumbranceImpl = {
           const backpackManagerWeight = calculateBackPackManagerWeight(item, backpackManager, ignoreCurrency);
           itemWeight = weightless ? itemWeight : itemWeight + backpackManagerWeight;
 
+          itemWeight = VariantEncumbranceDnd5eHelpers.manageCustomCodeFeature(item, itemWeight, false);
           itemWeight = VariantEncumbranceDnd5eHelpers.manageEquippedAndUnEquippedFeature(item, itemWeight);
 
           debug(
@@ -475,6 +476,7 @@ export const VariantEncumbranceImpl = {
           // TODO  wait for 2.2.0
           const weightless = getProperty(item, "system.capacity.weightless") ?? false;
 
+          itemWeight = VariantEncumbranceDnd5eHelpers.manageCustomCodeFeature(item, itemWeight, false);
           itemWeight = VariantEncumbranceDnd5eHelpers.manageEquippedAndUnEquippedFeature(item, itemWeight);
 
           // Feature: Do Not increase weight by quantity for no ammunition item
@@ -1415,11 +1417,12 @@ export function calcWeightItemCollection(
 
   if (item.type !== "backpack" || !item.flags.itemcollection) {
     debug(`calcWeightItemCollection | Is not a 'backpack' and is not flagged as itemcollection`);
-    let currentItemWeight = calcItemWeight(item, ignoreCurrency, doNotIncreaseWeightByQuantityForNoAmmunition);
+    let itemWeight = calcItemWeight(item, ignoreCurrency, doNotIncreaseWeightByQuantityForNoAmmunition);
 
-    currentItemWeight = VariantEncumbranceDnd5eHelpers.manageEquippedAndUnEquippedFeature(item, currentItemWeight);
+    itemWeight = VariantEncumbranceDnd5eHelpers.manageCustomCodeFeature(item, itemWeight, false);
+    itemWeight = VariantEncumbranceDnd5eHelpers.manageEquippedAndUnEquippedFeature(item, itemWeight);
 
-    return currentItemWeight;
+    return itemWeight;
   }
   // IF IS A BACKPACK
   // MOD 4535992 Removed variant encumbrance take care of this
@@ -1449,6 +1452,7 @@ export function calcWeightItemCollection(
       (getProperty(item, "flags.itemcollection.bagWeight") ?? 0);
   }
 
+  itemWeight = VariantEncumbranceDnd5eHelpers.manageCustomCodeFeature(item, itemWeight, false);
   itemWeight = VariantEncumbranceDnd5eHelpers.manageEquippedAndUnEquippedFeature(item, itemWeight);
 
   return itemWeight;

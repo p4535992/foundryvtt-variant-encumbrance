@@ -92,6 +92,31 @@ This module uses the [midi-qol](https://gitlab.com/tposney/midi-qol/-/tree/maste
 </details>
 -->
 
+## Hooks
+
+From version 0.14.X you can add your own code for customize the item weight.
+
+I will check on my side these keys on the options object:
+
+- `veweight`: The new item weight
+- `bulk`: The new item bulk weight
+- TODO other stuff ???
+
+**NOTE:** Is not a async function
+
+```javascript
+Hooks.on("variant-encumbrance-dnd5e.customizeItemWeight", (actor, item, itemWeight, options) => {
+      actorEntity,
+      item,
+      itemWeight,
+      options
+  let newWeight = // DO SOMETHING
+  let newBulk = // DO SOMETHING
+  setProperty(options, `veweight`, newWeight); // NOTE : 'weight' value must be a number or it will be ignored
+  setProperty(options, `bulk`, newBulk); // NOTE : 'bulk' value must be a number or it will be ignored
+});
+```
+
 ## Features
 
 ### Redesigned weight bar
