@@ -438,7 +438,7 @@ export const registerSettings = function () {
     default: false,
     type: Boolean,
   });
-  // Setting nascosto
+  // Setting nascosto (DEPRECATED)
   game.settings.register(CONSTANTS.MODULE_ID, "doNotApplyWeightForEquippedArmor", {
     name: `${CONSTANTS.MODULE_ID}.setting.doNotApplyWeightForEquippedArmor.name`,
     hint: `${CONSTANTS.MODULE_ID}.setting.doNotApplyWeightForEquippedArmor.hint`,
@@ -553,6 +553,24 @@ export const registerSettings = function () {
     scope: "world",
     config: true,
     default: 0,
+    type: Number,
+  });
+
+  game.settings.register(CONSTANTS.MODULE_ID, "applyWeightMultiplierForEquippedWeapon", {
+    name: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForEquippedWeapon.name`,
+    hint: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForEquippedWeapon.hint`,
+    scope: "world",
+    config: true,
+    default: -1,
+    type: Number,
+  });
+
+  game.settings.register(CONSTANTS.MODULE_ID, "applyWeightMultiplierForProficientWeapon", {
+    name: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForProficientWeapon.name`,
+    hint: `${CONSTANTS.MODULE_ID}.setting.applyWeightMultiplierForProficientWeapon.hint`,
+    scope: "world",
+    config: true,
+    default: -1,
     type: Number,
   });
 

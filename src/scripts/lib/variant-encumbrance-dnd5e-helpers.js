@@ -73,12 +73,22 @@ export class VariantEncumbranceDnd5eHelpers {
       "applyWeightMultiplierForProficientArmorNatural"
     );
 
+    const applyWeightMultiplierForEquippedWeapon = game.settings.get(
+      CONSTANTS.MODULE_ID,
+      "applyWeightMultiplierForEquippedWeapon"
+    );
+
+    const applyWeightMultiplierForProficientWeapon = game.settings.get(
+      CONSTANTS.MODULE_ID,
+      "applyWeightMultiplierForProficientWeapon"
+    );
+
     //const doNotApplyWeightForEquippedArmor = String(applyWeightMultiplierForEquippedArmor) === "0";
     //const doNotApplyWeightForProficientArmor = String(applyWeightMultiplierForProficientArmor) === "0";
 
     const itemArmorTypes = ["clothing", "light", "medium", "heavy", "natural"];
     const isArmor = itemArmorTypes.includes(item.system.armor?.type);
-    const isWeapon = false; // TODO
+    const isWeapon = item.type === "weapon";
 
     // ==============================
     // if is a loot ignore any equipped or unequipped
@@ -90,9 +100,106 @@ export class VariantEncumbranceDnd5eHelpers {
       );
     }
     // ==============================
+    // If is equipped and is a weapon
+    // ==============================
+    else if (isEquipped && isWeapon) {
+      Logger.debug(
+        `manageEquippedAndUnEquippedFeature | 20 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
+      );
+      // If the homebrew feature equipped is enabled
+      if (applyWeightMultiplierForEquippedWeapon > 0) {
+        if (isProficient) {
+          // If the homebrew feature proficient is enabled
+          if (applyWeightMultiplierForProficientWeapon > 0) {
+            Logger.debug(
+              `manageEquippedAndUnEquippedFeature | 21 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Weapon = ${isWeapon}, Weapon = ${isWeapon}`
+            );
+            itemWeight *= applyWeightMultiplierForProficientWeapon;
+          } else if (applyWeightMultiplierForProficientWeapon === 0) {
+            Logger.debug(
+              `manageEquippedAndUnEquippedFeature | 22 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Weapon = ${isWeapon}, Weapon = ${isWeapon}`
+            );
+            itemWeight *= 0;
+          } else {
+            Logger.debug(
+              `manageEquippedAndUnEquippedFeature | 23 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Weapon = ${isWeapon}, Weapon = ${isWeapon}`
+            );
+            itemWeight *= profEquippedMultiplier;
+          }
+        } else {
+          Logger.debug(
+            `manageEquippedAndUnEquippedFeature | 24 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Weapon = ${isWeapon}, Weapon = ${isWeapon}`
+          );
+          itemWeight *= applyWeightMultiplierForEquippedWeapon;
+        }
+      } else if (applyWeightMultiplierForEquippedWeapon === 0) {
+        Logger.debug(
+          `manageEquippedAndUnEquippedFeature | 25 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Weapon = ${isWeapon}, Weapon = ${isWeapon}`
+        );
+        if (isProficient) {
+          Logger.debug(
+            `manageEquippedAndUnEquippedFeature | 26 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Weapon = ${isWeapon}, Weapon = ${isWeapon}`
+          );
+          // If the homebrew feature proficient is enabled
+          if (applyWeightMultiplierForProficientWeapon > 0) {
+            Logger.debug(
+              `manageEquippedAndUnEquippedFeature | 26.1 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Weapon = ${isWeapon}, Weapon = ${isWeapon}`
+            );
+            itemWeight *= applyWeightMultiplierForProficientWeapon;
+          } else if (applyWeightMultiplierForProficientWeapon === 0) {
+            Logger.debug(
+              `manageEquippedAndUnEquippedFeature | 27 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Weapon = ${isWeapon}, Weapon = ${isWeapon}`
+            );
+            itemWeight *= 0;
+          } else {
+            Logger.debug(
+              `manageEquippedAndUnEquippedFeature | 28 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Weapon = ${isWeapon}, Weapon = ${isWeapon}`
+            );
+            itemWeight *= profEquippedMultiplier;
+          }
+        } else {
+          Logger.debug(
+            `manageEquippedAndUnEquippedFeature | 29 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Weapon = ${isWeapon}, Weapon = ${isWeapon}`
+          );
+          itemWeight *= 0;
+        }
+      } else {
+        Logger.debug(
+          `manageEquippedAndUnEquippedFeature | 30 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Weapon = ${isWeapon}, Weapon = ${isWeapon}`
+        );
+        if (isProficient) {
+          Logger.debug(
+            `manageEquippedAndUnEquippedFeature | 31 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Weapon = ${isWeapon}, Weapon = ${isWeapon}`
+          );
+          // If the homebrew feature proficient is enabled
+          if (applyWeightMultiplierForProficientWeapon > 0) {
+            Logger.debug(
+              `manageEquippedAndUnEquippedFeature | 31.1 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Weapon = ${isWeapon}, Weapon = ${isWeapon}`
+            );
+            itemWeight *= applyWeightMultiplierForProficientWeapon;
+          } else if (applyWeightMultiplierForProficientWeapon === 0) {
+            Logger.debug(
+              `manageEquippedAndUnEquippedFeature | 32.6 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Weapon = ${isWeapon}, Weapon = ${isWeapon}`
+            );
+            itemWeight *= 0;
+          } else {
+            Logger.debug(
+              `manageEquippedAndUnEquippedFeature | 33 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Weapon = ${isWeapon}, Weapon = ${isWeapon}`
+            );
+            itemWeight *= profEquippedMultiplier;
+          }
+        } else {
+          Logger.debug(
+            `manageEquippedAndUnEquippedFeature | 34 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Weapon = ${isWeapon}, Weapon = ${isWeapon}`
+          );
+          itemWeight *= equippedMultiplier;
+        }
+      }
+    }
+    // ==============================
     // If is equipped and is a armor
     // ==============================
-    else if (isEquipped && itemArmorTypes.includes(item.system.armor?.type)) {
+    else if (isEquipped && isArmor) {
       Logger.debug(
         `manageEquippedAndUnEquippedFeature | 0 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
       );

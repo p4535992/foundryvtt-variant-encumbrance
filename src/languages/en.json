@@ -204,6 +204,12 @@
   "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForEquippedContainer.name": "Feature: Equipped Container/Backpack Weight Multiplier",
   "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForEquippedContainer.hint": "This is a homebrew rule, for equipped container/backpack types, if the weight is set to -1 is not applied, this will override the setting from 'Equipped Item Weight Multiplier'.",
 
+  "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForEquippedWeapon.name": "Feature: Equipped Weapon Weight Multiplier",
+  "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForEquippedWeapon.hint": "This is a homebrew rule, for equipped Weapon types, if the weight is set to -1 is not applied, this will override the setting from 'Equipped Item Weight Multiplier'.",
+
+  "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForProficientWeapon.name": "Feature: Proficient Weapon Weight Multiplier",
+  "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForProficientWeapon.hint": "This is a homebrew rule, for proficient Weapon types, if the weight is set to -1 is not applied, this will override the setting from 'Proficient Equipped Item Weight Multiplier'. NOTE: The item MUST BE EQUIPPED.",
+
   "variant-encumbrance-dnd5e.setting.useStrValueInsteadStrModOnBulk.name": "Feature: Use STR flat value instead STR MOD on Bulk",
   "variant-encumbrance-dnd5e.setting.useStrValueInsteadStrModOnBulk.hint": "This is a homebrew rule, ONLY FOR BULK calculation. Currently there is no way to adjust the maximum bulk for a creature, which is tied to size and STR MOD, now you can use the flat value of force to handle it.",
 
