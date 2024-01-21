@@ -19,7 +19,6 @@ import {
   getItemQuantity,
   getItemWeight,
   getWeightLabel,
-  hasProperty2,
   i18n,
   i18nFormat,
   isRealNumber,
@@ -837,8 +836,8 @@ export async function updateDocuments(wrapped, updates = [], context = { parent:
   const { doTheUpdate, noActiveEffect } = VariantEncumbranceDnd5eHelpers.isAEncumbranceUpdated(actorEntity, update);
   if (doTheUpdate && actorEntity.sheet?.rendered) {
     // if (
-    //   hasProperty2(update, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}`) ||
-    //   hasProperty2(update, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}`)
+    //   hasPropertyPatched(update, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}`) ||
+    //   hasPropertyPatched(update, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}`)
     // ) {
     //   return wrapped(updates, context);
     // }

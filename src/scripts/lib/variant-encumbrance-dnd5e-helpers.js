@@ -4,14 +4,14 @@ import CONSTANTS from "../constants.mjs";
 import {
   calculateBackPackManagerBulk,
   calculateBackPackManagerWeight,
-  debug,
   getItemBulk,
   getItemQuantity,
   getItemWeight,
-  hasProperty2,
   retrieveBackPackManagerItem,
 } from "./lib.mjs";
 import { invPlusActive } from "../modules.mjs";
+import { getPropertyPatched, hasPropertyPatched } from "./foundryvtt-utils-patched";
+import Logger from "./Logger";
 
 export class VariantEncumbranceDnd5eHelpers {
   static manageEquippedAndUnEquippedFeature(item, itemWeight) {
@@ -85,7 +85,7 @@ export class VariantEncumbranceDnd5eHelpers {
     // ==============================
     if (item.type === "loot") {
       // DO NOTHING
-      debug(
+      Logger.debug(
         `manageEquippedAndUnEquippedFeature | LOOT | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
       );
     }
@@ -93,7 +93,7 @@ export class VariantEncumbranceDnd5eHelpers {
     // If is equipped and is a armor
     // ==============================
     else if (isEquipped && itemArmorTypes.includes(item.system.armor?.type)) {
-      debug(
+      Logger.debug(
         `manageEquippedAndUnEquippedFeature | 0 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
       );
       // If the homebrew feature equipped is enabled
@@ -101,205 +101,205 @@ export class VariantEncumbranceDnd5eHelpers {
         if (isProficient) {
           // If the homebrew feature proficient is enabled
           if (applyWeightMultiplierForProficientArmor > 0) {
-            debug(
+            Logger.debug(
               `manageEquippedAndUnEquippedFeature | 1 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
             );
             itemWeight *= applyWeightMultiplierForProficientArmor;
           } else if (applyWeightMultiplierForProficientArmor === 0) {
-            debug(
+            Logger.debug(
               `manageEquippedAndUnEquippedFeature | 2 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
             );
             if (item.system.armor?.type === "clothing") {
-              debug(
+              Logger.debug(
                 `manageEquippedAndUnEquippedFeature | 2.1 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
               );
               itemWeight *= applyWeightMultiplierForProficientArmorClothing;
             } else if (item.system.armor?.type === "light") {
-              debug(
+              Logger.debug(
                 `manageEquippedAndUnEquippedFeature | 2.2 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
               );
               itemWeight *= applyWeightMultiplierForProficientArmorLight;
             } else if (item.system.armor?.type === "medium") {
-              debug(
+              Logger.debug(
                 `manageEquippedAndUnEquippedFeature | 2.3 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
               );
               itemWeight *= applyWeightMultiplierForProficientArmorMedium;
             } else if (item.system.armor?.type === "heavy") {
-              debug(
+              Logger.debug(
                 `manageEquippedAndUnEquippedFeature | 2.4 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
               );
               itemWeight *= applyWeightMultiplierForProficientArmorHeavy;
             } else if (item.system.armor?.type === "natural") {
-              debug(
+              Logger.debug(
                 `manageEquippedAndUnEquippedFeature | 2.5 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
               );
               itemWeight *= applyWeightMultiplierForProficientArmorNatural;
             } else {
-              debug(
+              Logger.debug(
                 `manageEquippedAndUnEquippedFeature | 2.6 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
               );
               itemWeight *= 0;
             }
           } else {
-            debug(
+            Logger.debug(
               `manageEquippedAndUnEquippedFeature | 3 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
             );
             itemWeight *= profEquippedMultiplier;
           }
         } else {
-          debug(
+          Logger.debug(
             `manageEquippedAndUnEquippedFeature | 4 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
           );
           itemWeight *= applyWeightMultiplierForEquippedArmor;
         }
       } else if (applyWeightMultiplierForEquippedArmor === 0) {
-        debug(
+        Logger.debug(
           `manageEquippedAndUnEquippedFeature | 5 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
         );
         if (isProficient) {
-          debug(
+          Logger.debug(
             `manageEquippedAndUnEquippedFeature | 6 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
           );
           // If the homebrew feature proficient is enabled
           if (applyWeightMultiplierForProficientArmor > 0) {
-            debug(
+            Logger.debug(
               `manageEquippedAndUnEquippedFeature | 6.1 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
             );
             itemWeight *= applyWeightMultiplierForProficientArmor;
           } else if (applyWeightMultiplierForProficientArmor === 0) {
-            debug(
+            Logger.debug(
               `manageEquippedAndUnEquippedFeature | 7 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
             );
             if (item.system.armor?.type === "clothing") {
-              debug(
+              Logger.debug(
                 `manageEquippedAndUnEquippedFeature | 7.1 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
               );
               itemWeight *= applyWeightMultiplierForProficientArmorClothing;
             } else if (item.system.armor?.type === "light") {
-              debug(
+              Logger.debug(
                 `manageEquippedAndUnEquippedFeature | 7.2 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
               );
               itemWeight *= applyWeightMultiplierForProficientArmorLight;
             } else if (item.system.armor?.type === "medium") {
-              debug(
+              Logger.debug(
                 `manageEquippedAndUnEquippedFeature | 7.3 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
               );
               itemWeight *= applyWeightMultiplierForProficientArmorMedium;
             } else if (item.system.armor?.type === "heavy") {
-              debug(
+              Logger.debug(
                 `manageEquippedAndUnEquippedFeature | 7.4 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
               );
               itemWeight *= applyWeightMultiplierForProficientArmorHeavy;
             } else if (item.system.armor?.type === "natural") {
-              debug(
+              Logger.debug(
                 `manageEquippedAndUnEquippedFeature | 7.5 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
               );
               itemWeight *= applyWeightMultiplierForProficientArmorNatural;
             } else {
-              debug(
+              Logger.debug(
                 `manageEquippedAndUnEquippedFeature | 7.6 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
               );
               itemWeight *= 0;
             }
           } else {
-            debug(
+            Logger.debug(
               `manageEquippedAndUnEquippedFeature | 8 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
             );
             itemWeight *= profEquippedMultiplier;
           }
         } else {
-          debug(
+          Logger.debug(
             `manageEquippedAndUnEquippedFeature | 9 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
           );
           if (item.system.armor?.type === "clothing") {
-            debug(
+            Logger.debug(
               `manageEquippedAndUnEquippedFeature | 9.1 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
             );
             itemWeight *= applyWeightMultiplierForEquippedArmorClothing;
           } else if (item.system.armor?.type === "light") {
-            debug(
+            Logger.debug(
               `manageEquippedAndUnEquippedFeature | 9.2 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
             );
             itemWeight *= applyWeightMultiplierForEquippedArmorLight;
           } else if (item.system.armor?.type === "medium") {
-            debug(
+            Logger.debug(
               `manageEquippedAndUnEquippedFeature | 9.3 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
             );
             itemWeight *= applyWeightMultiplierForEquippedArmorMedium;
           } else if (item.system.armor?.type === "heavy") {
-            debug(
+            Logger.debug(
               `manageEquippedAndUnEquippedFeature | 9.4 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
             );
             itemWeight *= applyWeightMultiplierForEquippedArmorHeavy;
           } else if (item.system.armor?.type === "natural") {
-            debug(
+            Logger.debug(
               `manageEquippedAndUnEquippedFeature | 9.5 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
             );
             itemWeight *= applyWeightMultiplierForEquippedArmorNatural;
           } else {
-            debug(
+            Logger.debug(
               `manageEquippedAndUnEquippedFeature | 9.6 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
             );
             itemWeight *= 0;
           }
         }
       } else {
-        debug(
+        Logger.debug(
           `manageEquippedAndUnEquippedFeature | 10 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
         );
         if (isProficient) {
-          debug(
+          Logger.debug(
             `manageEquippedAndUnEquippedFeature | 11 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
           );
           // If the homebrew feature proficient is enabled
           if (applyWeightMultiplierForProficientArmor > 0) {
-            debug(
+            Logger.debug(
               `manageEquippedAndUnEquippedFeature | 11.1 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
             );
             itemWeight *= applyWeightMultiplierForProficientArmor;
           } else if (applyWeightMultiplierForProficientArmor === 0) {
-            debug(
+            Logger.debug(
               `manageEquippedAndUnEquippedFeature | 12 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
             );
             if (item.system.armor?.type === "clothing") {
-              debug(
+              Logger.debug(
                 `manageEquippedAndUnEquippedFeature | 12.1 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
               );
               itemWeight *= applyWeightMultiplierForProficientArmorClothing;
             } else if (item.system.armor?.type === "light") {
-              debug(
+              Logger.debug(
                 `manageEquippedAndUnEquippedFeature | 12.2 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
               );
               itemWeight *= applyWeightMultiplierForProficientArmorLight;
             } else if (item.system.armor?.type === "medium") {
-              debug(
+              Logger.debug(
                 `manageEquippedAndUnEquippedFeature | 12.3 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
               );
               itemWeight *= applyWeightMultiplierForProficientArmorMedium;
             } else if (item.system.armor?.type === "heavy") {
-              debug(
+              Logger.debug(
                 `manageEquippedAndUnEquippedFeature | 12.4 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
               );
               itemWeight *= applyWeightMultiplierForProficientArmorHeavy;
             } else if (item.system.armor?.type === "natural") {
-              debug(
+              Logger.debug(
                 `manageEquippedAndUnEquippedFeature | 12.5 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
               );
               itemWeight *= applyWeightMultiplierForProficientArmorNatural;
             } else {
-              debug(
+              Logger.debug(
                 `manageEquippedAndUnEquippedFeature | 12.6 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
               );
               itemWeight *= 0;
             }
           } else {
-            debug(
+            Logger.debug(
               `manageEquippedAndUnEquippedFeature | 13 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
             );
             itemWeight *= profEquippedMultiplier;
           }
         } else {
-          debug(
+          Logger.debug(
             `manageEquippedAndUnEquippedFeature | 14 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
           );
           itemWeight *= equippedMultiplier;
@@ -311,12 +311,12 @@ export class VariantEncumbranceDnd5eHelpers {
     // ==============================
     else if (isEquipped) {
       if (isProficient) {
-        debug(
+        Logger.debug(
           `manageEquippedAndUnEquippedFeature | 13 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
         );
         itemWeight *= profEquippedMultiplier;
       } else {
-        debug(
+        Logger.debug(
           `manageEquippedAndUnEquippedFeature | 14 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
         );
         itemWeight *= equippedMultiplier;
@@ -326,12 +326,12 @@ export class VariantEncumbranceDnd5eHelpers {
     // If is unequipped
     // ==============================
     else {
-      debug(
+      Logger.debug(
         `manageEquippedAndUnEquippedFeature | 19 | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon}`
       );
       itemWeight *= unequippedMultiplier;
     }
-    debug(
+    Logger.debug(
       `manageEquippedAndUnEquippedFeature | FINAL | Equipped = ${isEquipped}, Proficient = ${isProficient}, Armor = ${isArmor}, Weapon = ${isWeapon} : ${itemWeightOri} => ${itemWeight}`
     );
     return itemWeight;
@@ -355,13 +355,13 @@ export class VariantEncumbranceDnd5eHelpers {
 
       itemWeight = VariantEncumbranceDnd5eHelpers.manageEquippedAndUnEquippedFeature(item, itemWeight);
 
-      debug(`Is BackpackManager! Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`);
+      Logger.debug(`Is BackpackManager! Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`);
       // mapItemEncumbrance[item.id] = itemQuantity * itemWeight;
       // return itemQuantity * itemWeight;
       return itemWeight;
     }
 
-    debug(`Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`);
+    Logger.debug(`Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`);
 
     // let ignoreEquipmentCheck = false;
 
@@ -455,13 +455,13 @@ export class VariantEncumbranceDnd5eHelpers {
     let appliedWeight = 0;
     if (ignoreQuantityCheckForItemCollection) {
       appliedWeight = itemWeight;
-      debug(
+      Logger.debug(
         `Item '${item.name}', Equipped '${isEquipped}', Proficient ${isProficient} :
            1 * ${itemWeight} = ${appliedWeight}`
       );
     } else {
       appliedWeight = itemQuantity * itemWeight;
-      debug(
+      Logger.debug(
         `Item '${item.name}', Equipped '${isEquipped}', Proficient ${isProficient} :
            ${itemQuantity} * ${itemWeight} = ${appliedWeight}`
       );
@@ -489,13 +489,13 @@ export class VariantEncumbranceDnd5eHelpers {
 
       itemWeight = VariantEncumbranceDnd5eHelpers.manageEquippedAndUnEquippedFeature(item, itemWeight);
 
-      debug(`Is BackpackManager! Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`);
+      Logger.debug(`Is BackpackManager! Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`);
       // mapItemEncumbrance[item.id] = itemQuantity * itemWeight;
       // return itemQuantity * itemWeight;
       return itemWeight;
     }
 
-    debug(`Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`);
+    Logger.debug(`Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`);
 
     // let ignoreEquipmentCheck = false;
 
@@ -589,13 +589,13 @@ export class VariantEncumbranceDnd5eHelpers {
     let appliedWeight = 0;
     if (ignoreQuantityCheckForItemCollection) {
       appliedWeight = itemWeight;
-      debug(
+      Logger.debug(
         `Item '${item.name}', Equipped '${isEquipped}', Proficient ${isProficient} :
            1 * ${itemWeight} = ${appliedWeight}`
       );
     } else {
       appliedWeight = itemQuantity * itemWeight;
-      debug(
+      Logger.debug(
         `Item '${item.name}', Equipped '${isEquipped}', Proficient ${isProficient} :
            ${itemQuantity} * ${itemWeight} = ${appliedWeight}`
       );
@@ -630,55 +630,114 @@ export class VariantEncumbranceDnd5eHelpers {
 
       // mergeObject(itemCurrent.system, updatedItem);
       // For our purpose we filter only the equipped action
-      if (hasProperty2(update, `system.quantity`)) {
+      if (hasPropertyPatched(update, `system.quantity`)) {
         doTheUpdate = true;
         noActiveEffect = false;
+        Logger.debug(
+          `isAEncumbranceUpdated | The update contains key 'system.quantity' => ${getPropertyPatched(
+            update,
+            `system.quantity`
+          )}`
+        );
       }
       // For our purpose we filter only the equipped action
-      if (hasProperty2(update, `system.weight`)) {
+      if (hasPropertyPatched(update, `system.weight`)) {
         doTheUpdate = true;
         noActiveEffect = false;
+        Logger.debug(
+          `isAEncumbranceUpdated | The update contains key 'system.weight' => ${getPropertyPatched(
+            update,
+            `system.weight`
+          )}`
+        );
       }
       // For our purpose we filter only the equipped action
-      if (hasProperty2(update, `system.equipped`)) {
+      if (hasPropertyPatched(update, `system.equipped`)) {
         doTheUpdate = true;
         noActiveEffect = false;
+        Logger.debug(
+          `isAEncumbranceUpdated | The update contains key 'system.equipped' => ${getPropertyPatched(
+            update,
+            `system.equipped`
+          )}`
+        );
       }
       // For our purpose we filter only the proficient action
-      if (hasProperty2(update, `system.proficient`)) {
+      if (hasPropertyPatched(update, `system.proficient`)) {
         doTheUpdate = true;
         noActiveEffect = false;
+        Logger.debug(
+          `isAEncumbranceUpdated | The update contains key 'system.proficient' => ${getPropertyPatched(
+            update,
+            `system.proficient`
+          )}`
+        );
       }
       // For our purpose we filter only the STR modifier action
-      if (update?.system?.abilities?.str) {
-        if (actorEntity.system.abilities.str.value !== update?.system.abilities?.str.value) {
-          actorEntity.system.abilities.str.value = update?.system.abilities?.str.value;
+      //if (update?.system?.abilities?.str) {
+      if (hasPropertyPatched(update, `system.abilities.str`)) {
+        if (actorEntity.system.abilities.str.value !== getPropertyPatched(update, `system.abilities.str.value`)) {
+          actorEntity.system.abilities.str.value = getPropertyPatched(update, `system.abilities.str.value`);
         }
         doTheUpdate = true;
         noActiveEffect = false;
+        Logger.debug(
+          `isAEncumbranceUpdated | The update contains key 'system.abilities.str' => ${getPropertyPatched(
+            update,
+            `system.abilities.str`
+          )}`
+        );
       }
       // For our purpose we filter only the CURRENCY modifier action
-      if (update?.system?.currency) {
+      if (hasPropertyPatched(update, `system.currency`)) {
         doTheUpdate = true;
         noActiveEffect = false;
+        Logger.debug(
+          `isAEncumbranceUpdated | The update contains key 'system.currency' => ${getPropertyPatched(
+            update,
+            `system.currency`
+          )}`
+        );
       }
       // For our purpose we filter only the inventory-plus modifier action
-      if (invPlusActive && update?.flags && hasProperty(update, `flags.${CONSTANTS.INVENTORY_PLUS_MODULE_ID}`)) {
+      if (invPlusActive && hasPropertyPatched(update, `flags.${CONSTANTS.INVENTORY_PLUS_MODULE_ID}`)) {
         doTheUpdate = true;
         noActiveEffect = false;
+        Logger.debug(
+          `isAEncumbranceUpdated | The update contains key 'flags.${
+            CONSTANTS.INVENTORY_PLUS_MODULE_ID
+          }' => ${getPropertyPatched(update, `flags.${CONSTANTS.INVENTORY_PLUS_MODULE_ID}`)}`
+        );
       }
       // Check change on the cargo property of vehicle
-      if (update?.system?.attributes?.capacity?.cargo) {
+      if (hasPropertyPatched(update, `system.attributes.capacity.cargo`)) {
         doTheUpdate = true;
         noActiveEffect = true;
+        Logger.debug(
+          `isAEncumbranceUpdated | The update contains key 'system.attributes.capacity.cargo' => ${getPropertyPatched(
+            update,
+            `system.attributes.capacity.cargo`
+          )}`
+        );
       }
       // Check if the update is about some item flag
-      if (
-        hasProperty2(update, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}`) ||
-        hasProperty2(update, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}`)
-      ) {
+      if (hasPropertyPatched(update, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}`)) {
         doTheUpdate = false;
         noActiveEffect = true;
+        Logger.debug(
+          `isAEncumbranceUpdated | The update contains key 'flags.${CONSTANTS.MODULE_ID}.${
+            CONSTANTS.FLAGS.ITEM.veweight
+          }' => ${getPropertyPatched(update, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}`)}`
+        );
+      }
+      if (hasPropertyPatched(update, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}`)) {
+        doTheUpdate = false;
+        noActiveEffect = true;
+        Logger.debug(
+          `isAEncumbranceUpdated | The update contains key 'flags.${CONSTANTS.MODULE_ID}.${
+            CONSTANTS.FLAGS.ITEM.bulk
+          }' => ${getPropertyPatched(update, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}`)}`
+        );
       }
     } else {
       doTheUpdate = false;
