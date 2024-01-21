@@ -106,10 +106,6 @@ I will check on my side these keys on the options object:
 
 ```javascript
 Hooks.on("variant-encumbrance-dnd5e.customizeItemWeight", (actor, item, itemWeight, options) => {
-      actorEntity,
-      item,
-      itemWeight,
-      options
   let newWeight = // DO SOMETHING
   let newBulk = // DO SOMETHING
   setProperty(options, `veweight`, newWeight); // NOTE : 'weight' value must be a number or it will be ignored
