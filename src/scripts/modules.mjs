@@ -279,7 +279,7 @@ export const readyHooks = async () => {
           switch (sheetClass) {
             case "dnd5e.Tidy5eSheet": {
               if (replaceStandardWeightValue) {
-                if (currentTextB) {
+                if (currentTextB && encumbranceData.mapItemEncumbrance) {
                   const weight =
                     encumbranceData.mapItemEncumbrance[item.id]?.toNearest(0.1) ??
                     (quantity * getItemWeight(item)).toNearest(0.1) ??
@@ -288,7 +288,7 @@ export const readyHooks = async () => {
                   liItem.parent().find(".item-detail.item-weight").text(totalWeightS);
                 }
               }
-              if (isBulkEnable) {
+              if (isBulkEnable && encumbranceDataBulk.mapItemEncumbrance) {
                 const bulk =
                   encumbranceDataBulk.mapItemEncumbrance[item.id]?.toNearest(0.1) ??
                   (quantity * getItemBulk(item)).toNearest(0.1) ??
@@ -307,7 +307,7 @@ export const readyHooks = async () => {
               break;
             }
             default: {
-              if (replaceStandardWeightValue) {
+              if (replaceStandardWeightValue && encumbranceData.mapItemEncumbrance) {
                 if (currentTextB) {
                   const weight =
                     encumbranceData.mapItemEncumbrance[item.id]?.toNearest(0.1) ??
@@ -317,7 +317,7 @@ export const readyHooks = async () => {
                   liItem.parent().find(".item-detail.item-weight div").text(totalWeightS);
                 }
               }
-              if (isBulkEnable) {
+              if (isBulkEnable && encumbranceDataBulk.mapItemEncumbrance) {
                 const bulk =
                   encumbranceDataBulk.mapItemEncumbrance[item.id]?.toNearest(0.1) ??
                   (quantity * getItemBulk(item)).toNearest(0.1) ??
@@ -1125,10 +1125,10 @@ const module = {
       const htmlElementEncumbranceBulk = htmlElement.find(".encumbrance-bulk");
 
       htmlElementEncumbranceBulk.find(".encumbrance-breakpoint").each(function (el) {
-        $(el).addClass("encumbrance-breakpoint-bulk").removeClass("encumbrance-breakpoint-variant");
+        $(this).addClass("encumbrance-breakpoint-bulk").removeClass("encumbrance-breakpoint-variant");
       });
       htmlElementEncumbranceBulk.find(".encumbrance-breakpoint-label").each(function (el) {
-        $(el).addClass("encumbrance-breakpoint-label-bulk").removeClass("encumbrance-breakpoint-label-variant");
+        $(this).addClass("encumbrance-breakpoint-label-bulk").removeClass("encumbrance-breakpoint-label-variant");
       });
 
       let encumbranceElementsBulk;
@@ -1294,16 +1294,17 @@ const module = {
     });
 
     let bulkLabel = i18n("variant-encumbrance-dnd5e.label.bulk.VEBulk");
-
+    // <p class="notes">${suggestedBulkValueS}</p>
     html
       .find(".item-properties") // <div class="item-properties">
       // .closest('item-weight').after(
       .append(
         `
-        <div class="form-group" style="color:red">
+        <div class="form-group" style="color:red" data-tooltip="${suggestedBulkValueS}" data-tooltip-direction="UP">
           <label style="color:red">${bulkLabel}</label>
-          <input style="color:red" type="text" name="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}" value="${bulk}" data-dtype="Number"/>
-          <p class="notes">${suggestedBulkValueS}</p>
+          <input 
+          style="color:red" 
+          type="text" name="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}" value="${bulk}" data-dtype="Number"/>
         </div>
         `
       );
@@ -1318,17 +1319,22 @@ const module = {
     const veweight =
       getProperty(item, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}`) ?? data.weight ?? 0;
 
-    let veweightLabel = i18n("variant-encumbrance-dnd5e.label.veweight.VEWeight");
+    const suggestedVEWeightValueS = i18n("variant-encumbrance-dnd5e.label.veweight.VEWeightSuggestion");
 
+    let veweightLabel = i18n("variant-encumbrance-dnd5e.label.veweight.VEWeight");
+    // <p class="notes"></p>
     html
       .find(".item-properties") // <div class="item-properties">
       // .closest('item-weight').after(
       .append(
         `
-        <div class="form-group" style="color:red">
+        <div class="form-group" style="color:red" data-tooltip="${suggestedVEWeightValueS}" data-tooltip-direction="UP">
           <label style="color:red">${veweightLabel}</label>
-          <input style="color:red" type="text" readonly name="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}" value="${veweight}" data-dtype="Number"/>
-          <p class="notes"></p>
+          <input 
+          style="color:red" 
+          readonly
+          type="text" 
+          name="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}" value="${veweight}" data-dtype="Number"/>
         </div>
         `
       );
