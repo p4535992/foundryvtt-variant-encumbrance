@@ -1,3 +1,8 @@
+### 0.14.2
+
+- Add module setting "doNotShowCustomizedWeightOnItemSheet" 
+- Add some better behavior on the customized label weight on the item sheet
+
 ### 0.14.1 
 
 - Add `typeOfWeight` to the hooks parameters

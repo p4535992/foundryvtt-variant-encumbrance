@@ -29,6 +29,7 @@ import { registerSocket } from "./socket.mjs";
 import API from "./api.mjs";
 import { calcBulkItemCollection, VariantEncumbranceBulkImpl } from "./VariantEncumbranceBulkImpl.mjs";
 import { VariantEncumbranceDnd5eHelpers } from "./lib/variant-encumbrance-dnd5e-helpers";
+import Logger from "./lib/Logger";
 
 export let ENCUMBRANCE_STATE = {
   UNENCUMBERED: "", // "Unencumbered",
@@ -1271,6 +1272,11 @@ const module = {
     }
   },
   renderItemSheetBulkSystem(app, html, data, itemTmp) {
+    const doNotShowCustomizedWeightOnItemSheet = game.settings.get(CONSTANTS.MODULE_ID, "doNotShowCustomizedWeightOnItemSheet");
+    if(!game.user.isGM && doNotShowCustomizedWeightOnItemSheet) {
+      Logger.debug(`renderItemSheetBulkSystem | OFF`);
+      return;
+    }
     // Size
     const item = app.object;
     const options = [];
@@ -1303,13 +1309,20 @@ const module = {
         <div class="form-group" style="color:red" data-tooltip="${suggestedBulkValueS}" data-tooltip-direction="UP">
           <label style="color:red">${bulkLabel}</label>
           <input 
-          style="color:red" 
-          type="text" name="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}" value="${bulk}" data-dtype="Number"/>
+          style="color:red"
+          ${game.user.isGM ? "" : "readonly"}
+          type="text" 
+          name="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}" value="${bulk}" data-dtype="Number"/>
         </div>
         `
       );
   },
   renderItemSheetVEWeightSystem(app, html, data, itemTmp) {
+    const doNotShowCustomizedWeightOnItemSheet = game.settings.get(CONSTANTS.MODULE_ID, "doNotShowCustomizedWeightOnItemSheet");
+    if(!game.user.isGM && doNotShowCustomizedWeightOnItemSheet) {
+      Logger.debug(`renderItemSheetVEWeightSystem | OFF`);
+      return;
+    }
     // Size
     const item = app.object;
     const options = [];
@@ -1332,7 +1345,7 @@ const module = {
           <label style="color:red">${veweightLabel}</label>
           <input 
           style="color:red" 
-          readonly
+          ${game.user.isGM ? "" : "readonly"}
           type="text" 
           name="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}" value="${veweight}" data-dtype="Number"/>
         </div>

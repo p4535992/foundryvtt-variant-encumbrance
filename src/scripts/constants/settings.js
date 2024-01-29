@@ -103,6 +103,7 @@ const SETTINGS = {
   USE_STANDARD_WEIGHT_CALCULATION: "useStandardWeightCalculation",
   USE_EQUIPPED_UNEQUIPPED_ITEM_COLLECTION_FEATURE: "useEquippedUnequippedItemCollectionFeature",
   ENABLE_DAE_INTEGRATION: "enableDAEIntegration",
+  DO_NOT_SHOW_CUSTOMIZED_WEIGHT_ON_ITEM_SHEET: "doNotShowCustomizedWeightOnItemSheet",
   REPLACE_STANDARD_WEIGHT_VALUE: "replaceStandardWeightValue",
 
   // ======================================================

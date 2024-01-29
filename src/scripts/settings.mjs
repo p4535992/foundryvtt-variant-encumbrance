@@ -350,6 +350,15 @@ export const registerSettings = function () {
     default: true,
   });
 
+  game.settings.register(CONSTANTS.MODULE_ID, "doNotShowCustomizedWeightOnItemSheet", {
+    name: i18n(CONSTANTS.MODULE_ID + ".setting.doNotShowCustomizedWeightOnItemSheet.name"),
+    hint: i18n(CONSTANTS.MODULE_ID + ".setting.doNotShowCustomizedWeightOnItemSheet.hint"),
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true,
+  });
+
   game.settings.register(CONSTANTS.MODULE_ID, "replaceStandardWeightValue", {
     name: i18n(CONSTANTS.MODULE_ID + ".setting.replaceStandardWeightValue.name"),
     hint: i18n(CONSTANTS.MODULE_ID + ".setting.replaceStandardWeightValue.hint"),
