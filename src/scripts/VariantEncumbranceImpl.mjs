@@ -50,79 +50,14 @@ export const VariantEncumbranceImpl = {
   },
 
   _updateEncumbranceInternal: async function (actorEntity, updatedItem, updatedEffect = undefined, mode = undefined) {
-    if (
-      hasProperty(updatedItem || {}, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}`) ||
-      hasProperty(updatedItem || {}, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}`)
-    ) {
+    const inventoryItems = VariantEncumbranceDnd5eHelpers.prepareInventoryItemsFromUpdate(
+      actorEntity,
+      updatedItem,
+      updatedEffect,
+      mode
+    );
+    if (!inventoryItems || inventoryItems.length <= 0) {
       return;
-    }
-
-    if (updatedItem) {
-      let itemID;
-      if (typeof updatedItem === "string" || updatedItem instanceof String) {
-        itemID = updatedItem;
-      } else {
-        itemID = updatedItem?.id ? updatedItem?.id : updatedItem._id;
-      }
-      let itemCurrent = itemID ? actorEntity.items.get(itemID) : undefined;
-      if (!itemCurrent && (updatedItem.id || updatedItem._id)) {
-        itemCurrent = updatedItem;
-      }
-      if (itemCurrent?.type === "feat" || itemCurrent?.type === "spell") {
-        return;
-      }
-
-      if (itemCurrent) {
-        if (typeof updatedItem === "string" || updatedItem instanceof String) {
-          // Do nothing
-        } else {
-          // On update operations, the actorEntity's items have not been updated.
-          // Override the entry for this item using the updatedItem data
-          try {
-            const updatedItem2 = {};
-            for (const [key, value] of Object.entries(updatedItem)) {
-              if (key.startsWith("system.")) {
-                const key2 = key.replace("system.", "");
-                updatedItem2[key2] = value;
-              } else {
-                updatedItem2[key] = value;
-              }
-            }
-            updatedItem = updatedItem2;
-
-            mergeObject(itemCurrent.system, updatedItem);
-          } catch (e) {
-            error(e?.message);
-          }
-        }
-        updatedItem = itemCurrent;
-      }
-    }
-
-    const currentItemId = updatedItem?.id ? updatedItem?.id : updatedItem?._id;
-    const inventoryItems = [];
-    const isAlreadyInActor = actorEntity.items?.find((itemTmp) => itemTmp.id === currentItemId);
-    const physicalItems = ["weapon", "equipment", "consumable", "tool", "backpack", "loot"];
-    actorEntity.items.contents.forEach((im) => {
-      if (im && physicalItems.includes(im.type)) {
-        if (im.id === currentItemId) {
-          if (mode === EncumbranceMode.DELETE) {
-          } else {
-            inventoryItems.push(im);
-          }
-        } else {
-          inventoryItems.push(im);
-        }
-      }
-    });
-    if (!isAlreadyInActor) {
-      const im = game.items?.find((itemTmp) => itemTmp.id === currentItemId);
-      if (im && physicalItems.includes(im.type)) {
-        if (mode === EncumbranceMode.DELETE) {
-        } else {
-          inventoryItems.push(im);
-        }
-      }
     }
     if (updatedEffect) {
       await VariantEncumbranceImpl.calculateEncumbranceWithEffect(actorEntity, inventoryItems, false, invPlusActive);
@@ -237,11 +172,11 @@ export const VariantEncumbranceImpl = {
     for (const effectEntity of actorEntity.effects) {
       const effectNameToSet = effectEntity.label;
 
-      //const effectIsApplied = await VariantEncumbranceImpl.hasEffectAppliedFromId(effectEntity, actorEntity);
+      //const effectIsApplied = await VariantEncumbranceDnd5eHelpers.hasEffectAppliedFromId(effectEntity, actorEntity);
 
       // Remove AE with empty a label but with flag of variant encumbrance ???
       if (!effectNameToSet && hasProperty(effectEntity, `flags.${CONSTANTS.MODULE_ID}`)) {
-        await VariantEncumbranceImpl.removeEffectFromId(effectEntity, actorEntity);
+        await VariantEncumbranceDnd5eHelpers.removeEffectFromId(effectEntity, actorEntity);
         continue;
       }
 
@@ -260,14 +195,14 @@ export const VariantEncumbranceImpl = {
         effectNameToSet !== ENCUMBRANCE_STATE.HEAVILY_ENCUMBERED &&
         effectNameToSet !== ENCUMBRANCE_STATE.OVERBURDENED
       ) {
-        await VariantEncumbranceImpl.removeEffectFromId(effectEntity, actorEntity);
+        await VariantEncumbranceDnd5eHelpers.removeEffectFromId(effectEntity, actorEntity);
         continue;
       }
 
       // Remove Old settings
 
       if (effectEntity.flags && hasProperty(effectEntity, `flags.VariantEncumbrance`)) {
-        await VariantEncumbranceImpl.removeEffectFromId(effectEntity, actorEntity);
+        await VariantEncumbranceDnd5eHelpers.removeEffectFromId(effectEntity, actorEntity);
         continue;
       }
 
@@ -290,7 +225,7 @@ export const VariantEncumbranceImpl = {
           effectNameToSet === ENCUMBRANCE_STATE.HEAVILY_ENCUMBERED ||
           effectNameToSet === ENCUMBRANCE_STATE.OVERBURDENED)
       ) {
-        await VariantEncumbranceImpl.removeEffectFromId(effectEntity, actorEntity);
+        await VariantEncumbranceDnd5eHelpers.removeEffectFromId(effectEntity, actorEntity);
         continue;
       }
 
@@ -304,7 +239,7 @@ export const VariantEncumbranceImpl = {
         if (!effectEntityPresent) {
           effectEntityPresent = effectEntity;
         } else {
-          await VariantEncumbranceImpl.removeEffectFromId(effectEntityPresent, actorEntity);
+          await VariantEncumbranceDnd5eHelpers.removeEffectFromId(effectEntityPresent, actorEntity);
           effectEntityPresent = effectEntity;
         }
       }
@@ -338,25 +273,25 @@ export const VariantEncumbranceImpl = {
       } else {
         if (effectName === ENCUMBRANCE_STATE.UNENCUMBERED) {
           if (effectEntityPresent?.id) {
-            const effectIsApplied1 = await VariantEncumbranceImpl.hasEffectAppliedFromId(
+            const effectIsApplied1 = await VariantEncumbranceDnd5eHelpers.hasEffectAppliedFromId(
               effectEntityPresent,
               actorEntity
             );
             if (effectIsApplied1) {
-              await VariantEncumbranceImpl.removeEffectFromId(effectEntityPresent, actorEntity);
+              await VariantEncumbranceDnd5eHelpers.removeEffectFromId(effectEntityPresent, actorEntity);
             }
           }
         } else {
           if (effectEntityPresent?.id) {
-            const effectIsApplied2 = await VariantEncumbranceImpl.hasEffectAppliedFromId(
+            const effectIsApplied2 = await VariantEncumbranceDnd5eHelpers.hasEffectAppliedFromId(
               effectEntityPresent,
               actorEntity
             );
             if (effectIsApplied2) {
-              await VariantEncumbranceImpl.removeEffectFromId(effectEntityPresent, actorEntity);
+              await VariantEncumbranceDnd5eHelpers.removeEffectFromId(effectEntityPresent, actorEntity);
             }
           }
-          const effectIsApplied3 = await VariantEncumbranceImpl.hasEffectApplied(effectName, actorEntity);
+          const effectIsApplied3 = await VariantEncumbranceDnd5eHelpers.hasEffectApplied(effectName, actorEntity);
           if (!effectIsApplied3) {
             const origin = `Actor.${actorEntity.id}`;
             await VariantEncumbranceImpl.addEffect(effectName, actorEntity, origin, encumbranceTier);
@@ -1222,65 +1157,6 @@ export const VariantEncumbranceImpl = {
   },
 
   /**
-   * Checks to see if any of the current active effects applied to the actor
-   * with the given UUID match the effect name and are a convenient effect
-   *
-   * @param {string} effectName - the name of the effect to check
-   * @param {string} uuid - the uuid of the actor to see if the effect is
-   * applied to
-   * @returns {boolean} true if the effect is applied, false otherwise
-   */
-  async hasEffectApplied(effectName, actor) {
-    return await actor?.effects?.some((e) => (e?.name == effectName || e?.label == effectName) && !e?.disabled);
-  },
-
-  /**
-   * Checks to see if any of the current active effects applied to the actor
-   * with the given UUID match the effect name and are a convenient effect
-   *
-   * @param {string} effectName - the name of the effect to check
-   * @param {string} uuid - the uuid of the actor to see if the effect is
-   * applied to
-   * @returns {boolean} true if the effect is applied, false otherwise
-   */
-  async hasEffectAppliedFromId(effect, actor) {
-    return await actor?.effects?.some((e) => e?.id == effect.id);
-  },
-
-  /**
-   * Removes the effect with the provided name from an actor matching the
-   * provided UUID
-   *
-   * @param {string} effectName - the name of the effect to remove
-   * @param {string} uuid - the uuid of the actor to remove the effect from
-   */
-  async removeEffect(effectName, actor) {
-    if (effectName) effectName = i18n(effectName);
-    const actorEffects = actor?.effects || [];
-    const effectToRemove = actorEffects.find((e) => e?.label === effectName || e?.name === effectName);
-    if (!effectToRemove || !effectToRemove.id) return undefined;
-    const activeEffectsRemoved = (await actor.deleteEmbeddedDocuments("ActiveEffect", [effectToRemove.id])) || [];
-    return activeEffectsRemoved[0];
-  },
-
-  /**
-   * Removes the effect with the provided name from an actor matching the
-   * provided UUID
-   *
-   * @param {string} effectName - the name of the effect to remove
-   * @param {string} uuid - the uuid of the actor to remove the effect from
-   */
-  async removeEffectFromId(effect, actor) {
-    if (effect.id) {
-      const effectToRemove = (actor?.effects || []).find((e) => e.id === effect.id);
-      if (!effectToRemove || !effectToRemove.id) return undefined;
-      const activeEffectsRemoved = (await actor.deleteEmbeddedDocuments("ActiveEffect", [effectToRemove.id])) || [];
-      return activeEffectsRemoved[0];
-    }
-    return undefined;
-  },
-
-  /**
    * Adds the effect with the provided name to an actor matching the provided
    * UUID
    *
@@ -1316,7 +1192,7 @@ export const VariantEncumbranceImpl = {
       }
       effect.origin = effect.origin ? effect.origin : origin;
       effect.overlay = false;
-      if (await this.hasEffectApplied(effectName, actor)) {
+      if (await VariantEncumbranceDnd5eHelpers.hasEffectApplied(effectName, actor)) {
         return undefined;
       }
       // Create the Convenient Effects flags

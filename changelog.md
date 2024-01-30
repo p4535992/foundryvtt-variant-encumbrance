@@ -1,3 +1,7 @@
+### 0.14.3
+
+- Some clean up of the code and update vite build watch
+
 ### 0.14.2
 
 - Add module setting "doNotShowCustomizedWeightOnItemSheet" 

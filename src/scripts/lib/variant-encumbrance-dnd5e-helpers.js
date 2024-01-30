@@ -13,8 +13,87 @@ import {
 import { invPlusActive } from "../modules.mjs";
 import { getPropertyPatched, hasPropertyPatched } from "./foundryvtt-utils-patched";
 import Logger from "./Logger";
+import { EncumbranceMode } from "../VariantEncumbranceModels.mjs";
 
 export class VariantEncumbranceDnd5eHelpers {
+  static prepareInventoryItemsFromUpdate(actorEntity, updatedItem, updatedEffect, mode) {
+    if (
+      hasProperty(updatedItem || {}, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}`) ||
+      hasProperty(updatedItem || {}, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}`)
+    ) {
+      return;
+    }
+
+    if (updatedItem) {
+      let itemID;
+      if (typeof updatedItem === "string" || updatedItem instanceof String) {
+        itemID = updatedItem;
+      } else {
+        itemID = updatedItem?.id ? updatedItem?.id : updatedItem._id;
+      }
+      let itemCurrent = itemID ? actorEntity.items.get(itemID) : undefined;
+      if (!itemCurrent && (updatedItem.id || updatedItem._id)) {
+        itemCurrent = updatedItem;
+      }
+      if (itemCurrent?.type === "feat" || itemCurrent?.type === "spell") {
+        return;
+      }
+
+      if (itemCurrent) {
+        if (typeof updatedItem === "string" || updatedItem instanceof String) {
+          // Do nothing
+        } else {
+          // On update operations, the actorEntity's items have not been updated.
+          // Override the entry for this item using the updatedItem data
+          try {
+            const updatedItem2 = {};
+            for (const [key, value] of Object.entries(updatedItem)) {
+              if (key.startsWith("system.")) {
+                const key2 = key.replace("system.", "");
+                updatedItem2[key2] = value;
+              } else {
+                updatedItem2[key] = value;
+              }
+            }
+            updatedItem = updatedItem2;
+
+            mergeObject(itemCurrent.system, updatedItem);
+          } catch (e) {
+            error(e?.message);
+          }
+        }
+        updatedItem = itemCurrent;
+      }
+    }
+
+    const currentItemId = updatedItem?.id ? updatedItem?.id : updatedItem?._id;
+    const inventoryItems = [];
+    const isAlreadyInActor = actorEntity.items?.find((itemTmp) => itemTmp.id === currentItemId);
+    const physicalItems = ["weapon", "equipment", "consumable", "tool", "backpack", "loot"];
+    actorEntity.items.contents.forEach((im) => {
+      if (im && physicalItems.includes(im.type)) {
+        if (im.id === currentItemId) {
+          if (mode === EncumbranceMode.DELETE) {
+          } else {
+            inventoryItems.push(im);
+          }
+        } else {
+          inventoryItems.push(im);
+        }
+      }
+    });
+    if (!isAlreadyInActor) {
+      const im = game.items?.find((itemTmp) => itemTmp.id === currentItemId);
+      if (im && physicalItems.includes(im.type)) {
+        if (mode === EncumbranceMode.DELETE) {
+        } else {
+          inventoryItems.push(im);
+        }
+      }
+    }
+    return inventoryItems;
+  }
+
   static manageCustomCodeFeature(item, itemWeight, isBulk) {
     const actor = item.parent;
     let options = {};
@@ -885,5 +964,68 @@ export class VariantEncumbranceDnd5eHelpers {
       doTheUpdate: doTheUpdate,
       noActiveEffect: noActiveEffect,
     };
+  }
+
+  // ==============================
+  // EFFECT UTILITIES
+  // ================================
+
+  /**
+   * Checks to see if any of the current active effects applied to the actor
+   * with the given UUID match the effect name and are a convenient effect
+   *
+   * @param {string} effectName - the name of the effect to check
+   * @param {string} uuid - the uuid of the actor to see if the effect is
+   * applied to
+   * @returns {boolean} true if the effect is applied, false otherwise
+   */
+  static async hasEffectApplied(effectName, actor) {
+    return await actor?.effects?.some((e) => (e?.name == effectName || e?.label == effectName) && !e?.disabled);
+  }
+
+  /**
+   * Checks to see if any of the current active effects applied to the actor
+   * with the given UUID match the effect name and are a convenient effect
+   *
+   * @param {string} effectName - the name of the effect to check
+   * @param {string} uuid - the uuid of the actor to see if the effect is
+   * applied to
+   * @returns {boolean} true if the effect is applied, false otherwise
+   */
+  static async hasEffectAppliedFromId(effect, actor) {
+    return await actor?.effects?.some((e) => e?.id == effect.id);
+  }
+
+  /**
+   * Removes the effect with the provided name from an actor matching the
+   * provided UUID
+   *
+   * @param {string} effectName - the name of the effect to remove
+   * @param {string} uuid - the uuid of the actor to remove the effect from
+   */
+  static async removeEffect(effectName, actor) {
+    if (effectName) effectName = i18n(effectName);
+    const actorEffects = actor?.effects || [];
+    const effectToRemove = actorEffects.find((e) => e?.label === effectName || e?.name === effectName);
+    if (!effectToRemove || !effectToRemove.id) return undefined;
+    const activeEffectsRemoved = (await actor.deleteEmbeddedDocuments("ActiveEffect", [effectToRemove.id])) || [];
+    return activeEffectsRemoved[0];
+  }
+
+  /**
+   * Removes the effect with the provided name from an actor matching the
+   * provided UUID
+   *
+   * @param {string} effectName - the name of the effect to remove
+   * @param {string} uuid - the uuid of the actor to remove the effect from
+   */
+  static async removeEffectFromId(effect, actor) {
+    if (effect.id) {
+      const effectToRemove = (actor?.effects || []).find((e) => e.id === effect.id);
+      if (!effectToRemove || !effectToRemove.id) return undefined;
+      const activeEffectsRemoved = (await actor.deleteEmbeddedDocuments("ActiveEffect", [effectToRemove.id])) || [];
+      return activeEffectsRemoved[0];
+    }
+    return undefined;
   }
 }

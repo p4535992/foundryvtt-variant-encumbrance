@@ -1272,8 +1272,11 @@ const module = {
     }
   },
   renderItemSheetBulkSystem(app, html, data, itemTmp) {
-    const doNotShowCustomizedWeightOnItemSheet = game.settings.get(CONSTANTS.MODULE_ID, "doNotShowCustomizedWeightOnItemSheet");
-    if(!game.user.isGM && doNotShowCustomizedWeightOnItemSheet) {
+    const doNotShowCustomizedWeightOnItemSheet = game.settings.get(
+      CONSTANTS.MODULE_ID,
+      "doNotShowCustomizedWeightOnItemSheet"
+    );
+    if (!game.user.isGM && doNotShowCustomizedWeightOnItemSheet) {
       Logger.debug(`renderItemSheetBulkSystem | OFF`);
       return;
     }
@@ -1318,8 +1321,11 @@ const module = {
       );
   },
   renderItemSheetVEWeightSystem(app, html, data, itemTmp) {
-    const doNotShowCustomizedWeightOnItemSheet = game.settings.get(CONSTANTS.MODULE_ID, "doNotShowCustomizedWeightOnItemSheet");
-    if(!game.user.isGM && doNotShowCustomizedWeightOnItemSheet) {
+    const doNotShowCustomizedWeightOnItemSheet = game.settings.get(
+      CONSTANTS.MODULE_ID,
+      "doNotShowCustomizedWeightOnItemSheet"
+    );
+    if (!game.user.isGM && doNotShowCustomizedWeightOnItemSheet) {
       Logger.debug(`renderItemSheetVEWeightSystem | OFF`);
       return;
     }
@@ -1345,7 +1351,7 @@ const module = {
           <label style="color:red">${veweightLabel}</label>
           <input 
           style="color:red" 
-          ${game.user.isGM ? "" : "readonly"}
+          readonly
           type="text" 
           name="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}" value="${veweight}" data-dtype="Number"/>
         </div>
