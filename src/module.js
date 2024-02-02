@@ -15,8 +15,8 @@
 import { registerSettings } from "./scripts/settings.mjs";
 import { initHooks, readyHooks, setupHooks } from "./scripts/modules.mjs";
 import CONSTANTS from "./scripts/constants.mjs";
-import { error } from "./scripts/lib/lib.mjs";
 import API from "./scripts/api.mjs";
+import Logger from "./scripts/lib/Logger";
 
 /* ------------------------------------ */
 /* Initialize module					*/
@@ -54,12 +54,12 @@ Hooks.once("ready", () => {
   if (!game.modules.get("lib-wrapper")?.active && game.user?.isGM) {
     let word = "install and activate";
     if (game.modules.get("lib-wrapper")) word = "activate";
-    throw error(`Requires the 'libWrapper' module. Please ${word} it.`);
+    throw Logger.error(`Requires the 'libWrapper' module. Please ${word} it.`);
   }
   if (!game.modules.get("socketlib")?.active && game.user?.isGM) {
     let word = "install and activate";
     if (game.modules.get("socketlib")) word = "activate";
-    throw error(`Requires the 'socketlib' module. Please ${word} it.`);
+    throw Logger.error(`Requires the 'socketlib' module. Please ${word} it.`);
   }
   readyHooks();
 });

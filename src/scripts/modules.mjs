@@ -13,16 +13,12 @@ import {
 import {
   checkBulkCategory,
   convertPoundsToKg,
-  debug,
   getBulkLabel,
   getItemBulk,
   getItemQuantity,
   getItemWeight,
   getWeightLabel,
-  i18n,
-  i18nFormat,
   isRealNumber,
-  warn,
 } from "./lib/lib.mjs";
 import CONSTANTS from "./constants.mjs";
 import { registerSocket } from "./socket.mjs";
@@ -47,19 +43,19 @@ export let daeActive = false;
 export let backPackManagerActive = false;
 
 export const initHooks = () => {
-  // warn("Init Hooks processing");
+  // Logger.warn("Init Hooks processing");
 
   Hooks.once("socketlib.ready", registerSocket);
 
   // if (game.settings.get(CONSTANTS.MODULE_ID, 'debugHooks')) {
   //   for (const hook of Object.values(HOOKS)) {
   //     if (typeof hook === 'string') {
-  //       Hooks.on(hook, (...args) => debug(`Hook called: ${hook}`, ...args));
-  //       debug(`Registered hook: ${hook}`);
+  //       Hooks.on(hook, (...args) => Logger.debug(`Hook called: ${hook}`, ...args));
+  //       Logger.debug(`Registered hook: ${hook}`);
   //     } else {
   //       for (const innerHook of Object.values(hook)) {
-  //         Hooks.on(innerHook, (...args) => debug(`Hook called: ${innerHook}`, ...args));
-  //         debug(`Registered hook: ${innerHook}`);
+  //         Hooks.on(innerHook, (...args) => Logger.debug(`Hook called: ${innerHook}`, ...args));
+  //         Logger.debug(`Registered hook: ${innerHook}`);
   //       }
   //     }
   //   }
@@ -199,10 +195,10 @@ export const readyHooks = async () => {
   });
 
   ENCUMBRANCE_STATE = {
-    UNENCUMBERED: i18n(CONSTANTS.MODULE_ID + ".effect.name.unencumbered"), // "Unencumbered",
-    ENCUMBERED: i18n(CONSTANTS.MODULE_ID + ".effect.name.encumbered"), // "Encumbered",
-    HEAVILY_ENCUMBERED: i18n(CONSTANTS.MODULE_ID + ".effect.name.heavily_encumbered"), // "Heavily Encumbered",
-    OVERBURDENED: i18n(CONSTANTS.MODULE_ID + ".effect.name.overburdened"), // "Overburdened"
+    UNENCUMBERED: Logger.i18n(CONSTANTS.MODULE_ID + ".effect.name.unencumbered"), // "Unencumbered",
+    ENCUMBERED: Logger.i18n(CONSTANTS.MODULE_ID + ".effect.name.encumbered"), // "Encumbered",
+    HEAVILY_ENCUMBERED: Logger.i18n(CONSTANTS.MODULE_ID + ".effect.name.heavily_encumbered"), // "Heavily Encumbered",
+    OVERBURDENED: Logger.i18n(CONSTANTS.MODULE_ID + ".effect.name.overburdened"), // "Overburdened"
   };
 
   Hooks.on("renderActorSheet", async function (actorSheet, htmlElement, actorObject) {
@@ -458,26 +454,26 @@ export const readyHooks = async () => {
           }
 
           if (game.user?.isGM) {
-            let mylabel = i18n("variant-encumbrance-dnd5e.label.enableVEAndWEOnSpecificActor");
+            let mylabel = Logger.i18n("variant-encumbrance-dnd5e.label.enableVEAndWEOnSpecificActor");
             let myicon = "fas fa-weight-hanging";
             let index = 0;
 
             if (enableVarianEncumbranceEffectsOnSpecificActorFlag && enableVarianEncumbranceWeightOnSpecificActorFlag) {
-              mylabel = i18n("variant-encumbrance-dnd5e.label.enableVEAndWEOnSpecificActor");
+              mylabel = Logger.i18n("variant-encumbrance-dnd5e.label.enableVEAndWEOnSpecificActor");
               myicon = "fas fa-weight-hanging";
               index = 0;
             } else if (
               !enableVarianEncumbranceEffectsOnSpecificActorFlag &&
               enableVarianEncumbranceWeightOnSpecificActorFlag
             ) {
-              mylabel = i18n("variant-encumbrance-dnd5e.label.enableWEOnSpecificActor");
+              mylabel = Logger.i18n("variant-encumbrance-dnd5e.label.enableWEOnSpecificActor");
               myicon = "fas fa-balance-scale-right";
               index = 1;
             } else if (
               !enableVarianEncumbranceEffectsOnSpecificActorFlag &&
               !enableVarianEncumbranceWeightOnSpecificActorFlag
             ) {
-              mylabel = i18n("variant-encumbrance-dnd5e.label.disableVEAndWEOnSpecificActor");
+              mylabel = Logger.i18n("variant-encumbrance-dnd5e.label.disableVEAndWEOnSpecificActor");
               myicon = "fas fa-feather";
               index = 2;
             } else if (
@@ -485,11 +481,11 @@ export const readyHooks = async () => {
               !enableVarianEncumbranceWeightOnSpecificActorFlag
             ) {
               // THIS USE CASE CAN'T BE HAPPENED WE REST TO THE STANDARD
-              mylabel = i18n("variant-encumbrance-dnd5e.label.enableVEAndWEOnSpecificActor");
+              mylabel = Logger.i18n("variant-encumbrance-dnd5e.label.enableVEAndWEOnSpecificActor");
               myicon = "fas fa-weight-hanging";
               index = 3;
             } else {
-              throw new Error("Something is wrong");
+              throw new Logger.error("Something is wrong");
             }
 
             // varianEncumbranceButtons.push({
@@ -501,25 +497,25 @@ export const readyHooks = async () => {
                 if (index === 0) {
                   enableVarianEncumbranceEffectsOnSpecificActorFlag = false;
                   enableVarianEncumbranceWeightOnSpecificActorFlag = true;
-                  mylabel = i18n("variant-encumbrance-dnd5e.label.enableWEOnSpecificActor");
+                  mylabel = Logger.i18n("variant-encumbrance-dnd5e.label.enableWEOnSpecificActor");
                   myicon = "fas fa-balance-scale-right";
                   index = 1;
                 } else if (index === 1) {
                   enableVarianEncumbranceEffectsOnSpecificActorFlag = false;
                   enableVarianEncumbranceWeightOnSpecificActorFlag = false;
-                  mylabel = i18n("variant-encumbrance-dnd5e.label.disableVEAndWEOnSpecificActor");
+                  mylabel = Logger.i18n("variant-encumbrance-dnd5e.label.disableVEAndWEOnSpecificActor");
                   myicon = "fas fa-feather";
                   index = 2;
                 } else if (index === 2) {
                   enableVarianEncumbranceEffectsOnSpecificActorFlag = true;
                   enableVarianEncumbranceWeightOnSpecificActorFlag = true;
-                  mylabel = i18n("variant-encumbrance-dnd5e.label.enableVEAndWEOnSpecificActor");
+                  mylabel = Logger.i18n("variant-encumbrance-dnd5e.label.enableVEAndWEOnSpecificActor");
                   myicon = "fas fa-weight-hanging";
                   index = 0;
                 } else if (index === 3) {
                   enableVarianEncumbranceEffectsOnSpecificActorFlag = true;
                   enableVarianEncumbranceWeightOnSpecificActorFlag = true;
-                  mylabel = i18n("variant-encumbrance-dnd5e.label.enableVEAndWEOnSpecificActor");
+                  mylabel = Logger.i18n("variant-encumbrance-dnd5e.label.enableVEAndWEOnSpecificActor");
                   myicon = "fas fa-weight-hanging";
                   index = 0;
                 }
@@ -595,7 +591,7 @@ export const readyHooks = async () => {
             );
           }
 
-          let mylabelBulk = i18n("variant-encumbrance-dnd5e.label.enableVEAndWEBulkOnSpecificActor");
+          let mylabelBulk = Logger.i18n("variant-encumbrance-dnd5e.label.enableVEAndWEBulkOnSpecificActor");
           let myiconBulk = "fas fa-bold";
           let indexBulk = 0;
 
@@ -603,21 +599,21 @@ export const readyHooks = async () => {
             enableVarianEncumbranceEffectsBulkOnSpecificActorFlag &&
             enableVarianEncumbranceWeightBulkOnSpecificActorFlag
           ) {
-            mylabelBulk = i18n("variant-encumbrance-dnd5e.label.enableVEAndWEBulkOnSpecificActor");
+            mylabelBulk = Logger.i18n("variant-encumbrance-dnd5e.label.enableVEAndWEBulkOnSpecificActor");
             myiconBulk = "fas fa-bold";
             indexBulk = 0;
           } else if (
             !enableVarianEncumbranceEffectsBulkOnSpecificActorFlag &&
             enableVarianEncumbranceWeightBulkOnSpecificActorFlag
           ) {
-            mylabelBulk = i18n("variant-encumbrance-dnd5e.label.enableWEBulkOnSpecificActor");
+            mylabelBulk = Logger.i18n("variant-encumbrance-dnd5e.label.enableWEBulkOnSpecificActor");
             myiconBulk = "fas fa-balance-scale-left";
             indexBulk = 1;
           } else if (
             !enableVarianEncumbranceEffectsBulkOnSpecificActorFlag &&
             !enableVarianEncumbranceWeightBulkOnSpecificActorFlag
           ) {
-            mylabelBulk = i18n("variant-encumbrance-dnd5e.label.disableVEAndWEBulkOnSpecificActor");
+            mylabelBulk = Logger.i18n("variant-encumbrance-dnd5e.label.disableVEAndWEBulkOnSpecificActor");
             myiconBulk = "fas fa-feather-alt";
             indexBulk = 2;
           } else if (
@@ -625,11 +621,11 @@ export const readyHooks = async () => {
             !enableVarianEncumbranceWeightBulkOnSpecificActorFlag
           ) {
             // THIS USE CASE CAN'T BE HAPPENED WE REST TO THE STANDARD
-            mylabelBulk = i18n("variant-encumbrance-dnd5e.label.enableVEAndWEBulkOnSpecificActor");
+            mylabelBulk = Logger.i18n("variant-encumbrance-dnd5e.label.enableVEAndWEBulkOnSpecificActor");
             myiconBulk = "fas fa-bold";
             indexBulk = 3;
           } else {
-            throw new Error("Something is wrong");
+            throw new Logger.error("Something is wrong");
           }
 
           // varianEncumbranceButtons.push({
@@ -641,25 +637,25 @@ export const readyHooks = async () => {
               if (indexBulk === 0) {
                 enableVarianEncumbranceEffectsBulkOnSpecificActorFlag = false;
                 enableVarianEncumbranceWeightBulkOnSpecificActorFlag = true;
-                mylabelBulk = i18n("variant-encumbrance-dnd5e.label.enableWEBulkOnSpecificActor");
+                mylabelBulk = Logger.i18n("variant-encumbrance-dnd5e.label.enableWEBulkOnSpecificActor");
                 myiconBulk = "fas fa-balance-scale-left";
                 indexBulk = 1;
               } else if (indexBulk === 1) {
                 enableVarianEncumbranceEffectsBulkOnSpecificActorFlag = false;
                 enableVarianEncumbranceWeightBulkOnSpecificActorFlag = false;
-                mylabelBulk = i18n("variant-encumbrance-dnd5e.label.disableVEAndWEBulkOnSpecificActor");
+                mylabelBulk = Logger.i18n("variant-encumbrance-dnd5e.label.disableVEAndWEBulkOnSpecificActor");
                 myiconBulk = "fas fa-feather-alt";
                 indexBulk = 2;
               } else if (indexBulk === 2) {
                 enableVarianEncumbranceEffectsBulkOnSpecificActorFlag = true;
                 enableVarianEncumbranceWeightBulkOnSpecificActorFlag = true;
-                mylabelBulk = i18n("variant-encumbrance-dnd5e.label.enableVEAndWEBulkOnSpecificActor");
+                mylabelBulk = Logger.i18n("variant-encumbrance-dnd5e.label.enableVEAndWEBulkOnSpecificActor");
                 myiconBulk = "fas fa-bold";
                 indexBulk = 0;
               } else if (indexBulk === 3) {
                 enableVarianEncumbranceEffectsBulkOnSpecificActorFlag = true;
                 enableVarianEncumbranceWeightBulkOnSpecificActorFlag = true;
-                mylabelBulk = i18n("variant-encumbrance-dnd5e.label.enableVEAndWEBulkOnSpecificActor");
+                mylabelBulk = Logger.i18n("variant-encumbrance-dnd5e.label.enableVEAndWEBulkOnSpecificActor");
                 myiconBulk = "fas fa-bold";
                 indexBulk = 0;
               }
@@ -1284,7 +1280,7 @@ const module = {
     const item = app.object;
     const options = [];
     // options.push(
-    //   `<option data-image="icons/svg/mystery-man.svg" value="">${i18n(`${CONSTANTS.MODULE_ID}.default`)}</option>`,
+    //   `<option data-image="icons/svg/mystery-man.svg" value="">${Logger.i18n(`${CONSTANTS.MODULE_ID}.default`)}</option>`,
     // );
     const weight = data.weight ?? 0;
     let suggestedBulkWeight = 0;
@@ -1298,11 +1294,11 @@ const module = {
       bulk = suggestedBulkWeight;
     }
 
-    const suggestedBulkValueS = i18nFormat("variant-encumbrance-dnd5e.label.bulk.suggestedValue", {
+    const suggestedBulkValueS = Logger.i18nFormat("variant-encumbrance-dnd5e.label.bulk.suggestedValue", {
       suggestedBulkWeight: suggestedBulkWeight,
     });
 
-    let bulkLabel = i18n("variant-encumbrance-dnd5e.label.bulk.VEBulk");
+    let bulkLabel = Logger.i18n("variant-encumbrance-dnd5e.label.bulk.VEBulk");
     // <p class="notes">${suggestedBulkValueS}</p>
     html
       .find(".item-properties") // <div class="item-properties">
@@ -1333,14 +1329,14 @@ const module = {
     const item = app.object;
     const options = [];
     // options.push(
-    //   `<option data-image="icons/svg/mystery-man.svg" value="">${i18n(`${CONSTANTS.MODULE_ID}.default`)}</option>`,
+    //   `<option data-image="icons/svg/mystery-man.svg" value="">${Logger.i18n(`${CONSTANTS.MODULE_ID}.default`)}</option>`,
     // );
     const veweight =
       getProperty(item, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}`) ?? data.weight ?? 0;
 
-    const suggestedVEWeightValueS = i18n("variant-encumbrance-dnd5e.label.veweight.VEWeightSuggestion");
+    const suggestedVEWeightValueS = Logger.i18n("variant-encumbrance-dnd5e.label.veweight.VEWeightSuggestion");
 
-    let veweightLabel = i18n("variant-encumbrance-dnd5e.label.veweight.VEWeight");
+    let veweightLabel = Logger.i18n("variant-encumbrance-dnd5e.label.veweight.VEWeight");
     // <p class="notes"></p>
     html
       .find(".item-properties") // <div class="item-properties">

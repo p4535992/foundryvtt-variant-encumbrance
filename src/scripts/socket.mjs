@@ -1,6 +1,6 @@
 import CONSTANTS from "./constants.mjs";
 import API from "./api.mjs";
-import { debug } from "./lib/lib.mjs";
+import Logger from "./lib/Logger";
 
 // export const SOCKET_HANDLERS = {
 // 	/**
@@ -24,7 +24,7 @@ import { debug } from "./lib/lib.mjs";
 export let variantEncumbranceSocket;
 
 export function registerSocket() {
-  debug("Registered variantEncumbranceSocket");
+  Logger.debug("Registered variantEncumbranceSocket");
   if (variantEncumbranceSocket) {
     return variantEncumbranceSocket;
   }

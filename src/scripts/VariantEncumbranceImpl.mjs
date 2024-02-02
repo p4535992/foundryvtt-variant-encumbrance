@@ -18,9 +18,6 @@ import {
 } from "./modules.mjs";
 import CONSTANTS from "./constants.mjs";
 import {
-  debug,
-  error,
-  i18n,
   isGMConnected,
   isRealNumber,
   retrieveAttributeEncumbranceMax,
@@ -32,6 +29,7 @@ import {
 } from "./lib/lib.mjs";
 import API from "./api.mjs";
 import { VariantEncumbranceDnd5eHelpers } from "./lib/variant-encumbrance-dnd5e-helpers";
+import Logger from "./lib/Logger";
 
 /* ------------------------------------ */
 /* Constants         					*/
@@ -378,7 +376,7 @@ export const VariantEncumbranceImpl = {
           itemWeight = VariantEncumbranceDnd5eHelpers.manageCustomCodeFeature(item, itemWeight, false);
           itemWeight = VariantEncumbranceDnd5eHelpers.manageEquippedAndUnEquippedFeature(item, itemWeight);
 
-          debug(
+          Logger.debug(
             `Is BackpackManager! Actor '${actorEntity.name}', Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`
           );
           mapItemEncumbrance[item.id] = itemQuantity * itemWeight;
@@ -389,7 +387,7 @@ export const VariantEncumbranceImpl = {
           return weight + itemQuantity * itemWeight;
         }
 
-        debug(`Actor '${actorEntity.name}', Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`);
+        Logger.debug(`Actor '${actorEntity.name}', Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`);
 
         // let ignoreEquipmentCheck = false;
 
@@ -484,13 +482,13 @@ export const VariantEncumbranceImpl = {
         let appliedWeight = 0;
         if (ignoreQuantityCheckForItemCollection) {
           appliedWeight = itemWeight;
-          debug(
+          Logger.debug(
             `Actor '${actorEntity.name}', Item '${item.name}', Equipped '${isEquipped}', Proficient ${isProficient} :
                1 * ${itemWeight} = ${appliedWeight} on total ${weight} => ${weight + appliedWeight}`
           );
         } else {
           appliedWeight = itemQuantity * itemWeight;
-          debug(
+          Logger.debug(
             `Actor '${actorEntity.name}', Item '${item.name}', Equipped '${isEquipped}', Proficient ${isProficient} :
                ${itemQuantity} * ${itemWeight} = ${appliedWeight} on total ${weight} => ${weight + appliedWeight}`
           );
@@ -507,7 +505,7 @@ export const VariantEncumbranceImpl = {
       // Start inventory+ module is active 2
       if (invPlusActiveTmp) {
         for (const [key, value] of invPlusCategoriesWeightToAdd) {
-          debug(`Actor '${actorEntity.name}', Category '${key}' : ${value} => ${totalWeight + value}`);
+          Logger.debug(`Actor '${actorEntity.name}', Category '${key}' : ${value} => ${totalWeight + value}`);
           totalWeight = totalWeight + value;
         }
       }
@@ -534,7 +532,7 @@ export const VariantEncumbranceImpl = {
         } else {
           totalWeight += numCoins / currencyPerWeight;
         }
-        debug(
+        Logger.debug(
           `Actor '${actorEntity.name}' : ${numCoins} / ${currencyPerWeight} = ${
             currencyPerWeight == 0 ? 0 : numCoins / currencyPerWeight
           } => ${totalWeight}`
@@ -543,7 +541,7 @@ export const VariantEncumbranceImpl = {
 
       // Compute Encumbrance percentage
       totalWeight = totalWeight.toNearest(0.1);
-      debug(`Actor '${actorEntity.name}' => ${totalWeight}`);
+      Logger.debug(`Actor '${actorEntity.name}' => ${totalWeight}`);
 
       let speedDecrease = 0;
 
@@ -877,10 +875,10 @@ export const VariantEncumbranceImpl = {
         encumbrance: dataEncumbrance,
         mapItemEncumbrance: mapItemEncumbrance,
       };
-      debug(JSON.stringify(encumbranceData));
+      Logger.debug(JSON.stringify(encumbranceData));
       return encumbranceData;
     } else {
-      throw new Error("Something is wrong");
+      throw new Logger.error("Something is wrong");
     }
   },
 
@@ -926,7 +924,7 @@ export const VariantEncumbranceImpl = {
         return effect;
       }
       default: {
-        throw new Error("The effect name '" + effectName + "' is not recognized");
+        throw new Logger.error("The effect name '" + effectName + "' is not recognized");
       }
     }
   },
@@ -934,7 +932,7 @@ export const VariantEncumbranceImpl = {
   _encumbered: function () {
     return new Effect({
       name: ENCUMBRANCE_STATE.ENCUMBERED,
-      description: i18n("variant-encumbrance-dnd5e.effect.description.encumbered"),
+      description: Logger.i18n("variant-encumbrance-dnd5e.effect.description.encumbered"),
       icon: "icons/svg/down.svg",
       isDynamic: true,
       transfer: true,
@@ -944,7 +942,7 @@ export const VariantEncumbranceImpl = {
   _heavilyEncumbered: function () {
     return new Effect({
       name: ENCUMBRANCE_STATE.HEAVILY_ENCUMBERED,
-      description: i18n("variant-encumbrance-dnd5e.effect.description.heavily_encumbered"),
+      description: Logger.i18n("variant-encumbrance-dnd5e.effect.description.heavily_encumbered"),
       icon: "icons/svg/downgrade.svg",
       isDynamic: true,
       transfer: true,
@@ -1001,7 +999,7 @@ export const VariantEncumbranceImpl = {
   _heavilyEncumberedNoMidi: function () {
     return new Effect({
       name: ENCUMBRANCE_STATE.HEAVILY_ENCUMBERED,
-      description: i18n("variant-encumbrance-dnd5e.effect.description.heavily_encumbered"),
+      description: Logger.i18n("variant-encumbrance-dnd5e.effect.description.heavily_encumbered"),
       icon: "icons/svg/downgrade.svg",
       isDynamic: true,
       transfer: true,
@@ -1012,7 +1010,7 @@ export const VariantEncumbranceImpl = {
   _overburdenedEncumbered: function () {
     return new Effect({
       name: ENCUMBRANCE_STATE.OVERBURDENED,
-      description: i18n("variant-encumbrance-dnd5e.effect.description.overburdened"),
+      description: Logger.i18n("variant-encumbrance-dnd5e.effect.description.overburdened"),
       // icon: 'icons/svg/hazard.svg',
       icon: "icons/tools/smithing/anvil.webp",
       isDynamic: true,
@@ -1070,7 +1068,7 @@ export const VariantEncumbranceImpl = {
   _overburdenedEncumberedNoMidi: function () {
     return new Effect({
       name: ENCUMBRANCE_STATE.OVERBURDENED,
-      description: i18n("variant-encumbrance-dnd5e.effect.description.overburdened"),
+      description: Logger.i18n("variant-encumbrance-dnd5e.effect.description.overburdened"),
       // icon: 'icons/svg/hazard.svg',
       icon: "icons/tools/smithing/anvil.webp",
       isDynamic: true,
@@ -1186,7 +1184,7 @@ export const VariantEncumbranceImpl = {
         },
       };
       effect.isTemporary = true;
-      effectName = i18n(effectName);
+      effectName = Logger.i18n(effectName);
       if (!origin) {
         origin = `Actor.${actor.id}`;
       }
@@ -1292,7 +1290,7 @@ export function calcWeightItemCollection(
   // IF IS NOT A BACKPACK
 
   if (item.type !== "backpack" || !item.flags.itemcollection) {
-    debug(`calcWeightItemCollection | Is not a 'backpack' and is not flagged as itemcollection`);
+    Logger.debug(`calcWeightItemCollection | Is not a 'backpack' and is not flagged as itemcollection`);
     let itemWeight = calcItemWeight(item, ignoreCurrency, doNotIncreaseWeightByQuantityForNoAmmunition);
 
     itemWeight = VariantEncumbranceDnd5eHelpers.manageCustomCodeFeature(item, itemWeight, false);
@@ -1341,7 +1339,7 @@ function calcItemWeight(
   { ignoreItems, ignoreTypes } = { ignoreItems: undefined, ignoreTypes: undefined }
 ) {
   if (item.type !== "backpack" || item.items === undefined) {
-    debug(
+    Logger.debug(
       `calcItemWeight | Is not a backpack or has not items on it => ${_calcItemWeight(
         item,
         doNotIncreaseWeightByQuantityForNoAmmunition
@@ -1361,7 +1359,7 @@ function calcItemWeight(
     game.settings.get("dnd5e", "currencyWeight") &&
     item.system.currency
   ) {
-    debug(`calcItemWeight | Check out currency = true => ${weight}`);
+    Logger.debug(`calcItemWeight | Check out currency = true => ${weight}`);
 
     const currency = item.system.currency ?? {};
     const numCoins = Object.values(currency).reduce((val, denom) => (val += Math.max(denom, 0)), 0);
@@ -1377,19 +1375,19 @@ function calcItemWeight(
       weight = weight + numCoins / currencyPerWeight;
     }
     weight = Math.round(weight * 100000) / 100000;
-    debug(
+    Logger.debug(
       `calcItemWeight | Backpack : ${numCoins} / ${currencyPerWeight} = ${
         currencyPerWeight == 0 ? 0 : numCoins / currencyPerWeight
       } => ${weight}`
     );
   } else {
-    debug(`calcItemWeight | Check out currency = false => ${weight}`);
+    Logger.debug(`calcItemWeight | Check out currency = false => ${weight}`);
 
     const currency = item.system.currency ?? {};
     const numCoins = currency ? Object.keys(currency).reduce((val, denom) => val + currency[denom], 0) : 0;
     weight = weight + numCoins / 50;
     weight = Math.round(weight * 100000) / 100000;
-    debug(`calcItemWeight | Backpack : ${numCoins} / ${50} = ${numCoins / 50} => ${weight}`);
+    Logger.debug(`calcItemWeight | Backpack : ${numCoins} / ${50} = ${numCoins / 50} => ${weight}`);
   }
   return weight;
 }

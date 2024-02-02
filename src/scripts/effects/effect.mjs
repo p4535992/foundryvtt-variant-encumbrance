@@ -1,3 +1,5 @@
+import Logger from "../lib/Logger";
+
 /**
  * Data class for defining an effect
  */
@@ -92,13 +94,13 @@ export default class Effect {
     const isPassive = !this.isTemporary;
     const currentDae = this._isEmptyObject(this.dae) ? this.flags.dae : this.dae;
     const convenientDescription = this.description
-      ? i18n(this.description) ?? "Applies custom effects"
+      ? Logger.i18n(this.description) ?? "Applies custom effects"
       : this.description;
     return {
       id: this._id,
-      // name: i18n(this.name),
-      label: i18n(this.label),
-      description: i18n(this.description),
+      // name: Logger.i18n(this.name),
+      label: Logger.i18n(this.label),
+      description: Logger.i18n(this.description),
       icon: this.icon,
       tint: this.tint,
       duration: this._getDurationData(),
@@ -375,7 +377,7 @@ function cleanUpString(stringToCleanUp) {
   // regex expression to match all non-alphanumeric characters in string
   const regex = /[^A-Za-z0-9]/g;
   if (stringToCleanUp) {
-    return i18n(stringToCleanUp).replace(regex, "").toLowerCase();
+    return Logger.i18n(stringToCleanUp).replace(regex, "").toLowerCase();
   } else {
     return stringToCleanUp;
   }

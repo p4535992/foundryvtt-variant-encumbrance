@@ -6,50 +6,6 @@ import { calcWeightItemCollection } from "../VariantEncumbranceImpl.mjs";
 import API from "../api.mjs";
 import Logger from "./Logger.js";
 
-// ================================
-// Logger utility
-// ================================
-
-export function debug(msg, ...args) {
-  return Logger.debug(msg, args);
-}
-
-export function log(message, ...args) {
-  return Logger.log(message, args);
-}
-
-export function notify(message, ...args) {
-  return Logger.notify(message, args);
-}
-
-export function info(info, notify = false, ...args) {
-  return Logger.info(info, notify, args);
-}
-
-export function warn(warning, notify = false, ...args) {
-  return Logger.warn(warning, notify, args);
-}
-
-export function error(error, notify = true, ...args) {
-  return Logger.error(error, notify, args);
-}
-
-export function timelog(message) {
-  return Logger.timelog(message);
-}
-
-export const i18n = (key) => {
-  return Logger.i18n(key);
-};
-
-export const i18nFormat = (key, data = {}) => {
-  return Logger.i18nFormat(key, data);
-};
-
-export function dialogWarning(message, icon = "fas fa-exclamation-triangle") {
-  return Logger.dialogWarning(message, icon);
-}
-
 // =============================
 // Module Generic function
 // =============================
@@ -167,7 +123,7 @@ export function cleanUpString(stringToCleanUp) {
   // regex expression to match all non-alphanumeric characters in string
   const regex = /[^A-Za-z0-9]/g;
   if (stringToCleanUp) {
-    return i18n(stringToCleanUp).replace(regex, "").toLowerCase();
+    return Logger.i18n(stringToCleanUp).replace(regex, "").toLowerCase();
   } else {
     return stringToCleanUp;
   }
@@ -314,14 +270,14 @@ export function retrieveAttributeEncumbranceMax(actorEntity, standardValueN) {
       ) {
         return valueN;
       } else {
-        warn(`Can't parse the mode value ${daeValue.mode} for 'data.attributes.encumbrance.max'`);
+        Logger.warn(`Can't parse the mode value ${daeValue.mode} for 'data.attributes.encumbrance.max'`);
         return 0;
       }
     } else {
       return 0;
     }
   } catch (e) {
-    warn(`Can't parse the value ${daeValue} for 'data.attributes.encumbrance.max'`);
+    Logger.warn(`Can't parse the value ${daeValue} for 'data.attributes.encumbrance.max'`);
     return 0;
   }
 }
@@ -351,14 +307,14 @@ export function retrieveAttributeCapacityCargo(actor, standardValueN) {
       ) {
         return valueN;
       } else {
-        warn(`Can't parse the mode value ${daeValue.mode} for 'system.attributes.capacity.cargo'`);
+        Logger.warn(`Can't parse the mode value ${daeValue.mode} for 'system.attributes.capacity.cargo'`);
         return 0;
       }
     } else {
       return 0;
     }
   } catch (e) {
-    warn(`Can't parse the value ${daeValue} for 'system.attributes.capacity.cargo'`);
+    Logger.warn(`Can't parse the value ${daeValue} for 'system.attributes.capacity.cargo'`);
     return 0;
   }
 }
@@ -498,7 +454,7 @@ export function getItemBulk(item) {
 }
 
 export function getBulkLabel() {
-  const bulkLabelI18n = i18n("variant-encumbrance-dnd5e.label.bulk.Bulk");
+  const bulkLabelI18n = Logger.i18n("variant-encumbrance-dnd5e.label.bulk.Bulk");
   const displayedUnits = game.settings.get(CONSTANTS.MODULE_ID, "unitsBulk");
   const bulkLabel = capitalizeFirstLetter(displayedUnits ?? bulkLabelI18n);
   return bulkLabel;
@@ -567,12 +523,12 @@ export function retrieveBackPackManagerItem(item) {
 
   const backpack = fromUuidSync(uuid);
   if (!backpack) {
-    warn(`No backpack (Actor) is been found with uuid:${uuid} on item: ${item.name}`);
+    Logger.warn(`No backpack (Actor) is been found with uuid:${uuid} on item: ${item.name}`);
     return undefined;
   }
   // if for some ungodly reason, you put yourself in yourself:
   if (backpack === item.parent) {
-    warn(
+    Logger.warn(
       `No backpack (Actor) is been evaluate with uuid:${uuid} on item: ${item.name} if for some ungodly reason, you put yourself in yourself`
     );
     return undefined;

@@ -59,7 +59,7 @@ export class VariantEncumbranceDnd5eHelpers {
 
             mergeObject(itemCurrent.system, updatedItem);
           } catch (e) {
-            error(e?.message);
+            Logger.error(e?.message);
           }
         }
         updatedItem = itemCurrent;
@@ -1004,7 +1004,7 @@ export class VariantEncumbranceDnd5eHelpers {
    * @param {string} uuid - the uuid of the actor to remove the effect from
    */
   static async removeEffect(effectName, actor) {
-    if (effectName) effectName = i18n(effectName);
+    if (effectName) effectName = Logger.i18n(effectName);
     const actorEffects = actor?.effects || [];
     const effectToRemove = actorEffects.find((e) => e?.label === effectName || e?.name === effectName);
     if (!effectToRemove || !effectToRemove.id) return undefined;
