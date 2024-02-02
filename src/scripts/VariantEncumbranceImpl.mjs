@@ -387,7 +387,9 @@ export const VariantEncumbranceImpl = {
           return weight + itemQuantity * itemWeight;
         }
 
-        Logger.debug(`Actor '${actorEntity.name}', Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`);
+        Logger.debug(
+          `Actor '${actorEntity.name}', Item '${item.name}' : Quantity = ${itemQuantity}, Weight = ${itemWeight}`
+        );
 
         // let ignoreEquipmentCheck = false;
 
@@ -1233,7 +1235,7 @@ export const VariantEncumbranceImpl = {
         changes: changes, //changes
         disabled: false,
         duration: duration,
-        flags: foundry.utils.mergeObject(ceFlags, effect.flags),
+        flags: foundry.utils.foundry.utils.mergeObject(ceFlags, effect.flags),
         icon: effect.icon, // icon
 
         name: effectName, // label

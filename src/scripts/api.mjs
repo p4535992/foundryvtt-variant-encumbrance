@@ -1,7 +1,7 @@
 import { VariantEncumbranceImpl } from "./VariantEncumbranceImpl.mjs";
 import CONSTANTS from "./constants.mjs";
 // import Effect from "./effects/effect.mjs";
-import { checkBulkCategory, isStringEquals} from "./lib/lib.mjs";
+import { checkBulkCategory, isStringEquals } from "./lib/lib.mjs";
 import { VariantEncumbranceBulkImpl } from "./VariantEncumbranceBulkImpl.mjs";
 import { invPlusActive } from "./modules.mjs";
 import { VariantEncumbranceDnd5eHelpers } from "./lib/variant-encumbrance-dnd5e-helpers";

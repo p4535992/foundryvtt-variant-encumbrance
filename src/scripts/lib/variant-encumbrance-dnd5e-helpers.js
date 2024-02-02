@@ -57,9 +57,12 @@ export class VariantEncumbranceDnd5eHelpers {
             }
             updatedItem = updatedItem2;
 
-            mergeObject(itemCurrent.system, updatedItem);
+            itemCurrent = foundry.utils.expandObject(itemCurrent);
+
+            foundry.utils.mergeObject(itemCurrent.system, updatedItem);
           } catch (e) {
             Logger.error(e?.message);
+            return [];
           }
         }
         updatedItem = itemCurrent;
@@ -844,7 +847,7 @@ export class VariantEncumbranceDnd5eHelpers {
     } else if (isEnabledActorType(actorEntity)) {
       //  && actorEntity.sheet?.rendered
 
-      // mergeObject(itemCurrent.system, updatedItem);
+      // foundry.utils.mergeObject(itemCurrent.system, updatedItem);
       // For our purpose we filter only the equipped action
       if (hasPropertyPatched(update, `system.quantity`)) {
         doTheUpdate = true;

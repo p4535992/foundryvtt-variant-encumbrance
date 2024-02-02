@@ -104,7 +104,7 @@ export default class Effect {
       icon: this.icon,
       tint: this.tint,
       duration: this._getDurationData(),
-      flags: foundry.utils.mergeObject(this.flags, {
+      flags: foundry.utils.foundry.utils.mergeObject(this.flags, {
         core: {
           statusId: isPassive ? undefined : this._id,
           overlay: overlay ? overlay : this.overlay ? this.overlay : false, // MOD 4535992
@@ -178,7 +178,7 @@ export default class Effect {
       changes,
       disabled: false,
       duration,
-      flags: foundry.utils.mergeObject(ceFlags, flags),
+      flags: foundry.utils.foundry.utils.mergeObject(ceFlags, flags),
       icon,
       label,
       origin,

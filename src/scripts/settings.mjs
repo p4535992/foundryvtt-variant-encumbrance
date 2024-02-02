@@ -1,6 +1,4 @@
-import API from "./api.mjs";
 import CONSTANTS from "./constants.mjs";
-import { i18n } from "./lib/lib.mjs";
 
 export const registerSettings = function () {
   game.settings.registerMenu(CONSTANTS.MODULE_ID, "resetAllSettings", {

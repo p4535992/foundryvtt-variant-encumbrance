@@ -934,14 +934,14 @@ const module = {
         // const actorEntityCurrent = <ActorData>actorObject.actor; // STRANGE BUG game.actors?.get(actorObject.actor._id);
         // STRANGE BEHAVIOUR
         if (actorObject.actor?.flags) {
-          // mergeObject(<any>actorEntity.flags, <any>actorObject.actor.flags);
+          // foundry.utils.mergeObject(<any>actorEntity.flags, <any>actorObject.actor.flags);
           setProperty(actorEntityTmp, "flags", actorObject.actor.flags);
         }
         // if (actorObject.system) {
-        // 	// mergeObject(<any>actorEntity.system, <any>actorObject.system);
+        // 	// foundry.utils.mergeObject(<any>actorEntity.system, <any>actorObject.system);
         // 	setProperty(actorEntityTmp, "system", actorObject.system);
         // }
-        // mergeObject(actorEntity.items, actorObject.items);
+        // foundry.utils.mergeObject(actorEntity.items, actorObject.items);
         let itemsToCheck = [];
         // if (actorObject.items && actorObject.items instanceof Array) {
         //   for (const itemM of actorEntityTmp.items.contents) {
@@ -950,7 +950,7 @@ const module = {
         //     });
         //     const newItem = <any>duplicate(itemM);
         //     if (itemToMerge) {
-        //       mergeObject(newItem.system, itemToMerge);
+        //       foundry.utils.mergeObject(newItem.system, itemToMerge);
         //     }
         //     itemsToCheck.push(newItem);
         //   }
@@ -1144,14 +1144,14 @@ const module = {
         // const actorEntityCurrent = <ActorData>actorObject.actor; // STRANGE BUG game.actors?.get(actorObject.actor._id);
         // STRANGE BEHAVIOUR
         if (actorObject.actor?.flags) {
-          // mergeObject(<any>actorEntity.flags, <any>actorObject.actor.flags);
+          // foundry.utils.mergeObject(<any>actorEntity.flags, <any>actorObject.actor.flags);
           setProperty(actorEntityTmp, "flags", actorObject.actor.flags);
         }
         // if (actorObject.system) {
-        // 	// mergeObject(<any>actorEntity.system, <any>actorObject.system);
+        // 	// foundry.utils.mergeObject(<any>actorEntity.system, <any>actorObject.system);
         // 	setProperty(actorEntityTmp, "system", actorObject.system);
         // }
-        // mergeObject(actorEntity.items, actorObject.items);
+        // foundry.utils.mergeObject(actorEntity.items, actorObject.items);
         let itemsToCheck = [];
         // if (actorObject.items && actorObject.items instanceof Array) {
         //   for (const itemM of actorEntityTmp.items.contents) {
@@ -1160,7 +1160,7 @@ const module = {
         //     });
         //     const newItem = <any>duplicate(itemM);
         //     if (itemToMerge) {
-        //       mergeObject(newItem.system, itemToMerge);
+        //       foundry.utils.mergeObject(newItem.system, itemToMerge);
         //     }
         //     itemsToCheck.push(newItem);
         //   }
