@@ -1235,7 +1235,7 @@ export const VariantEncumbranceImpl = {
         changes: changes, //changes
         disabled: false,
         duration: duration,
-        flags: foundry.utils.foundry.utils.mergeObject(ceFlags, effect.flags),
+        flags: foundry.utils.mergeObject(ceFlags, effect.flags),
         icon: effect.icon, // icon
 
         name: effectName, // label
