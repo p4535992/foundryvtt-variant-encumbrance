@@ -1,3 +1,7 @@
+### 0.14.4 
+
+- bug fix: https://mail.google.com/mail/u/0/#inbox/FMfcgzGwJvqmKcSNtSzppRvGxBNTmzDr
+
 ### 0.14.3
 
 - Some clean up of the code and update vite build watch
