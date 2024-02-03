@@ -151,7 +151,7 @@ export const setupHooks = async () => {
   //   'MIXED',
   // );
   // END RMOEVED 2022-02-01
-
+  // START RMOEVED 2023-02-01
   // libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.prototype.prepareEmbeddedEntities", prepareEmbeddedEntities, "WRAPPER");
 
   // libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.prototype.getEmbeddedCollection", getEmbeddedCollection, "MIXED")
@@ -166,12 +166,13 @@ export const setupHooks = async () => {
   // libWrapper.register(MODULE_ID, "CONFIG.Item.documentClass.prototype.isEmbedded", isEmbedded, "OVERRIDE")
 
   // libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass._onCreateDocuments", _onCreateDocuments, "MIXED")
+  // END RMOEVED 2023-02-01
 
-  libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.createDocuments", createDocuments, "MIXED");
+  libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.createDocuments", createDocuments, "WRAPPER");
 
-  libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.deleteDocuments", deleteDocuments, "MIXED");
+  libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.deleteDocuments", deleteDocuments, "WRAPPER");
 
-  libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.updateDocuments", updateDocuments, "MIXED");
+  libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.updateDocuments", updateDocuments, "WRAPPER");
 };
 
 export const readyHooks = async () => {
