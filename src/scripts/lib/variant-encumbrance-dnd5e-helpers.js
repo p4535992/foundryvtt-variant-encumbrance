@@ -1,6 +1,6 @@
 import { isEmptyObject } from "jquery";
-import { calcWeightItemCollection, isEnabledActorType } from "../VariantEncumbranceImpl.mjs";
-import CONSTANTS from "../constants.mjs";
+import { calcWeightItemCollection, isEnabledActorType } from "../VariantEncumbranceImpl.js";
+import CONSTANTS from "../constants.js";
 import {
   calculateBackPackManagerBulk,
   calculateBackPackManagerWeight,
@@ -9,11 +9,11 @@ import {
   getItemWeight,
   isRealNumber,
   retrieveBackPackManagerItem,
-} from "./lib.mjs";
-import { invPlusActive } from "../modules.mjs";
+} from "./lib.js";
+import { invPlusActive } from "../modules.js";
 import { getPropertyPatched, hasPropertyPatched } from "./foundryvtt-utils-patched";
 import Logger from "./Logger";
-import { EncumbranceMode } from "../VariantEncumbranceModels.mjs";
+import { EncumbranceMode } from "../VariantEncumbranceModels.js";
 
 export class VariantEncumbranceDnd5eHelpers {
   static prepareInventoryItemsFromUpdate(actorEntity, updatedItem, updatedEffect, mode) {

@@ -1,4 +1,4 @@
-import Effect from "./effect.mjs";
+import Effect from "./effect.js";
 
 export class ActiveEffectManagerLibApi {
   effectInterface = {};
