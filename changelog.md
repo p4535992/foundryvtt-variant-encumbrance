@@ -3,6 +3,7 @@
 - Rewrite a lot of stuff 
 - Remove wrapper methods in favor of standard preHooks
 - BUg fix: https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/27, with this PR https://github.com/chrisk123999/chris-premades/pull/186/files
+- Bug fix: https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/33
 
 
 ### 0.14.4-5-6-7
