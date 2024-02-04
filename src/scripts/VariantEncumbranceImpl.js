@@ -168,7 +168,7 @@ export const VariantEncumbranceImpl = {
     let effectEntityPresent;
 
     for (const effectEntity of actorEntity.effects) {
-      const effectNameToSet = effectEntity.label;
+      const effectNameToSet = effectEntity.name || effectEntity.label;
 
       //const effectIsApplied = await VariantEncumbranceDnd5eHelpers.hasEffectAppliedFromId(effectEntity, actorEntity);
 
