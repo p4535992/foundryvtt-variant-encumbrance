@@ -102,7 +102,7 @@
   "variant-encumbrance-dnd5e.setting.enableDAEIntegration.hint": "If enabled, this setting will apply the value recovered by the DAE effects to the 'system.attributes.encumbrance.max' and 'system.attributes.capacity.cargo' attributes IF the 'DAE' module is present and active.",
 
   "variant-encumbrance-dnd5e.setting.doNotShowCustomizedWeightOnItemSheet.name": "Do not show customized weight on item sheet",
-  "variant-encumbrance-dnd5e.setting.doNotShowCustomizedWeightOnItemSheet.hint": "If this setting module is enabled, it will hide the display of the custom weight (the one with the red text) from all non-gm users. By default, the value is true.",
+  "variant-encumbrance-dnd5e.setting.doNotShowCustomizedWeightOnItemSheet.hint": "If this setting module is enabled, it will hide the display of any custom data of this module from all non-gm users. By default, the value is true.",
 
   "variant-encumbrance-dnd5e.setting.replaceStandardWeightValue.name": "Replace standard displayed weight value on Actor Sheet",
   "variant-encumbrance-dnd5e.setting.replaceStandardWeightValue.hint": "If enabled, this setting will replace the standard weight displayed on the actor inventory list value with the 'modified value' from this module",

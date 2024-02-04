@@ -1311,6 +1311,7 @@ const module = {
       suggestedBulkWeight = suggestedBulk.bulk;
     }
     // NOTE: we use the parent no the data
+    const displayedUnits = game.settings.get(CONSTANTS.MODULE_ID, "unitsBulk");
     let bulk = getProperty(item, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}`) ?? 0;
     if (bulk <= 0 && game.settings.get(CONSTANTS.MODULE_ID, "automaticApplySuggestedBulk")) {
       bulk = suggestedBulkWeight;
@@ -1320,7 +1321,7 @@ const module = {
       suggestedBulkWeight: suggestedBulkWeight,
     });
 
-    let bulkLabel = Logger.i18n("variant-encumbrance-dnd5e.label.bulk.VEBulk");
+    let bulkLabel = Logger.i18n("variant-encumbrance-dnd5e.label.bulk.VEBulk") + " (" + displayedUnits + ")";
     // <p class="notes">${suggestedBulkValueS}</p>
     html
       .find(".item-properties") // <div class="item-properties">
@@ -1353,13 +1354,19 @@ const module = {
     // options.push(
     //   `<option data-image="icons/svg/mystery-man.svg" value="">${Logger.i18n(`${CONSTANTS.MODULE_ID}.default`)}</option>`,
     // );
+
+    const displayedUnits = game.settings.get("dnd5e", "metricWeightUnits")
+      ? game.settings.get(CONSTANTS.MODULE_ID, "unitsMetric")
+      : game.settings.get(CONSTANTS.MODULE_ID, "units");
+
     const veweight =
       getProperty(item, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}`) ?? data.weight ?? 0;
 
     const suggestedVEWeightValueS = Logger.i18n("variant-encumbrance-dnd5e.label.veweight.VEWeightSuggestion");
 
-    let veweightLabel = Logger.i18n("variant-encumbrance-dnd5e.label.veweight.VEWeight");
+    let veweightLabel = Logger.i18n("variant-encumbrance-dnd5e.label.veweight.VEWeight") + " (" + displayedUnits + ")";
     // <p class="notes"></p>
+    /*
     html
       .find(".item-properties") // <div class="item-properties">
       // .closest('item-weight').after(
@@ -1375,5 +1382,11 @@ const module = {
         </div>
         `
       );
+    */
+    html
+      .find(`[name="system.weight"]`)
+      .parent()
+      .attr("data-tooltip", suggestedVEWeightValueS + ": " + veweight + " " + displayedUnits)
+      .attr("data-tooltip-direction", "UP");
   },
 };
