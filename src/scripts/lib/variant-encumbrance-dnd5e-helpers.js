@@ -1,5 +1,5 @@
 import { isEmptyObject } from "jquery";
-import { calcWeightItemCollection, isEnabledActorType } from "../VariantEncumbranceImpl.js";
+import { VariantEncumbranceImpl, calcWeightItemCollection, isEnabledActorType } from "../VariantEncumbranceImpl.js";
 import CONSTANTS from "../constants.js";
 import {
   calculateBackPackManagerBulk,
@@ -13,13 +13,14 @@ import {
 import { invPlusActive } from "../modules.js";
 import { getPropertyPatched, hasPropertyPatched } from "./foundryvtt-utils-patched";
 import Logger from "./Logger";
-import { EncumbranceMode } from "../VariantEncumbranceModels.js";
+import { EncumbranceFlags, EncumbranceMode } from "../VariantEncumbranceModels.js";
+import { VariantEncumbranceBulkImpl } from "../VariantEncumbranceBulkImpl.js";
 
 export class VariantEncumbranceDnd5eHelpers {
   static prepareInventoryItemsFromUpdate(actorEntity, updatedItem, updatedEffect, mode) {
     if (
-      hasProperty(updatedItem || {}, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}`) ||
-      hasProperty(updatedItem || {}, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}`)
+      hasPropertyPatched(updatedItem || {}, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}`) ||
+      hasPropertyPatched(updatedItem || {}, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}`)
     ) {
       return;
     }
@@ -844,8 +845,25 @@ export class VariantEncumbranceDnd5eHelpers {
     let noActiveEffect = false;
     if (isEmptyObject(update)) {
       // DO NOTHING
+      Logger.debug(`isAEncumbranceUpdated | The update contains key is empty`);
     } else if (isEnabledActorType(actorEntity)) {
       //  && actorEntity.sheet?.rendered
+      const physicalItems = ["weapon", "equipment", "consumable", "tool", "backpack", "loot"];
+      if (hasPropertyPatched(update, `system.type`)) {
+        const itemType = getPropertyPatched(update, `system.type`);
+        if (!physicalItems.includes(itemType)) {
+          Logger.debug(
+            `isAEncumbranceUpdated | The update contains key 'system.type' => ${getPropertyPatched(
+              update,
+              `system.type`
+            )}`
+          );
+          return {
+            doTheUpdate: false,
+            noActiveEffect: true,
+          };
+        }
+      }
 
       // foundry.utils.mergeObject(itemCurrent.system, updatedItem);
       // For our purpose we filter only the equipped action
@@ -1030,5 +1048,114 @@ export class VariantEncumbranceDnd5eHelpers {
       return activeEffectsRemoved[0];
     }
     return undefined;
+  }
+
+  static async manageCreateDocumentItem(actorEntity, update, data) {
+    const { doTheUpdate, noActiveEffect } = VariantEncumbranceDnd5eHelpers.isAEncumbranceUpdated(actorEntity, update);
+    if (doTheUpdate && actorEntity.sheet?.rendered) {
+      // if (
+      //   hasPropertyPatched(update, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}`) ||
+      //   hasPropertyPatched(update, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}`)
+      // ) {
+      //   return wrapped(updates, context);
+      // }
+      // if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
+      if (noActiveEffect) {
+        if (game.settings.get(CONSTANTS.MODULE_ID, "enabled")) {
+          VariantEncumbranceImpl.calculateEncumbrance(actorEntity, actorEntity.items.contents, false, invPlusActive);
+        }
+        if (game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem")) {
+          VariantEncumbranceBulkImpl.calculateEncumbrance(
+            actorEntity,
+            actorEntity.items.contents,
+            false,
+            invPlusActive
+          );
+        }
+      } else {
+        if (game.settings.get(CONSTANTS.MODULE_ID, "enabled")) {
+          await VariantEncumbranceImpl.updateEncumbrance(
+            actorEntity,
+            data,
+            actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.ENABLED_AE),
+            EncumbranceMode.ADD
+          );
+        }
+        if (game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem")) {
+          await VariantEncumbranceBulkImpl.updateEncumbrance(
+            actorEntity,
+            data,
+            actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.ENABLED_AE_BULK),
+            EncumbranceMode.ADD
+          );
+        }
+      }
+    }
+  }
+
+  static async manageUpdateDocumentItem(actorEntity, update, data) {
+    const { doTheUpdate, noActiveEffect } = VariantEncumbranceDnd5eHelpers.isAEncumbranceUpdated(actorEntity, update);
+    if (doTheUpdate && actorEntity.sheet?.rendered) {
+      // if (
+      //   hasPropertyPatched(update, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}`) ||
+      //   hasPropertyPatched(update, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}`)
+      // ) {
+      //   return wrapped(updates, context);
+      // }
+      // if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
+      if (noActiveEffect) {
+        if (game.settings.get(CONSTANTS.MODULE_ID, "enabled")) {
+          VariantEncumbranceImpl.calculateEncumbrance(actorEntity, actorEntity.items.contents, false, invPlusActive);
+        }
+        if (game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem")) {
+          VariantEncumbranceBulkImpl.calculateEncumbrance(
+            actorEntity,
+            actorEntity.items.contents,
+            false,
+            invPlusActive
+          );
+        }
+      } else {
+        if (game.settings.get(CONSTANTS.MODULE_ID, "enabled")) {
+          await VariantEncumbranceImpl.updateEncumbrance(
+            actorEntity,
+            data,
+            actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.ENABLED_AE),
+            EncumbranceMode.UPDATE
+          );
+        }
+        if (game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem")) {
+          await VariantEncumbranceBulkImpl.updateEncumbrance(
+            actorEntity,
+            data,
+            actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.ENABLED_AE_BULK),
+            EncumbranceMode.UPDATE
+          );
+        }
+      }
+    }
+  }
+
+  static async manageDeleteDocumentItem(actorEntity, update, data) {
+    const { doTheUpdate, noActiveEffect } = VariantEncumbranceDnd5eHelpers.isAEncumbranceUpdated(actorEntity, update);
+    if (doTheUpdate && actorEntity.sheet?.rendered) {
+      if (game.settings.get(CONSTANTS.MODULE_ID, "enabled")) {
+        await VariantEncumbranceImpl.updateEncumbrance(
+          actorEntity,
+          data,
+          actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.ENABLED_AE),
+          EncumbranceMode.DELETE
+        );
+      }
+      if (game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem")) {
+        await VariantEncumbranceBulkImpl.updateEncumbrance(
+          actorEntity,
+          data,
+          actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.ENABLED_AE_BULK),
+          EncumbranceMode.DELETE
+        );
+      }
+    }
+    // }
   }
 }

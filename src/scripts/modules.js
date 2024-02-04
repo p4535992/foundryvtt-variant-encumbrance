@@ -167,12 +167,13 @@ export const setupHooks = async () => {
 
   // libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass._onCreateDocuments", _onCreateDocuments, "MIXED")
   // END RMOEVED 2023-02-01
+  // START REMOVED 2024-02-04
+  // libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.createDocuments", createDocuments, "MIXED");
 
-  libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.createDocuments", createDocuments, "WRAPPER");
+  // libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.deleteDocuments", deleteDocuments, "MIXED");
 
-  libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.deleteDocuments", deleteDocuments, "WRAPPER");
-
-  libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.updateDocuments", updateDocuments, "WRAPPER");
+  // libWrapper.register(CONSTANTS.MODULE_ID, "CONFIG.Item.documentClass.updateDocuments", updateDocuments, "MIXED");
+  // END REMOVED 2024-02-01
 };
 
 export const readyHooks = async () => {
@@ -732,7 +733,7 @@ export const readyHooks = async () => {
     }
   });
 };
-
+/*
 export async function createEmbeddedDocuments(wrapped, embeddedName, data, context) {
   const actorEntity = this.actor;
   if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
@@ -801,98 +802,118 @@ export async function updateEmbeddedDocuments(wrapped, embeddedName, data, optio
   }
   return wrapped(embeddedName, data, options);
 }
-// START REMOVED 2022-01-29
-export async function createDocuments(wrapped, data, context = { parent: {}, pack: {}, options: {} }) {
+*/
+// START REMOVED 2024-02-02
+/*
+export async function createDocuments(wrapped, ...args) {
+  const [data, context = { parent: {}, pack: {}, options: {} }] = args;
+  Logger.debug("createDocuments", data, context);
   const { parent, pack, options } = context;
   const actorEntity = parent;
-  if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
-    if (game.settings.get(CONSTANTS.MODULE_ID, "enabled")) {
-      await VariantEncumbranceImpl.updateEncumbrance(
-        actorEntity,
-        data,
-        actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.ENABLED_AE),
-        EncumbranceMode.ADD
-      );
-    }
-    if (game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem")) {
-      await VariantEncumbranceBulkImpl.updateEncumbrance(
-        actorEntity,
-        data,
-        actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.ENABLED_AE_BULK),
-        EncumbranceMode.ADD
-      );
-    }
+  if (!actorEntity) {
+    return;
   }
-  return wrapped(data, context);
+  const updateData = data;
+  const prepareData = this;
+  VariantEncumbranceDnd5eHelpers.manageCreateDocumentItem(actorEntity, updateData, prepareData);
+
+  return wrapped(...args);
+  // return wrapped.apply(this, args);
 }
 
-export async function updateDocuments(wrapped, updates = [], context = { parent: {}, pack: {}, options: {} }) {
+export async function updateDocuments(wrapped, ...args) {
+  const [updates = [], context = { parent: {}, pack: {}, options: {} }] = args;
+  Logger.debug("updateDocuments", updates, context);
   const { parent, pack, options } = context;
   const actorEntity = parent;
-
-  const update = updates ? updates[0] : undefined;
-  const { doTheUpdate, noActiveEffect } = VariantEncumbranceDnd5eHelpers.isAEncumbranceUpdated(actorEntity, update);
-  if (doTheUpdate && actorEntity.sheet?.rendered) {
-    // if (
-    //   hasPropertyPatched(update, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}`) ||
-    //   hasPropertyPatched(update, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}`)
-    // ) {
-    //   return wrapped(updates, context);
-    // }
-    // if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
-    if (noActiveEffect) {
-      if (game.settings.get(CONSTANTS.MODULE_ID, "enabled")) {
-        VariantEncumbranceImpl.calculateEncumbrance(actorEntity, actorEntity.items.contents, false, invPlusActive);
-      }
-      if (game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem")) {
-        VariantEncumbranceBulkImpl.calculateEncumbrance(actorEntity, actorEntity.items.contents, false, invPlusActive);
-      }
-    } else {
-      if (game.settings.get(CONSTANTS.MODULE_ID, "enabled")) {
-        await VariantEncumbranceImpl.updateEncumbrance(
-          actorEntity,
-          updates,
-          actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.ENABLED_AE),
-          EncumbranceMode.ADD
-        );
-      }
-      if (game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem")) {
-        await VariantEncumbranceBulkImpl.updateEncumbrance(
-          actorEntity,
-          updates,
-          actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.ENABLED_AE_BULK),
-          EncumbranceMode.ADD
-        );
-      }
-    }
+  if (!actorEntity) {
+    return;
   }
-  return wrapped(updates, context);
+  const updateData = updates ? updates[0] : undefined;
+  const prepareData = this;
+  VariantEncumbranceDnd5eHelpers.manageUpdateDocumentItem(actorEntity, updateData, prepareData);
+
+  return wrapped(...args);
+  // return wrapped.apply(this, args);
 }
 
-export async function deleteDocuments(wrapped, ids = [], context = { parent: {}, pack: {}, options: {} }) {
+export async function deleteDocuments(wrapped, ...args) {
+  const [ids = [], context = { parent: {}, pack: {}, options: {} }] = args;
+  Logger.debug("deleteDocuments", ids, context);
   const { parent, pack, options } = context;
   const actorEntity = parent;
-  if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
-    if (game.settings.get(CONSTANTS.MODULE_ID, "enabled")) {
-      await VariantEncumbranceImpl.updateEncumbrance(
-        actorEntity,
-        ids,
-        actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.ENABLED_AE),
-        EncumbranceMode.DELETE
-      );
-    }
-    if (game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem")) {
-      await VariantEncumbranceBulkImpl.updateEncumbrance(
-        actorEntity,
-        ids,
-        actorEntity.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.ENABLED_AE_BULK),
-        EncumbranceMode.DELETE
-      );
-    }
+  if (!actorEntity) {
+    return;
   }
-  return wrapped(ids, context);
+  const updateData = undefined;
+  const prepareData = this;
+  VariantEncumbranceDnd5eHelpers.manageDeleteDocumentItem(actorEntity, updateData, prepareData);
+
+  return wrapped(...args);
+  // return wrapped.apply(this, args);
 }
-// END REMOVED 2022-01-29
+*/
+// END REMOVED 2024-02-02
+
+Hooks.on("preCreateItem", async (item, data, options, userId) => {
+  const actorEntity = item.parent;
+  if (!actorEntity) {
+    return;
+  }
+  const updateData = data;
+  const prepareData = item;
+  VariantEncumbranceDnd5eHelpers.manageCreateDocumentItem(actorEntity, updateData, prepareData);
+});
+
+Hooks.on("preUpdateItem", async (item, changes, options, userId) => {
+  const actorEntity = item.parent;
+  if (!actorEntity) {
+    return;
+  }
+  const updateData = changes;
+  const prepareData = item;
+  VariantEncumbranceDnd5eHelpers.manageUpdateDocumentItem(actorEntity, updateData, prepareData);
+});
+
+Hooks.on("preDeleteItem", async (item, options, userId) => {
+  const actorEntity = item.parent;
+  if (!actorEntity) {
+    return;
+  }
+  const updateData = undefined;
+  const prepareData = item;
+  VariantEncumbranceDnd5eHelpers.manageDeleteDocumentItem(actorEntity, updateData, prepareData);
+});
+
+// Hooks.on("createItem", async (item, options, userId) => {
+//   const actorEntity = item.parent;
+//   if (!actorEntity) {
+//     return;
+//   }
+//   const updateData = options;
+//   const prepareData = item;
+//   VariantEncumbranceDnd5eHelpers.manageCreateDocumentItem(actorEntity, updateData, prepareData);
+// });
+
+// Hooks.on("updateItem", async (item, change, options, userId) => {
+//   const actorEntity = item.parent;
+//   if (!actorEntity) {
+//     return;
+//   }
+//   const updateData = change;
+//   const prepareData = item;
+//   VariantEncumbranceDnd5eHelpers.manageUpdateDocumentItem(actorEntity, updateData, prepareData);
+// });
+
+// Hooks.on("deleteItem", async (item, options, userId) => {
+//   const actorEntity = item.parent;
+//   if (!actorEntity) {
+//     return;
+//   }
+//   const updateData = change;
+//   const prepareData = item;
+//   VariantEncumbranceDnd5eHelpers.manageDeleteDocumentItem(actorEntity, updateData, prepareData);
+// });
 
 const module = {
   async renderActorSheetVariant(
