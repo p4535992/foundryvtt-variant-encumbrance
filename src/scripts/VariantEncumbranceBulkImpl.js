@@ -15,7 +15,7 @@ import {
   invMidiQol,
   invPlusActive,
   itemContainerActive,
-} from "./modules.js";
+} from "./main.js";
 import CONSTANTS from "./constants.js";
 import {
   isGMConnected,

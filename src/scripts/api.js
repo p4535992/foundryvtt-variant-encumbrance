@@ -3,7 +3,7 @@ import CONSTANTS from "./constants.js";
 // import Effect from "./effects/effect.js";
 import { checkBulkCategory, isStringEquals } from "./lib/lib.js";
 import { VariantEncumbranceBulkImpl } from "./VariantEncumbranceBulkImpl.js";
-import { invPlusActive } from "./modules.js";
+import { invPlusActive } from "./main.js";
 import { VariantEncumbranceDnd5eHelpers } from "./lib/variant-encumbrance-dnd5e-helpers";
 import Logger from "./lib/Logger";
 

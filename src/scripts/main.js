@@ -24,8 +24,8 @@ import CONSTANTS from "./constants.js";
 import { registerSocket } from "./socket.js";
 import API from "./api.js";
 import { calcBulkItemCollection, VariantEncumbranceBulkImpl } from "./VariantEncumbranceBulkImpl.js";
-import { VariantEncumbranceDnd5eHelpers } from "./lib/variant-encumbrance-dnd5e-helpers";
-import Logger from "./lib/Logger";
+import { VariantEncumbranceDnd5eHelpers } from "./lib/variant-encumbrance-dnd5e-helpers.js";
+import Logger from "./lib/Logger.js";
 
 export let ENCUMBRANCE_STATE = {
   UNENCUMBERED: "", // "Unencumbered",
@@ -1330,10 +1330,10 @@ const module = {
         `
         <div class="form-group" style="color:red" data-tooltip="${suggestedBulkValueS}" data-tooltip-direction="UP">
           <label style="color:red">${bulkLabel}</label>
-          <input 
+          <input
           style="color:red"
           ${game.user.isGM ? "" : "readonly"}
-          type="text" 
+          type="text"
           name="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}" value="${bulk}" data-dtype="Number"/>
         </div>
         `
@@ -1374,10 +1374,10 @@ const module = {
         `
         <div class="form-group" style="color:red" data-tooltip="${suggestedVEWeightValueS}" data-tooltip-direction="UP">
           <label style="color:red">${veweightLabel}</label>
-          <input 
-          style="color:red" 
+          <input
+          style="color:red"
           readonly
-          type="text" 
+          type="text"
           name="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}" value="${veweight}" data-dtype="Number"/>
         </div>
         `

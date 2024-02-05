@@ -10,7 +10,7 @@ import {
   isRealNumber,
   retrieveBackPackManagerItem,
 } from "./lib.js";
-import { invPlusActive } from "../modules.js";
+import { invPlusActive } from "../main.js";
 import { getPropertyPatched, hasPropertyPatched } from "./foundryvtt-utils-patched";
 import Logger from "./Logger";
 import { EncumbranceFlags, EncumbranceMode } from "../VariantEncumbranceModels.js";

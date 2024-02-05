@@ -1,7 +1,7 @@
 import { BULK_CATEGORY, BulkData, EncumbranceActorType } from "./../VariantEncumbranceModels.js";
 import CONSTANTS from "../constants.js";
 import { calcBulkItemCollection } from "../VariantEncumbranceBulkImpl.js";
-import { backPackManagerActive, itemContainerActive } from "../modules.js";
+import { backPackManagerActive, itemContainerActive } from "../main.js";
 import { calcWeightItemCollection } from "../VariantEncumbranceImpl.js";
 import API from "../api.js";
 import Logger from "./Logger.js";
