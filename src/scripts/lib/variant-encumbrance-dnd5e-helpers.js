@@ -1,5 +1,5 @@
 import { isEmptyObject } from "jquery";
-import { VariantEncumbranceImpl, calcWeightItemCollection, isEnabledActorType } from "../VariantEncumbranceImpl.js";
+import { VariantEncumbranceImpl, calcWeightItemCollection } from "../VariantEncumbranceImpl.js";
 import CONSTANTS from "../constants.js";
 import {
   calculateBackPackManagerBulk,
@@ -17,6 +17,23 @@ import { EncumbranceFlags, EncumbranceMode } from "../VariantEncumbranceModels.j
 import { VariantEncumbranceBulkImpl } from "../VariantEncumbranceBulkImpl.js";
 
 export class VariantEncumbranceDnd5eHelpers {
+  static isEnabledActorType(actorEntity) {
+    const useVarianEncumbranceWithSpecificType = game.settings.get(
+      CONSTANTS.MODULE_ID,
+      "useVarianEncumbranceWithSpecificType"
+    )
+      ? String(game.settings.get(CONSTANTS.MODULE_ID, "useVarianEncumbranceWithSpecificType")).split(",")
+      : [];
+    if (
+      actorEntity &&
+      useVarianEncumbranceWithSpecificType.length > 0 &&
+      useVarianEncumbranceWithSpecificType.includes(actorEntity?.type)
+    ) {
+      return true;
+    }
+    return false;
+  }
+
   static prepareInventoryItemsFromUpdate(actorEntity, updatedItem, updatedEffect, mode) {
     if (
       hasPropertyPatched(updatedItem || {}, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}`) ||
@@ -846,7 +863,7 @@ export class VariantEncumbranceDnd5eHelpers {
     if (isEmptyObject(update)) {
       // DO NOTHING
       Logger.debug(`isAEncumbranceUpdated | The update contains key is empty`);
-    } else if (isEnabledActorType(actorEntity)) {
+    } else if (VariantEncumbranceDnd5eHelpers.isEnabledActorType(actorEntity)) {
       //  && actorEntity.sheet?.rendered
       const physicalItems = ["weapon", "equipment", "consumable", "tool", "backpack", "loot"];
       if (hasPropertyPatched(update, `system.type`)) {
@@ -1059,7 +1076,7 @@ export class VariantEncumbranceDnd5eHelpers {
       // ) {
       //   return wrapped(updates, context);
       // }
-      // if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
+      // if (VariantEncumbranceDnd5eHelpers.isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
       if (noActiveEffect) {
         if (game.settings.get(CONSTANTS.MODULE_ID, "enabled")) {
           VariantEncumbranceImpl.calculateEncumbrance(actorEntity, actorEntity.items.contents, false, invPlusActive);
@@ -1102,7 +1119,7 @@ export class VariantEncumbranceDnd5eHelpers {
       // ) {
       //   return wrapped(updates, context);
       // }
-      // if (isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
+      // if (VariantEncumbranceDnd5eHelpers.isEnabledActorType(actorEntity) && actorEntity.sheet?.rendered) {
       if (noActiveEffect) {
         if (game.settings.get(CONSTANTS.MODULE_ID, "enabled")) {
           VariantEncumbranceImpl.calculateEncumbrance(actorEntity, actorEntity.items.contents, false, invPlusActive);

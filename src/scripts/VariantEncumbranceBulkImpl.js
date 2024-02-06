@@ -1148,6 +1148,216 @@ export const VariantEncumbranceBulkImpl = {
     }
     return undefined;
   },
+
+  renderItemSheet(app, html, data, itemTmp) {
+    const doNotShowCustomizedWeightOnItemSheet = game.settings.get(
+      CONSTANTS.MODULE_ID,
+      "doNotShowCustomizedWeightOnItemSheet"
+    );
+    if (!game.user.isGM && doNotShowCustomizedWeightOnItemSheet) {
+      Logger.debug(`renderItemSheetBulkSystem | OFF`);
+      return;
+    }
+    // Size
+    const item = app.object;
+    const options = [];
+    // options.push(
+    //   `<option data-image="icons/svg/mystery-man.svg" value="">${Logger.i18n(`${CONSTANTS.MODULE_ID}.default`)}</option>`,
+    // );
+    const weight = data.weight ?? 0;
+    let suggestedBulkWeight = 0;
+    const suggestedBulk = checkBulkCategory(weight, item);
+    if (suggestedBulk) {
+      suggestedBulkWeight = suggestedBulk.bulk;
+    }
+    // NOTE: we use the parent no the data
+    const displayedUnits = game.settings.get(CONSTANTS.MODULE_ID, "unitsBulk");
+    let bulk = getProperty(item, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}`) ?? 0;
+    if (bulk <= 0 && game.settings.get(CONSTANTS.MODULE_ID, "automaticApplySuggestedBulk")) {
+      bulk = suggestedBulkWeight;
+    }
+
+    const suggestedBulkValueS = Logger.i18nFormat("variant-encumbrance-dnd5e.label.bulk.suggestedValue", {
+      suggestedBulkWeight: suggestedBulkWeight,
+    });
+
+    let bulkLabel = Logger.i18n("variant-encumbrance-dnd5e.label.bulk.VEBulk") + " (" + displayedUnits + ")";
+    // <p class="notes">${suggestedBulkValueS}</p>
+    html
+      .find(".item-properties") // <div class="item-properties">
+      // .closest('item-weight').after(
+      .append(
+        `
+        <div class="form-group" style="color:red" data-tooltip="${suggestedBulkValueS}" data-tooltip-direction="UP">
+          <label style="color:red">${bulkLabel}</label>
+          <input
+          style="color:red"
+          ${game.user.isGM ? "" : "readonly"}
+          type="text"
+          name="flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.bulk}" value="${bulk}" data-dtype="Number"/>
+        </div>
+        `
+      );
+  },
+
+  async renderActorSheet(actorSheet, htmlElement, actorObject, actorEntityTmp, encumbranceElement, sheetClass) {
+    // ===============================
+    // CUSTOMIZE ENCUMBRANCE
+    // ===============================
+
+    $(encumbranceElement)
+      .clone()
+      .removeClass("encumbrance-variant")
+      .addClass("encumbrance-bulk")
+      .appendTo(encumbranceElement.parent());
+
+    // htmlElement.find('.encumbrance-bulk').css('margin-bottom', '16px');
+    // htmlElement.find('.encumbrance-bulk')[0].style.marginBottom = '16px';
+
+    const htmlElementEncumbranceBulk = htmlElement.find(".encumbrance-bulk");
+
+    htmlElementEncumbranceBulk.find(".encumbrance-breakpoint").each(function (el) {
+      $(this).addClass("encumbrance-breakpoint-bulk").removeClass("encumbrance-breakpoint-variant");
+    });
+    htmlElementEncumbranceBulk.find(".encumbrance-breakpoint-label").each(function (el) {
+      $(this).addClass("encumbrance-breakpoint-label-bulk").removeClass("encumbrance-breakpoint-label-variant");
+    });
+
+    let encumbranceElementsBulk;
+    if (htmlElementEncumbranceBulk[0]?.tagName === "FORM" && htmlElementEncumbranceBulk[0]?.id === "") {
+      encumbranceElementsBulk = htmlElementEncumbranceBulk[0]?.children;
+    } else {
+      encumbranceElementsBulk = htmlElementEncumbranceBulk[0]?.children;
+    }
+
+    let encumbranceDataBulk;
+    // if (hasProperty(actorObject, `flags.${CONSTANTS.MODULE_ID}.${EncumbranceFlags.DATA_BULK}`)) {
+    //   encumbranceDataBulk = getProperty(actorObject,`flags.${CONSTANTS.MODULE_ID}.${EncumbranceFlags.DATA_BULK}`);
+    // }
+    if (!encumbranceDataBulk) {
+      // const itemsCurrent = actorEntity.items.contents;//actorObject.items;// STRANGE BUG actorEntity.items.contents
+      // const actorEntityCurrent = <ActorData>actorObject.actor; // STRANGE BUG game.actors?.get(actorObject.actor._id);
+      // STRANGE BEHAVIOUR
+      if (actorObject.actor?.flags) {
+        // foundry.utils.mergeObject(<any>actorEntity.flags, <any>actorObject.actor.flags);
+        setProperty(actorEntityTmp, "flags", actorObject.actor.flags);
+      }
+      // if (actorObject.system) {
+      // 	// foundry.utils.mergeObject(<any>actorEntity.system, <any>actorObject.system);
+      // 	setProperty(actorEntityTmp, "system", actorObject.system);
+      // }
+      // foundry.utils.mergeObject(actorEntity.items, actorObject.items);
+      let itemsToCheck = [];
+      // if (actorObject.items && actorObject.items instanceof Array) {
+      //   for (const itemM of actorEntityTmp.items.contents) {
+      //     const itemToMerge = <ItemData>actorObject.items.find((zData) => {
+      //       return z._id === itemM.id;
+      //     });
+      //     const newItem = <any>duplicate(itemM);
+      //     if (itemToMerge) {
+      //       foundry.utils.mergeObject(newItem.system, itemToMerge);
+      //     }
+      //     itemsToCheck.push(newItem);
+      //   }
+      // } else {
+      itemsToCheck = actorEntityTmp.items.contents;
+      // }
+
+      encumbranceDataBulk = VariantEncumbranceBulkImpl.calculateEncumbrance(
+        actorEntityTmp,
+        itemsToCheck,
+        false,
+        invPlusActive
+      );
+
+      // TODO THIS LAUNCH A ERROR ON THE SEMAPHORE SYNCHRONIZE...
+      // if (actorEntityTmp.getFlag(CONSTANTS.MODULE_ID, EncumbranceFlags.ENABLED_AE_BULK)) {
+      // 	await VariantEncumbranceBulkImpl.manageActiveEffect(actorEntityTmp, encumbranceDataBulk.encumbranceTier);
+      // }
+    }
+
+    const displayedUnitsBulk = encumbranceDataBulk.unit ?? game.settings.get(CONSTANTS.MODULE_ID, "unitsBulk");
+
+    if (
+      !encumbranceElementsBulk &&
+      ((game.modules.get("compact-beyond-5e-sheet")?.active &&
+        actorSheet.template.includes("compact-beyond-5e-sheet")) ||
+        (game.modules.get("dndbeyond-character-sheet")?.active &&
+          actorSheet.template.includes("dndbeyond-character-sheet")))
+    ) {
+      const encumbranceElementsTmp = htmlElementEncumbranceBulk[0]?.children;
+
+      encumbranceElementsTmp[0].textContent =
+        "Bulk Carried: " +
+        Math.round(encumbranceDataBulk.totalWeightToDisplay * 100000) / 100000 +
+        " " +
+        displayedUnitsBulk;
+
+      encumbranceElementsTmp[1].textContent = "Max: " + encumbranceDataBulk.heavyMax + " " + displayedUnitsBulk;
+      // TODO visual integration with compact-beyond-5e-sheet
+    }
+
+    if (encumbranceElementsBulk) {
+      encumbranceElementsBulk[2].style.left = (encumbranceDataBulk.lightMax / encumbranceDataBulk.heavyMax) * 100 + "%";
+      encumbranceElementsBulk[3].style.left = (encumbranceDataBulk.lightMax / encumbranceDataBulk.heavyMax) * 100 + "%";
+      encumbranceElementsBulk[4].style.left =
+        (encumbranceDataBulk.mediumMax / encumbranceDataBulk.heavyMax) * 100 + "%";
+      encumbranceElementsBulk[5].style.left =
+        (encumbranceDataBulk.mediumMax / encumbranceDataBulk.heavyMax) * 100 + "%";
+      encumbranceElementsBulk[0].style.cssText =
+        "width: " +
+        Math.min(Math.max((encumbranceDataBulk.totalWeightToDisplay / encumbranceDataBulk.heavyMax) * 100, 0), 99.8) +
+        "%;";
+
+      encumbranceElementsBulk[1].textContent =
+        Math.round(encumbranceDataBulk.totalWeightToDisplay * 100000) / 100000 +
+        "/" +
+        encumbranceDataBulk.heavyMax +
+        " " +
+        displayedUnitsBulk;
+
+      encumbranceElementsBulk[0].classList.remove("medium");
+      encumbranceElementsBulk[0].classList.remove("heavy");
+
+      if (encumbranceDataBulk.encumbranceTier === ENCUMBRANCE_TIERS.LIGHT) {
+        encumbranceElementsBulk[0].classList.add("medium");
+      }
+      if (encumbranceDataBulk.encumbranceTier === ENCUMBRANCE_TIERS.HEAVY) {
+        encumbranceElementsBulk[0].classList.add("heavy");
+      }
+      if (encumbranceDataBulk.encumbranceTier === ENCUMBRANCE_TIERS.MAX) {
+        encumbranceElementsBulk[0].classList.add("max");
+      }
+
+      // htmlElementEncumbranceBulk
+      //   .find('.encumbrance-breakpoint-bulk.encumbrance-33.arrow-up').parent().css('margin-bottom', '4px');
+      // htmlElementEncumbranceBulk
+      //   .find('.encumbrance-breakpoint-bulk.encumbrance-33.arrow-up')
+      //   .append(`<div class="encumbrance-breakpoint-label-bulk VELabel">${encumbranceDataBulk.lightMax}<div>`);
+
+      htmlElementEncumbranceBulk
+        .find(".encumbrance-breakpoint-bulk.encumbrance-66.arrow-up")
+        .html(`<div class="encumbrance-breakpoint-label-bulk VELabel">${encumbranceDataBulk.mediumMax}<div>`);
+
+      $(encumbranceElementsBulk)
+        .parent()
+        .find(".encumbrance-breakpoint.encumbrance-33.arrow-up.encumbrance-breakpoint-bulk")[0].style.display = "none";
+      $(encumbranceElementsBulk)
+        .parent()
+        .find(".encumbrance-breakpoint.encumbrance-33.arrow-down.encumbrance-breakpoint-bulk")[0].style.display =
+        "none";
+
+      $(encumbranceElementsBulk)
+        .find(".encumbrance-breakpoint-bulk.encumbrance-66.arrow-up")
+        .append(`<div class="encumbrance-breakpoint-label-bulk VELabel">${encumbranceDataBulk.mediumMax}<div>`);
+
+      encumbranceElementsBulk[1].insertAdjacentHTML(
+        "afterend",
+        `<span class="VELabel" style="right:0%">${encumbranceDataBulk.heavyMax}</span>`
+      );
+      encumbranceElementsBulk[1].insertAdjacentHTML("afterend", `<span class="VELabel">0</span>`);
+    }
+  },
 };
 
 // ===========================
