@@ -1,3 +1,7 @@
+### 0.15.1 
+
+- Little update on the api
+
 ### 0.15.0 
 
 - Rewrite a lot of stuff 

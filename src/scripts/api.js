@@ -6,6 +6,7 @@ import { VariantEncumbranceBulkImpl } from "./VariantEncumbranceBulkImpl.js";
 import { invPlusActive } from "./main.js";
 import { VariantEncumbranceDnd5eHelpers } from "./lib/variant-encumbrance-dnd5e-helpers";
 import Logger from "./lib/Logger";
+import { RetrieveHelpers } from "./lib/retrieve-helpers.js";
 
 const API = {
   async calculateWeightOnActorFromIdArr(...inAttributes) {
@@ -17,13 +18,7 @@ const API = {
   },
 
   calculateWeightOnActorFromId(actorIdOrName) {
-    const actor = game.actors?.contents.find((actorEntity) => {
-      return isStringEquals(actorEntity.id, actorIdOrName) || isStringEquals(actorEntity.name, actorIdOrName);
-    });
-    if (!actor) {
-      Logger.warn(`No actor found for reference '${actorIdOrName}'`);
-      return;
-    }
+    const actor = RetrieveHelpers.getActorSync(actorIdOrName, false, true);
     return this.calculateWeightOnActor(actor);
   },
 
@@ -43,11 +38,7 @@ const API = {
       Logger.warn(`No token found for reference '${tokenIdOrName}'`);
       return;
     }
-    const actor = token.actor;
-    if (!actor) {
-      Logger.warn(`No actor found for reference '${tokenIdOrName}'`);
-      return;
-    }
+    const actor = RetrieveHelpers.getActorSync(token.actor, false, true);
     return this.calculateWeightOnActor(actor);
   },
 
@@ -56,9 +47,7 @@ const API = {
       throw Logger.error("calculateWeightOnActorArr | inAttributes must be of type array");
     }
     const [actorIdOrName] = inAttributes;
-    const actor = game.actors?.contents.find((actorEntity) => {
-      return isStringEquals(actorEntity.id, actorIdOrName) || isStringEquals(actorEntity.name, actorIdOrName);
-    });
+    const actor = RetrieveHelpers.getActorSync(actorIdOrName, false, true);
     return this.calculateWeightOnActor(actor);
   },
 
@@ -89,13 +78,7 @@ const API = {
   },
 
   calculateBulkOnActorFromId(actorIdOrName) {
-    const actor = game.actors?.contents.find((actorEntity) => {
-      return isStringEquals(actorEntity.id, actorIdOrName) || isStringEquals(actorEntity.name, actorIdOrName);
-    });
-    if (!actor) {
-      Logger.warn(`No actor found for reference '${actorIdOrName}'`);
-      return;
-    }
+    const actor = RetrieveHelpers.getActorSync(actorIdOrName, false, true);
     return this.calculateBulkOnActor(actor);
   },
 
@@ -115,11 +98,7 @@ const API = {
       Logger.warn(`No token found for reference '${tokenIdOrName}'`);
       return;
     }
-    const actor = token.actor;
-    if (!actor) {
-      Logger.warn(`No actor found for reference '${tokenIdOrName}'`);
-      return;
-    }
+    const actor = RetrieveHelpers.getActorSync(token.actor, false, true);
     return this.calculateBulkOnActor(actor);
   },
 
@@ -128,9 +107,7 @@ const API = {
       throw Logger.error("calculateBulkOnActorArr | inAttributes must be of type array");
     }
     const [actorIdOrName] = inAttributes;
-    const actor = game.actors?.contents.find((actorEntity) => {
-      return isStringEquals(actorEntity.id, actorIdOrName) || isStringEquals(actorEntity.name, actorIdOrName);
-    });
+    const actor = RetrieveHelpers.getActorSync(actorIdOrName, false, true);
     return this.calculateBulkOnActor(actor);
   },
 
