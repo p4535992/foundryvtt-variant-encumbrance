@@ -1,3 +1,7 @@
+### 0.15.2
+
+- Update retrieve-helper
+
 ### 0.15.1 
 
 - Little update on the api
