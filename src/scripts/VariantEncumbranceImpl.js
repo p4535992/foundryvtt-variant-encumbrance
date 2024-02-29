@@ -1380,6 +1380,46 @@ export const VariantEncumbranceImpl = {
       }
 
       const displayedUnits = encumbranceData.unit;
+
+      /* pre 3.0.0
+      <div class="encumbrance {{#if encumbered}}encumbered{{/if}}">
+          <span class="encumbrance-bar" style="width:{{pct}}%"></span>
+          <span class="encumbrance-label">{{value}} / {{max}}</span>
+          <i class="encumbrance-breakpoint encumbrance-33 arrow-up"></i>
+          <i class="encumbrance-breakpoint encumbrance-33 arrow-down"></i>
+          <i class="encumbrance-breakpoint encumbrance-66 arrow-up"></i>
+          <i class="encumbrance-breakpoint encumbrance-66 arrow-down"></i>
+      </div>
+
+      <div class="encumbrance ">
+            <span class="encumbrance-bar" style="width:36.166666666666664%"></span>
+            <span class="encumbrance-label">108.5 / 300</span>
+            <i class="encumbrance-breakpoint encumbrance-33 arrow-up"></i>
+            <i class="encumbrance-breakpoint encumbrance-33 arrow-down"></i>
+            <i class="encumbrance-breakpoint encumbrance-66 arrow-up"></i>
+            <i class="encumbrance-breakpoint encumbrance-66 arrow-down"></i>
+      </div>
+      */
+
+      /* new 3.0.0
+      <div class="encumbrance" role="meter" aria-label="Encumbrance" aria-value="0.4" aria-valuetext="0.6 lbs." aria-valuemin="0" aria-valuemax="150" style="--percentage: 0.4%">
+          <label>0.6 / 150</label>
+          <i class="breakpoint encumbrance-33 arrow-up" role="presentation"></i>
+          <i class="breakpoint encumbrance-33 arrow-down" role="presentation"></i>
+          <i class="breakpoint encumbrance-66 arrow-up" role="presentation"></i>
+          <i class="breakpoint encumbrance-66 arrow-down" role="presentation"></i>
+      </div>
+      */
+
+      /*
+      <div class="encumbrance encumbrance-variant" role="meter" aria-label="Encumbrance" aria-value="6" aria-valuetext="0.6 lbs." aria-valuemin="0" aria-valuemax="10" style="--percentage: 6%">
+          <label style="width: 0.4%;">0.6 / 10</label>
+          <i class="breakpoint encumbrance-33 arrow-up" role="presentation">0.6/150 lbs.</i><span class="VELabel">0</span><span class="VELabel" style="right:0%">150</span>
+          <i class="breakpoint encumbrance-33 arrow-down" role="presentation" style="left: 33.3333%;"></i>
+          <i class="breakpoint encumbrance-66 arrow-up" role="presentation" style="left: 33.3333%;"></i>
+          <i class="breakpoint encumbrance-66 arrow-down" role="presentation" style="left: 66.6667%;"></i>
+      </div>
+      */
       // TODO MADE BETTER CODE
       if (
         !encumbranceElements &&
