@@ -6,7 +6,8 @@
 .encumbrance {
   margin-top: 18px !important;
 }
-.encumbrance-label {
+.encumbrance-label,
+.encumbrance > label {
   margin: auto !important;
   width: 100% !important;
   text-align: center !important;
@@ -44,18 +45,27 @@
   text-align: center;
 }
 
-.encumbrance-bar {
+.encumbrance-bar,
+.dnd5e dnd5e-inventory .capacity::after,
+.dnd5e dnd5e-inventory .encumbrance::after {
   background: #6eb313 !important;
 }
 
-.encumbrance-bar.medium {
+.encumbrance-bar.medium,
+.dnd5e dnd5e-inventory .capacity.medium::after,
+.dnd5e dnd5e-inventory .encumbrance.medium::after {
   background: #ea7e20 !important;
 }
 
-.encumbrance-bar.heavy {
+.encumbrance-bar.heavy,
+.dnd5e dnd5e-inventory .capacity.heavy::after,
+.dnd5e dnd5e-inventory .encumbrance.heavy::after {
   background: #e40000 !important;
 }
-.encumbrance-bar.max {
+
+.encumbrance-bar.max,
+.dnd5e dnd5e-inventory .capacity.max::after,
+.dnd5e dnd5e-inventory .encumbrance.max::after {
   background: repeating-linear-gradient(135deg, #2d2d2d, #2d2d2d 10px, #efd00e 10px, #efd00e 20px) !important;
 }
 
@@ -80,13 +90,6 @@
   margin-bottom: 16px !important;
   margin-top: 25px !important;
 }
-
-/* 
-.encumbrance-breakpoint.encumbrance-33 .arrow-up .encumbrance-breakpoint-bulk,
-.encumbrance-breakpoint.encumbrance-33 .arrow-down .encumbrance-breakpoint-bulk{
-  display: none;
-} 
-*/
 
 .encumbrance-bar-bulk {
   background: #6eb313 !important;

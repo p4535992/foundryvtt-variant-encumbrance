@@ -26,6 +26,7 @@ import {
   getItemBulk,
   retrieveBackPackManagerItem,
   calculateBackPackManagerBulk,
+  checkBulkCategory,
 } from "./lib/lib.js";
 import API from "./api.js";
 import { VariantEncumbranceDnd5eHelpers } from "./lib/variant-encumbrance-dnd5e-helpers";
@@ -251,7 +252,7 @@ export const VariantEncumbranceBulkImpl = {
    * Optionally include the weight of carried currency across all denominations by applying the standard rule
    * from the PHB pg. 143
    * @param {Object} actorData      The data object for the Actor being rendered
-   * @returns {{max, value, pct}}  An object describing the character's encumbrance level
+   * @returns {{totalWeight, totalWeightToDisplay, lightMax, mediumMax, heavyMax, encumbranceTier, speedDecrease, unit, inventorySlot, minimumBulk, encumbrance, mapItemEncumbrance}}  An object describing the character's encumbrance level
    * @private
    */
   calculateEncumbrance: function (
@@ -1223,13 +1224,6 @@ export const VariantEncumbranceBulkImpl = {
       $(this).addClass("encumbrance-breakpoint-label-bulk").removeClass("encumbrance-breakpoint-label-variant");
     });
 
-    let encumbranceElementsBulk;
-    if (htmlElementEncumbranceBulk[0]?.tagName === "FORM" && htmlElementEncumbranceBulk[0]?.id === "") {
-      encumbranceElementsBulk = htmlElementEncumbranceBulk[0]?.children;
-    } else {
-      encumbranceElementsBulk = htmlElementEncumbranceBulk[0]?.children;
-    }
-
     let encumbranceDataBulk;
     // if (hasProperty(actorObject, `flags.${CONSTANTS.MODULE_ID}.${EncumbranceFlags.DATA_BULK}`)) {
     //   encumbranceDataBulk = getProperty(actorObject,`flags.${CONSTANTS.MODULE_ID}.${EncumbranceFlags.DATA_BULK}`);
@@ -1278,84 +1272,150 @@ export const VariantEncumbranceBulkImpl = {
 
     const displayedUnitsBulk = encumbranceDataBulk.unit ?? game.settings.get(CONSTANTS.MODULE_ID, "unitsBulk");
 
-    if (
-      !encumbranceElementsBulk &&
-      ((game.modules.get("compact-beyond-5e-sheet")?.active &&
-        actorSheet.template.includes("compact-beyond-5e-sheet")) ||
-        (game.modules.get("dndbeyond-character-sheet")?.active &&
-          actorSheet.template.includes("dndbeyond-character-sheet")))
-    ) {
-      const encumbranceElementsTmp = htmlElementEncumbranceBulk[0]?.children;
+    let encumbranceElementsBulk = htmlElementEncumbranceBulk[0]?.children;
 
-      encumbranceElementsTmp[0].textContent =
-        "Bulk Carried: " +
-        Math.round(encumbranceDataBulk.totalWeightToDisplay * 100000) / 100000 +
-        " " +
-        displayedUnitsBulk;
+    if (parseInt(game.system.version) >= 3) {
+      /*
+      const span1 = document.createElement("span");
+      span1.classList.add("encumbrance-bar");
+      span1.style.width = encumbranceData.pct + "%";
 
-      encumbranceElementsTmp[1].textContent = "Max: " + encumbranceDataBulk.heavyMax + " " + displayedUnitsBulk;
-      // TODO visual integration with compact-beyond-5e-sheet
-    }
+      const span2 = document.createElement("span");
+      span2.classList.add("encumbrance-label");
+      span2.textContent = htmlElementEncumbranceBulk[0].firstElementChild.textContent;
 
-    if (encumbranceElementsBulk) {
-      encumbranceElementsBulk[2].style.left = (encumbranceDataBulk.lightMax / encumbranceDataBulk.heavyMax) * 100 + "%";
-      encumbranceElementsBulk[3].style.left = (encumbranceDataBulk.lightMax / encumbranceDataBulk.heavyMax) * 100 + "%";
-      encumbranceElementsBulk[4].style.left =
-        (encumbranceDataBulk.mediumMax / encumbranceDataBulk.heavyMax) * 100 + "%";
-      encumbranceElementsBulk[5].style.left =
-        (encumbranceDataBulk.mediumMax / encumbranceDataBulk.heavyMax) * 100 + "%";
-      encumbranceElementsBulk[0].style.cssText =
-        "width: " +
-        Math.min(Math.max((encumbranceDataBulk.totalWeightToDisplay / encumbranceDataBulk.heavyMax) * 100, 0), 99.8) +
-        "%;";
+      htmlElementEncumbranceBulk.find("i").addClass("encumbrance-breakpoint").removeClass("breakpoint");
 
-      encumbranceElementsBulk[1].textContent =
+      htmlElementEncumbranceBulk[0].firstElementChild.remove();
+
+      htmlElementEncumbranceBulk[0].prepend(span2);
+      htmlElementEncumbranceBulk[0].prepend(span1);
+      */
+
+      htmlElementEncumbranceBulk[0].setAttribute(
+        "aria-value",
+        Math.round(encumbranceDataBulk.totalWeight * 100000) / 100000
+      );
+      htmlElementEncumbranceBulk[0].setAttribute(
+        "style",
+        `--percentage: ${
+          Math.round((encumbranceDataBulk.totalWeight / encumbranceDataBulk.heavyMax) * 100 * 100000) / 100000
+        }%`
+      );
+      htmlElementEncumbranceBulk[0].setAttribute(
+        "aria-valuetext",
+        encumbranceDataBulk.totalWeightToDisplay + " " + displayedUnitsBulk
+      );
+      htmlElementEncumbranceBulk[0].setAttribute(
+        "aria-valuemax",
+        Math.round(encumbranceDataBulk.heavyMax * 100000) / 100000
+      );
+      // aria-value="0.4" aria-valuetext="0.6 lbs." aria-valuemin="0" aria-valuemax="150" style="--percentage: 0.4%"
+
+      encumbranceElementsBulk[0].textContent =
         Math.round(encumbranceDataBulk.totalWeightToDisplay * 100000) / 100000 +
         "/" +
         encumbranceDataBulk.heavyMax +
         " " +
         displayedUnitsBulk;
 
-      encumbranceElementsBulk[0].classList.remove("medium");
-      encumbranceElementsBulk[0].classList.remove("heavy");
+      htmlElementEncumbranceBulk[0].classList.remove("medium");
+      htmlElementEncumbranceBulk[0].classList.remove("heavy");
+      htmlElementEncumbranceBulk[0].classList.remove("max");
 
       if (encumbranceDataBulk.encumbranceTier === ENCUMBRANCE_TIERS.LIGHT) {
-        encumbranceElementsBulk[0].classList.add("medium");
+        htmlElementEncumbranceBulk[0].classList.add("medium");
       }
       if (encumbranceDataBulk.encumbranceTier === ENCUMBRANCE_TIERS.HEAVY) {
-        encumbranceElementsBulk[0].classList.add("heavy");
+        htmlElementEncumbranceBulk[0].classList.add("heavy");
       }
       if (encumbranceDataBulk.encumbranceTier === ENCUMBRANCE_TIERS.MAX) {
-        encumbranceElementsBulk[0].classList.add("max");
+        htmlElementEncumbranceBulk[0].classList.add("max");
+      }
+    } else {
+      if (
+        !encumbranceElementsBulk &&
+        ((game.modules.get("compact-beyond-5e-sheet")?.active &&
+          actorSheet.template.includes("compact-beyond-5e-sheet")) ||
+          (game.modules.get("dndbeyond-character-sheet")?.active &&
+            actorSheet.template.includes("dndbeyond-character-sheet")))
+      ) {
+        const encumbranceElementsTmp = htmlElementEncumbranceBulk[0]?.children;
+
+        encumbranceElementsTmp[0].textContent =
+          "Bulk Carried: " +
+          Math.round(encumbranceDataBulk.totalWeightToDisplay * 100000) / 100000 +
+          " " +
+          displayedUnitsBulk;
+
+        encumbranceElementsTmp[1].textContent = "Max: " + encumbranceDataBulk.heavyMax + " " + displayedUnitsBulk;
+        // TODO visual integration with compact-beyond-5e-sheet
       }
 
-      // htmlElementEncumbranceBulk
-      //   .find('.encumbrance-breakpoint-bulk.encumbrance-33.arrow-up').parent().css('margin-bottom', '4px');
-      // htmlElementEncumbranceBulk
-      //   .find('.encumbrance-breakpoint-bulk.encumbrance-33.arrow-up')
-      //   .append(`<div class="encumbrance-breakpoint-label-bulk VELabel">${encumbranceDataBulk.lightMax}<div>`);
+      if (encumbranceElementsBulk) {
+        encumbranceElementsBulk[2].style.left =
+          (encumbranceDataBulk.lightMax / encumbranceDataBulk.heavyMax) * 100 + "%";
+        encumbranceElementsBulk[3].style.left =
+          (encumbranceDataBulk.lightMax / encumbranceDataBulk.heavyMax) * 100 + "%";
+        encumbranceElementsBulk[4].style.left =
+          (encumbranceDataBulk.mediumMax / encumbranceDataBulk.heavyMax) * 100 + "%";
+        encumbranceElementsBulk[5].style.left =
+          (encumbranceDataBulk.mediumMax / encumbranceDataBulk.heavyMax) * 100 + "%";
+        encumbranceElementsBulk[0].style.cssText =
+          "width: " +
+          Math.min(Math.max((encumbranceDataBulk.totalWeightToDisplay / encumbranceDataBulk.heavyMax) * 100, 0), 99.8) +
+          "%;";
 
-      htmlElementEncumbranceBulk
-        .find(".encumbrance-breakpoint-bulk.encumbrance-66.arrow-up")
-        .html(`<div class="encumbrance-breakpoint-label-bulk VELabel">${encumbranceDataBulk.mediumMax}<div>`);
+        encumbranceElementsBulk[1].textContent =
+          Math.round(encumbranceDataBulk.totalWeightToDisplay * 100000) / 100000 +
+          "/" +
+          encumbranceDataBulk.heavyMax +
+          " " +
+          displayedUnitsBulk;
 
-      $(encumbranceElementsBulk)
-        .parent()
-        .find(".encumbrance-breakpoint.encumbrance-33.arrow-up.encumbrance-breakpoint-bulk")[0].style.display = "none";
-      $(encumbranceElementsBulk)
-        .parent()
-        .find(".encumbrance-breakpoint.encumbrance-33.arrow-down.encumbrance-breakpoint-bulk")[0].style.display =
-        "none";
+        encumbranceElementsBulk[0].classList.remove("medium");
+        encumbranceElementsBulk[0].classList.remove("heavy");
+        encumbranceElementsBulk[0].classList.remove("max");
 
-      $(encumbranceElementsBulk)
-        .find(".encumbrance-breakpoint-bulk.encumbrance-66.arrow-up")
-        .append(`<div class="encumbrance-breakpoint-label-bulk VELabel">${encumbranceDataBulk.mediumMax}<div>`);
+        if (encumbranceDataBulk.encumbranceTier === ENCUMBRANCE_TIERS.LIGHT) {
+          encumbranceElementsBulk[0].classList.add("medium");
+        }
+        if (encumbranceDataBulk.encumbranceTier === ENCUMBRANCE_TIERS.HEAVY) {
+          encumbranceElementsBulk[0].classList.add("heavy");
+        }
+        if (encumbranceDataBulk.encumbranceTier === ENCUMBRANCE_TIERS.MAX) {
+          encumbranceElementsBulk[0].classList.add("max");
+        }
 
-      encumbranceElementsBulk[1].insertAdjacentHTML(
-        "afterend",
-        `<span class="VELabel" style="right:0%">${encumbranceDataBulk.heavyMax}</span>`
-      );
-      encumbranceElementsBulk[1].insertAdjacentHTML("afterend", `<span class="VELabel">0</span>`);
+        // htmlElementEncumbranceBulk
+        //   .find('.encumbrance-breakpoint-bulk.encumbrance-33.arrow-up').parent().css('margin-bottom', '4px');
+        // htmlElementEncumbranceBulk
+        //   .find('.encumbrance-breakpoint-bulk.encumbrance-33.arrow-up')
+        //   .append(`<div class="encumbrance-breakpoint-label-bulk VELabel">${encumbranceDataBulk.lightMax}<div>`);
+
+        htmlElementEncumbranceBulk
+          .find(".encumbrance-breakpoint-bulk.encumbrance-66.arrow-up")
+          .html(`<div class="encumbrance-breakpoint-label-bulk VELabel">${encumbranceDataBulk.mediumMax}<div>`);
+
+        $(encumbranceElementsBulk)
+          .parent()
+          .find(".encumbrance-breakpoint.encumbrance-33.arrow-up.encumbrance-breakpoint-bulk")[0].style.display =
+          "none";
+        $(encumbranceElementsBulk)
+          .parent()
+          .find(".encumbrance-breakpoint.encumbrance-33.arrow-down.encumbrance-breakpoint-bulk")[0].style.display =
+          "none";
+
+        $(encumbranceElementsBulk)
+          .find(".encumbrance-breakpoint-bulk.encumbrance-66.arrow-up")
+          .append(`<div class="encumbrance-breakpoint-label-bulk VELabel">${encumbranceDataBulk.mediumMax}<div>`);
+
+        encumbranceElementsBulk[1].insertAdjacentHTML(
+          "afterend",
+          `<span class="VELabel" style="right:0%">${encumbranceDataBulk.heavyMax}</span>`
+        );
+        encumbranceElementsBulk[1].insertAdjacentHTML("afterend", `<span class="VELabel">0</span>`);
+      }
     }
   },
 };
