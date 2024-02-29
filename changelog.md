@@ -1,3 +1,8 @@
+### 0.15.3
+
+- Bug fix and patch a little the variant encumrbance html bar on the legacy sheet on the system verison 3.0.0
+- Bug fix strange effect delay ? the effect will not remove/add right away when the tier change
+
 ### 0.15.2
 
 - Update retrieve-helper
