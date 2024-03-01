@@ -1467,13 +1467,19 @@ export const VariantEncumbranceImpl = {
 
         if (encumbranceData.encumbranceTier === ENCUMBRANCE_TIERS.LIGHT) {
           htmlElementEncumbranceVariant[0].classList.add("medium");
-        }
-        if (encumbranceData.encumbranceTier === ENCUMBRANCE_TIERS.HEAVY) {
+        } else if (encumbranceData.encumbranceTier === ENCUMBRANCE_TIERS.HEAVY) {
           htmlElementEncumbranceVariant[0].classList.add("heavy");
-        }
-        if (encumbranceData.encumbranceTier === ENCUMBRANCE_TIERS.MAX) {
+        } else if (encumbranceData.encumbranceTier === ENCUMBRANCE_TIERS.MAX) {
           htmlElementEncumbranceVariant[0].classList.add("max");
         }
+
+        htmlElementEncumbranceVariant.find("i.encumbrance-33").each(function () {
+          $(this).attr("data-tooltip", encumbranceData.lightMax).attr("data-tooltip-direction", "UP");
+        });
+
+        htmlElementEncumbranceVariant.find("i.encumbrance-66").each(function () {
+          $(this).attr("data-tooltip", encumbranceData.mediumMax).attr("data-tooltip-direction", "UP");
+        });
 
         if (game.settings.get(CONSTANTS.MODULE_ID, "enableBulkSystem")) {
           htmlElementEncumbranceVariant
@@ -1580,11 +1586,9 @@ export const VariantEncumbranceImpl = {
 
           if (encumbranceData.encumbranceTier === ENCUMBRANCE_TIERS.LIGHT) {
             encumbranceElements[0].classList.add("medium");
-          }
-          if (encumbranceData.encumbranceTier === ENCUMBRANCE_TIERS.HEAVY) {
+          } else if (encumbranceData.encumbranceTier === ENCUMBRANCE_TIERS.HEAVY) {
             encumbranceElements[0].classList.add("heavy");
-          }
-          if (encumbranceData.encumbranceTier === ENCUMBRANCE_TIERS.MAX) {
+          } else if (encumbranceData.encumbranceTier === ENCUMBRANCE_TIERS.MAX) {
             encumbranceElements[0].classList.add("max");
           }
 

@@ -1,3 +1,8 @@
+### 0.15.4
+
+- Add tooltip on the breakpoin encumbrance on legacy sheet for version 3.0.0
+- Add replace CONFIG.DND5E.encumbrance.strMultiplier with CONFIG.DND5E.encumbrance.threshold.maximum on version 3.0.0 of the system
+
 ### 0.15.3
 
 - Bug fix and patch a little the variant encumrbance html bar on the legacy sheet on the system verison 3.0.0

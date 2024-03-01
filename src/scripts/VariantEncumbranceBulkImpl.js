@@ -1325,13 +1325,18 @@ export const VariantEncumbranceBulkImpl = {
 
       if (encumbranceDataBulk.encumbranceTier === ENCUMBRANCE_TIERS.LIGHT) {
         htmlElementEncumbranceBulk[0].classList.add("medium");
-      }
-      if (encumbranceDataBulk.encumbranceTier === ENCUMBRANCE_TIERS.HEAVY) {
+      } else if (encumbranceDataBulk.encumbranceTier === ENCUMBRANCE_TIERS.HEAVY) {
         htmlElementEncumbranceBulk[0].classList.add("heavy");
-      }
-      if (encumbranceDataBulk.encumbranceTier === ENCUMBRANCE_TIERS.MAX) {
+      } else if (encumbranceDataBulk.encumbranceTier === ENCUMBRANCE_TIERS.MAX) {
         htmlElementEncumbranceBulk[0].classList.add("max");
       }
+
+      htmlElementEncumbranceBulk.find("i.encumbrance-33").hide();
+
+      htmlElementEncumbranceBulk.find("i.encumbrance-66").each(function () {
+        $(this).attr("data-tooltip", encumbranceDataBulk.mediumMax).attr("data-tooltip-direction", "UP");
+        $(this).css("insetInlineStart", "50%");
+      });
     } else {
       if (
         !encumbranceElementsBulk &&
@@ -1379,11 +1384,9 @@ export const VariantEncumbranceBulkImpl = {
 
         if (encumbranceDataBulk.encumbranceTier === ENCUMBRANCE_TIERS.LIGHT) {
           encumbranceElementsBulk[0].classList.add("medium");
-        }
-        if (encumbranceDataBulk.encumbranceTier === ENCUMBRANCE_TIERS.HEAVY) {
+        } else if (encumbranceDataBulk.encumbranceTier === ENCUMBRANCE_TIERS.HEAVY) {
           encumbranceElementsBulk[0].classList.add("heavy");
-        }
-        if (encumbranceDataBulk.encumbranceTier === ENCUMBRANCE_TIERS.MAX) {
+        } else if (encumbranceDataBulk.encumbranceTier === ENCUMBRANCE_TIERS.MAX) {
           encumbranceElementsBulk[0].classList.add("max");
         }
 
