@@ -115,6 +115,12 @@
         "id": "df-qol",
         "reason": "Minor issue: possible wrong calculation on vehicle sheet with the feature \"Vehicle Cargo Capacity Unit\", it should work, but i'm not tested all the use cases, open a issue if you encounter any problem"
       }
+    ],
+    "recommends": [
+      {
+        "id": "dfreds-convenient-effects",
+        "reason": "Minor issue: possible wrong calculation on vehicle sheet with the feature \"Vehicle Cargo Capacity Unit\", it should work, but i'm not tested all the use cases, open a issue if you encounter any problem"
+      }
     ]
   }
 }
