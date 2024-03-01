@@ -2,6 +2,7 @@
 
 - Add tooltip on the breakpoin encumbrance on legacy sheet for version 3.0.0
 - Add replace CONFIG.DND5E.encumbrance.strMultiplier with CONFIG.DND5E.encumbrance.threshold.maximum on version 3.0.0 of the system
+- Replace default value for the strength multiplier from 6.8 to 7.5 as version 3.0.0 decide to do
 
 ### 0.15.3
 

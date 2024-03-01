@@ -68,7 +68,7 @@ export const initHooks = () => {
   //   },
   //   strMultiplier: {
   //     imperial: 15,
-  //     metric: 6.8
+  //     metric: 7.5
   //   },
   //   vehicleWeightMultiplier: {
   //     imperial: 2000, // 2000 lbs in an imperial ton
@@ -76,13 +76,28 @@ export const initHooks = () => {
   //   }
   // };
 
-  CONFIG.DND5E.encumbrance.strMultiplier.imperial = game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplier") ?? 15;
+  if (parseInt(game.system.version) >= 3) {
+    CONFIG.DND5E.encumbrance.threshold.maximum.imperial =
+      game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplier") ?? 15;
 
-  if (game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")) {
-    CONFIG.DND5E.encumbrance.strMultiplier.metric = game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplier") ?? 15;
+    if (game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")) {
+      CONFIG.DND5E.encumbrance.threshold.maximum.metric =
+        game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplier") ?? 15;
+    } else {
+      CONFIG.DND5E.encumbrance.threshold.maximum.metric =
+        game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplierMetric") ?? 7.5;
+    }
   } else {
-    CONFIG.DND5E.encumbrance.strMultiplier.metric =
-      game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplierMetric") ?? 6.8;
+    CONFIG.DND5E.encumbrance.strMultiplier.imperial =
+      game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplier") ?? 15;
+
+    if (game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")) {
+      CONFIG.DND5E.encumbrance.strMultiplier.metric =
+        game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplier") ?? 15;
+    } else {
+      CONFIG.DND5E.encumbrance.strMultiplier.metric =
+        game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplierMetric") ?? 7.5;
+    }
   }
 
   CONFIG.DND5E.encumbrance.currencyPerWeight.imperial = game.settings.get(CONSTANTS.MODULE_ID, "currencyWeight") ?? 50;
