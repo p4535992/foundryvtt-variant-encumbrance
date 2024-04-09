@@ -8,19 +8,19 @@
  * @returns {boolean}       An indicator for whether the property exists
  */
 export function hasPropertyPatched(object, key) {
-  if (!key) return false;
-  let target = object;
-  // MOD 4535992
-  const tk = getType(target[key]);
-  if (tk !== "null" && tk !== "undefined") return true;
-  // END MOD 4535992
-  for (let p of key.split(".")) {
-    const t = getType(target);
-    if (!(t === "Object" || t === "Array")) return false;
-    if (p in target) target = target[p];
-    else return false;
-  }
-  return true;
+    if (!key) return false;
+    let target = object;
+    // MOD 4535992
+    const tk = getType(target[key]);
+    if (tk !== "null" && tk !== "undefined") return true;
+    // END MOD 4535992
+    for (let p of key.split(".")) {
+        const t = getType(target);
+        if (!(t === "Object" || t === "Array")) return false;
+        if (p in target) target = target[p];
+        else return false;
+    }
+    return true;
 }
 
 /**
@@ -33,17 +33,17 @@ export function hasPropertyPatched(object, key) {
  * @return {*}              The value of the found property
  */
 export function getPropertyPatched(object, key) {
-  if (!key) return undefined;
-  let target = object;
-  // MOD 4535992
-  const tk = getType(target[key]);
-  if (tk !== "null" && tk !== "undefined") return target[key];
-  // END MOD 4535992
-  for (let p of key.split(".")) {
-    const t = getType(target);
-    if (!(t === "Object" || t === "Array")) return undefined;
-    if (p in target) target = target[p];
-    else return undefined;
-  }
-  return target;
+    if (!key) return undefined;
+    let target = object;
+    // MOD 4535992
+    const tk = getType(target[key]);
+    if (tk !== "null" && tk !== "undefined") return target[key];
+    // END MOD 4535992
+    for (let p of key.split(".")) {
+        const t = getType(target);
+        if (!(t === "Object" || t === "Array")) return undefined;
+        if (p in target) target = target[p];
+        else return undefined;
+    }
+    return target;
 }
