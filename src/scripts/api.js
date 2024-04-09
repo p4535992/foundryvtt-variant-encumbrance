@@ -56,7 +56,7 @@ const API = {
             Logger.warn(`No actor is been passed`);
             return;
         }
-        const physicalItems = ["weapon", "equipment", "consumable", "tool", "backpack", "loot"];
+        const physicalItems = ["weapon", "equipment", "consumable", "tool", "backpack", "loot", "container"];
         const inventoryItems = [];
         actor.items.contents.forEach((im) => {
             if (im && physicalItems.includes(im.type)) {
@@ -121,7 +121,7 @@ const API = {
             Logger.warn(`No actor is been passed`);
             return;
         }
-        const physicalItems = ["weapon", "equipment", "consumable", "tool", "backpack", "loot"];
+        const physicalItems = ["weapon", "equipment", "consumable", "tool", "backpack", "loot", "container"];
         const inventoryItems = [];
         actor.items.contents.forEach((im) => {
             if (im && physicalItems.includes(im.type)) {

@@ -1,3 +1,7 @@
+### 0.15.5 
+
+- Add initial support ofr new container on Dnd5e 3.1.1
+
 ### 0.15.4
 
 - Add tooltip on the breakpoin encumbrance on legacy sheet for version 3.0.0

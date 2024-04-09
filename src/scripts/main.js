@@ -253,7 +253,7 @@ export const readyHooks = async () => {
             }
 
             const inventoryItems = [];
-            const physicalItems = ["weapon", "equipment", "consumable", "tool", "backpack", "loot"];
+            const physicalItems = ["weapon", "equipment", "consumable", "tool", "backpack", "loot", "container"];
             actorEntityTmp.items.contents.forEach((im) => {
                 if (im && physicalItems.includes(im.type)) {
                     inventoryItems.push(im);

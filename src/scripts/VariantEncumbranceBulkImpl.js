@@ -299,10 +299,13 @@ export const VariantEncumbranceBulkImpl = {
 
             // START TOTAL WEIGHT
             // Get the total weight from items
-            const physicalItems = ["weapon", "equipment", "consumable", "tool", "backpack", "loot"];
+            const physicalItems = ["weapon", "equipment", "consumable", "tool", "backpack", "loot", "container"];
             // let totalWeight = actorEntity.items.reduce((weight, item) => {
             let totalWeight = inventoryItems.reduce((weight, item) => {
                 if (!physicalItems.includes(item.type)) {
+                    return weight;
+                }
+                if (item.system.container) {
                     return weight;
                 }
 
@@ -356,8 +359,16 @@ export const VariantEncumbranceBulkImpl = {
                 // End Item container check
                 else {
                     // Does the weight of the items in the container carry over to the actor?
-                    // TODO  wait for 2.2.0
-                    const weightless = getProperty(item, "system.capacity.weightless") ?? false;
+                    if (item.type === "container") {
+                        const currencyWeight = item.system.currencyWeight || 0;
+                        const contentsWeightNoCurrency = item.system.contentsWeight - currencyWeight || 0;
+                        const contentsWeightWithCurrency = item.system.contentsWeight || 0;
+                        const totalWeight = item.system.totalWeight || 0;
+                        const onlyContainerWeight = totalWeight - item.system.contentsWeight || 0;
+                        const containerWeight = ignoreCurrency ? contentsWeightNoCurrency : contentsWeightWithCurrency;
+                        const weightless = getProperty(item, "system.capacity.weightless") ?? false;
+                        itemWeight = weightless ? itemWeight : itemWeight + containerWeight;
+                    }
 
                     itemWeight = VariantEncumbranceDnd5eHelpers.manageCustomCodeFeature(item, itemWeight, true);
                     itemWeight = VariantEncumbranceDnd5eHelpers.manageEquippedAndUnEquippedFeature(item, itemWeight);

@@ -90,7 +90,7 @@ export class VariantEncumbranceDnd5eHelpers {
         const currentItemId = updatedItem?.id ? updatedItem?.id : updatedItem?._id;
         const inventoryItems = [];
         const isAlreadyInActor = actorEntity.items?.find((itemTmp) => itemTmp.id === currentItemId);
-        const physicalItems = ["weapon", "equipment", "consumable", "tool", "backpack", "loot"];
+        const physicalItems = ["weapon", "equipment", "consumable", "tool", "backpack", "loot", "container"];
         actorEntity.items.contents.forEach((im) => {
             if (im && physicalItems.includes(im.type)) {
                 if (im.id === currentItemId) {
@@ -619,8 +619,17 @@ export class VariantEncumbranceDnd5eHelpers {
         // End Item container check
         else {
             // Does the weight of the items in the container carry over to the actor?
-            // TODO  wait for 2.2.0
-            const weightless = getProperty(item, "system.capacity.weightless") ?? false;
+            if (item.type === "container") {
+                const currencyWeight = item.system.currencyWeight || 0;
+                const contentsWeightNoCurrency = item.system.contentsWeight - currencyWeight || 0;
+                const contentsWeightWithCurrency = item.system.contentsWeight || 0;
+                const totalWeight = item.system.totalWeight || 0;
+                const onlyContainerWeight = totalWeight - item.system.contentsWeight || 0;
+                const containerWeight = ignoreCurrency ? contentsWeightNoCurrency : contentsWeightWithCurrency;
+                const weightless = getProperty(item, "system.capacity.weightless") ?? false;
+                itemWeight = weightless ? itemWeight : itemWeight + containerWeight;
+            }
+            s;
 
             itemWeight = VariantEncumbranceDnd5eHelpers.manageEquippedAndUnEquippedFeature(item, itemWeight);
 
@@ -755,8 +764,16 @@ export class VariantEncumbranceDnd5eHelpers {
         // End Item container check
         else {
             // Does the weight of the items in the container carry over to the actor?
-            // TODO  wait for 2.2.0
-            const weightless = getProperty(item, "system.capacity.weightless") ?? false;
+            if (item.type === "container") {
+                const currencyWeight = item.system.currencyWeight || 0;
+                const contentsWeightNoCurrency = item.system.contentsWeight - currencyWeight || 0;
+                const contentsWeightWithCurrency = item.system.contentsWeight || 0;
+                const totalWeight = item.system.totalWeight || 0;
+                const onlyContainerWeight = totalWeight - item.system.contentsWeight || 0;
+                const containerWeight = ignoreCurrency ? contentsWeightNoCurrency : contentsWeightWithCurrency;
+                const weightless = getProperty(item, "system.capacity.weightless") ?? false;
+                itemWeight = weightless ? itemWeight : itemWeight + containerWeight;
+            }
 
             itemWeight = VariantEncumbranceDnd5eHelpers.manageEquippedAndUnEquippedFeature(item, itemWeight);
 
@@ -869,7 +886,7 @@ export class VariantEncumbranceDnd5eHelpers {
             Logger.debug(`isAEncumbranceUpdated | The update contains key is empty`);
         } else if (VariantEncumbranceDnd5eHelpers.isEnabledActorType(actorEntity)) {
             //  && actorEntity.sheet?.rendered
-            const physicalItems = ["weapon", "equipment", "consumable", "tool", "backpack", "loot"];
+            const physicalItems = ["weapon", "equipment", "consumable", "tool", "backpack", "loot", "container"];
             // if (
             //   hasPropertyPatched(update, `system.type`) &&
             //   !physicalItems.includes(getPropertyPatched(update, `system.type`)?.value)
