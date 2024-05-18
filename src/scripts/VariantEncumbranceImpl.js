@@ -1345,28 +1345,17 @@ export const VariantEncumbranceImpl = {
         sheetClass,
     ) {
         if (game.settings.get(CONSTANTS.MODULE_ID, "enabled")) {
-            //if (actorObject.isCharacter || actorObject.isVehicle) {
-            // const actorEntity = game.actors?.get(actorObject.actor._id);
-            // Do no touch the true actor again
-
-            let encumbranceData;
-            // if (hasProperty(actorObject, `flags.${CONSTANTS.MODULE_ID}.${EncumbranceFlags.DATA}`)) {
-            //   encumbranceData = getProperty(actorObject,`flags.${CONSTANTS.MODULE_ID}.${EncumbranceFlags.DATA}`);
-            // }
-            if (!encumbranceData) {
-                // STRANGE BEHAVIOUR
-                if (actorObject.actor?.flags) {
-                    setProperty(actorEntityTmp, "flags", actorObject.actor.flags);
-                }
-                let itemsToCheck = actorEntityTmp.items.contents;
-
-                encumbranceData = VariantEncumbranceImpl.calculateEncumbrance(
-                    actorEntityTmp,
-                    itemsToCheck,
-                    false,
-                    invPlusActive,
-                );
+            if (actorObject.actor?.flags) {
+                setProperty(actorEntityTmp, "flags", actorObject.actor.flags);
             }
+            let itemsToCheck = actorEntityTmp.items.contents;
+
+            let encumbranceData = VariantEncumbranceImpl.calculateEncumbrance(
+                actorEntityTmp,
+                itemsToCheck,
+                false,
+                invPlusActive,
+            );
 
             const displayedUnits = encumbranceData.unit;
 
@@ -1381,7 +1370,7 @@ export const VariantEncumbranceImpl = {
                     htmlElementEncumbranceVariant.find(".encumbrance-breakpoint-label").each(function (el) {
                         $(this).addClass("encumbrance-breakpoint-label-variant");
                     });
-                    let encumbranceElements = htmlElementEncumbranceVariant[0]?.children;
+                    let encumbranceElements = $(htmlElementEncumbranceVariant.find("span.encumbrance-label")[0]); // htmlElementEncumbranceVariant[0]?.children;
                     /*
                     const span1 = document.createElement("span");
                     span1.classList.add("encumbrance-bar");
