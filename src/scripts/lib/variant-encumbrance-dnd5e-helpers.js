@@ -1050,7 +1050,7 @@ export class VariantEncumbranceDnd5eHelpers {
      * @returns {boolean} true if the effect is applied, false otherwise
      */
     static async hasEffectApplied(effectName, actor) {
-        return await actor?.effects?.some((e) => (e?.name == effectName || e?.label == effectName) && !e?.disabled);
+        return await actor?.effects?.some((e) => e?.name == effectName && !e?.disabled);
     }
 
     /**
@@ -1076,7 +1076,7 @@ export class VariantEncumbranceDnd5eHelpers {
     static async removeEffect(effectName, actor) {
         if (effectName) effectName = Logger.i18n(effectName);
         const actorEffects = actor?.effects || [];
-        const effectToRemove = actorEffects.find((e) => e?.label === effectName || e?.name === effectName);
+        const effectToRemove = actorEffects.find((e) => e?.name === effectName);
         if (!effectToRemove || !effectToRemove.id) return undefined;
         const activeEffectsRemoved = (await actor.deleteEmbeddedDocuments("ActiveEffect", [effectToRemove.id])) || [];
         return activeEffectsRemoved[0];

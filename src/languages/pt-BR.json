@@ -1,0 +1,242 @@
+{
+    "variant-encumbrance-dnd5e.setting.enabled.name": "Habilitado",
+    "variant-encumbrance-dnd5e.setting.enabled.hint": "Habilitar/Desabilitar a característica de sobrecarga variante. Normalmente você desabilita isso se apenas quiser a solução do Sistema de Volume.",
+
+    "variant-encumbrance-dnd5e.setting.useVarianEncumbranceWithSpecificType.name": "Use a Sobrecarga Variante com um tipo específico de ator",
+    "variant-encumbrance-dnd5e.setting.useVarianEncumbranceWithSpecificType.hint": "Use, por exemplo, os seguintes tipos de atores (por exemplo, personagem, npc, etc. separados por vírgula), lembre-se que é sensível a maiúsculas.",
+
+    "variant-encumbrance-dnd5e.setting.fakeMetricSystem.name": "Simular o cálculo do sistema métrico, mas usando o imperial",
+    "variant-encumbrance-dnd5e.setting.fakeMetricSystem.hint": "Use isso apenas com a configuração do sistema 'Usar Unidades de Peso Métrico' marcada. Porque essa configuração não atualiza o valor em libras para quilogramas do item, o cálculo é 'visualmente errado', com essa configuração definida como verdadeira, usamos as mesmas constantes de encargo imperial e evitamos o problema, mas isso é um remendo, não uma solução, é por isso que havia este módulo no passado: https://github.com/HadaIonut/Foundry-mgl",
+
+    "variant-encumbrance-dnd5e.setting.useStrengthMultiplier.name": "Ativar ou desativar a característica de multiplicador de força",
+    "variant-encumbrance-dnd5e.setting.useStrengthMultiplier.hint": "NÃO RECOMENDADO, isso multiplicará o valor do transporte com o valor de multiplicador de força configurado no sistema, NORMALMENTE VOCÊ NÃO PRECISA DISSO porque o módulo já faz isso com a configuração de multiplicador de \"Encargo Pesado\"",
+
+    "variant-encumbrance-dnd5e.setting.strengthMultiplier.name": "Multiplicador de Força",
+    "variant-encumbrance-dnd5e.setting.strengthMultiplier.hint": "Funciona apenas com a função de multiplicador de força ativada. Multiplicador usado para calcular o peso máximo de transporte a partir do valor de habilidade de força.",
+
+    "variant-encumbrance-dnd5e.setting.strengthMultiplierMetric.name": "Multiplicador de Força (Sistema Métrico)",
+    "variant-encumbrance-dnd5e.setting.strengthMultiplierMetric.hint": "Multiplicador usado para calcular o peso máximo de transporte a partir do valor de habilidade de força (Sistema Métrico).",
+
+    "variant-encumbrance-dnd5e.setting.useVariantEncumbrance.name": "Penalidades de Velocidade do Sobrecarga Variante",
+    "variant-encumbrance-dnd5e.setting.useVariantEncumbrance.hint": "Ativar penalidades automáticas de velocidade a partir do peso transportado.",
+
+    "variant-encumbrance-dnd5e.setting.unequippedMultiplier.name": "Multiplicador de Peso de Item Não Equipado",
+    "variant-encumbrance-dnd5e.setting.unequippedMultiplier.hint": "Multiplicador para itens quando não equipados.",
+
+    "variant-encumbrance-dnd5e.setting.equippedMultiplier.name": "Multiplicador de Peso de Item Equipado",
+    "variant-encumbrance-dnd5e.setting.equippedMultiplier.hint": "Multiplicador para itens quando equipados, pode ser usado para reduzir o peso efetivo de armaduras e armas.",
+
+    "variant-encumbrance-dnd5e.setting.profEquippedMultiplier.name": "Multiplicador de Peso de Item Equipado com Proficiência",
+    "variant-encumbrance-dnd5e.setting.profEquippedMultiplier.hint": "Multiplicador para itens proficientes quando equipados, pode ser usado para reduzir o peso efetivo de armaduras e armas. NOTA: O item DEVE SER EQUIPADO.",
+
+    "variant-encumbrance-dnd5e.setting.enableCurrencyWeight.name": "Ativar Peso da Moeda Por Unidade de Peso",
+    "variant-encumbrance-dnd5e.setting.enableCurrencyWeight.hint": "Se ativado, adicionará o peso da moeda ao total.",
+
+    "variant-encumbrance-dnd5e.setting.currencyWeight.name": "Moeda Por Unidade de Peso",
+    "variant-encumbrance-dnd5e.setting.currencyWeight.hint": "Define o número de moedas necessárias para igualar 1 unidade de peso.",
+
+    "variant-encumbrance-dnd5e.setting.currencyWeightMetric.name": "Moeda Por Unidade de Peso (Sistema Métrico)",
+    "variant-encumbrance-dnd5e.setting.currencyWeightMetric.hint": "Define o número de moedas necessárias para igualar 1 unidade de peso (Sistema Métrico).",
+
+    "variant-encumbrance-dnd5e.setting.vehicleWeightMultiplier.name": "Multiplicador de Peso de Veículos, libras em uma tonelada imperial",
+    "variant-encumbrance-dnd5e.setting.vehicleWeightMultiplier.hint": "Os pesos dos veículos são de uma ordem de grandeza maior, Multiplicador para veículos.",
+
+    "variant-encumbrance-dnd5e.setting.vehicleWeightMultiplierMetric.name": "Multiplicador de Peso de Veículos, kg em uma tonelada métrica (Sistema Métrico)",
+    "variant-encumbrance-dnd5e.setting.vehicleWeightMultiplierMetric.hint": "Os pesos dos veículos são de uma ordem de grandeza maior, Multiplicador para veículos (Sistema Métrico).",
+
+    "variant-encumbrance-dnd5e.setting.lightMultiplier.name": "Multiplicador de Força Desimpedido",
+    "variant-encumbrance-dnd5e.setting.lightMultiplier.hint": "Multiplicador usado para calcular o peso máximo de transporte antes de ficar sobrecarregado do valor de habilidade de força.",
+
+    "variant-encumbrance-dnd5e.setting.lightMultiplierMetric.name": "Multiplicador de Força Desimpedido (Sistema Métrico)",
+    "variant-encumbrance-dnd5e.setting.lightMultiplierMetric.hint": "Multiplicador usado para calcular o peso máximo de transporte antes de ficar sobrecarregado do valor de habilidade de força (Sistema Métrico).",
+
+    "variant-encumbrance-dnd5e.setting.mediumMultiplier.name": "Multiplicador de Força Sobrecarregado",
+    "variant-encumbrance-dnd5e.setting.mediumMultiplier.hint": "Multiplicador usado para calcular o peso máximo de transporte antes de ficar pesadamente sobrecarregado do valor de habilidade de força.",
+
+    "variant-encumbrance-dnd5e.setting.mediumMultiplierMetric.name": "Multiplicador de Força Sobrecarregado (Sistema Métrico)",
+    "variant-encumbrance-dnd5e.setting.mediumMultiplierMetric.hint": "Multiplicador usado para calcular o peso máximo de transporte antes de ficar pesadamente sobrecarregado do valor de habilidade de força (Sistema Métrico).",
+
+    "variant-encumbrance-dnd5e.setting.heavyMultiplier.name": "Pesadamente Sobrecarregado (antigo Multiplicador de Força)",
+    "variant-encumbrance-dnd5e.setting.heavyMultiplier.hint": "Multiplicador usado para calcular o peso máximo de transporte do valor de habilidade de força.",
+
+    "variant-encumbrance-dnd5e.setting.heavyMultiplierMetric.name": "Pesadamente Sobrecarregado (antigo Multiplicador de Força) (Sistema Métrico)",
+    "variant-encumbrance-dnd5e.setting.heavyMultiplierMetric.hint": "Multiplicador usado para calcular o peso máximo de transporte do valor de habilidade de força (Sistema Métrico).",
+
+    "variant-encumbrance-dnd5e.setting.sizeMultipliers.name": "Modificadores de Tamanho do Encargo Variante",
+    "variant-encumbrance-dnd5e.setting.sizeMultipliers.hint": "Ativar multiplicadores do tamanho da criatura.",
+
+    "variant-encumbrance-dnd5e.setting.units.name": "Unidades de Peso",
+    "variant-encumbrance-dnd5e.setting.units.hint": "Unidades exibidas na barra de encargo (apenas gráficos). O padrão é 'lbs.'",
+
+    "variant-encumbrance-dnd5e.setting.unitsMetric.name": "Unidades de Peso (Sistema Métrico)",
+    "variant-encumbrance-dnd5e.setting.unitsMetric.hint": "Unidades exibidas na barra de encargo (apenas gráficos) (Sistema Métrico). O padrão é 'kg'",
+
+    "variant-encumbrance-dnd5e.setting.lightWeightDecrease.name": "Diminuição de Velocidade por Sobrecarga Leve",
+    "variant-encumbrance-dnd5e.setting.lightWeightDecrease.hint": "O número de unidades de velocidade subtraídas quando levemente sobrecarregado, o padrão é '10'.",
+
+    "variant-encumbrance-dnd5e.setting.lightWeightDecreaseMetric.name": "Diminuição de Velocidade por Sobrecarga Leve (Sistema Métrico)",
+    "variant-encumbrance-dnd5e.setting.lightWeightDecreaseMetric.hint": "O número de unidades de velocidade subtraídas quando levemente sobrecarregado, o padrão é '3'.",
+
+    "variant-encumbrance-dnd5e.setting.heavyWeightDecrease.name": "Diminuição de Velocidade por Sobrecarga",
+    "variant-encumbrance-dnd5e.setting.heavyWeightDecrease.hint": "O número de unidades de velocidade subtraídas quando pesadamente sobrecarregado, o padrão é '20'.",
+
+    "variant-encumbrance-dnd5e.setting.heavyWeightDecreaseMetric.name": "Diminuição de Velocidade por Sobrecarga (Sistema Métrico)",
+    "variant-encumbrance-dnd5e.setting.heavyWeightDecreaseMetric.hint": "O número de unidades de velocidade subtraídas quando pesadamente sobrecarregado, o padrão é '6'.",
+
+    "variant-encumbrance-dnd5e.setting.enablePreCheckEncumbranceTier.name": "Ativar pré-verificação do nível de encargo",
+    "variant-encumbrance-dnd5e.setting.enablePreCheckEncumbranceTier.hint": "NÃO RECOMENDADO, mas alguém parece usar essa regra estranha? Se verdadeiro, a adição/remoção do AE é lançada apenas quando há uma mudança no nível de valor do tier, então a atualização é ignorada ao adicionar/remover/atualizar item",
+
+    "variant-encumbrance-dnd5e.setting.enableVarianEncumbranceOnSpecificActor.name": "Habilitar/Desabilitar a função de aplicar os efeitos ativos de encargo variante para ator específico",
+    "variant-encumbrance-dnd5e.setting.enableVarianEncumbranceOnSpecificActor.hint": "Se verdadeiro, adicione no cabeçalho da ficha do ator um botão visível apenas para o Mestre para habilitar/desabilitar a função de efeitos ativos, por padrão a função é desabilitada (a bandeira é falsa) por questões de desempenho",
+
+    "variant-encumbrance-dnd5e.setting.removeLabelButtonsSheetHeader.name": "Remover etiqueta dos botões no cabeçalho da ficha do personagem",
+    "variant-encumbrance-dnd5e.setting.removeLabelButtonsSheetHeader.hint": "Remover etiqueta dos botões no cabeçalho da ficha do personagem, útil para telas pequenas e dispositivos móveis, por padrão é verdadeiro",
+
+    "variant-encumbrance-dnd5e.setting.useStandardWeightCalculation.name": "Usar cálculo de peso padrão do sistema dnd5e",
+    "variant-encumbrance-dnd5e.setting.useStandardWeightCalculation.hint": "NÃO RECOMENDADO, mas algumas pessoas parecem perder a cabeça por 2s em vez de 1s no cálculo do peso ???, você perderá todos os benefícios das outras funções como Equipado, Não Equipado, Equipado Proficiente, Inventário +, Contêiner de Item, etc., mas ei !! você tem o 1 segundo que você perdeu..",
+
+    "variant-encumbrance-dnd5e.setting.useEquippedUnequippedItemCollectionFeature.name": "Usar recurso equipado/não equipado do módulo ItemCollection/Item Container para a mochila",
+    "variant-encumbrance-dnd5e.setting.useEquippedUnequippedItemCollectionFeature.hint": "NÃO RECOMENDADO, a única diferença (apenas para contêiner de item) é que o módulo \"Contêiner de Item\" define 0 se não equipado, o \"encargo variante\" obtém o valor da configuração do módulo por padrão 1 se não equipado, e agora eu lembro que o cálculo não faz sentido para algumas pessoas porque há dois comportamentos para os itens equipados e não equipados se eles forem contêiner de item ou item padrão. As bolsas podem ser desequipadas pelos jogadores ou Mestre, então seu peso relatado cai para 0 em seu inventário (apenas bolsas com capacidade diferente de 0 podem ser desequipadas)",
+
+    "variant-encumbrance-dnd5e.setting.enableDAEIntegration.name": "Ativar integração DAE",
+    "variant-encumbrance-dnd5e.setting.enableDAEIntegration.hint": "Se ativado, esta configuração aplicará o valor recuperado pelos efeitos DAE aos atributos 'system.attributes.encumbrance.max' e 'system.attributes.capacity.cargo' SE o módulo 'DAE' estiver presente e ativo.",
+
+    "variant-encumbrance-dnd5e.setting.doNotShowCustomizedWeightOnItemSheet.name": "Não exibir peso personalizado na ficha do item",
+    "variant-encumbrance-dnd5e.setting.doNotShowCustomizedWeightOnItemSheet.hint": "Se este módulo estiver habilitado, ele ocultará a exibição de quaisquer dados personalizados deste módulo de todos os usuários não mestres. Por padrão, o valor é verdadeiro.",
+
+    "variant-encumbrance-dnd5e.setting.replaceStandardWeightValue.name": "Substituir valor de peso padrão exibido na ficha do ator",
+    "variant-encumbrance-dnd5e.setting.replaceStandardWeightValue.hint": "Se habilitado, esta configuração substituirá o peso padrão exibido na lista de inventário do ator com o 'valor modificado' deste módulo",
+
+    "variant-encumbrance-dnd5e.setting.enableBulkSystem.name": "Habilitar sistema de volume",
+    "variant-encumbrance-dnd5e.setting.enableBulkSystem.hint": "Ativar integração com o Sistema de Volume explicado aqui: https://www.giffyglyph.com/darkerdungeons/grimoire/4.0.0/en/active_inventory.html",
+    "variant-encumbrance-dnd5e.setting.unitsBulk.name": "Unidades de Peso (Sistema de Volume)",
+    "variant-encumbrance-dnd5e.setting.unitsBulk.hint": "Unidades exibidas na barra de encargo (apenas gráficos) (Sistema de Volume). O padrão é 'volume'",
+    "variant-encumbrance-dnd5e.setting.heavyWeightDecreaseBulk.name": "Diminuição de Velocidade por Sobrecarga (Sistema de Volume)",
+    "variant-encumbrance-dnd5e.setting.heavyWeightDecreaseBulk.hint": "O número de unidades de velocidade multiplicado quando pesadamente sobrecarregado (Sistema de Volume), o padrão é '0.5'.",
+    "variant-encumbrance-dnd5e.setting.automaticApplySuggestedBulk.name": "Aplicação automática do volume sugerido (Sistema de Volume)",
+    "variant-encumbrance-dnd5e.setting.automaticApplySuggestedBulk.hint": "AVISO: ISSO É PERIGOSO, ELE ATUALIZARÁ OS DADOS DE VOLUME EM CADA ITEM RENDERIZADO SE O VALOR DE VOLUME FOR 0. Isso geralmente economiza tempo se você não quiser definir manualmente cada item (o modo recomendado)",
+
+    "variant-encumbrance-dnd5e.setting.currencyWeightBulk.name": "Moeda por Unidade de Volume (Sistema de Volume)",
+    "variant-encumbrance-dnd5e.setting.currencyWeightBulk.hint": "Este parâmetro permite que o peso das moedas seja levado em consideração no sistema de volume. Se você não gostar, pode desativá-lo definindo-o como 0, o valor padrão fornecido é 100, então a fórmula de cálculo será 'número de moedas / 100', por exemplo 'Krazak encontra um baú apodrecido que contém 1.900 moedas de cobre sortidas (19 volumes transportados)'",
+
+    "variant-encumbrance-dnd5e.setting.hideStandardEncumbranceBar.name": "Remover barra de encargo padrão da ficha do personagem",
+    "variant-encumbrance-dnd5e.setting.hideStandardEncumbranceBar.hint": "Se habilitado, ele ocultará a barra de encargo padrão, útil apenas para pessoas que usam a barra de volume e não querem ver duas barras gráficas",
+
+    "variant-encumbrance-dnd5e.setting.hideStandardWeightUnits.name": "Remover unidades de peso padrão da ficha do personagem",
+    "variant-encumbrance-dnd5e.setting.hideStandardWeightUnits.hint": "Se habilitado, ele 'tentará' ocultar a unidade de peso padrão, útil apenas para pessoas que usam unidades de volume.",
+
+    "variant-encumbrance-dnd5e.setting.reset.name": "Redefinir configurações para o padrão",
+    "variant-encumbrance-dnd5e.setting.reset.label": "Redefinir Configurações para o Padrão",
+    "variant-encumbrance-dnd5e.setting.reset.hint": "Isso redefinirá todas as configurações de volta para o padrão do sistema de jogo ativo.",
+    "variant-encumbrance-dnd5e.setting.debug.name": "Habilitar depuração",
+    "variant-encumbrance-dnd5e.setting.debug.label": "Imprime mensagens de depuração no console",
+    "variant-encumbrance-dnd5e.setting.debug.hint": " ",
+
+    "variant-encumbrance-dnd5e.dialogs.resetsettings.title": "Redefinir Configurações do Módulo",
+    "variant-encumbrance-dnd5e.dialogs.resetsettings.content": "Tem certeza de que deseja redefinir todas as configurações do módulo para os padrões do sistema atual? <strong>ISSO NÃO PODE SER DESFEITO!</strong>",
+    "variant-encumbrance-dnd5e.dialogs.resetsettings.confirm": "Redefinir Configurações do Módulo",
+    "variant-encumbrance-dnd5e.dialogs.resetsettings.cancel": "Cancelar",
+
+    "variant-encumbrance-dnd5e.effect.name.unencumbered": "Sem Carga",
+    "variant-encumbrance-dnd5e.effect.description.unencumbered": "",
+
+    "variant-encumbrance-dnd5e.effect.name.encumbered": "Sobrecarga",
+    "variant-encumbrance-dnd5e.effect.description.encumbered": "Reduz o movimento em 3 metros.",
+
+    "variant-encumbrance-dnd5e.effect.name.heavily_encumbered": "Sobrecarga Pesada",
+    "variant-encumbrance-dnd5e.effect.description.heavily_encumbered": "Reduz o movimento em 6 metros, desvantagem em todos os rolagens de ataque e desvantagem em testes de resistência de força, destreza e constituição",
+
+    "variant-encumbrance-dnd5e.effect.name.overburdened": "Sobrecarga Extrema",
+    "variant-encumbrance-dnd5e.effect.description.overburdened": "Reduz o movimento para 0 metros, desvantagem em todos os rolagens de ataque e desvantagem em testes de resistência de força, destreza e constituição",
+
+    "variant-encumbrance-dnd5e.label.disableVEAndWEOnSpecificActor": "VE+WE Desabilitado",
+    "variant-encumbrance-dnd5e.label.enableWEOnSpecificActor": "WE Habilitado",
+    "variant-encumbrance-dnd5e.label.disableVEOnSpecificActor": "VE Desabilitado",
+    "variant-encumbrance-dnd5e.label.enableVEAndWEOnSpecificActor": "VE+WE Habilitado",
+
+    "variant-encumbrance-dnd5e.label.disableVEAndWEBulkOnSpecificActor": "Bulk VE+WE Desabilitado",
+    "variant-encumbrance-dnd5e.label.enableWEBulkOnSpecificActor": "Bulk WE Habilitado",
+    "variant-encumbrance-dnd5e.label.disableVEBulkOnSpecificActor": "Bulk VE Desabilitado",
+    "variant-encumbrance-dnd5e.label.enableVEAndWEBulkOnSpecificActor": "Bulk VE+WE Habilitado",
+
+    "variant-encumbrance-dnd5e.setting.vehicleUnit.name": "Habilitar Unidade de peso para Veículos",
+    "variant-encumbrance-dnd5e.setting.vehicleUnit.hint": "Habilita a capacidade de alterar a unidade base para peso usada pelos veículos",
+    "variant-encumbrance-dnd5e.setting.disableEquippedUnequippedProficientWeightManagement.name": "Desabilitar Gerenciamento de Peso Equipado/Desequipado/Proficiente",
+    "variant-encumbrance-dnd5e.setting.disableEquippedUnequippedProficientWeightManagement.hint": "Só faz sentido habilitar esta configuração se você deseja desativar completamente o gerenciamento de peso com base em equipado/desequipado/proficiente ou se deseja usar seu próprio código através dos ganchos fornecidos por este módulo.",
+
+    "variant-encumbrance-dnd5e.setting.doNotIncreaseWeightByQuantityForNoAmmunition.name": "Recurso: Não aumentar o peso por quantidade para itens sem munição",
+    "variant-encumbrance-dnd5e.setting.doNotIncreaseWeightByQuantityForNoAmmunition.hint": "Esta é uma regra caseira, para itens não de munição, o peso não aumenta por quantidade (então, 5 poções = 1 peso de item, por exemplo)",
+
+    "variant-encumbrance-dnd5e.setting.doNotApplyWeightForEquippedArmor.name": "Recurso: Não aplicar peso para item de armadura equipado",
+    "variant-encumbrance-dnd5e.setting.doNotApplyWeightForEquippedArmor.hint": "Esta é uma regra caseira, para tipos de armadura equipada (roupas, leve, média, pesada, natural), se o peso for definido como 0, ele não será aplicado, isso substituirá a configuração de 'Multiplicador de Peso de Item Equipado'. NOTA: A configuração de cálculo de armadura específica 'Recurso: Multiplicador de Peso de Armadura Equipada para 'XXX Armadura' substituirá esta configuração.",
+
+    "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForEquippedArmor.name": "Recurso: Multiplicador de Peso de Armadura Equipada",
+    "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForEquippedArmor.hint": "Esta é uma regra caseira, para tipos de armadura equipada, se o peso for definido como -1, ele não será aplicado, isso substituirá a configuração de 'Multiplicador de Peso de Item Equipado'. NOTA: A configuração de cálculo de armadura específica 'Recurso: Multiplicador de Peso de Armadura Equipada para 'XXX Armadura' substituirá esta configuração APENAS SE O VALOR FOR IGUAL A 0.",
+
+    "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForEquippedArmorClothing.name": "Recurso: Multiplicador de Peso de Armadura Equipada para 'Armadura de Vestuário'",
+    "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForEquippedArmorClothing.hint": "Esta é uma regra caseira e é principalmente um aprimoramento do recurso existente 'Multiplicador de Peso de Item Equipado' para tipos de armadura equipada 'vestuário', um multiplicador específico é aplicado ao valor de peso. NOTA: Esta configuração só funciona com o recurso 'Recurso: Multiplicador de Peso de Armadura Equipada' IGUAL A 0, o valor padrão é 0.",
+
+    "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForEquippedArmorLight.name": "Recurso: Multiplicador de Peso de Armadura Equipada para 'Armadura Leve'",
+    "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForEquippedArmorLight.hint": "Esta é uma regra caseira e é principalmente um aprimoramento do recurso existente 'Multiplicador de Peso de Item Equipado' para tipos de armadura equipada 'leve', um multiplicador específico é aplicado ao valor de peso. NOTA: Esta configuração só funciona com o recurso 'Recurso: Multiplicador de Peso de Armadura Equipada' IGUAL A 0, o valor padrão é 0.",
+
+    "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForEquippedArmorMedium.name": "Recurso: Multiplicador de Peso de Armadura Equipada para 'Armadura Média'",
+    "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForEquippedArmorMedium.hint": "Esta é uma regra caseira e é principalmente um aprimoramento do recurso existente 'Multiplicador de Peso de Item Equipado' para tipos de armadura equipada 'média', um multiplicador específico é aplicado ao valor de peso. NOTA: Esta configuração só funciona com o recurso 'Recurso: Multiplicador de Peso de Armadura Equipada' IGUAL A 0, o valor padrão é 0.",
+
+    "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForEquippedArmorHeavy.name": "Recurso: Multiplicador de Peso de Armadura Equipada para 'Armadura Pesada'",
+    "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForEquippedArmorHeavy.hint": "Esta é uma regra caseira e é principalmente um aprimoramento do recurso existente 'Multiplicador de Peso de Item Equipado' para tipos de armadura equipada 'pesada', um multiplicador específico é aplicado ao valor de peso. NOTA: Esta configuração só funciona com o recurso 'Recurso: Multiplicador de Peso de Armadura Equipada' IGUAL A 0, o valor padrão é 0.",
+
+    "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForEquippedArmorNatural.name": "Recurso: Multiplicador de Peso de Armadura Equipada para 'Armadura Natural'",
+    "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForEquippedArmorNatural.hint": "Esta é uma regra caseira e é principalmente um aprimoramento do recurso existente 'Multiplicador de Peso de Item Equipado' para tipos de armadura equipada 'natural', um multiplicador específico é aplicado ao valor de peso. NOTA: Esta configuração só funciona com o recurso 'Recurso: Multiplicador de Peso de Armadura Equipada' IGUAL A 0, o valor padrão é 0.",
+
+    "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForProficientArmor.name": "Recurso: Multiplicador de Peso de Armadura Proficiente",
+    "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForProficientArmor.hint": "Esta é uma regra caseira, para tipos de armadura proficiente, se o peso for definido como -1, não será aplicado, isso substituirá a configuração de 'Multiplicador de Peso de Item Equipado Proficiente'. NOTA: O item DEVE ESTAR EQUIPADO.",
+
+    "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForProficientArmorClothing.name": "Recurso: Multiplicador de Peso de Armadura Proficiente para 'Armadura de Vestuário'",
+    "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForProficientArmorClothing.hint": "Esta é uma regra caseira e é principalmente um aprimoramento do recurso existente 'Multiplicador de Peso de Item Equipado Proficiente' para tipos de armadura proficiente 'vestuário', um multiplicador específico é aplicado ao valor de peso. NOTA: Esta configuração só funciona com o recurso de 'Recurso: Multiplicador de Peso de Armadura Proficiente' IGUAL A 0, o valor padrão é 0.",
+
+    "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForProficientArmorLight.name": "Recurso: Multiplicador de Peso de Armadura Proficiente para 'Armadura Leve'",
+    "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForProficientArmorLight.hint": "Esta é uma regra caseira e é principalmente um aprimoramento do recurso existente 'Multiplicador de Peso de Item Equipado Proficiente' para tipos de armadura proficiente 'leve', um multiplicador específico é aplicado ao valor de peso. NOTA: Esta configuração só funciona com o recurso de 'Recurso: Multiplicador de Peso de Armadura Proficiente' IGUAL A 0, o valor padrão é 0.",
+
+    "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForProficientArmorMedium.name": "Recurso: Multiplicador de Peso de Armadura Proficiente para 'Armadura Média'",
+    "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForProficientArmorMedium.hint": "Esta é uma regra caseira e é principalmente um aprimoramento do recurso existente 'Multiplicador de Peso de Item Equipado Proficiente' para tipos de armadura proficiente 'média', um multiplicador específico é aplicado ao valor de peso. NOTA: Esta configuração só funciona com o recurso de 'Recurso: Multiplicador de Peso de Armadura Proficiente' IGUAL A 0, o valor padrão é 0.",
+
+    "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForProficientArmorHeavy.name": "Recurso: Multiplicador de Peso de Armadura Proficiente para 'Armadura Pesada'",
+    "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForProficientArmorHeavy.hint": "Esta é uma regra caseira e é principalmente um aprimoramento do recurso existente 'Multiplicador de Peso de Item Equipado Proficiente' para tipos de armadura proficiente 'pesada', um multiplicador específico é aplicado ao valor de peso. NOTA: Esta configuração só funciona com o recurso de 'Recurso: Multiplicador de Peso de Armadura Proficiente' IGUAL A 0, o valor padrão é 0.",
+
+    "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForProficientArmorNatural.name": "Recurso: Multiplicador de Peso de Armadura Proficiente para 'Armadura Natural'",
+    "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForProficientArmorNatural.hint": "Esta é uma regra caseira e é principalmente um aprimoramento do recurso existente 'Multiplicador de Peso de Item Equipado Proficiente' para tipos de armadura proficiente 'natural', um multiplicador específico é aplicado ao valor de peso. NOTA: Esta configuração só funciona com o recurso de 'Recurso: Multiplicador de Peso de Armadura Proficiente' IGUAL A 0, o valor padrão é 0.",
+
+    "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForEquippedContainer.name": "Recurso: Multiplicador de Peso de Contêiner/ Mochila Equipado",
+    "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForEquippedContainer.hint": "Esta é uma regra caseira, para tipos de contêiner/mochila equipados, se o peso for definido como -1, não será aplicado, isso substituirá a configuração de 'Multiplicador de Peso de Item Equipado'.",
+
+    "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForEquippedWeapon.name": "Recurso: Multiplicador de Peso de Arma Equipada",
+    "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForEquippedWeapon.hint": "Esta é uma regra caseira, para tipos de armas equipadas, se o peso for definido como -1, não será aplicado, isso substituirá a configuração de 'Multiplicador de Peso de Item Equipado'.",
+
+    "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForProficientWeapon.name": "Recurso: Multiplicador de Peso de Arma Proficiente",
+    "variant-encumbrance-dnd5e.setting.applyWeightMultiplierForProficientWeapon.hint": "Esta é uma regra caseira, para tipos de armas proficientes, se o peso for definido como -1, não será aplicado, isso substituirá a configuração de 'Multiplicador de Peso de Item Equipado Proficiente'. NOTA: O item DEVE ESTAR EQUIPADO.",
+
+    "variant-encumbrance-dnd5e.setting.useStrValueInsteadStrModOnBulk.name": "Recurso: Usar valor fixo de FOR em vez de MOD de FOR em Carga",
+    "variant-encumbrance-dnd5e.setting.useStrValueInsteadStrModOnBulk.hint": "Esta é uma regra caseira, APENAS PARA cálculo de BULK. Atualmente não há maneira de ajustar o bulk máximo para uma criatura, que está ligado ao tamanho e MOD DE FOR, agora você pode usar o valor fixo de força para lidar com isso.",
+
+    "variant-encumbrance-dnd5e.config.name": "Unidade de Peso",
+    "variant-encumbrance-dnd5e.config.hint": "Unidade de medida a ser usada para cálculo de peso.",
+    "variant-encumbrance-dnd5e.label.units_LongTon": "Tonelada Longa (2240 lb.)",
+    "variant-encumbrance-dnd5e.label.units_ShortTon": "Tonelada curta (2000 lb.)",
+    "variant-encumbrance-dnd5e.label.units_Pounds": "Libras (1 lb.)",
+    "variant-encumbrance-dnd5e.label.convertTitle": "Converter Capacidade de Carga",
+    "variant-encumbrance-dnd5e.label.convertContent": "Gostaria de converter a capacidade de carga atual de '{{OLD}}' para '{{NEW}}'?",
+
+    "variant-encumbrance-dnd5e.label.veweight.VEWeight": "Peso VE",
+    "variant-encumbrance-dnd5e.label.veweight.VEWeightSuggestion": "Este é o peso modificado do módulo VE",
+    "variant-encumbrance-dnd5e.label.bulk.VEBulk": "Peso do Volume",
+
+    "variant-encumbrance-dnd5e.label.bulk.ItemContainerCapacityBulk": "Volume",
+    "variant-encumbrance-dnd5e.label.bulk.Bulk": "Volume",
+    "variant-encumbrance-dnd5e.label.bulk.suggestedValue": "Valor de Volume Sugerido: {suggestedBulkWeight}",
+    "variant-encumbrance-dnd5e.label.bulk.category.tiny.description": "Menor do que a palma da sua mão. Você pode segurar muitos desses em uma mão. Um peso negligenciável ou trivial.",
+    "variant-encumbrance-dnd5e.label.bulk.category.small.description": "Até uma mão / 9 polegadas. Pode ser segurado confortavelmente com uma mão. Até 1kg. O peso de um pão ou um saco de açúcar.",
+    "variant-encumbrance-dnd5e.label.bulk.category.medium.description": "Até o comprimento de um braço / 60cm de comprimento. Pode ser segurado com uma mão. Até 2,25kg. Aproximadamente tão pesado quanto alguns sacos grandes de açúcar.",
+    "variant-encumbrance-dnd5e.label.bulk.category.large.description": "Maior do que um braço. Geralmente pode ser segurado com uma mão, mas é mais confortável com duas. Até 4,5kg. Aproximadamente tão pesado quanto um gato ou um saco de batatas.",
+    "variant-encumbrance-dnd5e.label.bulk.category.x-large.description": "Maior do que a altura de uma pessoa média. Requer duas mãos para segurar. Até 16kg. Cerca de um quarto do peso de uma pessoa média.",
+    "variant-encumbrance-dnd5e.label.bulk.category.xx-large.description": "Maior do que a altura de duas pessoas. Requer duas mãos para segurar. 32kg. Aproximadamente metade do peso de uma pessoa média."
+}

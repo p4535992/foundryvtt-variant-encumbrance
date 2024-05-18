@@ -1,4 +1,9 @@
-### 0.15.5 
+### 0.15.6
+
+- Try to fix: https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/39
+- Try to fix: https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/37
+
+### 0.15.5
 
 - Add initial support ofr new container on Dnd5e 3.1.1
 

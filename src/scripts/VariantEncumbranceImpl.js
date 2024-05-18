@@ -271,7 +271,7 @@ export const VariantEncumbranceImpl = {
         }
 
         if (effectName && effectName !== "") {
-            if (effectName === effectEntityPresent?.label) {
+            if (effectName === effectEntityPresent?.name) {
                 // Skip if name is the same and the active effect is already present.
             } else {
                 if (effectName === ENCUMBRANCE_STATE.UNENCUMBERED) {
