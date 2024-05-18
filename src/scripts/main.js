@@ -271,24 +271,86 @@ export const readyHooks = async () => {
                 false,
                 invPlusActive,
             );
-            const listItem = htmlElement.find("li.item .item-weight");
+            let listItem = null;
+            switch (sheetClass) {
+                case "dnd5e.Tidy5eCharacterSheet": {
+                    listItem = htmlElement.find(".item-table-row-container");
+                    break;
+                }
+                case "dnd5e.ActorSheet5eCharacter": {
+                    listItem = htmlElement.find("li.item .item-weight");
+                    break;
+                }
+                case "dnd5e.ActorSheet5eCharacter2": {
+                    listItem = htmlElement.find("li.item .item-weight");
+                    break;
+                }
+                // THE DEFAULT CASE IS THE LEGACY SHEET
+                default: {
+                    listItem = htmlElement.find("li.item .item-weight");
+                    break;
+                }
+            }
             for (const liItemB of listItem) {
                 const liItem = $(liItemB);
-                const itemId = liItem.parent().attr("data-item-id");
-                // REMOVED INCOMPATIBILITY WITH Dnd5e 3.0.0
-                // const itemName = liItem.parent().find(".item-name h4").html().replace(/\n/g, "").trim();
+                let itemId = null;
+                switch (sheetClass) {
+                    case "dnd5e.Tidy5eCharacterSheet": {
+                        itemId = liItem.attr("data-item-id");
+                        break;
+                    }
+                    case "dnd5e.ActorSheet5eCharacter": {
+                        itemId = liItem.parent().attr("data-item-id");
+                        break;
+                    }
+                    case "dnd5e.ActorSheet5eCharacter2": {
+                        itemId = liItem.parent().attr("data-item-id");
+                        break;
+                    }
+                    // THE DEFAULT CASE IS THE LEGACY SHEET
+                    default: {
+                        itemId = liItem.parent().attr("data-item-id");
+                        break;
+                    }
+                }
                 const item = inventoryItems.find((im) => {
-                    return im.id === itemId; // || im.name === itemName;
+                    return im.id === itemId;
                 });
                 if (item) {
                     const quantity = getItemQuantity(item);
-                    const currentText = (liItem.parent().find(".item-detail.item-weight")[0]?.innerText ?? "")
-                        .replace(/(\r\n|\n|\r)/gm, "")
-                        .trim();
+                    let currentText = null;
+                    switch (sheetClass) {
+                        case "dnd5e.Tidy5eCharacterSheet": {
+                            currentText = (liItem.find(".item-table-cell > span.truncate")[1]?.innerText ?? "")
+                                .replace(/(\r\n|\n|\r)/gm, "")
+                                .trim();
+                            break;
+                        }
+                        case "dnd5e.ActorSheet5eCharacter": {
+                            currentText = (liItem.parent().find(".item-detail.item-weight")[0]?.innerText ?? "")
+                                .replace(/(\r\n|\n|\r)/gm, "")
+                                .trim();
+                            break;
+                        }
+                        case "dnd5e.ActorSheet5eCharacter2": {
+                            currentText = (liItem.parent().find(".item-detail.item-weight")[0]?.innerText ?? "")
+                                .replace(/(\r\n|\n|\r)/gm, "")
+                                .trim();
+                            break;
+                        }
+                        // THE DEFAULT CASE IS THE LEGACY SHEET
+                        default: {
+                            currentText = (liItem.parent().find(".item-detail.item-weight")[0]?.innerText ?? "")
+                                .replace(/(\r\n|\n|\r)/gm, "")
+                                .trim();
+                            break;
+                        }
+                    }
+
                     const currentTextB = currentText ? true : false;
 
                     switch (sheetClass) {
-                        case "dnd5e.Tidy5eSheet": {
+                        case "dnd5e.Tidy5eCharacterSheet": {
                             if (replaceStandardWeightValue) {
                                 if (currentTextB && encumbranceData.mapItemEncumbrance) {
                                     const weight =
@@ -296,7 +358,7 @@ export const readyHooks = async () => {
                                         (quantity * getItemWeight(item)).toNearest(0.1) ??
                                         0;
                                     const totalWeightS = `${weight} ${getWeightLabel()}`;
-                                    liItem.parent().find(".item-detail.item-weight").text(totalWeightS);
+                                    $(liItem.find(".item-table-cell > span.truncate")[1]).text(totalWeightS);
                                 }
                             }
                             if (isBulkEnable && encumbranceDataBulk.mapItemEncumbrance) {
@@ -307,11 +369,13 @@ export const readyHooks = async () => {
                                 const totalBulkS = `${bulk} ${getBulkLabel()}`;
                                 if (hideStandardWeightUnits) {
                                     if (currentTextB) {
-                                        liItem.parent().find(".item-detail.item-weight").text(totalBulkS);
+                                        $(liItem.find(".item-table-cell > span.truncate")[1]).text(totalBulkS);
                                     }
                                 } else {
                                     if (currentTextB) {
-                                        liItem.parent().find(".item-detail.item-weight").append(`<br/>${totalBulkS}`);
+                                        $(liItem.find(".item-table-cell > span.truncate")[1]).append(
+                                            `<br/>${totalBulkS}`,
+                                        );
                                     }
                                 }
                             }

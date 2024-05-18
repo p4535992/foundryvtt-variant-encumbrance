@@ -218,7 +218,7 @@ export const SUPPORTED_SHEET = [
     },
     {
         id: "TIDY_SHEET",
-        name: "dnd5e.Tidy5eSheet",
+        name: "dnd5e.Tidy5eCharacterSheet",
         template: "modules/tidy5e-sheet/templates/actors/tidy5e-sheet.html",
         templateId: "tidy5e-sheet",
         moduleId: "tidy5e-sheet",
