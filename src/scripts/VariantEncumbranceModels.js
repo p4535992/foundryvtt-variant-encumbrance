@@ -191,8 +191,15 @@ export const SUPPORTED_SHEET = [
     {
         id: "CHARACTER_5E_SHEET",
         name: "",
-        template: "systems/dnd5e/templates/actors/character-sheet.html",
+        template: "systems/dnd5e/templates/actors/character-sheet.hbs",
         templateId: "dnd5e/templates/actors/character-sheet",
+        moduleId: "",
+    },
+    {
+        id: "CHARACTER_5E_SHEET_V2",
+        name: "",
+        template: "systems/dnd5e/templates/actors/character-sheet-2.hbs",
+        templateId: "dnd5e/templates/actors/character-sheet-2",
         moduleId: "",
     },
     {

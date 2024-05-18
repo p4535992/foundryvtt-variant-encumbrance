@@ -275,9 +275,10 @@ export const readyHooks = async () => {
             for (const liItemB of listItem) {
                 const liItem = $(liItemB);
                 const itemId = liItem.parent().attr("data-item-id");
-                const itemName = liItem.parent().find(".item-name h4").html().replace(/\n/g, "").trim();
+                // REMOVED INCOMPATIBILITY WITH Dnd5e 3.0.0
+                // const itemName = liItem.parent().find(".item-name h4").html().replace(/\n/g, "").trim();
                 const item = inventoryItems.find((im) => {
-                    return im.id === itemId || im.name === itemName;
+                    return im.id === itemId; // || im.name === itemName;
                 });
                 if (item) {
                     const quantity = getItemQuantity(item);
@@ -316,6 +317,68 @@ export const readyHooks = async () => {
                             }
                             break;
                         }
+                        case "dnd5e.ActorSheet5eCharacter": {
+                            if (replaceStandardWeightValue && encumbranceData.mapItemEncumbrance) {
+                                if (currentTextB) {
+                                    const weight =
+                                        encumbranceData.mapItemEncumbrance[item.id]?.toNearest(0.1) ??
+                                        (quantity * getItemWeight(item)).toNearest(0.1) ??
+                                        0;
+                                    const totalWeightS = `${weight} ${getWeightLabel()}`;
+                                    liItem.parent().find(".item-detail.item-weight div").text(totalWeightS);
+                                }
+                            }
+                            if (isBulkEnable && encumbranceDataBulk.mapItemEncumbrance) {
+                                const bulk =
+                                    encumbranceDataBulk.mapItemEncumbrance[item.id]?.toNearest(0.1) ??
+                                    (quantity * getItemBulk(item)).toNearest(0.1) ??
+                                    0;
+                                const totalBulkS = `${bulk} ${getBulkLabel()}`;
+                                if (hideStandardWeightUnits) {
+                                    if (currentTextB) {
+                                        liItem.parent().find(".item-detail.item-weight div").text(totalBulkS);
+                                    }
+                                } else {
+                                    if (currentTextB) {
+                                        liItem
+                                            .parent()
+                                            .find(".item-detail.item-weight div")
+                                            .append(`<br/>${totalBulkS}`);
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                        case "dnd5e.ActorSheet5eCharacter2": {
+                            if (replaceStandardWeightValue && encumbranceData.mapItemEncumbrance) {
+                                if (currentTextB) {
+                                    const weight =
+                                        encumbranceData.mapItemEncumbrance[item.id]?.toNearest(0.1) ??
+                                        (quantity * getItemWeight(item)).toNearest(0.1) ??
+                                        0;
+                                    const totalWeightS = `${weight} ${getWeightLabel()}`;
+                                    liItem.parent().find(".item-detail.item-weight").text(totalWeightS);
+                                }
+                            }
+                            if (isBulkEnable && encumbranceDataBulk.mapItemEncumbrance) {
+                                const bulk =
+                                    encumbranceDataBulk.mapItemEncumbrance[item.id]?.toNearest(0.1) ??
+                                    (quantity * getItemBulk(item)).toNearest(0.1) ??
+                                    0;
+                                const totalBulkS = `${bulk} ${getBulkLabel()}`;
+                                if (hideStandardWeightUnits) {
+                                    if (currentTextB) {
+                                        liItem.parent().find(".item-detail.item-weight").text(totalBulkS);
+                                    }
+                                } else {
+                                    if (currentTextB) {
+                                        liItem.parent().find(".item-detail.item-weight").append(`<br/>${totalBulkS}`);
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                        // THE DEFAULT CASE IS THE LEGACY SHEET
                         default: {
                             if (replaceStandardWeightValue && encumbranceData.mapItemEncumbrance) {
                                 if (currentTextB) {
