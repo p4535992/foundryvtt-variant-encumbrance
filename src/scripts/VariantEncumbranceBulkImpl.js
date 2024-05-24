@@ -27,6 +27,7 @@ import {
     retrieveBackPackManagerItem,
     calculateBackPackManagerBulk,
     checkBulkCategory,
+    getItemWeight,
 } from "./lib/lib.js";
 import API from "./api.js";
 import { VariantEncumbranceDnd5eHelpers } from "./lib/variant-encumbrance-dnd5e-helpers";
@@ -358,18 +359,6 @@ export const VariantEncumbranceBulkImpl = {
                 }
                 // End Item container check
                 else {
-                    // Does the weight of the items in the container carry over to the actor?
-                    if (item.type === "container") {
-                        const currencyWeight = item.system.currencyWeight || 0;
-                        const contentsWeightNoCurrency = item.system.contentsWeight - currencyWeight || 0;
-                        const contentsWeightWithCurrency = item.system.contentsWeight || 0;
-                        const totalWeight = item.system.totalWeight || 0;
-                        const onlyContainerWeight = totalWeight - item.system.contentsWeight || 0;
-                        const containerWeight = ignoreCurrency ? contentsWeightNoCurrency : contentsWeightWithCurrency;
-                        const weightless = getProperty(item, "system.capacity.weightless") ?? false;
-                        itemWeight = weightless ? itemWeight : itemWeight + containerWeight;
-                    }
-
                     itemWeight = VariantEncumbranceDnd5eHelpers.manageCustomCodeFeature(item, itemWeight, true);
                     itemWeight = VariantEncumbranceDnd5eHelpers.manageEquippedAndUnEquippedFeature(item, itemWeight);
 
@@ -714,11 +703,13 @@ export const VariantEncumbranceBulkImpl = {
 
             let strengthMultiplier = 1;
             if (game.settings.get(CONSTANTS.MODULE_ID, "useStrengthMultiplier")) {
-                strengthMultiplier = game.settings.get("dnd5e", "metricWeightUnits")
-                    ? game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")
-                        ? game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplier")
-                        : game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplierMetric")
-                    : game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplier");
+                const unitSystem = game.settings.get("dnd5e", "metricWeightUnits") ? "metric" : "imperial";
+                strengthMultiplier =
+                    unitSystem === "metric"
+                        ? game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")
+                            ? game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplier")
+                            : game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplierMetric")
+                        : game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplier");
             }
             const displayedUnits = game.settings.get(CONSTANTS.MODULE_ID, "unitsBulk");
             const lightMax = 0;
@@ -1190,11 +1181,11 @@ export const VariantEncumbranceBulkImpl = {
         }
         // Size
         const item = app.object;
-        const options = [];
+        // const options = [];
         // options.push(
         //   `<option data-image="icons/svg/mystery-man.svg" value="">${Logger.i18n(`${CONSTANTS.MODULE_ID}.default`)}</option>`,
         // );
-        const weight = data.weight ?? 0;
+        const weight = getItemWeight(item); //data.weight.value ?? 0;
         let suggestedBulkWeight = 0;
         const suggestedBulk = checkBulkCategory(weight, item);
         if (suggestedBulk) {
@@ -1275,15 +1266,15 @@ export const VariantEncumbranceBulkImpl = {
               const span1 = document.createElement("span");
               span1.classList.add("encumbrance-bar");
               span1.style.width = encumbranceData.pct + "%";
-        
+
               const span2 = document.createElement("span");
               span2.classList.add("encumbrance-label");
               span2.textContent = htmlElementEncumbranceBulk[0].firstElementChild.textContent;
-        
+
               htmlElementEncumbranceBulk.find("i").addClass("encumbrance-breakpoint").removeClass("breakpoint");
-        
+
               htmlElementEncumbranceBulk[0].firstElementChild.remove();
-        
+
               htmlElementEncumbranceBulk[0].prepend(span2);
               htmlElementEncumbranceBulk[0].prepend(span1);
               */
@@ -1358,15 +1349,15 @@ export const VariantEncumbranceBulkImpl = {
               const span1 = document.createElement("span");
               span1.classList.add("encumbrance-bar");
               span1.style.width = encumbranceData.pct + "%";
-        
+
               const span2 = document.createElement("span");
               span2.classList.add("encumbrance-label");
               span2.textContent = htmlElementEncumbranceBulk[0].firstElementChild.textContent;
-        
+
               htmlElementEncumbranceBulk.find("i").addClass("encumbrance-breakpoint").removeClass("breakpoint");
-        
+
               htmlElementEncumbranceBulk[0].firstElementChild.remove();
-        
+
               htmlElementEncumbranceBulk[0].prepend(span2);
               htmlElementEncumbranceBulk[0].prepend(span1);
               */
@@ -1623,15 +1614,15 @@ export const VariantEncumbranceBulkImpl = {
               const span1 = document.createElement("span");
               span1.classList.add("encumbrance-bar");
               span1.style.width = encumbranceData.pct + "%";
-        
+
               const span2 = document.createElement("span");
               span2.classList.add("encumbrance-label");
               span2.textContent = htmlElementEncumbranceBulk[0].firstElementChild.textContent;
-        
+
               htmlElementEncumbranceBulk.find("i").addClass("encumbrance-breakpoint").removeClass("breakpoint");
-        
+
               htmlElementEncumbranceBulk[0].firstElementChild.remove();
-        
+
               htmlElementEncumbranceBulk[0].prepend(span2);
               htmlElementEncumbranceBulk[0].prepend(span1);
               */
@@ -1890,7 +1881,8 @@ function calcItemBulk(
         const currency = item.system.currency ?? {};
         const numCoins = Object.values(currency).reduce((val, denom) => (val += Math.max(denom, 0)), 0);
 
-        // const currencyPerWeight = game.settings.get("dnd5e", "metricWeightUnits")
+        // const unitSystem = game.settings.get("dnd5e", "metricWeightUnits") ? "metric" : "imperial";
+        // const currencyPerWeight = unitSystem === "metric"
         //   ? game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")
         //     ? game.settings.get(CONSTANTS.MODULE_ID, "currencyWeight")
         //     : game.settings.get(CONSTANTS.MODULE_ID, "currencyWeightMetric")

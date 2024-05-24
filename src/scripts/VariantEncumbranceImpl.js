@@ -324,6 +324,12 @@ export const VariantEncumbranceImpl = {
         ignoreCurrency,
         invPlusActiveTmp,
     ) {
+        const config = CONFIG.DND5E.encumbrance;
+        const encumbrance = (actorEntity.system.attributes.encumbrance ??= {});
+        const baseUnits =
+            CONFIG.DND5E.encumbrance.baseUnits[actorEntity.type] ?? CONFIG.DND5E.encumbrance.baseUnits.default;
+        const unitSystem = game.settings.get("dnd5e", "metricWeightUnits") ? "metric" : "imperial";
+
         const mapItemEncumbrance = {};
         const enableVarianEncumbranceWeightOnActorFlag = actorEntity.getFlag(
             CONSTANTS.MODULE_ID,
@@ -424,18 +430,6 @@ export const VariantEncumbranceImpl = {
                 }
                 // End Item container check
                 else {
-                    // Does the weight of the items in the container carry over to the actor?
-                    if (item.type === "container") {
-                        const currencyWeight = item.system.currencyWeight || 0;
-                        const contentsWeightNoCurrency = item.system.contentsWeight - currencyWeight || 0;
-                        const contentsWeightWithCurrency = item.system.contentsWeight || 0;
-                        const totalWeight = item.system.totalWeight || 0;
-                        const onlyContainerWeight = totalWeight - item.system.contentsWeight || 0;
-                        const containerWeight = ignoreCurrency ? contentsWeightNoCurrency : contentsWeightWithCurrency;
-                        const weightless = getProperty(item, "system.capacity.weightless") ?? false;
-                        itemWeight = weightless ? itemWeight : itemWeight + containerWeight;
-                    }
-
                     itemWeight = VariantEncumbranceDnd5eHelpers.manageCustomCodeFeature(item, itemWeight, false);
                     itemWeight = VariantEncumbranceDnd5eHelpers.manageEquippedAndUnEquippedFeature(item, itemWeight);
 
@@ -552,11 +546,13 @@ export const VariantEncumbranceImpl = {
                 const currency = actorEntity.system.currency;
                 const numCoins = Object.values(currency).reduce((val, denom) => (val += Math.max(denom, 0)), 0);
 
-                const currencyPerWeight = game.settings.get("dnd5e", "metricWeightUnits")
-                    ? game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")
-                        ? game.settings.get(CONSTANTS.MODULE_ID, "currencyWeight")
-                        : game.settings.get(CONSTANTS.MODULE_ID, "currencyWeightMetric")
-                    : game.settings.get(CONSTANTS.MODULE_ID, "currencyWeight");
+                const unitSystem = game.settings.get("dnd5e", "metricWeightUnits") ? "metric" : "imperial";
+                const currencyPerWeight =
+                    unitSystem === "metric"
+                        ? game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")
+                            ? game.settings.get(CONSTANTS.MODULE_ID, "currencyWeight")
+                            : game.settings.get(CONSTANTS.MODULE_ID, "currencyWeightMetric")
+                        : game.settings.get(CONSTANTS.MODULE_ID, "currencyWeight");
                 if (currencyPerWeight == 0) {
                     totalWeight += 0;
                 } else {
@@ -603,37 +599,43 @@ export const VariantEncumbranceImpl = {
             }
 
             let strengthMultiplier = 1;
+            const unitSystem = game.settings.get("dnd5e", "metricWeightUnits") ? "metric" : "imperial";
             if (game.settings.get(CONSTANTS.MODULE_ID, "useStrengthMultiplier")) {
-                strengthMultiplier = game.settings.get("dnd5e", "metricWeightUnits")
-                    ? game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")
-                        ? game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplier")
-                        : game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplierMetric")
-                    : game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplier");
+                strengthMultiplier =
+                    unitSystem === "metric"
+                        ? game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")
+                            ? game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplier")
+                            : game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplierMetric")
+                        : game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplier");
             }
 
-            let displayedUnits = game.settings.get("dnd5e", "metricWeightUnits")
-                ? game.settings.get(CONSTANTS.MODULE_ID, "unitsMetric")
-                : game.settings.get(CONSTANTS.MODULE_ID, "units");
+            let displayedUnits =
+                unitSystem === "metric"
+                    ? game.settings.get(CONSTANTS.MODULE_ID, "unitsMetric")
+                    : game.settings.get(CONSTANTS.MODULE_ID, "units");
 
-            const lightMultiplier = game.settings.get("dnd5e", "metricWeightUnits")
-                ? game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")
-                    ? game.settings.get(CONSTANTS.MODULE_ID, "lightMultiplier")
-                    : game.settings.get(CONSTANTS.MODULE_ID, "lightMultiplierMetric")
-                : game.settings.get(CONSTANTS.MODULE_ID, "lightMultiplier");
+            const lightMultiplier =
+                unitSystem === "metric"
+                    ? game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")
+                        ? game.settings.get(CONSTANTS.MODULE_ID, "lightMultiplier")
+                        : game.settings.get(CONSTANTS.MODULE_ID, "lightMultiplierMetric")
+                    : game.settings.get(CONSTANTS.MODULE_ID, "lightMultiplier");
             let lightMax = lightMultiplier; // lightMultiplier * strengthScore;
 
-            const mediumMultiplier = game.settings.get("dnd5e", "metricWeightUnits")
-                ? game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")
-                    ? game.settings.get(CONSTANTS.MODULE_ID, "mediumMultiplier")
-                    : game.settings.get(CONSTANTS.MODULE_ID, "mediumMultiplierMetric")
-                : game.settings.get(CONSTANTS.MODULE_ID, "mediumMultiplier");
+            const mediumMultiplier =
+                unitSystem === "metric"
+                    ? game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")
+                        ? game.settings.get(CONSTANTS.MODULE_ID, "mediumMultiplier")
+                        : game.settings.get(CONSTANTS.MODULE_ID, "mediumMultiplierMetric")
+                    : game.settings.get(CONSTANTS.MODULE_ID, "mediumMultiplier");
             let mediumMax = mediumMultiplier; // mediumMultiplier * strengthScore;
 
-            const heavyMultiplier = game.settings.get("dnd5e", "metricWeightUnits")
-                ? game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")
-                    ? game.settings.get(CONSTANTS.MODULE_ID, "heavyMultiplier")
-                    : game.settings.get(CONSTANTS.MODULE_ID, "heavyMultiplierMetric")
-                : game.settings.get(CONSTANTS.MODULE_ID, "heavyMultiplier");
+            const heavyMultiplier =
+                unitSystem === "metric"
+                    ? game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")
+                        ? game.settings.get(CONSTANTS.MODULE_ID, "heavyMultiplier")
+                        : game.settings.get(CONSTANTS.MODULE_ID, "heavyMultiplierMetric")
+                    : game.settings.get(CONSTANTS.MODULE_ID, "heavyMultiplier");
             let heavyMax = heavyMultiplier; // heavyMultiplier * strengthScore;
 
             let max = 0;
@@ -861,15 +863,17 @@ export const VariantEncumbranceImpl = {
 
             let encumbranceTier = ENCUMBRANCE_TIERS.NONE;
             if (totalWeight > lightMax && totalWeight <= mediumMax) {
-                speedDecrease = game.settings.get("dnd5e", "metricWeightUnits")
-                    ? game.settings.get(CONSTANTS.MODULE_ID, "lightWeightDecreaseMetric")
-                    : game.settings.get(CONSTANTS.MODULE_ID, "lightWeightDecrease");
+                speedDecrease =
+                    unitSystem === "metric"
+                        ? game.settings.get(CONSTANTS.MODULE_ID, "lightWeightDecreaseMetric")
+                        : game.settings.get(CONSTANTS.MODULE_ID, "lightWeightDecrease");
                 encumbranceTier = ENCUMBRANCE_TIERS.LIGHT;
             }
             if (totalWeight > mediumMax && totalWeight <= heavyMax) {
-                speedDecrease = game.settings.get("dnd5e", "metricWeightUnits")
-                    ? game.settings.get(CONSTANTS.MODULE_ID, "heavyWeightDecreaseMetric")
-                    : game.settings.get(CONSTANTS.MODULE_ID, "heavyWeightDecrease");
+                speedDecrease =
+                    unitSystem === "metric"
+                        ? game.settings.get(CONSTANTS.MODULE_ID, "heavyWeightDecreaseMetric")
+                        : game.settings.get(CONSTANTS.MODULE_ID, "heavyWeightDecrease");
                 encumbranceTier = ENCUMBRANCE_TIERS.HEAVY;
             }
             if (totalWeight > heavyMax) {
@@ -919,12 +923,12 @@ export const VariantEncumbranceImpl = {
      * @param {Actor5e} actor - the effected actor
      */
     addDynamicEffects: async function (effectName, actor, speedDecrease) {
+        const unitSystem = game.settings.get("dnd5e", "metricWeightUnits") ? "metric" : "imperial";
         // const invMidiQol = game.modules.get(CONSTANTS.MIDI_QOL_MODULE_ID)?.active;
         switch (effectName.toLowerCase()) {
             case ENCUMBRANCE_STATE.ENCUMBERED.toLowerCase(): {
                 const effect = VariantEncumbranceImpl._encumbered();
-                const speedDecreased =
-                    speedDecrease > 0 ? speedDecrease : game.settings.get("dnd5e", "metricWeightUnits") ? 3 : 10;
+                const speedDecreased = speedDecrease > 0 ? speedDecrease : unitSystem === "metric" ? 3 : 10;
                 VariantEncumbranceImpl._addEncumbranceEffects(effect, actor, speedDecreased);
                 return effect;
             }
@@ -935,8 +939,7 @@ export const VariantEncumbranceImpl = {
                 } else {
                     effect = VariantEncumbranceImpl._heavilyEncumberedNoMidi();
                 }
-                const speedDecreased =
-                    speedDecrease > 0 ? speedDecrease : game.settings.get("dnd5e", "metricWeightUnits") ? 6 : 20;
+                const speedDecreased = speedDecrease > 0 ? speedDecrease : unitSystem === "metric" ? 6 : 20;
                 VariantEncumbranceImpl._addEncumbranceEffects(effect, actor, speedDecreased);
                 return effect;
             }
@@ -1192,17 +1195,20 @@ export const VariantEncumbranceImpl = {
      * @param {string} uuid - the uuid of the actor to add the effect to
      */
     async addEffect(effectName, actor, origin, encumbranceTier) {
+        const unitSystem = game.settings.get("dnd5e", "metricWeightUnits") ? "metric" : "imperial";
         let speedDecrease = 0;
         if (encumbranceTier === ENCUMBRANCE_TIERS.NONE) {
             speedDecrease = 0;
         } else if (encumbranceTier === ENCUMBRANCE_TIERS.LIGHT) {
-            speedDecrease = game.settings.get("dnd5e", "metricWeightUnits")
-                ? game.settings.get(CONSTANTS.MODULE_ID, "lightWeightDecreaseMetric")
-                : game.settings.get(CONSTANTS.MODULE_ID, "lightWeightDecrease");
+            speedDecrease =
+                unitSystem === "metric"
+                    ? game.settings.get(CONSTANTS.MODULE_ID, "lightWeightDecreaseMetric")
+                    : game.settings.get(CONSTANTS.MODULE_ID, "lightWeightDecrease");
         } else if (encumbranceTier === ENCUMBRANCE_TIERS.HEAVY) {
-            speedDecrease = game.settings.get("dnd5e", "metricWeightUnits")
-                ? game.settings.get(CONSTANTS.MODULE_ID, "heavyWeightDecreaseMetric")
-                : game.settings.get(CONSTANTS.MODULE_ID, "heavyWeightDecrease");
+            speedDecrease =
+                unitSystem === "metric"
+                    ? game.settings.get(CONSTANTS.MODULE_ID, "heavyWeightDecreaseMetric")
+                    : game.settings.get(CONSTANTS.MODULE_ID, "heavyWeightDecrease");
         } else if (encumbranceTier === ENCUMBRANCE_TIERS.MAX) {
             speedDecrease = null;
         }
@@ -1300,13 +1306,16 @@ export const VariantEncumbranceImpl = {
         // options.push(
         //   `<option data-image="icons/svg/mystery-man.svg" value="">${Logger.i18n(`${CONSTANTS.MODULE_ID}.default`)}</option>`,
         // );
-
-        const displayedUnits = game.settings.get("dnd5e", "metricWeightUnits")
-            ? game.settings.get(CONSTANTS.MODULE_ID, "unitsMetric")
-            : game.settings.get(CONSTANTS.MODULE_ID, "units");
+        const unitSystem = game.settings.get("dnd5e", "metricWeightUnits") ? "metric" : "imperial";
+        const displayedUnits =
+            unitSystem === "metric"
+                ? game.settings.get(CONSTANTS.MODULE_ID, "unitsMetric")
+                : game.settings.get(CONSTANTS.MODULE_ID, "units");
 
         const veweight =
-            getProperty(item, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}`) ?? data.weight ?? 0;
+            getProperty(item, `flags.${CONSTANTS.MODULE_ID}.${CONSTANTS.FLAGS.ITEM.veweight}`) ??
+            getItemWeight(item, null, null, null) ??
+            0;
 
         const suggestedVEWeightValueS = Logger.i18n("variant-encumbrance-dnd5e.label.veweight.VEWeightSuggestion");
 
@@ -1375,15 +1384,15 @@ export const VariantEncumbranceImpl = {
                     const span1 = document.createElement("span");
                     span1.classList.add("encumbrance-bar");
                     span1.style.width = encumbranceData.pct + "%";
-            
+
                     const span2 = document.createElement("span");
                     span2.classList.add("encumbrance-label");
                     span2.textContent = htmlElementEncumbranceVariant[0].firstElementChild.textContent;
-            
+
                     htmlElementEncumbranceVariant.find("i").addClass("encumbrance-breakpoint").removeClass("breakpoint");
-            
+
                     htmlElementEncumbranceVariant[0].firstElementChild.remove();
-            
+
                     htmlElementEncumbranceVariant[0].prepend(span2);
                     htmlElementEncumbranceVariant[0].prepend(span1);
                     */
@@ -1461,15 +1470,15 @@ export const VariantEncumbranceImpl = {
                         const span1 = document.createElement("span");
                         span1.classList.add("encumbrance-bar");
                         span1.style.width = encumbranceData.pct + "%";
-                
+
                         const span2 = document.createElement("span");
                         span2.classList.add("encumbrance-label");
                         span2.textContent = htmlElementEncumbranceVariant[0].firstElementChild.textContent;
-                
+
                         htmlElementEncumbranceVariant.find("i").addClass("encumbrance-breakpoint").removeClass("breakpoint");
-                
+
                         htmlElementEncumbranceVariant[0].firstElementChild.remove();
-                
+
                         htmlElementEncumbranceVariant[0].prepend(span2);
                         htmlElementEncumbranceVariant[0].prepend(span1);
                         */
@@ -1559,40 +1568,40 @@ export const VariantEncumbranceImpl = {
                             //div.classList.add('encumbrance');
                             /*
                             const div = htmlElement.find('.encumberance')[0];
-                    
+
                             const span1 = document.createElement('span');
                             span1.classList.add('encumbrance-bar');
-                    
+
                             const span2 = document.createElement('span');
                             span2.classList.add('encumbrance-label');
-                    
+
                             const icon1 = document.createElement('icon');
                             icon1.classList.add('encumbrance-breakpoint');
                             icon1.classList.add('encumbrance-33');
                             icon1.classList.add('arrow-up');
-                    
+
                             const icon2 = document.createElement('icon');
                             icon2.classList.add('encumbrance-breakpoint');
                             icon2.classList.add('encumbrance-33');
                             icon2.classList.add('arrow-down');
-                    
+
                             const icon3 = document.createElement('icon');
                             icon3.classList.add('encumbrance-breakpoint');
                             icon3.classList.add('encumbrance-66');
                             icon3.classList.add('arrow-up');
-                    
+
                             const icon4 = document.createElement('icon');
                             icon4.classList.add('encumbrance-breakpoint');
                             icon4.classList.add('encumbrance-66');
                             icon4.classList.add('arrow-down');
-                    
+
                             div.appendChild(span1)
                             div.appendChild(span2)
                             div.appendChild(icon1)
                             div.appendChild(icon2)
                             div.appendChild(icon3)
                             div.appendChild(icon4)
-                    
+
                             encumbranceElements = htmlElement.find('.encumberance')[0]?.children;
                             */
                             /*
@@ -1794,15 +1803,15 @@ export const VariantEncumbranceImpl = {
                         const span1 = document.createElement("span");
                         span1.classList.add("encumbrance-bar");
                         span1.style.width = encumbranceData.pct + "%";
-                
+
                         const span2 = document.createElement("span");
                         span2.classList.add("encumbrance-label");
                         span2.textContent = htmlElementEncumbranceVariant[0].firstElementChild.textContent;
-                
+
                         htmlElementEncumbranceVariant.find("i").addClass("encumbrance-breakpoint").removeClass("breakpoint");
-                
+
                         htmlElementEncumbranceVariant[0].firstElementChild.remove();
-                
+
                         htmlElementEncumbranceVariant[0].prepend(span2);
                         htmlElementEncumbranceVariant[0].prepend(span1);
                         */
@@ -1892,40 +1901,40 @@ export const VariantEncumbranceImpl = {
                             //div.classList.add('encumbrance');
                             /*
                             const div = htmlElement.find('.encumberance')[0];
-                    
+
                             const span1 = document.createElement('span');
                             span1.classList.add('encumbrance-bar');
-                    
+
                             const span2 = document.createElement('span');
                             span2.classList.add('encumbrance-label');
-                    
+
                             const icon1 = document.createElement('icon');
                             icon1.classList.add('encumbrance-breakpoint');
                             icon1.classList.add('encumbrance-33');
                             icon1.classList.add('arrow-up');
-                    
+
                             const icon2 = document.createElement('icon');
                             icon2.classList.add('encumbrance-breakpoint');
                             icon2.classList.add('encumbrance-33');
                             icon2.classList.add('arrow-down');
-                    
+
                             const icon3 = document.createElement('icon');
                             icon3.classList.add('encumbrance-breakpoint');
                             icon3.classList.add('encumbrance-66');
                             icon3.classList.add('arrow-up');
-                    
+
                             const icon4 = document.createElement('icon');
                             icon4.classList.add('encumbrance-breakpoint');
                             icon4.classList.add('encumbrance-66');
                             icon4.classList.add('arrow-down');
-                    
+
                             div.appendChild(span1)
                             div.appendChild(span2)
                             div.appendChild(icon1)
                             div.appendChild(icon2)
                             div.appendChild(icon3)
                             div.appendChild(icon4)
-                    
+
                             encumbranceElements = htmlElement.find('.encumberance')[0]?.children;
                             */
                             /*
@@ -2114,12 +2123,13 @@ function calcItemWeight(
 
         const currency = item.system.currency ?? {};
         const numCoins = Object.values(currency).reduce((val, denom) => (val += Math.max(denom, 0)), 0);
-
-        const currencyPerWeight = game.settings.get("dnd5e", "metricWeightUnits")
-            ? game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")
-                ? game.settings.get(CONSTANTS.MODULE_ID, "currencyWeight")
-                : game.settings.get(CONSTANTS.MODULE_ID, "currencyWeightMetric")
-            : game.settings.get(CONSTANTS.MODULE_ID, "currencyWeight");
+        const unitSystem = game.settings.get("dnd5e", "metricWeightUnits") ? "metric" : "imperial";
+        const currencyPerWeight =
+            unitSystem === "metric"
+                ? game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")
+                    ? game.settings.get(CONSTANTS.MODULE_ID, "currencyWeight")
+                    : game.settings.get(CONSTANTS.MODULE_ID, "currencyWeightMetric")
+                : game.settings.get(CONSTANTS.MODULE_ID, "currencyWeight");
         if (currencyPerWeight == 0) {
             weight = weight + 0;
         } else {
@@ -2192,39 +2202,45 @@ function _standardActorWeightCalculation(actorEntity) {
     }
 
     let strengthMultiplier = 1;
+    const unitSystem = game.settings.get("dnd5e", "metricWeightUnits") ? "metric" : "imperial";
     if (game.settings.get(CONSTANTS.MODULE_ID, "useStrengthMultiplier")) {
-        strengthMultiplier = game.settings.get("dnd5e", "metricWeightUnits")
-            ? game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")
-                ? game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplier")
-                : game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplierMetric")
-            : game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplier");
+        strengthMultiplier =
+            unitSystem === "metric"
+                ? game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")
+                    ? game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplier")
+                    : game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplierMetric")
+                : game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplier");
     }
 
-    let displayedUnits = game.settings.get("dnd5e", "metricWeightUnits")
-        ? game.settings.get(CONSTANTS.MODULE_ID, "unitsMetric")
-        : game.settings.get(CONSTANTS.MODULE_ID, "units");
+    let displayedUnits =
+        unitSystem === "metric"
+            ? game.settings.get(CONSTANTS.MODULE_ID, "unitsMetric")
+            : game.settings.get(CONSTANTS.MODULE_ID, "units");
 
     // const strengthScore = actorEntity.system.abilities.str.value * modForSize;
 
-    const lightMultiplier = game.settings.get("dnd5e", "metricWeightUnits")
-        ? game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")
-            ? game.settings.get(CONSTANTS.MODULE_ID, "lightMultiplier")
-            : game.settings.get(CONSTANTS.MODULE_ID, "lightMultiplierMetric")
-        : game.settings.get(CONSTANTS.MODULE_ID, "lightMultiplier");
+    const lightMultiplier =
+        unitSystem === "metric"
+            ? game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")
+                ? game.settings.get(CONSTANTS.MODULE_ID, "lightMultiplier")
+                : game.settings.get(CONSTANTS.MODULE_ID, "lightMultiplierMetric")
+            : game.settings.get(CONSTANTS.MODULE_ID, "lightMultiplier");
     let lightMax = lightMultiplier; // lightMultiplier * strengthScore;
 
-    const mediumMultiplier = game.settings.get("dnd5e", "metricWeightUnits")
-        ? game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")
-            ? game.settings.get(CONSTANTS.MODULE_ID, "mediumMultiplier")
-            : game.settings.get(CONSTANTS.MODULE_ID, "mediumMultiplierMetric")
-        : game.settings.get(CONSTANTS.MODULE_ID, "mediumMultiplier");
+    const mediumMultiplier =
+        unitSystem === "metric"
+            ? game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")
+                ? game.settings.get(CONSTANTS.MODULE_ID, "mediumMultiplier")
+                : game.settings.get(CONSTANTS.MODULE_ID, "mediumMultiplierMetric")
+            : game.settings.get(CONSTANTS.MODULE_ID, "mediumMultiplier");
     let mediumMax = mediumMultiplier; // mediumMultiplier * strengthScore;
 
-    const heavyMultiplier = game.settings.get("dnd5e", "metricWeightUnits")
-        ? game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")
-            ? game.settings.get(CONSTANTS.MODULE_ID, "heavyMultiplier")
-            : game.settings.get(CONSTANTS.MODULE_ID, "heavyMultiplierMetric")
-        : game.settings.get(CONSTANTS.MODULE_ID, "heavyMultiplier");
+    const heavyMultiplier =
+        unitSystem === "metric"
+            ? game.settings.get(CONSTANTS.MODULE_ID, "fakeMetricSystem")
+                ? game.settings.get(CONSTANTS.MODULE_ID, "heavyMultiplier")
+                : game.settings.get(CONSTANTS.MODULE_ID, "heavyMultiplierMetric")
+            : game.settings.get(CONSTANTS.MODULE_ID, "heavyMultiplier");
     let heavyMax = heavyMultiplier; // heavyMultiplier * strengthScore;
 
     let dataEncumbrance;

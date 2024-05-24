@@ -188,7 +188,6 @@ export const registerSettings = function () {
         default: 50,
         onChange: (value) => {
             // NOT NECESSARY WE USE THE VALUE ON THE SETTING
-            // DND5E.encumbrance.currencyPerWeight = value;
         },
     });
 
@@ -201,7 +200,6 @@ export const registerSettings = function () {
         default: 110,
         onChange: (value) => {
             // NOT NECESSARY WE USE THE VALUE ON THE SETTING
-            // DND5E.encumbrance.currencyPerWeight = value;
         },
     });
 
@@ -214,7 +212,6 @@ export const registerSettings = function () {
         default: 2000,
         onChange: (value) => {
             // NOT NECESSARY WE USE THE VALUE ON THE SETTING
-            // DND5E.encumbrance.currencyPerWeight = value;
         },
     });
 
@@ -227,7 +224,6 @@ export const registerSettings = function () {
         default: 1000,
         onChange: (value) => {
             // NOT NECESSARY WE USE THE VALUE ON THE SETTING
-            // DND5E.encumbrance.currencyPerWeight = value;
         },
     });
 

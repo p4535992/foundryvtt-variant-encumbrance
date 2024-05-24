@@ -216,7 +216,8 @@ export function checkBulkCategory(weight, item) {
         );
         // TODO IS OK TO DO THIS FOR ITEM CONTAINER ????
         // bulkRef = calcWeightItemCollection(item, useEquippedUnequippedItemCollectionFeature, false, doNotIncreaseWeightByQuantityForNoAmmunition);
-        // if (game.settings.get("dnd5e", "metricWeightUnits")) {
+        // const unitSystem = game.settings.get("dnd5e", "metricWeightUnits") ? "metric" : "imperial";
+        // if (unitSystem === "metric") {
         // 	bulkRef = bulkRef <= 0 ? 0 : convertPoundsToKg(bulkRef);
         // }
         bulkRef = calcBulkItemCollection(
@@ -437,9 +438,44 @@ export function retrieveActiveEffectDataChangeByKeyFromActiveEffect(actor, activ
     };
 }
 
-export function getItemWeight(item) {
-    const itemWeight = isRealNumber(item.system.weight) ? item.system.weight : 0;
-    return itemWeight ?? 0;
+/**
+ * @param {"character"|"npc"|"vehicle"} [baseUnits=null]
+ * @param {"metric"|"imperial"} [unitSystem=null]
+ * @param {"default"|"vehicle"} [actorType=default]
+ */
+export function getItemWeight(
+    item,
+    baseUnits = null,
+    unitSystem = null,
+    actorType = CONFIG.DND5E.encumbrance.baseUnits.default,
+) {
+    const unitSystem0 = unitSystem ?? (game.settings.get("dnd5e", "metricWeightUnits") ? "metric" : "imperial");
+    const actorType0 = actorType ?? item.actor?.type ?? CONFIG.DND5E.encumbrance.baseUnits.default;
+    const actorTypeBaseUnits0 =
+        actorType0 === "vehicle"
+            ? CONFIG.DND5E.encumbrance.baseUnits.vehicle
+            : CONFIG.DND5E.encumbrance.baseUnits.default;
+    const baseUnits0 =
+        baseUnits ??
+        CONFIG.DND5E.encumbrance.baseUnits[actorTypeBaseUnits0] ??
+        CONFIG.DND5E.encumbrance.baseUnits.default;
+
+    if (item.container || item.type === "container") {
+        // Does the weight of the items in the container carry over to the actor?
+        const currencyWeight = item.system.currencyWeight || 0;
+        const contentsWeightNoCurrency = item.system.contentsWeight - currencyWeight || 0;
+        const contentsWeightWithCurrency = item.system.contentsWeight || 0;
+        const totalWeight = item.system.totalWeight || 0;
+        const onlyContainerWeight = totalWeight - item.system.contentsWeight || 0;
+        const containerWeight = ignoreCurrency ? contentsWeightNoCurrency : contentsWeightWithCurrency;
+        const weightless = getProperty(item, "system.capacity.weightless") ?? false;
+        itemWeight = weightless ? itemWeight : itemWeight + containerWeight;
+    } else {
+        // const itemWeight = isRealNumber(item.system.weight) ? item.system.weight.value : 0;
+        const value = item.system.totalWeightIn?.(baseUnits0[unitSystem0]);
+        const itemWeight = isRealNumber(value) ? value : 0;
+        return itemWeight ?? 0;
+    }
 }
 
 export function getItemQuantity(item) {
@@ -447,10 +483,43 @@ export function getItemQuantity(item) {
     return itemQuantity ?? 0;
 }
 
-export function getItemBulk(item) {
-    const itemBulk = getProperty(item, `flags.${CONSTANTS.MODULE_ID}.bulk`);
-    const itemWeightBulk = isRealNumber(itemBulk) ? itemBulk : 0;
-    return itemWeightBulk ?? 0;
+/**
+ * @param {"character"|"npc"|"vehicle"} [baseUnits=null]
+ * @param {"metric"|"imperial"} [unitSystem=null]
+ * @param {"default"|"vehicle"} [actorType=default]
+ */
+export function getItemBulk(
+    item,
+    baseUnits = null,
+    unitSystem = null,
+    actorType = CONFIG.DND5E.encumbrance.baseUnits.default,
+) {
+    const unitSystem0 = unitSystem ?? (game.settings.get("dnd5e", "metricWeightUnits") ? "metric" : "imperial");
+    const actorType0 = actorType ?? item.actor?.type ?? CONFIG.DND5E.encumbrance.baseUnits.default;
+    const actorTypeBaseUnits0 =
+        actorType0 === "vehicle"
+            ? CONFIG.DND5E.encumbrance.baseUnits.vehicle
+            : CONFIG.DND5E.encumbrance.baseUnits.default;
+    const baseUnits0 =
+        baseUnits ??
+        CONFIG.DND5E.encumbrance.baseUnits[actorTypeBaseUnits0] ??
+        CONFIG.DND5E.encumbrance.baseUnits.default;
+
+    // Does the weight of the items in the container carry over to the actor?
+    if (item.container || item.type === "container") {
+        const currencyWeight = item.system.currencyWeight || 0;
+        const contentsWeightNoCurrency = item.system.contentsWeight - currencyWeight || 0;
+        const contentsWeightWithCurrency = item.system.contentsWeight || 0;
+        const totalWeight = item.system.totalWeight || 0;
+        const onlyContainerWeight = totalWeight - item.system.contentsWeight || 0;
+        const containerWeight = ignoreCurrency ? contentsWeightNoCurrency : contentsWeightWithCurrency;
+        const weightless = getProperty(item, "system.capacity.weightless") ?? false;
+        itemWeight = weightless ? itemWeight : itemWeight + containerWeight;
+    } else {
+        const itemBulk = getProperty(item, `flags.${CONSTANTS.MODULE_ID}.bulk`);
+        const itemWeightBulk = isRealNumber(itemBulk) ? itemBulk : 0;
+        return itemWeightBulk ?? 0;
+    }
 }
 
 export function getBulkLabel() {
@@ -461,9 +530,11 @@ export function getBulkLabel() {
 }
 
 export function getWeightLabel() {
-    const displayedUnits = game.settings.get("dnd5e", "metricWeightUnits")
-        ? game.settings.get(CONSTANTS.MODULE_ID, "unitsMetric")
-        : game.settings.get(CONSTANTS.MODULE_ID, "units");
+    const unitSystem = game.settings.get("dnd5e", "metricWeightUnits") ? "metric" : "imperial";
+    const displayedUnits =
+        unitSystem === "metric"
+            ? game.settings.get(CONSTANTS.MODULE_ID, "unitsMetric")
+            : game.settings.get(CONSTANTS.MODULE_ID, "units");
     const weightLabel = capitalizeFirstLetter(displayedUnits);
     return weightLabel;
 }

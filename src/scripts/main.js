@@ -47,35 +47,6 @@ export const initHooks = () => {
 
     Hooks.once("socketlib.ready", registerSocket);
 
-    // if (game.settings.get(CONSTANTS.MODULE_ID, 'debugHooks')) {
-    //   for (const hook of Object.values(HOOKS)) {
-    //     if (typeof hook === 'string') {
-    //       Hooks.on(hook, (...args) => Logger.debug(`Hook called: ${hook}`, ...args));
-    //       Logger.debug(`Registered hook: ${hook}`);
-    //     } else {
-    //       for (const innerHook of Object.values(hook)) {
-    //         Hooks.on(innerHook, (...args) => Logger.debug(`Hook called: ${innerHook}`, ...args));
-    //         Logger.debug(`Registered hook: ${innerHook}`);
-    //       }
-    //     }
-    //   }
-    // }
-
-    // CONFIG.DND5E.encumbrance = {
-    //   currencyPerWeight: {
-    //     imperial: 50,
-    //     metric: 110
-    //   },
-    //   strMultiplier: {
-    //     imperial: 15,
-    //     metric: 7.5
-    //   },
-    //   vehicleWeightMultiplier: {
-    //     imperial: 2000, // 2000 lbs in an imperial ton
-    //     metric: 1000 // 1000 kg in a metric ton
-    //   }
-    // };
-
     if (parseInt(game.system.version) >= 3) {
         CONFIG.DND5E.encumbrance.threshold.maximum.imperial =
             game.settings.get(CONSTANTS.MODULE_ID, "strengthMultiplier") ?? 15;
