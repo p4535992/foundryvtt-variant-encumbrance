@@ -81,7 +81,8 @@ export const initHooks = () => {
         CONFIG.DND5E.encumbrance.currencyPerWeight.metric =
             game.settings.get(CONSTANTS.MODULE_ID, "currencyWeightMetric") ?? 110;
     }
-
+    // RIMOSSO 3.2.0
+    /*
     CONFIG.DND5E.encumbrance.vehicleWeightMultiplier.imperial =
         game.settings.get(CONSTANTS.MODULE_ID, "vehicleWeightMultiplier") ?? 2000; // 2000 lbs in an imperial ton
 
@@ -92,6 +93,7 @@ export const initHooks = () => {
         CONFIG.DND5E.encumbrance.vehicleWeightMultiplier.metric =
             game.settings.get(CONSTANTS.MODULE_ID, "vehicleWeightMultiplierMetric") ?? 1000; // 1000 kg in a metric ton
     }
+    */
     // CONFIG.debug.hooks = true; // For debugging only
 
     invPlusActive = game.modules.get(CONSTANTS.INVENTORY_PLUS_MODULE_ID)?.active;

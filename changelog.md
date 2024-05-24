@@ -1,3 +1,7 @@
+### 0.16.0 [BREAKING CHANGES]
+
+- Add starting Dnd5e 3.2.0 compatibility...
+
 ### 0.15.6
 
 - Try to fix: https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues/39

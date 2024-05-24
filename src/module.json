@@ -2,7 +2,7 @@
     "id": "variant-encumbrance-dnd5e",
     "title": "Variant Encumbrance+Midi",
     "description": "A module for D&D 5th Edition, to automatically modify character carry weights to match the Variant Encumbrance optional rule set.",
-    "version": "0.15.6",
+    "version": "0.16.0",
     "authors": [
         { "name": "Vanir#0001 (discord)" },
         { "name": "47Y" },
@@ -74,11 +74,11 @@
     "compatibility": {
         "minimum": 11,
         "verified": 11,
-        "maximum": 11
+        "maximum": 12
     },
     "url": "https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e",
-    "manifest": "https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/releases/download/0.15.6/module.json",
-    "download": "https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/releases/download/0.15.6/module.zip",
+    "manifest": "https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/releases/download/0.16.0/module.json",
+    "download": "https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/releases/download/0.16.0/module.zip",
     "readme": "https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/blob/master/README.md",
     "changelog": "https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/blob/master/changelog.md",
     "bugs": "https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues",
@@ -91,14 +91,9 @@
                 "type": "system",
                 "manifest": "https://raw.githubusercontent.com/foundryvtt/dnd5e/master/system.json",
                 "compatibility": {
-                    "verified": "2.2.1"
+                    "minimum": "3.2.0",
+                    "verified": "3.2.0"
                 }
-            },
-            {
-                "id": "sw5e",
-                "type": "system",
-                "manifest": "https://raw.githubusercontent.com/unrealkakeman89/sw5e/master/system.json",
-                "compatibility": {}
             }
         ],
         "requires": [

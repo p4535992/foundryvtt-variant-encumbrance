@@ -203,29 +203,29 @@ export const registerSettings = function () {
         },
     });
 
-    game.settings.register(CONSTANTS.MODULE_ID, "vehicleWeightMultiplier", {
-        name: CONSTANTS.MODULE_ID + ".setting.vehicleWeightMultiplier.name",
-        hint: CONSTANTS.MODULE_ID + ".setting.vehicleWeightMultiplier.hint",
-        scope: "world",
-        config: true,
-        type: Number,
-        default: 2000,
-        onChange: (value) => {
-            // NOT NECESSARY WE USE THE VALUE ON THE SETTING
-        },
-    });
+    // game.settings.register(CONSTANTS.MODULE_ID, "vehicleWeightMultiplier", {
+    //     name: CONSTANTS.MODULE_ID + ".setting.vehicleWeightMultiplier.name",
+    //     hint: CONSTANTS.MODULE_ID + ".setting.vehicleWeightMultiplier.hint",
+    //     scope: "world",
+    //     config: true,
+    //     type: Number,
+    //     default: 2000,
+    //     onChange: (value) => {
+    //         // NOT NECESSARY WE USE THE VALUE ON THE SETTING
+    //     },
+    // });
 
-    game.settings.register(CONSTANTS.MODULE_ID, "vehicleWeightMultiplierMetric", {
-        name: CONSTANTS.MODULE_ID + ".setting.vehicleWeightMultiplierMetric.name",
-        hint: CONSTANTS.MODULE_ID + ".setting.vehicleWeightMultiplierMetric.hint",
-        scope: "world",
-        config: true,
-        type: Number,
-        default: 1000,
-        onChange: (value) => {
-            // NOT NECESSARY WE USE THE VALUE ON THE SETTING
-        },
-    });
+    // game.settings.register(CONSTANTS.MODULE_ID, "vehicleWeightMultiplierMetric", {
+    //     name: CONSTANTS.MODULE_ID + ".setting.vehicleWeightMultiplierMetric.name",
+    //     hint: CONSTANTS.MODULE_ID + ".setting.vehicleWeightMultiplierMetric.hint",
+    //     scope: "world",
+    //     config: true,
+    //     type: Number,
+    //     default: 1000,
+    //     onChange: (value) => {
+    //         // NOT NECESSARY WE USE THE VALUE ON THE SETTING
+    //     },
+    // });
 
     game.settings.register(CONSTANTS.MODULE_ID, "sizeMultipliers", {
         name: CONSTANTS.MODULE_ID + ".setting.sizeMultipliers.name",
