@@ -106,9 +106,9 @@ function cleanPackEntry(data, { clearSourceId=true, ownership=0 }={}) {
   if ( data.system?.capacity?.value === 0 ) data.system.capacity.value = null;
   if ( data.system?.strength === 0 ) data.system.strength = null;
   // BREAKING CHANGES Dnd5e 3.2.X
-  if (!data.system?.weight?.units) {
+  if (data.system?.weight && !data.system?.weight?.units) {
     data.system.weight = {
-      value: Number.isNumeric(data.system.weight) ? Number(data.system.weight) : 0,
+      value: typeof data.system.weight === 'number' ? data.system.weight : 0,
       units: "lb"
     };
   }

@@ -82,8 +82,6 @@
     "readme": "https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/blob/master/README.md",
     "changelog": "https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/blob/master/changelog.md",
     "bugs": "https://github.com/p4535992/foundryvtt-variant-encumbrance-dnd5e/issues",
-    "allowBugReporter": true,
-    "manifestPlusVersion": "1.2.0",
     "relationships": {
         "systems": [
             {
