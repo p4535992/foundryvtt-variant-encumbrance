@@ -1,4 +1,4 @@
-### 0.16.0 [BREAKING CHANGES]
+### 0.16.0-1 [BREAKING CHANGES]
 
 - Add starting Dnd5e 3.2.0 compatibility...
 

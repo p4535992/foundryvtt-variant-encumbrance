@@ -442,12 +442,14 @@ export function retrieveActiveEffectDataChangeByKeyFromActiveEffect(actor, activ
  * @param {"character"|"npc"|"vehicle"} [baseUnits=null]
  * @param {"metric"|"imperial"} [unitSystem=null]
  * @param {"default"|"vehicle"} [actorType=default]
+ * @param {boolean} [ignoreCurrency=false]
  */
 export function getItemWeight(
     item,
     baseUnits = null,
     unitSystem = null,
     actorType = CONFIG.DND5E.encumbrance.baseUnits.default,
+    ignoreCurrency = false,
 ) {
     const unitSystem0 = unitSystem ?? (game.settings.get("dnd5e", "metricWeightUnits") ? "metric" : "imperial");
     const actorType0 = actorType ?? item.actor?.type ?? CONFIG.DND5E.encumbrance.baseUnits.default;
@@ -487,12 +489,14 @@ export function getItemQuantity(item) {
  * @param {"character"|"npc"|"vehicle"} [baseUnits=null]
  * @param {"metric"|"imperial"} [unitSystem=null]
  * @param {"default"|"vehicle"} [actorType=default]
+ * @param {boolean} [ignoreCurrency=false]
  */
 export function getItemBulk(
     item,
     baseUnits = null,
     unitSystem = null,
     actorType = CONFIG.DND5E.encumbrance.baseUnits.default,
+    ignoreCurrency = false,
 ) {
     const unitSystem0 = unitSystem ?? (game.settings.get("dnd5e", "metricWeightUnits") ? "metric" : "imperial");
     const actorType0 = actorType ?? item.actor?.type ?? CONFIG.DND5E.encumbrance.baseUnits.default;

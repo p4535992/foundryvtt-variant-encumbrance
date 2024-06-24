@@ -577,7 +577,7 @@ export class VariantEncumbranceDnd5eHelpers {
     static manageItemWeight(item) {
         let itemQuantity = getItemQuantity(item);
         let itemWeight = getItemWeight(item);
-
+        const ignoreCurrency = false;
         const isEquipped = item.system.equipped ? true : false;
         const isProficient = item.system.proficient === 1 ? true : false;
 
@@ -722,7 +722,7 @@ export class VariantEncumbranceDnd5eHelpers {
     static manageItemBulk(item) {
         let itemQuantity = getItemQuantity(item);
         let itemWeight = getItemBulk(item);
-
+        const ignoreCurrency = false;
         const isEquipped = item.system.equipped ? true : false;
         const isProficient = item.system.proficient === 1 ? true : false;
 
